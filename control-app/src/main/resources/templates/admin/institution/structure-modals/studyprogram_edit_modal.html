@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="studyprogram_edit_modal">
+
+<div class="modal fade" id="programModal" tabindex="-1" role="dialog" aria-labelledby="programModalLabel" aria-hidden="true" style="padding-right: 17px">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img  style="color: silver" th:src="@{/public/images/icons/IconDepartment-sm.png}" alt="regular" src=""/>
+                <h5 class="modal-title ml-2" id="programModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input type="hidden" id="pr_rowIdx_edited" value=""/>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
+                    <div class="card card-body" style="background-color: #f7f7f9;border: none">
+
+                        <input type="hidden" id="program_edit_mode" value=""/>
+                        <input type="hidden" id="program_id" value=""/>
+                        <!-- DEPARTMENT -->
+                        <div class="form-group row">
+                            <label for="program_department" class="col-sm-2 col-form-label"><b>Τμήμα*</b></label>
+                            <div class="col-sm-8">
+                                <select id="program_department" style="width: 100%" class="form-control">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Studies -->
+                        <div class="form-group row">
+                            <label for="program_study" class="col-sm-2 col-form-label"><b>Σπουδές*</b></label>
+                            <div class="col-sm-8">
+                                <select id="program_study" style="width: 100%" class="form-control">
+                                    <option value="post" th:text="#{post}"></option>
+                                    <option value="master" th:text="#{master}"></option>
+                                    <option value="cont" th:text="#{cont}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- TITLE -->
+                        <div class="form-group row">
+                            <label for="program_title" class="col-sm-2 col-form-label"><b>Τίτλος*</b></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="program_title" class="form-control"/>
+                            </div>
+                        </div>
+                    </div> <!-- card body -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"  id="deleteStudyProgram">Διαγραφή</button>
+                <button type="button" class="btn btn-primary"  id="addOrUpdateProgram">Αποθήκευση</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

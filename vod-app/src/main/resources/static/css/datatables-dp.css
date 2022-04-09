@@ -1,0 +1,20 @@
+.dataTables_wrapper .dataTables_paginate {
+    width: 100%;
+    text-align: center!important;
+    float: left!important;
+}
+.dataTables_wrapper .top  {
+    padding: 5px 5px 0 5px;
+    margin-bottom: 10px;
+}
+.dataTables_wrapper .bottom {
+    margin-top: 10px;
+}
+.dataTables_wrapper .paging_full_numbers {
+    background-color: #eee;
+    padding: 5px 5px 5px 5px;
+
+}
+.dataTables_wrapper .ellipsis {
+    color: black;
+}

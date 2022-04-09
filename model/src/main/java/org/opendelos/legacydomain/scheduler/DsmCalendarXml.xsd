@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema  xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	 jxb:version="2.0"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="DsmCalendarXml">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Id" type="xs:string" minOccurs="1" maxOccurs="1" />
+                <xs:element name="Date" type="xs:date" minOccurs="0" maxOccurs="1" />
+                <xs:element name="UnitId" type="xs:string" minOccurs="0" maxOccurs="1" />
+                <xs:element name="DayId" type="xs:string" minOccurs="0" maxOccurs="1" />
+                <xs:element name="HourId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="Minutes" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="RoomId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="ActionId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="Record" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="Broadcast" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="TeacherId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="CourseId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="PeriodId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="DurationHours" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="DurationMinutes" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="TypeId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="OrganizationId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="ActionAccessId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="Comment" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="Publish" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="Status" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="Screencast" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="PresentationResourceId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="SlidesResourceId" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="CreatorId" type="xs:string" minOccurs="0" maxOccurs="1" />
+            </xs:sequence>           
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

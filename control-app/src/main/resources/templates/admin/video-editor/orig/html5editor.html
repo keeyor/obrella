@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset='utf-8'>
+    <title class="text-truncate">Rich Lecture - Video editor</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/themes/base/jquery.ui.all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/richLecture_addons/css/style_editor.css}"/>
+
+</head>
+<body>
+<header>
+    <div class="header">
+        <button type="button" disabled class="custom low small send_json_button" th:title="#{richlecture.save}" onclick="actions.send_json()"></button>
+        <a th:href="@{/admin/video-editor/editor_help}" class="help_btn" th:title="#{richlecture.help}" target="_blank"></a>
+    </div>
+</header>
+<div id="contentwrapper">
+    <section>
+        <div class="player_row">
+            <div id="movie_player">
+                <video id='player' controls preload='none'>
+                    <source id='mp4' src="" type='video/mp4'>
+                </video>
+            </div>
+            <div class="buttons_show_trims_clips">
+                <div class="show_trims_clips">
+                    <span th:text="#{richlecture.selection_of_trims}"></span>
+                    <div class ="userTrimInputs"> </div>
+                    <span th:text="#{richlecture.selection_of_cuts}"></span>
+                    <div class ="userClipInputs"> </div>
+                </div>
+
+                <div class="trim_clip_div">
+                    <form>
+                        <div id ="trimmingInputs">
+                            <div id="trimInputHeader" th:text="#{richlecture.trim_inputs}"></div>
+                            <div>
+                                <button type="button" class="custom low small set_start_button" th:title="#{richlecture.set_start_time}" onclick="actions.set_start_video()"></button>
+                                <button type="button" class="custom low small set_end_button" th:title="#{richlecture.set_end_time}" onclick="actions.set_end_video()"></button>
+                            </div>
+                        </div>
+                        <div class="trim_clip_separator"></div>
+                        <div id ="clippingInputs">
+                            <div id="clipInputHeader" th:text="#{richlecture.cut_inputs}"></div>
+                            <div>
+                                <button type="button" class="custom low small begin_cut_button" th:title="#{richlecture.begin_cut}" onclick="actions.begin_cut()"></button>
+                                <button type="button" disabled class="custom low small end_cut_button" th:title="#{richlecture.end_cut}" onclick="actions.end_cut()"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!--<div style="clear:both"></div>-->
+                <div class="player_controls">
+                    <div class="player_fast_bwd" th:title="#{richlecture.go_5sec_back}" onclick="actions.fast_seek('bwd')"></div>
+                    <div class="player_play" th:title="#{richlecture.play_pause}" onclick="actions.play()"></div>
+                    <div class="player_fast_fwd" th:title="#{richlecture.go_5sec_later}" onclick="actions.fast_seek('fwd')"></div>
+                    <!--<div class="player_stop" title="Stop" onclick="actions.stop()"></div>-->
+                    <div class="player_vol_down" th:title="#{richlecture.vol_down}" onclick="volume_down()"></div>
+                    <div class="player_mute" th:title="#{richlecture.mute}" onclick="toggle_mute()"></div>
+                    <div class="player_vol_up" th:title="#{richlecture.vol_up}" onclick="volume_up()"></div>
+                    <input type="text" placeholder="HH:MM:SS" class="go_to_field"/>
+                </div>
+                <div class="realediting_block">
+                    <div class="realediting_label" th:text="#{richlecture.realediting_label}"></div>
+                    <button type="button" class="custom low small realediting_btn" th:title="#{richlecture.realediting_btn_title}" onclick="actions.realedit()"></button>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+            <!--<div class="zoom_timeline">-->
+            <div class="timeline">
+                <div class="draggable_container">
+                    <div class="timeline_progress_position"><div class="timeline_progress_position_time"></div></div>
+                </div>
+            </div>
+            <!--</div>-->
+
+        </div>
+    </section>
+</div>
+<div class="play_cut_section"></div>
+<div class="play_edited_section"></div>
+<div id="edit_selected_period" th:title="#{richlecture.edit_selected_period}">
+    <form>
+        <label for="edit_start_time" th:text="#{richlecture.edit_start}"></label><br/>
+        <input type="text" placeholder="HH:MM:SS" name="edit_start_time" id="edit_start_time" class=""><br/><br/>
+        <label for="edit_end_time" th:text="#{richlecture.edit_end}"></label><br/>
+        <input type="text" placeholder="HH:MM:SS" name="edit_end_time" id="edit_end_time" class=""><br/>
+    </form>
+</div>
+
+<div th:replace="~{admin/video-editor/modals/start_realedit_modal::start_realedit}"></div>
+
+
+<div class="info box" id="info"></div>
+
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery.tools.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.widget.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.mouse.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.core.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.draggable.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/jquery.ui.resizable_nickorfas.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.dialog.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.position.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.button.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/bPopup.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/ion.sound.min.js}"></script>
+
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/lang/el.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/html5editor/html5editor.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/html5editor/html5script.js}"></script>
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+</body>
+
+</html>
+

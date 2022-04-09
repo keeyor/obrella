@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OpenDelos Live</title>
+    <link rel="stylesheet" th:href="@{/css/global41.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
+    <!-- font awesome 5 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fa5/css/all.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/navbar.css}"/>
+
+    <!-- classic theme datatable with various plugins -->
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+    <!-- select2 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+</head>
+<body style="font-size: 0.89em">
+<input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
+<input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
+<input type="hidden" id="editor_id" th:value="${user.id}"/>
+<input type="hidden" id="editor_name" th:value="${user.name}"/>
+<input type="hidden" id="isStaffMember" th:value="${user_isStaffMember}"/>
+<input type="hidden" id="isManager" th:value="${user_isManager}"/>
+<input type="hidden" id="user_access" th:value="${user_access}"/>
+<input type="hidden" id="cpage"            th:value="${cpage}" />
+<input type="hidden" id="upload_base_path" value="/delosrc/resources/ml/"/> <!-- TODO  :: PUT TO MODEL -->
+
+<input type="hidden" id="department_filter" th:value="${departmentFilter.id}"/>
+<input type="hidden" id="department_filter_name" th:value="${departmentFilter.text}"/>
+<input type="hidden" id="staff_filter" th:value="${staffMemberFilter.id}"/>
+<input type="hidden" id="staff_filter_name" th:value="${staffMemberFilter.text}"/>
+
+<input type="hidden" id="area_filter" th:value="${areaFilter}"/>
+<input type="hidden" id="area_filter_name" th:value="${areaFilterName}"/>
+
+<input type="hidden" id="etype_filter" th:value="${etypeFilter}"/>
+<input type="hidden" id="etype_filter_name" th:value="${etypeFilterName}"/>
+
+<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div class="wrapper d-flex flex-column min-vh-100 bg-light" >
+    <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+            <ul class="header-nav d-none d-md-flex">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/sevents}">Διαχείριση Εκδηλώσεων</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/sevent-editor}">Νέα Εκδήλωση</a></li>
+            </ul>
+            <ul class="header-nav ms-auto">
+
+            </ul>
+        </div>
+        <div class="header-divider"></div>
+        <div class="container-fluid">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb my-0 ms-2">
+                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item active"><span>Διαχείριση Εκδηλώσεων</span></li>
+                </ol>
+            </nav>
+        </div>
+    </header>
+
+    <div class="body flex-grow-1 px-3" style="background-color: white">
+       <div class="container-fluid">
+           <div class="row">
+               <div class="offset-lg-1 col-lg-10 col-md-12">
+                   <th:block th:if="${QR != null}">
+                       <div th:replace="~{admin/content/scheduled_events/offsets/ontop-applied-filters :: ontop-applied-filters}">Applied Filters</div>
+                   </th:block>
+                   <div class="card">
+                       <div class="card-body">
+                           <th:block th:if="${QR != null && QR.totalResults >0}">
+                               <div class="row">
+                                   <div class="col-6">
+                                                    <span class="float-left">
+                                                        <span th:text="${'Εμφάνιση ' + (QR.skip+1)} + '-'"></span>
+                                                        <span th:if="${QR.totalResults < (QR.skip+QR.limit)}"><span th:text="${QR.totalResults}"></span></span>
+                                                        <span th:unless="${QR.totalResults < (QR.skip+QR.limit)}"><span th:text="${(QR.skip + QR.limit)}"></span></span>
+                                                        <span th:text="${' από ' + QR.totalResults}"></span>
+                                                        <span th:text="${'   (' +  PageLoadTime + 'ms)'}"></span>
+                                                    </span>
+                                   </div>
+                                   <div class="col-6">
+                                       <div th:replace="~{admin/content/search/u-sort-and-display :: u-sort-and-display}"></div>
+                                   </div>
+                               </div>
+                               <!-- Pager -->
+                               <div class="row my-3">
+                                   <div class="col-12 text-center">
+                                       <div th:replace="~{admin/content/scheduled_events/u-pager :: u-pager('false')}">Pager</div>
+                                   </div>
+                               </div>
+
+                               <div class="row">
+                                   <div class="col-12">
+                                       <div th:if="${QR.skip > 1000}">
+                                           Δεν επιτρέπεται η εξυπηρέτηση περισσότερων από 1000 αποτελεσμάτων τη φορά. Περιορίστε τον αριθμό των αποτελεσμάτων προσθέτοντας νέα κριτήρια αναζήτησης
+                                           (Ζητήσατε αποτελέσματα μετά τα <span th:text="${QR.skip}"></span>)
+                                       </div>
+                                       <!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
+                                       <div th:unless="${QR.skip > 1000}">
+                                           <!-- highlighted -->
+                                           <div class="row px-1 py-1">
+                                               <div class="col"></div>
+                                               <div class="col-2">
+                                                   <div class="dropdown">
+                                                       <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-coreui-toggle="dropdown" aria-expanded="false" title="Επιλεγμένα">
+                                                           <i class="fas fa-check me-2"></i><span id="marked_items_no">(0)</span>
+                                                       </button>
+                                                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                           <li><a class="dropdown-item disabled" id="remove_marked_resources" href="#">Διαγραφή</a></li>
+                                                           <li><a class="dropdown-item disabled" id="publish_marked_resources" href="#">Ενεργοποίηση Ημερολογίου</a></li>
+                                                           <li><a class="dropdown-item disabled" id="unpublish_marked_resources" href="#">Απενεργοποίηση Ημερολογίου</a></li>
+                                                           <li><a class="dropdown-item" id="mark_all_resources" href="#">Επιλογή Όλων</a></li>
+                                                           <li><a class="dropdown-item" id="unmark_all_resources" href="#">Απεπιλογή Όλων</a></li>
+                                                       </ul>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!--@thymesVar id="scheduledEvent" type="org.opendelos.model.resources.ScheduledEvent"-->
+                                           <div class="mb-2" th:each="scheduledEvent, iStat: ${QR.searchResultList}" th:style="${iStat.odd}? ''">
+                                               <div class="card" style="border:none;">
+                                                   <div class="card-body event_hover">
+                                                       <div class="row">
+                                                           <div class="col" style="align-items: center">
+                                                               <div style=" border-bottom: orange 1px solid;background-color: #efefef" class="py-2">
+                                                               <span th:text="${iStat.count + '.'}"></span>
+                                                                   <span style="font-size: 1.1em;font-weight: 600"><span th:text="${scheduledEvent.title}"></span></span>
+                                                               </div>
+                                                               <div class="row row-cols-auto mt-2" style="font-size: 0.9em;font-weight: 600; color: darkslategray">
+                                                                   <div class="col">
+                                                                                <span th:if="${scheduledEvent.isActive}" title="Ενεργό Ημερολόγιο">
+                                                                                    <i class="fas fa-power-off" style="color: green"></i> ΕΝΕΡΓΟ ΗΜΕΡΟΛΟΓΙΟ
+                                                                                </span>
+                                                                       <span th:unless="${scheduledEvent.isActive}" title="Ανενεργό Ημερολόγιο">
+                                                                                    <i class="fas fa-power-off" style="color:red"></i> ΑΝΕΝΕΡΓΟ ΗΜΕΡΟΛΟΓΙΟ
+                                                                                </span>
+                                                                   </div>
+                                                                   <div class="col" th:if="${scheduledEvent.isFeatured}">
+                                                                                   <span  title="Προβεβλημένη Εκδήλωση">
+                                                                                    <i class="fas fa-exclamation" style="color: red"></i> ΠΡΟΒΕΒΛΗΜΕΝΗ ΕΚΔΗΛΩΣΗ
+                                                                                   </span>
+                                                                   </div>
+                                                                   <div class="col" th:if="${scheduledEvent.area}">
+                                                                       <i class="fas fa-quote-right ml-3"></i>
+                                                                       <span th:text="#{${scheduledEvent.area}}"></span>
+                                                                   </div>
+                                                                   <div class="col" th:if="${scheduledEvent.type}">
+                                                                       <i class="fas fa-quote-right ml-3"></i>
+                                                                       <span  th:text="#{${scheduledEvent.type}}"></span>
+                                                                   </div>
+                                                                   <div class="col" th:if="${scheduledEvent.categories}">
+                                                                       <i  class="fas fa-quote-right ml-3"></i>
+                                                                       <span th:each="thema: ${scheduledEvent.categories}">
+                                                                                            <span class="mx-1" th:text="#{${thema}}"></span>
+                                                                                </span>
+                                                                   </div>
+                                                               </div>
+                                                               <div class="pt-3" style="font-weight: 600">
+                                                                   <i class="far fa-calendar-alt"></i>
+                                                                   <span  class="me-1" th:text="${#temporals.format(scheduledEvent.startDate, 'dd')}"></span>
+                                                                   <span  class="me-1" th:text="${#temporals.format(scheduledEvent.startDate, 'MMMM')}"></span>
+                                                                   <span  class="me-1" th:text="${#temporals.format(scheduledEvent.startDate, 'YYYY')}"></span>
+                                                                   <th:block th:if="${scheduledEvent.endDate != null && scheduledEvent.endDate != '' &&
+                                                                                             scheduledEvent.startDate != scheduledEvent.endDate }">
+                                                                       <span  class="mx-1"> - </span>
+                                                                       <span  class="me-1" th:text="${#temporals.format(scheduledEvent.endDate, 'dd')}"></span>
+                                                                       <span  class="me-1" th:text="${#temporals.format(scheduledEvent.endDate, 'MMMM')}"></span>
+                                                                       <span  class="me-1" th:text="${#temporals.format(scheduledEvent.endDate, 'YYYY')}"></span>
+                                                                   </th:block>
+                                                               </div>
+                                                               <div class="pt-2">
+                                                                   <div th:if="${scheduledEvent.responsibleUnit != null}" style="color:black;font-style: italic" class="text-high-emphasis ml-1">
+                                                                                    <span th:each="unit,iStat: ${scheduledEvent.responsibleUnit}">
+                                                                                                 <span th:unless="${iStat.first}">, </span>
+                                                                                                 <span th:if="${#strings.trim(unit.structureType) == 'DEPARTMENT'}"> Τμήμα</span>
+                                                                                                 <span th:if="${#strings.trim(unit.structureType) == 'SCHOOL'}"> Σχολή </span>
+                                                                                                 <span th:text="${unit.title + ' '}"></span>
+                                                                                    </span>
+                                                                   </div>
+                                                                   <div th:if="${scheduledEvent.responsiblePerson != null}" class="mb-2 font-italic ml-1 text-medium-emphasis">
+                                                                       <span class="text-high-emphasis">Επιστημονικός Υπεύθυνος ή Εκπρόσωπος:</span>
+                                                                       <span th:text="${scheduledEvent.responsiblePerson.name + ', ' + scheduledEvent.responsiblePerson.affiliation }"></span>
+                                                                   </div>
+                                                               </div>
+
+                                                           </div>
+                                                           <div class="vr"></div>
+                                                           <div class="col-2 date_info" style="align-items: center;vertical-align: center">
+                                                               <a href="#" role="button" class="btn btn-pill btn-sm ms-lg-2 hover_button"
+                                                                  title="Επεξεργασία στοιχείων Εκδήλωσης"
+                                                                  th:href="@{/admin/sevent-editor(id=${scheduledEvent.id})}">
+                                                                   <i class="fas fa-edit"></i>
+                                                               </a>
+                                                               <a th:attr="data-target=${scheduledEvent.id}" class="btn btn-sm btn-pill ms-lg-2 mark-resource hover_button" href="#" title="Επιλογή">
+                                                                   <i class="fas fa-check"></i>
+                                                               </a>
+                                                               <a href="#" role="button" class="btn btn-pill btn-sm ms-lg-2 hover_button"
+                                                                  title="Αναζήτηση καταγραφών της εκδήλωσης"
+                                                                  th:href="@{/admin/search(e=${scheduledEvent.id})}">
+                                                                   <i class="fas fa-search"></i>
+                                                               </a>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
+
+
+
+                                           </div>
+                                       </div>
+                                       <!-- Pager -->
+                                       <div class="row my-3">
+                                           <div class="col-12 text-center">
+                                               <div th:replace="~{admin/content/scheduled_events/u-pager :: u-pager('true')}">Pager</div>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </th:block>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+    </div>
+    <footer class="c-footer">
+        <i class="far fa-copyright mr-1"></i> <span th:text="#{default.institution.title}"></span>
+    </footer>
+</div>
+
+<div th:replace="~{modals/staff_select_modal :: staffmember_select_modal}"></div>
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+
+<!-- Optional JavaScript -->
+
+<script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
+
+<!-- plupload -->
+<script type="text/javascript" th:src="@{/lib/plupload-2.3.6/js/plupload.full.min.js}"></script>
+<!-- DataTables -->
+<script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+<script th:src="@{/lib/datatables-classic/row().show().js}" type="application/javascript"></script>
+<!-- TESTING LISTNAV -->
+<script th:src="@{/lib/datatables-listnav/jquery.dtListNav.dt1.10.js}" type="application/javascript"></script>
+<!-- Select2 -->
+<script th:src="@{/css/select2/js/select2.full.js}" type="application/javascript"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+
+<script th:src="@{/js/admin/content/sevents/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/content/sevents/dashboard.sevents.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/content/sevents/dashboard.departments.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/content/sevents/dashboard.staffmembers.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/content/sevents/dashboard.areas.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/search/el.js}" type="application/javascript"></script>
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+
+</body>
+</html>

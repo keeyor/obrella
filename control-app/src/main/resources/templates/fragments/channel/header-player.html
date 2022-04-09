@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div th:fragment="header-player" th:align="center">
+    <nav class="navbar fixed-top navbar-light bottom-shadow navbar-expand-sm" role="navigation" style="font-size: 0.9em">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="institute-brand" >
+                    <div th:with="uid=#{institution.identity}">
+                        <a th:href="@{/}"><img th:alt="#{default.institution.title}"  class="institute-logo" th:src="@{'/public/images/logos/' + ${uid} + '.png'}" alt="" src=""></a>
+                    </div>
+                </div>
+                <div id="main-title-navbar" class="institute-text"  style="font-size: 1em">
+                    <h1><span id="navbar_title_span"> αναζήτηση πολυμεσικού περιεχομένου</span> </h1>
+                    <p style="line-height:1.5;font-size: 1.0em"> <small th:text="#{default.institution.title}"></small></p>
+                </div>
+            </div>
+            <!--@thymesVar id="user" type="org.opendelos.model.users.OoUserDetails"-->
+            <span th:if="${user != null}">
+                <span sec:authorize="isAuthenticated()" class="nav-item mr-2">
+                        <i class="fas fa-user mr-1"></i> <span th:text="${user.name}"></span>
+                </span>
+                <span sec:authorize="isAuthenticated()" class="nav-item mr-2">
+                    <a class="blue-link-wcag-color"  href="#" title="logout" data-toggle="modal" data-target="#logout_modal">
+                        <i class="fas fa-sign-out-alt"></i> Αποσύνδεση
+                    </a>
+                </span>
+            </span>
+        </div>
+    </nav>
+</div>

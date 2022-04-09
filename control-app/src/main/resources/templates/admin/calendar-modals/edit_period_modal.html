@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="edit_period_modal">
+    <div class="modal fade" id="editPeriodModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-vertical-centered"> <!-- Start of modal dialog -->
+            <div class="modal-content"> <!-- Start of modal content -->
+                <div class="modal-header" style="background-color:silver">
+                     <span>
+				 		<img id="modal_header_img_institution" th:src="@{/public/images/icons/btnIconXonikaDiastimataOrganismou-circle.png}" alt="" src=""/>
+				 		<img id="modal_header_img_department" th:src="@{/public/images/icons/btnIconXonikaDiastimataMonadas-circle.png}" alt="" src=""/>
+				 		<img id="modal_header_img_study" th:src="@{/public/images/icons/btnIconXonikaDiastimataProgrammatos-circle.png}" alt="" src=""/>
+				 	 </span>
+                    <h3 class="modal-title">Επεξεργαστής Περιόδων</h3>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <div class="modal-body"> <!-- Start of modal body -->
+                    <span class="float-right">
+				 		 Ακαδημαϊκό Έτος: <b><span id="modal_year"></span></b>
+				 	</span>
+                    <div class="row" style="margin-bottom:20px">
+                        <!--@thymesVar id="institutionName" type="java.lang.String" -->
+                        <div class="col-12 pl-0"><b><span id="modal_institution" th:text="${institutionName}"></span></b></div>
+                        <div class="col-12 pl-0" id="modal_department_title"><b>Τμήμα:</b> <span id="modal_department"> -</span></div>
+                        <div class="col-12 pl-0" id="modal_study_title"><b>Πρόγραμμα Σπουδών:</b> <span id="modal_study"> -</span></div>
+                        <div class="col-12 pl-0" id="modal_inherit" style="margin-top:20px"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="table_modal" style="padding:0;border-spacing: 0;border:0;margin-top:10px;width:100%" class="table table-hover table-striped compact">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th style="width:160px">Όνομα Περιόδου</th>
+                                    <th>από</th>
+                                    <th>έως</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 float-right"><em>Επιλέξτε τις ημερομηνίες που επιθυμείτε και πατήστε 'Ενημέρωση'</em></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-danger invisible" id="PeriodErrorMessages" role="alert"></div>
+                        </div>
+                        <div class="col-12">
+                            <div id="PeriodMessages" class="alert alert-success alert-dismissible invisible"></div>
+                            <input id="modal_scope" type="hidden" value="" />
+                        </div>
+                    </div>
+                </div> <!-- End of modal body -->
+
+                <div class="modal-footer"> <!-- Start of modal footer -->
+                        <button type="button" title="ενημέρωση περιόδων" data-scope="system" id="updatePeriodsButton" class="btn btn-primary mr-1 blue-btn-wcag-bgnd-color">
+                            <span class="glyphicon glyphicon-pencil"></span><i class="far fa-save"></i> Αποθήκευση
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal"><i class="fas fa-undo"></i> Επιστροφή </button>
+                </div> <!-- End of modal footer -->
+
+            </div> <!-- End of modal content -->
+        </div> <!-- End of modal dialog -->
+    </div>
+</div>

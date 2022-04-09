@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>OpenDelos Live</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/global41.css}"/>
+    <title>OpenDelos Live</title>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
+    <!-- font awesome 5 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fa5/css/all.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+    <!-- classic theme datatable with various plugins -->
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+
+    <!-- bootstrap-toggle -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-toggle/bootstrap-toggle.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+
+    <!-- loader -->
+    <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+</head>
+<body style="font-size: 0.89em">
+<input type="hidden" id="institutionIdentity" th:value="${Institution.identity}"/>
+<input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
+
+<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div class="wrapper d-flex flex-column min-vh-100 bg-light" >
+
+    <div class="loading-overlay"></div>
+    <div class="loading-overlay-image-container">
+        <img th:src="@{/public/images/icons/512px-Loader.gif}" class="loading-overlay-img" alt="" src=""/>
+    </div>
+
+    <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+            <ul class="header-nav d-none d-md-flex">
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/users}">Διαχειριστές</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/system/streamers}">Εξυπηρετητές</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/messages}">Μηνύματα Χρηστών</a></li>
+                <li class="nav-item"><a class="nav-link" target="_blank" href="http://localhost:5601">Αρχεία Καταγραφής</a></li>
+            </ul>
+            <ul class="header-nav ms-auto">
+
+            </ul>
+        </div>
+        <div class="header-divider"></div>
+        <div class="container-fluid">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb my-0 ms-2">
+                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item active"><span>Εξυπηρετητές</span></li>
+                </ol>
+            </nav>
+        </div>
+    </header>
+
+
+    <div class="body flex-grow-1 px-3">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">
+                        <div class="card" id="messages_card">
+                            <div class="card-header">
+                                <h5>Μηνύματα Χρηστών</h5>
+                                <div class="text-medium-emphasis font-italic">
+                                    Διαχείριση μηνυμάτων ιστότοπου
+                                </div>
+                                <span class="float-end">
+                                        <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white" id="newMessageBt" role="button">
+                                            <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέο Μήνυμα
+                                        </a>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive" style="margin-top: 10px">
+                                            <table id="messagesDataTable" style="width:100%" class="row-border table-striped">
+                                                <thead>
+                                                <tr style="font-weight: 700">
+                                                    <td style="height: 12px;width: 20px">#</td>
+                                                    <td style="height: 12px;width: 60px"></td>
+                                                    <td >Κατάσταση</td>
+                                                    <td style="width: 60%">Κείμενο</td>
+                                                    <td >Ενεργό/Ανενεργό</td>
+                                                    <td style="height: 12px;width: 20px"></td>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                         <div class="card" id="message_edit_card" style="display: none">
+                             <div class="card-header">
+                                 <h5>Επεξεργασία Μηνύματος</h5>
+                                 <span class="float-end">
+                                   <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateMessage"><i class="far fa-save"></i> Αποθήκευση</button>
+                                    <button type="button" class="btn btn-secondary" id="closeUpdateMessage"><i class="fas fa-undo"></i> Επιστροφή</button>
+                                </span>
+                             </div>
+                             <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <h6 class="modal-title" id="messageModalLabel"></h6>
+                                        <input type="hidden" id="st_rowIdx_edited" value=""/>
+                                    </div>
+                                </div>
+                                 <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
+                                 <div style="background-color: #f7f7f9;border: none">
+                                        <form id="message_form" name="message_form">
+                                            <input type="hidden" id="message_edit_mode" value=""/>
+                                            <input type="hidden" id="message_id" value=""/>
+                                            <!-- Studies -->
+                                            <div class="form-group row pt-2">
+                                                <label for="message_type" class="col-sm-2 col-form-label">Τύπος*</label>
+                                                <div class="col-sm-4">
+                                                    <select id="message_type" name="message_type" style="width: 100%" class="form-control">
+                                                        <option value="success"> Επιτυχία</option>
+                                                        <option value="info"> Πληροφορία</option>
+                                                        <option value="warning"> Προειδοποίηση</option>
+                                                        <option value="danger"> Κίνδυνος</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                                <!-- description -->
+                                                <div class="form-group row mt-3">
+                                                    <label for="message_descr" class="col-sm-2 col-form-label">Κείμενο*</label>
+                                                    <div class="col-sm-4">
+                                                        <textarea class="form-control reset_control" id="message_descr" placeholder=""></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mt-3">
+                                                    <label for="message_toggle" class="col-sm-2 col-form-label">Εμφάνιση</label>
+                                                    <div class="col-sm-4">
+                                                        <input id="message_toggle" name="message_toggle" type="checkbox" />
+                                                    </div>
+                                                </div>
+                                        </form>
+                                    </div>
+                            </div>
+                             <div class="card-footer">
+                                <button type="button" class="btn btn-danger" id="deleteMessage"><i class="fas fa-ban"></i> Διαγραφή</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <footer class="c-footer">
+        <i class="far fa-copyright mr-1"></i> <span th:text="#{default.institution.title}"></span>
+    </footer>
+</div>
+
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+<!-- Optional JavaScript -->
+<script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
+
+<!-- bootstrap-toggle -->
+<script th:src="@{/lib/bootstrap-toggle/bootstrap-toggle.min.js}"></script>
+
+<script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+
+<script th:src="@{/js/admin/system/messages/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/system/messages/dashboard.messages.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/search/el.js}" type="application/javascript"></script>
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+<!-- loader -->
+<script th:src="@{/lib/loader/loader.js}"></script>
+</body>
+</html>

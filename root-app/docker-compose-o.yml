@@ -1,0 +1,89 @@
+version: "3.8"
+services:
+
+  dashboard:
+    build:
+      context: ../dashboard
+      dockerfile: Dockerfile
+    image: dashboard-image
+    container_name: dashboard-image
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    ports:
+      - "8080:8080"
+    networks:
+      - elk
+
+  vod:
+    build:
+      context: ../vod-app
+      dockerfile: Dockerfile
+    image: vod-image
+    container_name: vod-image
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    ports:
+      - "8050:8050"
+    networks:
+      - elk
+
+  live:
+    build:
+      context: ../live
+      dockerfile: Dockerfile
+    image: live-image
+    container_name: live-image
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    ports:
+      - "8071:8071"
+    networks:
+      - elk
+
+  live-app:
+    build:
+      context: ../live-app
+      dockerfile: Dockerfile
+    image: liveapp-image
+    container_name: liveapp-image
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    ports:
+      - "8070:8070"
+    networks:
+      - elk
+
+  events:
+    build:
+      context: ../events-app
+      dockerfile: Dockerfile
+    image: events-image
+    container_name: events-image
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    ports:
+      - "8060:8060"
+    networks:
+      - elk
+
+  root:
+    build:
+      context: ../root-app
+      dockerfile: Dockerfile
+    image: root-image
+    container_name: root-image
+    restart: on-failure
+    ports:
+      - "8085:8085"
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
+

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<header th:fragment="video-editor-content">
+        <!--@thymesVar id="Resource" type="org.opendelos.dashboard.model.resources.Resource"-->
+        <div class="card mx-3">
+            <div class="card-header">
+
+                    <h3><b>Επεξεργαστής Βίντεο</b></h3>
+                    <h5>
+                        <span id="resource_title" th:text="${Resource.title}"></span><span class="text-muted small" th:text="${' [id= ' + Resource.id + ']'}"></span><br/>
+                        <span class="small text-muted mt-1" th:text="${'Καταγραφή: '}"></span>
+                        <span class="small text-muted mt-1" th:include="fragments/format-resource-date.html:: formatDateTime(field=${Resource.date})"></span>
+                        <span class="small text-muted mt-1" th:text="${' | Ενημέρωση: '}"></span>
+                        <span class="small text-muted" th:include="fragments/format-resource-date.html:: formatDateTime(field=${Resource.dateModified})"></span>
+                    </h5>
+                    <span class="float-right">
+                        <a th:if="${Resource.type == 'COURSE'}" th:href="@{/admin/lecture-editor(id=${Resource.id},t='video')}" role="button" class="btn btn-secondary cancel_button" id="cancelResource_top"> <i class="fas fa-undo"></i> Επιστροφή</a>
+                          <a th:if="${Resource.type == 'EVENT'}" th:href="@{/admin/event-editor(id=${Resource.id},t='video')}" role="button" class="btn btn-secondary cancel_button" id="cancelResource_top">  <i class="fas fa-undo"></i> Επιστροφή</a>
+                          <span id="accept_reject_button" th:if="${Resource.rteStatus != null && Resource.rteStatus.status == 'DARE'}">
+                                   <a id="play_edited_video" th:attr="data-info=${Resource.id + '::' + Resource.title}" title="απαιτείται έγκριση ή απόρριψη κοπής"
+                                      class="btn btn-warning" style="margin-bottom:2px;color:white" href="#">
+                                      <i class="far fa-thumbs-up"></i> Έγκριση/Απόρριψη
+                                   </a>
+                          </span>
+                          <button type="submit" disabled class="btn btn-success send_json_button" id="save-button" th:title="#{richlecture.save}" onclick="actions.send_json()">
+                                    <i class="fas fa-save"></i> Αποθήκευση
+                          </button>
+                    </span>
+
+            </div>
+            <div class="card-body">
+                <table style="width:960px">
+                    <tr>
+                        <th>
+                            <a role="button" th:href="@{/admin/video-editor/editor_help}" class="btn btn-secondary " th:title="#{richlecture.help}" target="_blank">
+                                <i class="fas fa-question"></i>
+                            </a>
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td rowspan="4" style="width: 600px;padding-top: 10px">
+                            <!-- movie player -->
+                            <div id="movie_player">
+                                <video id='player' controls preload='none'>
+                                    <source id='mp4' src="" type='video/mp4'>
+                                </video>
+                            </div>
+                        </td>
+                        <td style="width: 340px;padding-top: 10px">
+                            <div class="show_trims_clips ml-3"  style="min-width: 340px">
+                                <span th:text="#{richlecture.selection_of_trims}"></span>
+                                <div class ="userTrimInputs"> </div>
+                                <span th:text="#{richlecture.selection_of_cuts}"></span>
+                                <div class ="userClipInputs"> </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="trimmingInputs" style="width: 160px;margin-left: 15px;margin-top: 10px">
+                                <div class="mr-1" id="trimInputHeader" th:text="#{richlecture.trim_inputs}"></div>
+                                <div>
+                                    <button type="button" class="btn btn-small set_start_button" th:title="#{richlecture.set_start_time}" onclick="actions.set_start_video()"></button>
+                                    <button type="button" class="btn btn-small set_end_button" th:title="#{richlecture.set_end_time}" onclick="actions.set_end_video()"></button>
+                                </div>
+                            </div>
+
+                            <div id ="clippingInputs" style="width: 160px;margin-left: 20px;margin-top: 10px">
+                                <div class="mr-1" id="clipInputHeader" th:text="#{richlecture.cut_inputs}"></div>
+                                <div>
+                                    <button type="button" class="custom low small begin_cut_button" th:title="#{richlecture.begin_cut}" onclick="actions.begin_cut()"></button>
+                                    <button type="button" disabled class="custom low small end_cut_button" th:title="#{richlecture.end_cut}" onclick="actions.end_cut()"></button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="player_controls ml-3"  style="min-width: 340px">
+                                <div class="player_fast_bwd" th:title="#{richlecture.go_5sec_back}" onclick="actions.fast_seek('bwd')"></div>
+                                <div class="player_play" th:title="#{richlecture.play_pause}" onclick="actions.play()"></div>
+                                <div class="player_fast_fwd" th:title="#{richlecture.go_5sec_later}" onclick="actions.fast_seek('fwd')"></div>
+
+                                <div class="player_vol_down" th:title="#{richlecture.vol_down}" onclick="volume_down()"></div>
+                                <div class="player_mute" th:title="#{richlecture.mute}" onclick="toggle_mute()"></div>
+                                <div class="player_vol_up" th:title="#{richlecture.vol_up}" onclick="volume_up()"></div>
+                                <input type="text" placeholder="HH:MM:SS" class="go_to_field"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="realediting_block ml-3" style="min-width: 340px">
+                                <div class="realediting_label" th:text="#{richlecture.realediting_label}"></div>
+                                <button type="button" class="custom low small realediting_btn" th:title="#{richlecture.realediting_btn_title}" onclick="actions.realedit()"></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-top: 20px">
+                            <div style="clear:both"></div>
+                            <!--<div class="zoom_timeline">-->
+                            <div class="timeline">
+                                <div class="draggable_container">
+                                    <div class="timeline_progress_position"><div class="timeline_progress_position_time"></div></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="height: 100px;background-color: #f1f2f2">
+                        <td colspan="2">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="info box" id="info" style="display: none"></div>
+
+
+  </div>
+
+</header>

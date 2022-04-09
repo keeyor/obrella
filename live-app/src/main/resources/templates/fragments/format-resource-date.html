@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<span th:fragment="formatDate (field)" title="ημερομηνία καταγραφής/ενημέρωσης" >
+    <span th:text="${#temporals.format(field, 'dd')}"></span>
+    <span th:text="${#temporals.format(field, 'MMM')}"></span>
+    <span th:text="${#temporals.format(field, 'YYYY')}"></span>
+</span>
+<span th:fragment="formatDateTime (field)" title="ημερομηνία καταγραφής" >
+    <span th:text="${#temporals.format(field,'HH:mm')}"></span>
+</span>
+<span th:fragment="formatDateTimeCustom(field)">
+    <span th:text="${T(org.opendelos.dashboard.services.resource.ResourceUtils).format(field)}"></span>
+</span>
+<span th:fragment="formatLiveTime(startTime, duration)">
+    <span th:text="${T(org.opendelos.dashboard.services.resource.ResourceUtils).formatLiveTime(startTime, duration)}"></span>
+</span>
+<span th:fragment="formatInstant(date)">
+    <span th:text="${T(org.opendelos.dashboard.services.resource.ResourceUtils).formatInstant(date)}"></span>
+</span>
+<!--
+<div th:with="timeZone=${T(java.util.TimeZone).getTimeZone('CET')}">
+    <span th:text="${T(org.apache.commons.lang3.time.DateFormatUtils).format(field, 'dd-MM-yyyy HH:mm', timeZone)}"></span>
+</div>
+-->
+
+
+

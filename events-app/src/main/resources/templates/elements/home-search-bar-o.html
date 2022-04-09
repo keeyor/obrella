@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!--@thymesVar id="resourceQuery" type="org.opendelos.vod.repository.resource.ResourceQuery"-->
+    <!--@thymesVar id="page" type="java.lang.String"-->
+    <!--    <div th:fragment="home-search-bar" style="font-size: 1.1em;background-color: #ebedef;border: 1px lightgrey solid!important">
+--            <form id="search-form" th:object="${resourceQuery}" th:action="@{${page}}" method="post">
+                   <div class="form-row mx-2">
+                       <div class="col-lg-11 col-md-9">
+                           <input type="search" class="form-control my-2" th:field="*{ft}" placeholder="Αναζήτηση Εκδήλωσης" aria-label="Search" style="width: 100%">
+                           <input type="hidden" id="eventTypeFilterIds" th:field="*{eventType}">
+                           <input type="hidden" id="departmentFilterId" th:field="*{departmentId}"/>
+                           <input type="hidden" id="schoolFilterId" th:field="*{schoolId}"/>
+                       </div>
+                       <div class="col-lg-1 col-md-3">
+                           <button class="btn blue-btn-wcag-bgnd-color text-white my-2" type="submit" style="width: 100%"><i class="fas fa-search"></i></button>
+                       </div>
+                   </div>
+               </form>-->
+        <div th:fragment="home-search-bar" class="text-center justify-content-center mt-4">
+            <form id="search-form" th:object="${resourceQuery}" th:action="@{search}" method="post">
+                     <div class="form-row justify-content-center">
+                         <div class="mr-2">
+                             <label for="inlineFormInputGroup"></label>
+                             <input type="search" th:field="*{ft}" class="search-box" id="inlineFormInputGroup" th:placeholder="#{alt.text.search}">
+                        </div>
+                        <button type="submit" class="btn blue-btn-wcag-bgnd-color text-white"><i class="fas fa-search"></i></button>
+                     </div>
+                    <input type="hidden" id="categoryTypeFilterId" th:field="*{categoryCode}">
+                    <input type="hidden" id="eventTypeFilterIds" th:field="*{eventType}">
+                    <input type="hidden" id="departmentFilterId" th:field="*{departmentId}"/><input type="hidden" id="schoolFilterId" th:field="*{schoolId}"/>
+            </form>
+        </div>
+
+</body>
+</html>

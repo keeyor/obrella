@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="ontop-dyna-filters">
+    <div id="AllFilters">
+        <div class="card mb-2">
+            <div class="ps-2" style="font-weight: 500">
+                <i class="fas fa-exclamation"></i> Περιορίστε τα αποτελέσματα του ημερολογίου μεταδόσεων, επιλέγοντας ένα ή περισσότερα κριτήρια:
+            </div>
+            <div class="card-body py-2 my-2">
+                <div class="row" >
+                    <div class="col-12">
+                        <a id="depCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasDep" role="button" aria-controls="offcanvasDep" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε τμήμα">
+                            <i class="fas fa-plus-circle"></i> | Τμήμα
+                        </a>
+                        <a id="staffCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasStaff" role="button" aria-controls="offcanvasStaff" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε διδάσκοντα">
+                            <i class="fas fa-plus-circle"></i> | Διδάσκων
+                        </a>
+                        <a  id="courseCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasCourse" role="button" aria-controls="offcanvasCourse"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε μάθημα">
+                            <i class="fas fa-plus-circle"></i> | Μάθημα
+                        </a>
+                        <div class="text-muted" id="no_dyna_filters"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- OffCanvas Dep -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasDep" aria-labelledby="offcanvasDepLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasDepLabel">Τμήμα</h5>
+            <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div>
+                Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Τμήμα</b> από την παρακάτω λίστα.
+                <p class="text-muted">
+                    Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Τμήμα**
+                </p>
+            </div>
+            <ul class="mt-3 list-group" id="dpFilters"></ul>
+
+            <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
+        </div>
+    </div>
+
+    <!-- OffCanvas Staff -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStaff" aria-labelledby="offcanvasStaffLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasStaffLabel">Διδάσκων</h5>
+            <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div>
+                Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Διδάσκοντα</b> από την παρακάτω λίστα
+                <p class="text-muted">
+                    Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Διδάσκοντα**
+                </p>
+            </div>
+            <ul  class="mt-3 list-group"  id="stFilters"></ul>
+
+            <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
+        </div>
+    </div>
+
+    <!-- OffCanvas Staff -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasCourse" aria-labelledby="offcanvasCourseLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasCourseLabel">Μάθημα</h5>
+            <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div>
+                Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Μάθημα</b> από την παρακάτω λίστα
+                <p class="text-muted">
+                    Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Μάθημα**
+                </p>
+            </div>
+            <ul class="mt-3 list-group" id="coFilters"></ul>
+
+            <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

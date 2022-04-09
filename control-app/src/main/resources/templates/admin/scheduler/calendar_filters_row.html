@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<header th:fragment="calendar_filters_row">
+    <div class="card" style="border: none">
+        <div class="card-body pb-0">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <label for="happy" class="control-label mr-1 pt-1">Ενεργή Περίοδος </label>
+                        <div id="radioBtn" class="btn-group">
+                            <button class="btn btn-secondary btn-sm active dur_option" data-toggle="happy" data-title="Day">Ημέρα</button>
+                            <button class="btn btn-secondary btn-sm notActive dur_option" data-toggle="happy" data-title="Week">Εβδομάδα</button>
+                            <button class="btn btn-secondary btn-sm notActive dur_option" data-toggle="happy" data-title="Month">Μήνας</button>
+                            <button class="btn btn-secondary btn-sm notActive dur_option" data-toggle="happy" data-title="Custom">Προσαρμογή</button>
+                        </div>
+                        <input type="hidden" name="happy" id="happy" value="Day">
+                    </div>
+                </div>
+                <div class="col-md-3"  id="date-range-pick">
+                    <div class="input-daterange input-group ml-4 mr-4 form-inline" id="datepicker" style="display: none" >
+                        <span class="input-group-prepend mr-1" style="height: 30px">
+                               <a style="color:#ffffff" class="btn btn-secondary btn-sm active"> από </a>
+                         </span>
+                        <label for="_date_from"></label>
+                        <input style="border-color:#321fdb;height: 30px" type="text" class="form-control date_select p-1" name="start" id="_date_from" />
+                        <span class="input-group-append ml-1 mr-1" style="height: 30px">
+                               <a style="color:#ffffff" class="btn btn-secondary btn-sm active"> έως </a>
+                        </span>
+                        <label for="_date_to"></label>
+                        <input style="border-color:#321fdb;height: 30px" type="text" class="form-control date_select" name="end" id="_date_to" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span class="text-muted"><i class="fas fa-info-circle"></i>
+                        Επιλέξτε ενεργή περίοδο με βάσει την Ημέρα, την Εβδομάδα, το Μήνα ή προσαρμόστε την ενεργή περίοδο πατώντας 'Προσαρμογή'.
+                        Μπορείτε να φιλτράρετε τα αποτελέσματα επιλέγοντας Τμήμα ή Άιθουσα
+                    </span>
+                    <nav class="navbar navbar-expand-xl navbar-dark bg-light pl-0">
+                        <button class="navbar-toggler" type="button"  title="Φίλτρα Αναζήτησης"
+                                data-toggle="collapse" data-target="#gen-nav" aria-controls="gen-nav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="fas fa-bars text-black-50"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="gen-nav">
+                            <ul class="navbar-nav mr-auto">
+                                <!-- DEPARTMENT FILTER -->
+                                <li id="department_clear" class="nav-item  clear-filter" style="display:none">
+                                    <a data-target="department" style="padding-right: 0" class="nav-link" title="ακύρωση φίλτρου" href="#">
+                                        <i class="fa fa-ban mr-1" aria-hidden="true" style="padding: 0"> </i>
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown mr-4">
+                                    <a class="nav-link dropdown-toggle  gray-accesskeys-link-wcag-color" href="#" id="department_load" role="button" data-toggle="dropdown" aria-expanded="false">
+                                         Τμήμα
+                                    </a>
+                                    <ul class="dropdown-menu" id="department-filter" aria-labelledby="department_load" style="font-size: 1em"></ul>
+                                </li>
+                                <!-- CLASSROOM FILTER -->
+                                <li id="classroom_clear" class="nav-item clear-filter" style="display:none">
+                                    <a data-target="classroom" style="padding-right: 0" class="nav-link" title="ακύρωση φίλτρου" href="#">
+                                        <i class="fa fa-ban mr-1" aria-hidden="true" style="padding: 0"> </i>
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown mr-4">
+                                    <a class="nav-link dropdown-toggle  gray-accesskeys-link-wcag-color" href="#" id="classroom_load" role="button" data-toggle="dropdown" aria-expanded="false">
+                                        Αίθουσα/Χώρος*
+                                    </a>
+                                    <ul class="dropdown-menu" id="classroom-filter"  aria-labelledby="classroom_load" style="max-height: 500px;width:500px;overflow-y:auto; overflow-x: hidden;
+                                            position: absolute;padding-top: 0">
+                                        <div class="px-1 pt-1 pb-1" style="width: 100%;position: sticky;top:0;left:0;height: 35px;background-color: white">
+                                            <input style="width: 100%;height: 100%" type="text"  placeholder="αναζήτηση.." id="myInput" onkeyup="filterFunction()">
+                                        </div>
+                                    </ul>
+                                </li>
+                                <th:block sec:authorize="hasRole('ROLE_STAFFMEMBER')">
+                                 <li id="editor_clear" class="nav-item clear-filter" style="display:none">
+                                    <a data-target="editor" style="padding-right: 0" class="nav-link" title="ακύρωση φίλτρου" href="#">
+                                        <i class="fa fa-ban mr-1" aria-hidden="true" style="padding: 0"> </i>
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                   <a class="nav-link dropdown-toggle  gray-accesskeys-link-wcag-color" href="#" id="editor_load" role="button" data-toggle="dropdown" aria-expanded="false">
+                                        Εμφάνιση
+                                    </a>
+                                    <ul class="dropdown-menu" id="editor-filter" aria-labelledby="editor_load" style="font-size: 1em">
+                                         <li>
+                                             <a style="font-size: 0.92em" class="dropdown-item filter-item" href="#" data-filter="editor" th:attr="data-target=${user.id}">Το πρόγραμμά μου</a>
+                                         </li>
+                                    </ul>
+                                </li>
+                                </th:block>
+                            </ul>
+                        </div>
+                    </nav>
+                    <span class="float-left"> * περιλαμβάνονται μόνο οι ενεργοποιημένες αίθουσες</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>

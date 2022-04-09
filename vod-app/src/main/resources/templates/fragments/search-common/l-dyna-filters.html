@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="l-dyna-filters">
+    <div id="AllFilters" class="card" style="font-size: 0.9em">
+        <!-- @thymesVar id="color" type="java.lang.String" -->
+        <!-- @thymesVar id="landing_page" type="java.lang.String" -->
+        <div th:unless="${landing_page == 'calendar-admin' || landing_page == 'daily-admin' || landing_page == 'live-admin'}" th:class="${'card-header ' + color + '-btn-wcag-bgnd-color'}" style="color: whitesmoke">
+                <span>Δυναμικά Φίλτρα *</span>
+                <span id="QueryReportStatus">
+                     (σε εξέλιξη <img width="16px" height="16px" th:src="@{/public/images/icons/icon_loading.gif}" alt="" src=""> )
+                </span>
+        </div>
+        <div th:if="${landing_page == 'calendar-admin' || landing_page == 'daily-admin' || landing_page == 'live-admin'}" th:class="${'card-header'}" style="color: whitesmoke;background-color: #2C3E50">
+                <span>Δυναμικά Φίλτρα *</span>
+                <span id="QueryReportStatus">
+                     (σε εξέλιξη <img width="16px" height="16px" th:src="@{/public/images/icons/icon_loading.gif}" alt="" src=""> )
+                </span>
+        </div>
+        <div class="card-body">
+            <div class="text-muted mb-2"><i>
+                * Τα δυναμικά φίλτρα εφαρμόζονται στα αποτελέσματα της κύριας αναζήτησης. Επιλέξτε ένα ή περισσότερα φίλτρα για να περιορίσετε τον αριθμό των αποτελεσμάτων</i>
+            </div>
+            <!-- DEPARTMENT FILTER -->
+            <div class="mb-3"  id="departments_filter_row" style="display: none">
+                <div class="row py-2">
+                    <div class="col-6 font-weight-bold">
+                        <img  alt="" width="16px" height="16px" th:src="@{'/public/images/icons/IconDepartment.png'}" src="">  Τμήμα
+                    </div>
+                    <div class="col-6 input-group pr-0"></div>
+                </div>
+                <div class="row dynafilters" style="max-height: 300px;overflow-y: auto">
+                    <div class="col-12 pr-0">
+                        <table id="departments_rdt" class="compact" style="width:100%">
+                            <thead>
+                                 <tr style="height: 20px;">
+                                    <th></th>
+                                    <th style="width: 100%"  class="text-left"></th>
+                                    <th class="text-right"></th>
+                                 </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COURSES FILTER -->
+            <div class="mb-3"  id="courses_filter_row" style="display: none">
+                <div class="row py-2">
+                    <div class="col-6 font-weight-bold">
+                        <img  alt="μαθήματα" width="16px" height="16px" th:src="@{'/public/images/icons/IconLesson.png'}" src="">  Μάθημα
+                    </div>
+                    <div class="col-6 input-group  pr-0">
+                    </div>
+                </div>
+                <div class="row" style="max-height: 300px;overflow-y: auto">
+                    <div class="col-12 pr-0">
+                        <table id="courses_rdt" class="compact" style="width:100%;border: none">
+                            <thead>
+                                <tr style="height: 20px;">
+                                    <th></th>
+                                    <th></th>
+                                    <th style="width: 100%" class="text-left"></th>
+                                    <th class="text-right"> </th>
+                                </tr>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <!-- STAFF MEMBERS FILTER -->
+            <div class="mb-3"  id="staff_filters_row"  style="display: none">
+            <div class="row py-2 mt-2">
+                <div class="col-6 font-weight-bold">
+                    <img  alt="Καθηγητές" width="16px" height="16px" th:src="@{'/public/images/icons/IconStaff.png'}" src="">  Καθηγητής
+                </div>
+                <div class="col-6 input-group  pr-0">
+                </div>
+            </div>
+                <div class="row" style="max-height: 300px;overflow-y: auto">
+                <div class="col-12 pr-0">
+                    <table id="staff_rdt" class="compact" style="width:100%">
+                        <thead>
+                            <tr style="height: 20px;">
+                                <th></th>
+                                <th></th>
+                                <th style="width: 100%" class="text-left"></th>
+                                <th class="text-right"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3" id="events_filter_row"  style="display: none">
+                <!-- SCHEDULED EVENTS FILTER -->
+                <div class="row py-2 mt-2">
+                    <div class="col-6 font-weight-bold">
+                        <img  alt="" width="16px" height="16px" th:src="@{'/public/images/icons/IconEvents25x25.png'}" src="">  Εκδήλωση
+                    </div>
+                    <div class="col-6 input-group  pr-0">
+                    </div>
+                </div>
+                <div class="row" style="max-height: 300px;overflow-y: auto">
+                    <div class="col-12 pr-0">
+                        <table id="events_rdt" class="compact" style="width:100%">
+                            <thead>
+                            <tr style="height: 20px;">
+                                <th></th>
+                                <th style="width: 100%"  class="text-left"></th>
+                                <th class="text-right"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Classroom Filter -->
+        <div class="mb-3" id="classroom_filter_row"  style="display: none">
+                <div class="row py-2 mt-2">
+                    <div class="col-6 font-weight-bold">
+                        <i class="fas fa-map-marked"></i>  Αίθουσα
+                    </div>
+                    <div class="col-6 input-group  pr-0">
+                    </div>
+                </div>
+                <div class="row" style="max-height: 300px;overflow-y: auto">
+                    <div class="col-12 pr-0">
+                        <table id="classroom_rdt" class="compact" style="width:100%">
+                            <thead>
+                                <tr style="height: 20px;">
+                                    <th></th>
+                                    <th style="width: 100%"  class="text-left"></th>
+                                    <th class="text-right"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+        </div>
+        <div th:if="${landing_page == 'search' || landing_page == 'admin-search'}" class="row text-muted">
+                <div class="col-12">
+                    <i>* Τα αριθμητικά αποτελέσματα των δυναμικών φίλτρων αφορούν τα πρώτα 1000 αποτελέσματα. Tα πραγματικά νούμερα ενδέχεται να είναι μεγαλύτερα</i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

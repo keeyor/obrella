@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="course_info_modal">
+    <div class="modal fade" id="CourseInfoModal" tabindex="-1" role="dialog" aria-labelledby="CourseInfoModalLabel" aria-hidden="true" style="padding-right: 17px">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #0b6da8">
+                    <h5 id="CourseInfoModalLabel" class="text-white">
+                        <span id="course_info_title"></span>Στοιχεία Μαθήματος
+                    </h5>
+                </div>
+                <div class="modal-body" id="course_info_panel">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Κλείσιμο</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

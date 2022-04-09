@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<header th:fragment="a-header(parent, child)" class="c-header-fixed c-header pl-2">
+    <ul class="c-header-nav d-md-down-none">
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" th:href="@{/admin/search}">Περιεχόμενο</a></li>
+        <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" th:href="@{/admin/institution/structure}">Διαχείριση Ιδρύματος</a></li>
+        </th:block>
+        <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_SA')">
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" th:href="@{/admin/department/courses}">Διαχείριση Τμημάτων</a></li>
+        </th:block>
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" th:href="@{/admin/scheduler/timetable}">Προγραμματισμός</a></li>
+        <th:block sec:authorize="hasRole('ROLE_SA')">
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" th:href="@{/admin/system/messages}">Ιστότοπος</a></li>
+        </th:block>
+    </ul>
+    <ul class="c-header-nav ml-auto mr-4">
+        <li sec:authorize="isAuthenticated()" class="c-header-nav-item mx-2">
+            <a class="c-header-nav-link blue-link-wcag-color" th:href="@{/admin/user_profile}" title="προφίλ">
+                <span sec:authentication="name"></span><i class="far fa-user-circle fa-2x ml-1"></i>
+            </a>
+        </li>
+        <li sec:authorize="isAuthenticated()" class="c-header-nav-item mx-2">
+            <a class="c-header-nav-link blue-link-wcag-color" th:href="@{/admin}" title="κέντρο ελέγχου">
+                <i class="fas fa-cog fa-2x"></i>
+            </a>
+        </li>
+        <li sec:authorize="isAuthenticated()" class="c-header-nav-item mx-2">
+            <a class="c-header-nav-link blue-link-wcag-color" href="#" title="logout" data-toggle="modal" data-target="#logout_modal">
+                <span class="icon-main-menu-logout fa-2x"></span>
+            </a>
+        </li>
+        <li sec:authorize="isAnonymous()" class="c-header-nav-item mx-2">
+            <a th:href="@{/admin}" title="login">
+                <span class="icon-main-menu-login blue-link-wcag-color fa-lg"></span>
+            </a>
+        </li>
+    </ul>
+    <!--@thymesVar id="landing_page" type="java.lang.String"-->
+    <div class="c-subheader mx-2">
+        <ol class="breadcrumb border-0 m-0">
+            <li class="breadcrumb-item active">
+                <span th:text="${parent}"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <span th:text="${child}"></span>
+            </li>
+        </ol>
+    </div>
+</header>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="events-app" />
+        <module name="model" />
+        <module name="root-app" />
+        <module name="control" />
+        <module name="sync" />
+        <module name="dashboard" />
+        <module name="live-app" />
+        <module name="live" />
+        <module name="vod-app" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="liveu" target="1.8" />
+      <module name="root-app (1)" target="1.8" />
+      <module name="root-app (2)" target="1.8" />
+      <module name="vod" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="control" options="-parameters" />
+      <module name="dashboard" options="-parameters" />
+      <module name="events-app" options="-parameters" />
+      <module name="live" options="-parameters" />
+      <module name="live-app" options="-parameters" />
+      <module name="liveu" options="-parameters" />
+      <module name="model" options="-parameters" />
+      <module name="root-app" options="-parameters" />
+      <module name="root-app (1)" options="-parameters" />
+      <module name="root-app (2)" options="-parameters" />
+      <module name="sync" options="-parameters" />
+      <module name="vod" options="-parameters" />
+      <module name="vod-app" options="-parameters" />
+    </option>
+  </component>
+</project>

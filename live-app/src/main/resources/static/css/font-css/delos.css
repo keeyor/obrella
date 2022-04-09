@@ -1,0 +1,124 @@
+@font-face {
+  font-family: 'delos';
+  src: url('../font/delos.eot?4086464');
+  src: url('../font/delos.eot?4086464#iefix') format('embedded-opentype'),
+       url('../font/delos.woff?4086464') format('woff'),
+       url('../font/delos.ttf?4086464') format('truetype'),
+       url('../font/delos.svg?4086464#delos') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'delos';
+    src: url('../font/delos.svg?4086464#delos') format('svg');
+  }
+}
+*/
+ 
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "delos", serif;
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+  /* Uncomment for 3D effect */
+  text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3);
+}
+ 
+.icon-info:before { content: '\e800'; } /* '' */
+.icon-slides:before { content: '\e801'; } /* '' */
+.icon-titles:before { content: '\e802'; } /* '' */
+.icon-nextslide:before { content: '\e803'; } /* '' */
+.icon-prevslide:before { content: '\e804'; } /* '' */
+.icon-cc:before { content: '\e805'; } /* '' */
+.icon-ccoutline:before { content: '\e806'; } /* '' */
+.icon-main-menu-settings:before { content: '\e807'; } /* '' */
+.icon-stuff-circle:before { content: '\e808'; } /* '' */
+.icon-class:before { content: '\e809'; } /* '' */
+.icon-class-circle:before { content: '\e80a'; } /* '' */
+.icon-lesson:before { content: '\e80b'; } /* '' */
+.icon-lesson-circle:before { content: '\e80c'; } /* '' */
+.icon-webcam:before { content: '\e80d'; } /* '' */
+.icon-live-lecture-large:before { content: '\e80e'; } /* '' */
+.icon-presentation:before { content: '\e80f'; } /* '' */
+.icon-screencast:before { content: '\e810'; } /* '' */
+.icon-main-menu-scheduler:before { content: '\e811'; } /* '' */
+.icon-main-menu-contentm:before { content: '\e812'; } /* '' */
+.icon-main-menu-irm:before { content: '\e813'; } /* '' */
+.icon-parameters:before { content: '\e814'; } /* '' */
+.icon-main-menu-search:before { content: '\e815'; } /* '' */
+.icon-stuff:before { content: '\e816'; } /* '' */
+.icon-key:before { content: '\e817'; } /* '' */
+.icon-on-demand:before { content: '\e818'; } /* '' */
+.icon-main-menu-login:before { content: '\e819'; } /* '' */
+.icon-main-menu-logout:before { content: '\e81a'; } /* '' */
+.icon-scheduled:before { content: '\e81b'; } /* '' */
+.icon-live:before { content: '\e81c'; } /* '' */
+.icon-detailed-view:before { content: '\e81d'; } /* '' */
+.icon-time-duration:before { content: '\e81e'; } /* '' */
+.icon-time-start:before { content: '\e81f'; } /* '' */
+.icon-compact-view:before { content: '\e820'; } /* '' */
+.icon-public-view:before { content: '\e821'; } /* '' */
+.icon-private-view:before { content: '\e822'; } /* '' */
+.icon-didaskon:before { content: '\e823'; } /* '' */
+.icon-speaker:before { content: '\e824'; } /* '' */
+.icon-event:before { content: '\e825'; } /* '' */
+.icon-lecture:before { content: '\e826'; } /* '' */
+.icon-lecture-lesson:before { content: '\e827'; } /* '' */
+.icon-lecture-event:before { content: '\e828'; } /* '' */
+.icon-scheduler-calendar:before { content: '\e829'; } /* '' */
+.icon-scheduler-list:before { content: '\e82a'; } /* '' */
+.icon-scheduler-menu-calendar:before { content: '\e82b'; } /* '' */
+.icon-live-lecture:before { content: '\e82c'; } /* '' */
+.icon-live-camera-wboard:before { content: '\e82d'; } /* '' */
+.icon-videocam:before { content: '\e82e'; } /* '' */
+.icon-live-camera-wvidew:before { content: '\e82f'; } /* '' */
+.icon-live-camera-present:before { content: '\e830'; } /* '' */
+.icon-screencast-alt:before { content: '\e831'; } /* '' */
+.icon-ok:before { content: '\e832'; } /* '' */
+.icon-cancel:before { content: '\e833'; } /* '' */
+.icon-scheduler-menu-list:before { content: '\e834'; } /* '' */
+.icon-cast:before { content: '\e835'; } /* '' */
+.icon-screencast-alt-inv:before { content: '\e836'; } /* '' */
+.icon-admin:before { content: '\e837'; } /* '' */
+.icon-support:before { content: '\e838'; } /* '' */
+.icon-hdd:before { content: '\e839'; } /* '' */
+.icon-hourglass:before { content: '\e83a'; } /* '' */
+.icon-cloud-thunder:before { content: '\e83b'; } /* '' */
+.icon-cloud:before { content: '\e83c'; } /* '' */
+.icon-block-1:before { content: '\e83d'; } /* '' */
+.icon-share:before { content: '\e83e'; } /* '' */
+.icon-twitter:before { content: '\e845'; } /* '' */
+.icon-linkedin:before { content: '\e846'; } /* '' */
+.icon-gplus:before { content: '\e847'; } /* '' */
+.icon-facebook:before { content: '\e848'; } /* '' */
+.icon-youtube:before { content: '\e849'; } /* '' */

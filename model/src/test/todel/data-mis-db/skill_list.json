@@ -1,0 +1,171 @@
+[ {
+  "id" : 1,
+  "name" : "Περιήγηση στο Διαδίκτυο",
+  "description" : null,
+  "category" : 2
+}, {
+  "id" : 2,
+  "name" : "Μηχανές αναζήτησης",
+  "description" : null,
+  "category" : 2
+}, {
+  "id" : 3,
+  "name" : "Κοινωνικά δίκτυα",
+  "description" : null,
+  "category" : 1
+}, {
+  "id" : 4,
+  "name" : "Περιεχόμενο (ανάπτυξη, αξιολόγηση)",
+  "description" : null,
+  "category" : 2
+}, {
+  "id" : 5,
+  "name" : "Εφαρμογές γραφείου",
+  "description" : null,
+  "category" : 3
+}, {
+  "id" : 6,
+  "name" : "Εφαρμογές επικοινωνίας",
+  "description" : null,
+  "category" : 1
+}, {
+  "id" : 7,
+  "name" : "Ανάπτυξη λογισμικού",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 8,
+  "name" : "Ανάπτυξη εφαρμογών διαδικτύου",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 9,
+  "name" : "Σύγχρονο επιχειρηματικό πλαίσιο",
+  "description" : null,
+  "category" : 4
+}, {
+  "id" : 10,
+  "name" : "Χρήση υπολογιστή",
+  "description" : null,
+  "category" : 3
+}, {
+  "id" : 11,
+  "name" : "Ασφάλεια",
+  "description" : null,
+  "category" : 2
+}, {
+  "id" : 12,
+  "name" : "Βάσεις Δεδομένων",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 13,
+  "name" : "Προγραμματισμός συσκευών",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 14,
+  "name" : "Κινητές συσκευές",
+  "description" : null,
+  "category" : 1
+}, {
+  "id" : 15,
+  "name" : "Μεγάλα Δεδομένα",
+  "description" : null,
+  "category" : 6
+}, {
+  "id" : 16,
+  "name" : "Ανάπτυξη εφαρμογών κινητών συσκευών",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 17,
+  "name" : "Προστασία προσωπικών δεδομένων",
+  "description" : null,
+  "category" : 2
+}, {
+  "id" : 18,
+  "name" : "Ψηφιακό μάρκετινγκ",
+  "description" : null,
+  "category" : 4
+}, {
+  "id" : 19,
+  "name" : "Κυβερνοασφάλεια",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 20,
+  "name" : "Yπολογιστικό Νέφος",
+  "description" : null,
+  "category" : 6
+}, {
+  "id" : 21,
+  "name" : "Τεχνητή Νοημοσύνη",
+  "description" : null,
+  "category" : 6
+}, {
+  "id" : 22,
+  "name" : "Μηχανική Μάθηση",
+  "description" : null,
+  "category" : 6
+}, {
+  "id" : 23,
+  "name" : "ΤΠΕ και Εκπαίδευση",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 24,
+  "name" : "Εργασία από το σπίτι",
+  "description" : "",
+  "category" : 1
+}, {
+  "id" : 25,
+  "name" : "Δίκτυα Επικοινωνιών",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 26,
+  "name" : "Λειτουργικά Συστήματα",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 27,
+  "name" : "Πληροφοριακά Συστήματα",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 28,
+  "name" : "Γλώσσες προγραμματισμού",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 29,
+  "name" : "Επικοινωνία Ανθρὠπου - Μηχανής",
+  "description" : null,
+  "category" : 5
+}, {
+  "id" : 30,
+  "name" : "Συναλλαγές πολίτη",
+  "description" : null,
+  "category" : 2
+}, {
+  "id" : 31,
+  "name" : "Ανάλυση Δεδομένων",
+  "description" : "",
+  "category" : 6
+}, {
+  "id" : 32,
+  "name" : "Ψηφιακή γεωργία",
+  "description" : "",
+  "category" : 6
+}, {
+  "id" : 33,
+  "name" : "Ψηφιακή Υγεία",
+  "description" : "",
+  "category" : 2
+}, {
+  "id" : 34,
+  "name" : "Έξυπνες πόλεις",
+  "description" : "",
+  "category" : 6
+} ]

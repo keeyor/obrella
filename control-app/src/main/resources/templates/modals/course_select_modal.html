@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="course_select_modal">
+<div class="modal fade" id="CourseSelectModal" tabindex="-1" role="dialog" aria-labelledby="CourseSelectModalLabel" aria-hidden="true" style="padding-right: 17px">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header"  style="border: none">
+                <h5 class="modal-title ml-2" id="CourseSelectModalLabel">
+                    <span class="fas fa-th-list"></span> Κατάλογος Μαθημάτων<br/>
+                    <small>Εφαρμογή φίλτρου αναζήτησης</small>
+                </h5>
+            </div>
+            <div class="modal-body"  style="font-size: 1em">
+                            <table id="CourseSelectDataTable" style="width:100%"  class="compact row-border table-striped">
+                                <thead>
+                                <tr style="font-weight: 700">
+                                    <td></td>
+                                    <td>Τίτλος</td>
+                                    <td style="width: 40%">Τμήμα</td>
+                                </tr>
+                                </thead>
+                            </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  id="applyCourseFilter">Εφαρμογή</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+            </div>
+    </div>
+    </div>
+</div>
+</div>

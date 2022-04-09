@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<footer th:fragment="footer"  class="c-footer" >
+    <div class="row" style="font-size: 0.9em!important">
+        <div class="col-12">
+            <a role="button" class="btn btn-transparent btn-sm blue-link-wcag-color" href="https://www.uoa.gr" target="_blank">
+                <i class="far fa-copyright mr-1"></i><span th:text="#{default.institution.title}"></span>
+            </a>
+            <button type="button" class="btn btn-default btn-sm  blue-link-wcag-color" data-toggle="modal" data-target="#about_modal">
+                Σχετικά
+            </button>
+            <button type="button" class="btn btn-default btn-sm   blue-link-wcag-color" data-toggle="modal" data-target="#terms_modal">
+                Όροι Χρήσης
+            </button>
+            <button type="button" class="btn btn-default btn-sm   blue-link-wcag-color" data-toggle="modal" data-target="#faq_modal">
+                Συχνές Ερωτήσεις
+            </button>
+            <button type="button" class="btn btn-default btn-sm   blue-link-wcag-color" data-toggle="modal" data-target="#contact_modal">
+                Επικοινωνία
+            </button>
+        </div>
+    </div>
+
+</footer>

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<header th:fragment="video-sync-content">
+        <!--@thymesVar id="Resource" type="org.opendelos.dashboard.model.resources.Resource"-->
+        <div class="card mx-3">
+            <div class="card-header">
+
+                    <h3><b>Συγχρονισμός Βίντεο-Παρουσίασης</b></h3>
+                    <h5>
+                        <span id="resource_title" th:text="${Resource.title}"></span><span class="text-muted small" th:text="${' [id= ' + Resource.id + ']'}"></span><br/>
+                        <span class="small text-muted mt-1" th:text="${'Καταγραφή: '}"></span>
+                        <span class="small text-muted mt-1" th:include="fragments/format-resource-date.html:: formatDateTime(field=${Resource.date})"></span>
+                        <span class="small text-muted mt-1" th:text="${' | Ενημέρωση: '}"></span>
+                        <span class="small text-muted" th:include="fragments/format-resource-date.html:: formatDateTime(field=${Resource.dateModified})"></span>
+                    </h5>
+                    <span class="float-right">
+                          <a th:if="${Resource.type == 'COURSE'}" th:href="@{/admin/lecture-editor(id=${Resource.id},t='presentation')}" role="button" class="btn btn-secondary cancel_button" id="cancelResource_top"> <i class="fas fa-undo"></i> Επιστροφή</a>
+                          <a th:if="${Resource.type == 'EVENT'}" th:href="@{/admin/event-editor(id=${Resource.id},t='presetnation')}" role="button" class="btn btn-secondary cancel_button" id="cancelResource_top">  <i class="fas fa-undo"></i> Επιστροφή</a>
+
+                          <button type="submit" disabled class="ml-1 btn btn-success save_btn float-right" id="save-button" th:title="#{richlecture.save}" onclick="actions.send_json()">
+                                    <i class="fas fa-save"></i> Αποθήκευση
+                          </button>
+                    </span>
+            </div>
+            <div class="card-body">
+                <table style="width:100%">
+                    <tr>
+                        <th>
+                            <a role="button" th:href="@{/admin/video-sync/synchronizer_help}" class="btn btn-secondary " th:title="#{richlecture.help}" target="_blank">
+                                <i class="fas fa-question"></i>
+                            </a>
+                        </th>
+                        <th colspan="2">
+                            <span class="float-right" style="padding-right: 5px">
+                                <button class="btn btn-outline-success" style="width: 241px">
+                                    <span th:text="#{richlecture.synchronized_slides}"></span>
+                                    <span class="number_of_synced_slides">-</span> / <span class="number_of_total_slides">-</span> <span class="number_of_synced_slides_outside_vid"></span>
+                                </button>
+                                <button class="btn btn-dark p-1" th:title="#{richlecture.go_to_unsynced_slide}" onclick="actions.go_to_unsynced_slide()">
+                                    <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/GotoUnSyncSlideTr.png}" alt=""/>
+                                </button>
+                            </span>
+                        </th>
+                    </tr>
+                    <tr><th>&nbsp;</th></tr>
+                    <tr>
+                        <th rowspan="2" style="width:420px">
+                            <!-- active slide -->
+                            <div id="active_slide">
+                                <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/blank.gif}" alt="" ondblclick="actions.zoom_active_slide()"/>
+                                <div class="zoom_active_slide" onclick="actions.zoom_active_slide()"></div>
+                            </div>
+                        </th>
+                        <td style="width:316px">
+                            <!-- marker list-->
+                            <div id="marker_list">
+                                <div id="marker_list_header"><span th:text="#{richlecture.marker_list}"></span></div>
+                                <div id="marker_list_content_header">
+                                    <div class="marker_selections">
+                                        <div class="active_slide_title_div_header"><span th:text="#{richlecture.marker_list_slide}"></span></div>
+                                        <div class="active_slide_time_div"><span th:text="#{richlecture.marker_list_time}"></span></div>
+                                        <div class="buttons_marker_div_header"><span th:text="#{richlecture.marker_list_actions}"></span></div>
+                                        <div style="clear:both"></div>
+                                        <div class="marker_list_header_line"></div>
+                                        <div style="clear:both"></div>
+                                    </div>
+                                </div>
+                                <div style="clear:both"></div>
+                                <div id="marker_list_content">
+                                </div>
+                            </div>
+                        </td>
+                        <td style="width:400px">
+                            <!-- video player -->
+                            <div id="movie_player">
+                                <video id='player_synchronizer' controls preload='none'>
+                                    <source id='mp4' src="" type='video/mp4'>
+                                </video>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- sync buttons -->
+                            <div id="sync_buttons_region">
+                                <div id="sync_and_go_buttons">
+                                    <button type="button"  class="sync_button" th:title="#{richlecture.synchronize}" onclick="actions.synchronize()"></button>
+                                    <button type="button"  class="sync_and_go_button" th:title="#{richlecture.synchronize_and_go}" onclick="actions.synchronize_and_go()"></button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <!-- movie tools -->
+                            <div class="player_controls_synchronizer">
+                                <button type="button" class="preview_mode_btn"  th:title="#{richlecture.preview_mode}" onclick="actions.activate_preview_mode()"></button>
+                                <button type="button" class="edit_mode_btn edit_mode_on" disabled th:title="#{richlecture.edit_mode}" onclick="actions.activate_edit_mode()"></button>
+                                <div class="player_fast_bwd" th:title="#{richlecture.go_5sec_back}" onclick="actions.fast_seek('bwd')"></div>
+                                <div class="player_play" th:title="#{richlecture.play_pause}" onclick="actions.play()"></div>
+                                <div class="player_fast_fwd" th:title="#{richlecture.go_5sec_later}" onclick="actions.fast_seek('fwd')"></div>
+                                <div class="player_vol_down" th:title="#{richlecture.vol_down}" onclick="actions.voldown()"></div>
+                                <div class="player_mute" th:title="#{richlecture.mute}" onclick="actions.mute()"></div>
+                                <div class="player_vol_up" th:title="#{richlecture.vol_up}" onclick="actions.volup()"></div>
+                                <input type="text" placeholder="HH:MM:SS" class="go_to_field"/>
+                                <!--<div class="go_to_field_trigger_button" title="Go to..." onclick="actions.go_to_time()"></div>-->
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="timeline_mouse_position">
+                                <div class="timeline">
+                                    <div class="draggable_container">
+                                        <div class="timeline_progress_position"><div class="timeline_progress_position_time"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="padding-top: 120px;background-color: #f1f2f2;padding-left: 30px">
+                            <div class="col-9">
+                                <div class="scroll-region">
+                                    <div class="scroll-bwd" ></div>
+                                    <div class="scroll-pane">
+                                        <div class="scroll-content"></div>
+                                    </div>
+                                    <div class="scroll-fwd" ></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="row" style="margin-top: 160px">
+
+                </div>
+                <div class="row">
+                    <div class="col-9">
+                        <div class="enlarged_active_slide"></div>
+                        <div id="shift_slides" th:title="#{richlecture.shift_slides_modal_title}" style="display:none">
+                            <form>
+                                <span th:text="#{richlecture.shift_slides_start_number}"></span>
+                                <span id="slide_selected_for_shifting">sss</span> <span th:text="#{richlecture.shift_slides_all_following}"></span>
+                                <input type="text" name="shift_time_diff" id="shift_time_diff" class="">
+                                <span th:text="#{richlecture.shift_slides_time_change}"></span>
+                                <input type="text" placeholder="HH:MM:SS" name="shift_time_start" id="shift_time_start" class="">.
+                                <div id="shift_attention"><span th:text="#{richlecture.shift_slides_attention}"></span></div>
+                            </form>
+                        </div>
+                        <div id="dvLoading"></div>
+                        <div id="info"></div>
+                    </div>
+                </div>
+            </div> <!-- card-body -->
+
+
+
+
+<!--
+            <div class="card-body">
+                <div class="row mb-3"  style="width: 1370px">
+                    <div class="col-12">
+                        <span class="float-right pr-0">
+                            <button class="btn btn-outline-success" style="width: 241px">
+                                    <span th:text="#{richlecture.synchronized_slides}"></span>
+                                    <span class="number_of_synced_slides">-</span> / <span class="number_of_total_slides">-</span> <span class="number_of_synced_slides_outside_vid"></span>
+                            </button>
+                            <button class="btn btn-dark p-1" th:title="#{richlecture.go_to_unsynced_slide}" onclick="actions.go_to_unsynced_slide()">
+                                <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/GotoUnSyncSlideTr.png}" alt=""/>
+                            </button>
+                            <button type="submit" disabled class="ml-1 btn btn-success save_btn float-right" id="save-button" th:title="#{richlecture.save}" onclick="actions.send_json()">
+                                    <i class="fas fa-save"></i> Αποθήκευση
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="row" style="width: 1370px">
+                    <div class="col-4 p-0">
+                        <div id="active_slide">
+                            <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/blank.gif}" alt="" ondblclick="actions.zoom_active_slide()"/>
+                            <div class="zoom_active_slide" onclick="actions.zoom_active_slide()"></div>
+                        </div>
+                    </div>
+                    <div class="col-3 p-2">
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="marker_list">
+                                    <div id="marker_list_header"><span th:text="#{richlecture.marker_list}"></span></div>
+                                    <div id="marker_list_content_header">
+                                        <div class="marker_selections">
+                                            <div class="active_slide_title_div_header"><span th:text="#{richlecture.marker_list_slide}"></span></div>
+                                            <div class="active_slide_time_div"><span th:text="#{richlecture.marker_list_time}"></span></div>
+                                            <div class="buttons_marker_div_header"><span th:text="#{richlecture.marker_list_actions}"></span></div>
+                                            <div style="clear:both"></div>
+                                            <div class="marker_list_header_line"></div>
+                                            <div style="clear:both"></div>
+                                        </div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                    <div id="marker_list_content">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="sync_buttons_region">
+                                    <div id="sync_and_go_buttons">
+                                        <button type="button"  class="sync_button" th:title="#{richlecture.synchronize}" onclick="actions.synchronize()"></button>
+                                        <button type="button"  class="sync_and_go_button" th:title="#{richlecture.synchronize_and_go}" onclick="actions.synchronize_and_go()"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5 pl-3 pr-0">
+                            <div class="row">
+                                <div id="movie_player">
+                                    <video id='player_synchronizer' controls preload='none'>
+                                        <source id='mp4' src="" type='video/mp4'>
+                                    </video>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="player_controls_synchronizer">
+                                    <button type="button" class="preview_mode_btn"  th:title="#{richlecture.preview_mode}" onclick="actions.activate_preview_mode()"></button>
+                                    <button type="button" class="edit_mode_btn edit_mode_on" disabled th:title="#{richlecture.edit_mode}" onclick="actions.activate_edit_mode()"></button>
+                                    <div class="player_fast_bwd" th:title="#{richlecture.go_5sec_back}" onclick="actions.fast_seek('bwd')"></div>
+                                    <div class="player_play" th:title="#{richlecture.play_pause}" onclick="actions.play()"></div>
+                                    <div class="player_fast_fwd" th:title="#{richlecture.go_5sec_later}" onclick="actions.fast_seek('fwd')"></div>
+                                    <div class="player_vol_down" th:title="#{richlecture.vol_down}" onclick="actions.voldown()"></div>
+                                    <div class="player_mute" th:title="#{richlecture.mute}" onclick="actions.mute()"></div>
+                                    <div class="player_vol_up" th:title="#{richlecture.vol_up}" onclick="actions.volup()"></div>
+                                    <input type="text" placeholder="HH:MM:SS" class="go_to_field"/>
+                                    &lt;!&ndash;<div class="go_to_field_trigger_button" title="Go to..." onclick="actions.go_to_time()"></div>&ndash;&gt;
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-9">
+                        <div class="timeline_mouse_position">
+                            <div class="timeline">
+                                <div class="draggable_container">
+                                    <div class="timeline_progress_position"><div class="timeline_progress_position_time"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 160px">
+                    <div class="col-9">
+                        <div class="scroll-region">
+                            <div class="scroll-bwd" ></div>
+                            <div class="scroll-pane">
+                                <div class="scroll-content"></div>
+                            </div>
+                            <div class="scroll-fwd" ></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-9">
+                        <div class="enlarged_active_slide"></div>
+                        <div id="shift_slides" th:title="#{richlecture.shift_slides_modal_title}" style="display:none">
+                            <form>
+                                <span th:text="#{richlecture.shift_slides_start_number}"></span>
+                                <span id="slide_selected_for_shifting">sss</span> <span th:text="#{richlecture.shift_slides_all_following}"></span>
+                                <input type="text" name="shift_time_diff" id="shift_time_diff" class="">
+                                <span th:text="#{richlecture.shift_slides_time_change}"></span>
+                                <input type="text" placeholder="HH:MM:SS" name="shift_time_start" id="shift_time_start" class="">.
+                                <div id="shift_attention"><span th:text="#{richlecture.shift_slides_attention}"></span></div>
+                            </form>
+                        </div>
+                        <div id="dvLoading"></div>
+                        <div id="info"></div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+</header>

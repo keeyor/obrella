@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{site.head.main.title}">ΕΚΠΑ: Βιντεοθήκη Δράσεων</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="shortcut icon" th:href="@{/public/images/icons/delos.ico}">
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+
+    <style>
+       .card-img-top {
+            box-shadow: rgba(0, 0, 0, 0.17) 0 -23px 25px 0 inset, rgba(0, 0, 0, 0.15) 0 -36px 30px 0 inset, rgba(0, 0, 0, 0.1) 0 -79px 40px 0 inset, rgba(0, 0, 0, 0.06) 0 2px 1px, rgba(0, 0, 0, 0.09) 0 4px 2px, rgba(0, 0, 0, 0.09) 0 8px 4px, rgba(0, 0, 0, 0.09) 0 16px 8px, rgba(0, 0, 0, 0.09) 0 32px 16px;
+           height: 120px;
+           max-height: 120px;
+       }
+       h4 {
+            font-size: 1em;
+       }
+       h4::before,
+       h4::after {
+            display: inline-block;
+            content: "";
+            border-top: 1px solid black;
+            width: 5%;
+            margin: 0 1rem;
+            transform: translateY(-0.2rem);
+        }
+        header {
+            text-align: center;
+        }
+        .banner {
+            height:164px;
+            background-size: cover;
+            background-image: url([[@{(${'/public/images/nea_anakoinoseis_02.png'})}]]);
+        }
+       @media (max-width: 768px) {
+           .hide-md {
+               display: none;
+           }
+       }
+       @media (min-width: 768px) {
+           .hide-lg {
+               display: none;
+           }
+       }
+    </style>
+</head>
+
+<body class="c-app">
+<input type="hidden" id ="localeCode" th:value="${localeCode}"/>
+<input type="hidden" id ="sSupportWedDir" th:value="${sSupportWedDir}"/>
+<input type="hidden" id ="mBaseWedDir" th:value="${mBaseWedDir}"/>
+<input type="hidden" id ="mEventsWedDir" th:value="${mEventsWedDir}"/>
+
+<div class="c-wrapper">
+    <div th:replace="~{elements/a-topnav :: a-topnav}"></div>
+    <div class="c-body" style="padding-bottom: 50px">
+        <main class="c-main pt-1">
+            <div class="container-fluid" style="margin-top: 60px">
+                <div class="offset-lg-1 offset-md-0 col-lg-10">
+                    <div class="row">
+                        <div class="col-lg-4 d-md-none d-sm-none d-none d-lg-block img-fluid mt-2" style="min-width: 320px">
+                            <img class="mt-1 mb-md-3" th:src="@{${'/public/images/logos/uoa_logo_' + localeCode + '.svg'}}" th:alt="#{default.institution.title}" style="max-height: 79px;" alt="" src="">
+                        </div>
+                        <div class="col-lg-8 col-md-12" id="main-title">
+                            <h2 class="d-inline" style="font-weight: 400;font-size: 2em"><span th:text="#{site.head.main.title}"></span><br/>
+                                <span th:text="#{site.head.main.subtitle}" style="font-weight: 600"></span></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- BANNER -->
+            <div class="container-fluid px-0 banner"></div>
+            <!-- NAV BELOW BANNER -->
+            <div th:replace="~{elements/a1-topnav :: a-topnav}"></div>
+            <!-- MAIN CONTENT -->
+            <div class="container-fluid">
+                <!-- DATE AND REFERSH -->
+                <div class="row">
+                    <div class="offset-lg-1 col-lg-10 col-md-12" id="time-data">
+                        <div class="float-right">
+                            <span id="daily_date_now" style="font-weight: 600"></span>
+                            <a class="ml-2" style="color: #005cbf" href="#" id="refresh_table"  title="Κάντε κλίκ για ανανέωση της σελίδας">
+                                <i class="fas fa-sync-alt"></i> <span th:text="#{label.refresh}">Ανανέωση</span> | <span class="mr-2" id="time"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- LIVE AND SCHEDULED -->
+                <div class="row">
+                    <div class="offset-lg-1 col-lg-10 col-md-12" id="live-content-1">
+                        <div class="card mb-0">
+                            <div class="card-header" style="color: #1385ba !important;border-bottom:2px solid">
+                                <h3 th:text="#{label.broadcasts}">Μεταδόσεις</h3>
+                            </div>
+                            <div class="card-body pb-0 pt-2">
+                                <div class="text-muted " th:text="#{broadcasts.header.text}"></div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12">
+                                        <header style="margin-top: 30px">
+                                            <h4><span  th:text="#{label.livenow}">Ζωντανά τώρα</span></h4>
+                                        </header>
+                                        <div class="card-body py-0 pl-0">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <ul id="LiveBroadcastsV4" class="pl-2"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12">
+                                        <header style="margin-top: 30px">
+                                            <h4><span th:text="#{label.nextbroadcasts}">Επόμενες Μεταδόσεις</span></h4>
+                                        </header>
+                                        <div class="card-body py-0 pl-0">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <ul id="nextAndLiveBroadcastsV4" class="pl-2"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- VIDEO LIBRARY -->
+                <div class="row">
+                    <div class="offset-lg-1 col-lg-10 col-md-12" id="vod-content">
+                        <div class="card">
+                            <div class="card-header" style="color: #1385ba !important;border-bottom:2px solid">
+                                <h3 th:text="#{label.events.library}">Βιντεοθήκη</h3>
+                            </div>
+                            <div class="card-body px-1">
+                                <!-- MAIN CATEGORIES -->
+                                <div class="container">
+                                    <div class="row my-3">
+                                        <div class="col-lg-4 col-md-12">
+                                            <a role="button" th:href="@{search-uas}" class="btn btn-lg blue-btn-wcag-bgnd-color text-white mr-2 form-control">
+                                                <i class="fas fa-users mr-1"></i><span class="font-weight-bolder" th:text="#{ea_uas}"></span>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-8 col-md-12"  th:text="#{area.uas.header.text}"></div>
+                                    </div>
+                                    <div class="row my-3">
+                                        <div class="col-lg-4 col-md-12">
+                                            <a role="button" th:href="@{search-evs}" class="btn btn-lg blue-btn-wcag-bgnd-color text-white mr-2 form-control">
+                                                <i class="fas fa-graduation-cap mr-1"></i> <span class="font-weight-bolder" th:text="#{ea_es}"></span>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-8 col-md-12 pt-lg-0 pt-md-2" th:text="#{area.es.header.text}"></div>
+                                    </div>
+                                </div>
+
+                                <!-- LATEST, POPULAR AND SUGGESTED -->
+                                 <header style="margin-top: 30px;margin-bottom: 30px">
+                                    <h4 th:text="#{header.text.secondary.list}">Πρόσφατα - Δημοφιλή - Προτεινόμενα</h4>
+                                 </header>
+                                    <!-- LATEST AND POPULAR -->
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <h5 class="mb-4" th:text="#{label.latest.events}">Πρόσφατες Εκδηλώσεις</h5>
+                                            <div class="row">
+                                                <th:block th:each="ScEvent, iStat: ${QR_RECENT.searchResultList}" th:style="${iStat.odd}? ''">
+                                                    <a target="_blank" style="color:#006A9B" th:href="@{/player(id=${ScEvent.id})}">
+                                                        <div class="card mr-1 ml-1 mb-1 pl-lg-3 pl-md-0" style="width: 12rem;">
+                                                            <th:block th:if="${ScEvent.event.photoRelativeUrl != null &&  ScEvent.event.photoRelativeUrl != ''}">
+                                                                <img th:src="${mEventsWedDir + ScEvent.event.id + '/' + ScEvent.event.photoRelativeUrl}" class="card-img-top" alt="..." src="">
+                                                            </th:block>
+                                                            <th:block th:unless="${ScEvent.event.photoRelativeUrl != null && ScEvent.event.photoRelativeUrl != ''}">
+<!--                                                                <img th:src="@{public/images/default/default_event_thumb.jpg}"  class="card-img-top" alt="..." src="">-->
+                                                           <img th:src="${mBaseWedDir + ScEvent.resourceAccess.folder + '/' + #strings.substringBefore(ScEvent.resourceAccess.fileName, '.mp4' ) + '-1.jpg'}"
+                                                                class="card-img-top" alt="..." src="">
+                                                            </th:block>
+                                                            <div class="card-body px-0">
+                                                                <h6 class="card-title" th:title="${ScEvent.getEvent.title}" th:text="${#strings.abbreviate(ScEvent.getEvent.title,40)}" style="color: black; font-weight: 600">
+
+                                                                </h6>
+                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="text-muted card-text" style="color: #3c4b64; font-weight: 600"></p>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </th:block>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 text-right">
+                                                    <a th:href="@{/search}" class="blue-link-wcag-color font-weight-bolder" th:text="#{label.more}">Περισσότερα...</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-1"></div>
+                                        <div class="col-5">
+                                            <h5 class="mb-4" th:text="#{label.popular.events}">Δημοφιλείς Εκδηλώσεις</h5>
+                                            <div class="row">
+                                                <th:block th:each="ScEvent, iStat: ${QR_POP.searchResultList}" th:style="${iStat.odd}? ''">
+                                                    <a target="_blank" style="color:#006A9B" th:href="@{/player(id=${ScEvent.id})}">
+                                                        <div class="card mr-1 ml-1 mb-1 pl-3" style="width: 12rem;">
+                                                            <th:block th:if="${ScEvent.event.photoRelativeUrl != null &&  ScEvent.event.photoRelativeUrl != ''}">
+                                                                <img th:src="${mEventsWedDir + ScEvent.event.id + '/' + ScEvent.event.photoRelativeUrl}" class="card-img-top" alt="..." src="">
+                                                            </th:block>
+                                                            <th:block th:unless="${ScEvent.event.photoRelativeUrl != null && ScEvent.event.photoRelativeUrl != ''}">
+                                                                <!--<img th:src="@{public/images/default/default_event_thumb.jpg}"  class="card-img-top" alt="..." src="">-->
+                                                                <img th:src="${mBaseWedDir + ScEvent.resourceAccess.folder + '/' + #strings.substringBefore(ScEvent.resourceAccess.fileName, '.mp4' ) + '-1.jpg'}"  class="card-img-top" alt="..." src="">
+                                                            </th:block>
+                                                            <div class="card-body px-0">
+                                                                <h6 class="card-title" th:title="${ScEvent.getEvent.title}" th:text="${#strings.abbreviate(ScEvent.getEvent.title,40)}" style="color: black; font-weight: 600">
+
+                                                                </h6>
+                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="text-muted card-text" style="color: #3c4b64; font-weight: 600"></p>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </th:block>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 text-right">
+                                                    <a th:href="@{/search(sort=views)}" class="blue-link-wcag-color  font-weight-bolder"  th:text="#{label.more}">Περισσότερα...</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- SUGGESTED -->
+                                    <div class="row" style="margin-top: 30px">
+                                        <div class="col-12"><h5 class="mb-4" th:text="#{label.recommended.events}">Προτεινόμενες Εκδηλώσεις</h5>
+                                            <div class="row" style="margin-top: 40px">
+                                                <th:block th:each="ScEvent, iStat: ${QR_FEATURED.searchResultList}" th:style="${iStat.odd}? ''">
+                                                    <a target="_blank" style="color:#006A9B" th:href="@{/player(id=${ScEvent.id})}">
+                                                        <div class="card mr-1 mb-1 pl-3" style="width: 12rem;">
+                                                            <th:block th:if="${ScEvent.event.photoRelativeUrl != null &&  ScEvent.event.photoRelativeUrl != ''}">
+                                                                <img th:src="${mEventsWedDir + ScEvent.event.id + '/' + ScEvent.event.photoRelativeUrl}" class="card-img-top" alt="..." src="">
+                                                            </th:block>
+                                                            <th:block th:unless="${ScEvent.event.photoRelativeUrl != null && ScEvent.event.photoRelativeUrl != ''}">
+<!--                                                                <img th:src="@{public/images/default/default_event_thumb.jpg}"  class="card-img-top" alt="..." src="">-->
+                                                                <img th:src="${mBaseWedDir + ScEvent.resourceAccess.folder + '/' + #strings.substringBefore(ScEvent.resourceAccess.fileName, '.mp4' ) + '-1.jpg'}"  class="card-img-top" alt="..." src="">
+                                                            </th:block>
+                                                            <div class="card-body px-0">
+                                                                <h6 class="card-title" th:title="${ScEvent.getEvent.title}" th:text="${#strings.abbreviate(ScEvent.getEvent.title,40)}" style="color: black; font-weight: 600">
+
+                                                                </h6>
+                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="text-muted card-text" style="color: #3c4b64; font-weight: 600"></p>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}">Footer</div>
+</div>
+
+<div th:replace="~{modals/about-modal :: #about_modal}"></div>
+<div th:replace="~{modals/contact-modal :: #contact_modal}"></div>
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+<script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+
+<script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+<script th:src="@{/lib/datatables-classic/sum().js}" type="application/javascript"></script>
+
+<!-- holder -->
+<script type="text/javascript" th:src="@{/js/holder/holder.js}"></script>
+
+<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+
+<!-- locale -->
+<script th:src="@{/js/scripts/i18n/locale.js}"></script>
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+
+<!-- Custom -->
+<script th:src="@{/js/scripts/home/dashboard.js}"></script>
+<script th:src="@{/js/scripts/home/dashboard.live.js}"></script>
+
+</body>
+</html>

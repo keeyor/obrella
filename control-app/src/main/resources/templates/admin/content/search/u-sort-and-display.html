@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
+<!--@thymesVar id="resourceQuery" type="org.opendelos.model.repo.ResourceQuery"-->
+<div th:fragment="u-sort-and-display">
+    <div th:if="${QR.totalResults > 0}">
+        <div class="btn-group btn-group-sm float-end me-2">
+            <button   style="font-size: 1em"  title="ταξινόμηση αποτελεσμάτων" class="btn  dropdown-toggle p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="direction_dd">
+                <span th:if="${resourceQuery.direction == 'desc'}" class="hide-md" th:text="Φθίνουσα"></span>
+                <span th:unless="${resourceQuery.direction == 'desc'}" class="hide-md" th:text="Αύξουσα"></span>
+                <i class="fas fa-exchange-alt fa-rotate-90 fa-lg" style="color: #006A9B !important"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" style="margin: 0">
+                <a class="dropdown-item direction_select" data-value="asc" href="#">Αύξουσα</a>
+                <a class="dropdown-item direction_select" data-value="desc"  href="#">Φθίνουσα</a>
+            </div>
+        </div>
+        <div class="btn-group btn-group-sm float-end" role="group">
+            <button  style="font-size: 1em" title="ταξινόμηση αποτελεσμάτων" class="btn dropdown-toggle p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span th:if="${resourceQuery.sort == 'title'}" class="hide-md" th:text="Τίτλος"></span>
+                <span th:if="${resourceQuery.sort == 'views'}" class="hide-md" th:text="Εμφανίσεις"></span>
+                <span th:if="${resourceQuery.sort == 'rel'}" class="hide-md" th:text="Σχετικότητα"></span>
+                <span th:unless="${resourceQuery.sort == 'title' || resourceQuery.sort == 'views' || resourceQuery.sort == 'rel'}" class="hide-md" th:text="Hμερομηνία"></span>
+                <i class="fas fa-sort-alpha-down fa-lg" style="color: #006A9B !important"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" style="margin: 0">
+                <a class="dropdown-item sort_select" data-value="date" href="#">Ημερομηνία</a>
+                <a class="dropdown-item sort_select" data-value="title"  href="#">Τίτλος</a>
+                <a class="dropdown-item sort_select" data-value="views"  href="#">Εμφανίσεις</a>
+                <a th:if="${resourceQuery.ft != ''}" class="dropdown-item sort_select" data-value="rel" href="#">Σχετικότητα</a>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

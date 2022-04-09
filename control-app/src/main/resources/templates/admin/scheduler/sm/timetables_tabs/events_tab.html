@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<header th:fragment="events_tab">
+    <div class="card" id="events_tab" style="border: none">
+        <div class="card-body px-0">
+            <table id="table_timetable_events" style="width:100%;font-size: 0.9em" class="row-border table-striped">
+                        <thead>
+                        <tr style="font-weight: 700">
+                            <td style="width: 16px">#</td>
+                            <td style="width: 16px"><i class="fas fa-plug"></i></td>
+                            <td>[id]</td>
+                            <td>Τύπος</td>
+                            <td>Ημέρα</td>
+                            <td>Ημερομηνία</td>
+                            <td>Ώρα</td>
+                            <td>Διάρκεια</th>
+                            <td>Διάρκεια mm</td>
+                            <td>resource </td>
+                            <td>Εκδήλωση</td>
+                            <td>Επ. Υπεύθυνος</td>
+                            <td>Άιθουσα / Χώρος</td>
+                            <td style="width: 15px"><img title="Επιλογές Μετάδοσης" th:src="@{/public/images/icons/IconMetadosi.png}"/></td>
+                            <td style="width: 15px"><img title="Επιλογές Πρόσβασης" th:src="@{/public/images/icons/IconMetadosiStatus.png}"/></td>
+                            <td style="width: 15px"><img title="Επιλογές Καταγραφής" th:src="@{/public/images/icons/IconRec.png}"/></td>
+                            <td style="width: 15px"><img title="Επιλογές Δημοσιοποίησης" th:src="@{/public/images/icons/IconRecStatus.png}"/></td>
+                            <td style="width: 5px"><i class="fas fa-user-shield"  title="διαχειριστής"></i></td>
+                            <td style="width: 15px"></td>
+                            <td style="width: 15px"></td>
+                            <td>[ακυρώσεις]</td>
+                            <td>Ημερομηνία</td>  <!-- PDF -->
+                        </tr>
+                        </thead>
+                    </table>
+         </div>
+    </div>
+</header>

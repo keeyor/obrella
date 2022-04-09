@@ -1,0 +1,143 @@
+version: "3.8"
+services:
+  elasticsearch:
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
+      - elasticsearch:/usr/share/elasticsearch/data:z
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      - elk
+
+  logstash:
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,z
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,z
+    ports:
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    build:
+      context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,z
+    ports:
+      - "5601:5601"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  live:
+    image: michaelgatzonis/opendelos-liverunner-service:0.1
+    container_name: opendelos-liverunner-service
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    extra_hosts:
+      - "dimos.med.uoa.gr:88.197.126.20"
+    ports:
+      - "8071:8071"
+    networks:
+      - elk
+    depends_on:
+      - logstash
+
+  control:
+    image: michaelgatzonis/opendelos-control-app:0.1
+    container_name: opendelos-control-app
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    extra_hosts:
+      - "dimos.med.uoa.gr:172.22.80.1"
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+    networks:
+      - elk
+    depends_on:
+      - logstash
+
+  vod:
+    image: michaelgatzonis/opendelos-vod-app:0.1
+    container_name: opendelos-vod-app
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    ports:
+      - "8050:8050"
+    networks:
+      - elk
+    depends_on:
+      - logstash
+
+  live-app:
+    image: michaelgatzonis/opendelos-live-app:0.1
+    container_name: opendelos-live-app
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    ports:
+      - "8070:8070"
+    networks:
+      - elk
+    depends_on:
+      - logstash
+
+  events:
+    image: michaelgatzonis/opendelos-events-app:0.1
+    container_name: opendelos-events-app
+    restart: on-failure
+    volumes:
+      - F:/delos-etc:/delos-etc
+    ports:
+      - "8060:8060"
+    networks:
+      - elk
+    depends_on:
+      - logstash
+
+  root:
+    image: michaelgatzonis/opendelos-root-app:0.1
+    container_name: opendelos-root-app
+    restart: on-failure
+    ports:
+      - "8085:8085"
+    networks:
+      - elk
+
+volumes:
+  elasticsearch:
+networks:
+  elk:
+    driver: bridge
+

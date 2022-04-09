@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="edit_pause_modal">
+    <div class="modal fade" id="editPauseModal" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-vertical-centered"> <!-- Start of modal dialog -->
+            <div class="modal-content"> <!-- Start of modal content -->
+                <div class="modal-header" style="background-color:silver">
+                    <span class="float-left" >
+				 		<img id="modal_header_p_img_institution" th:src="@{/public/images/icons/btnIconArgiesOrganismou-circle.png}" alt="" src=""/>
+				 		<img id="modal_header_p_img_department" th:src="@{/public/images/icons/btnIconArgiesMonadas-circle.png}" alt="" src=""/>
+				 	 </span>
+                    <h3 class="modal-title">Επεξεργαστής Aργιών</h3>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> <!-- Start of modal body -->
+                    <span class="pull-right">
+				 		 Ακαδημαϊκό Έτος: <b><span id="modal_p_year"></span></b>
+				 	 </span>
+                    <div class="row" style="margin-bottom:20px">
+                        <!--@thymesVar id="institutionName" type="java.lang.String" -->
+                        <div class="col-md-10 col-md-offset-1" ><b>'Ιδρυμα:</b> <span id="modal_p_institution" th:text="${institutionName}"></span></div>
+                        <div class="col-md-10 col-md-offset-1" id="modal_p_department_title"><b>Τμήμα:</b> <span id="modal_p_department"> -</span></div>
+                    </div>
+                    <div class="row" style="margin-bottom:20px">
+                        <div class="col-12" >
+				      		<span class="float-end">
+				     			  <button id="argia-button-new"  type="button" class="btn btn-light btn-sm"  title="Νέα Αργία">
+								       <i class="fas fa-plus-circle"></i> Νέα Αργία
+								  </button>
+							</span>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-12">
+                            <table id="table_p_modal" style="padding:0;border-spacing: 0;border:0;margin-top:10px;width: 100%" class="table table-hover table-striped compact">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th style="width:0"></th>
+                                    <th style="width:0"></th>
+                                    <th style="width:160px">Όνομα Αργίας</th>
+                                    <th>Ημερομηνία Έναρξης</th>
+                                    <th>Ημερομηνία Λήξης</th>
+                                    <th style="width:0"></th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12 float-right"><em>Επιλέξτε τις ημερομηνίες που επιθυμείτε και πατήστε 'Ενημέρωση'</em></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-danger invisible" id="PauseErrorMessages" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="PauseMessages" class="alert alert-success alert-dismissable invisible"></div>
+                            <input id="modal_p_scope" type="hidden"/>
+                        </div>
+                    </div>
+                </div> <!-- End of modal body -->
+
+                <div class="modal-footer"> <!-- Start of modal footer -->
+                        <button type="button" title="ενημέρωση περιόδων" data-scope="system" id="updatePausesButton" class="btn btn-primary mr-1 blue-btn-wcag-bgnd-color">
+                            <i class="far fa-save"></i> Αποθήκευση
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal"><i class="fas fa-undo"></i> Επιστροφή </button>
+                </div> <!-- End of modal footer -->
+
+            </div> <!-- End of modal content -->
+        </div> <!-- End of modal dialog -->
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="u-applied-filters">
+        <div class="mt-2">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-filter-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm.5 5a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zM4 8.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm2 3a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+                Ενεργά φίλτρα
+                <span th:if="${queryString != null && queryString != ''}">
+                    (<a href="live" id="clear-all-filters" style="border: none">αφαίρεση</a>)
+                </span>
+        </div>
+        <div id="category-filter" style="display: none">
+            <a href="#" role="button" class="btn btn-sm btn-outline-secondary pt-0 pl-2" style="border: none" type="button" id="clear-ca-filter">x</a>
+            <span id="category-dd-header"></span>
+        </div>
+        <div id="department-filter" style="display: none">
+            <a href="#" role="button" class="btn btn-sm btn-outline-secondary  pt-0 pl-2" style="border: none" type="button" id="clear-dt-filter">x</a>
+            <span class="" id="department-dd-header"></span>
+        </div>
+        <div  id="course-filter" style="display: none">
+            <a href="#" role="button" class="btn btn-sm btn-outline-secondary  pt-0 pl-2" style="border: none" type="button" id="clear-co-filter">x</a>
+            <span class="" id="course-dd-header"></span>
+        </div>
+        <div   id="staff-filter"  style="display: none">
+            <a href="#" role="button" class="btn btn-sm btn-outline-secondary  pt-0 pl-2" style="border: none" type="button" id="clear-sm-filter">x</a>
+            <span class="" id="staff-dd-header"></span>
+        </div>
+        <div  id="events-filter"  style="display: none">
+            <a href="#" role="button" class="btn btn-sm btn-outline-secondary  pt-0 pl-2" style="border: none" type="button" id="clear-ev-filter">x</a>
+            <span class="" id="events-dd-header"></span>
+        </div>
+        <div  id="resourceType-filter"  style="display: none">
+            <a href="#" role="button" class="btn btn-sm btn-outline-secondary  pt-0 pl-2" style="border: none" type="button" id="clear-rt-filter">x</a>
+            <span class="" id="rt-dd-header"></span>
+        </div>
+        <div  id="accessPolicy-filter"  style="display: none">
+            <a href="#" role="button" class="btn btn-sm btn-outline-secondary  pt-0 pl-2" style="border: none" type="button" id="clear-ap-filter">x</a>
+            <span class="" id="ap-dd-header"></span>
+        </div>
+        <div  id="tags-filter"  style="display: none">
+            <a href="#" role="button" class="btn btn-sm btn-outline-secondary  pt-0 pl-2" style="border: none" type="button" id="clear-tag-filter">x</a>
+            <span class="" id="ap-tag-header"></span>
+        </div>
+    </div>
+</body>
+
+</html>

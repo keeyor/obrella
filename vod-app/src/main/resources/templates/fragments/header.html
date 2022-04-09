@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<header th:fragment="header" class="c-header-fixed c-header">
+                <div class="institute-brand">
+                    <div th:with="uid=#{institution.identity}">
+                        <a th:href="@{/}"><img th:alt="#{default.institution.title}"  class="institute-logo" th:src="@{'/public/images/logos/' + ${uid} + '.png'}" alt="" src=""></a>
+                    </div>
+                </div>
+                <div>
+                    <div class="institute-text" id="navbar_title_span"> αναζήτηση πολυμεσικού περιεχομένου
+                        <p style="line-height:15px; font-size:15px; position: absolute;top:35px;left:89px"> <small th:text="#{default.institution.title}"></small></p>
+                    </div>
+                </div>
+                <ul class="c-header-nav ml-auto">
+                    <li sec:authorize="isAnonymous()" class="c-header-nav-item mx-2">
+                        <a th:href="@{/admin}" class="c-header-nav-link" title="login">
+                            <i class="fas fa-sign-in-alt fa-2x"></i>
+                        </a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="c-header-nav-item mx-2">
+                        <a class="c-header-nav-link" th:href="@{/admin/user_profile}" title="προφίλ">
+                            <span sec:authentication="name"></span><i class="far fa-user-circle fa-2x ml-1"></i>
+                        </a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="c-header-nav-item mx-2">
+                        <a class="c-header-nav-link" th:href="@{/admin}" title="Διαχειριστικό Περιβάλλον">
+                            <i class="fas fa-cogs fa-2x"></i>
+                        </a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="c-header-nav-item mx-2">
+                        <a class="c-header-nav-link" href="#" title="logout" data-toggle="modal" data-target="#logout_modal">
+                            <i class="fas fa-sign-out-alt fa-2x"></i>
+                        </a>
+                    </li>
+                </ul>
+            <!--@thymesVar id="landing_page" type="java.lang.String"-->
+            <div class="c-subheader" style="margin-left:80px">
+                <ol class="breadcrumb border-0 m-0" style="flex-wrap: nowrap">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}" style="color: #005cbf"><i class="fas fa-home"></i> Αρχική Σελίδα</a>
+                    </li>
+                    <li th:if="${landing_page == 'search'}" class="breadcrumb-item active">
+                        <i class="icon-on-demand mr-1" style="color: #006A9B;font-size: 12px"></i> Περιεχόμενο
+                    </li>
+                    <li th:unless="${landing_page == 'search'}" class="breadcrumb-item">
+                        <a th:href="@{/search}" style="color: #005cbf">
+                            <i class="icon-on-demand" style="color: #006A9B;font-size: 12px"></i> Περιεχόμενο</a>
+                    </li>
+                    <li th:if="${landing_page == 'live'}" class="breadcrumb-item active">
+                        <i class="icon-live-lecture mr-1" style="color: red;font-size: 14px"></i> Ζωντανές Μεταδόσεις
+                    </li>
+                    <li th:unless="${landing_page == 'live'}" class="breadcrumb-item">
+                        <a th:href="@{/live}" style="color: #005cbf">
+                            <i class="icon-live-lecture" style="color: red;font-size: 14px"></i> Ζωντανές Μεταδόσεις</a>
+                    </li>
+                    <li th:if="${landing_page == 'daily' || landing_page == 'calendar'}" class="breadcrumb-item active">
+                        <i class="icon-scheduled mr-1" style="color: #347834;font-size: 12px"></i> Ημερολόγιο Μεταδόσεων
+                    </li>
+                    <li th:unless="${landing_page == 'daily' || landing_page == 'calendar'}" class="breadcrumb-item">
+                        <a th:href="@{/calendar}" style="color: #005cbf">
+                            <i class="icon-scheduled" style="color: #347834;font-size: 12px"></i> Ημερολόγιο Μεταδόσεων</a>
+                    </li>
+                  <!--  <li th:if="${landing_page == 'search'}" class="breadcrumb-item active">
+                        <i class="icon-on-demand mr-1" style="color: #006A9B;font-size: 12px"></i> Περιεχόμενο
+                    </li>
+                    <li th:unless="${landing_page == 'search'}" class="breadcrumb-item">
+                        <a th:if="${departmentFilter == null || departmentFilter.id == ''}" th:href="@{/search}" style="color: #005cbf">
+                            <i class="icon-on-demand" style="color: #006A9B;font-size: 12px"></i> Περιεχόμενο</a>
+                        <a th:unless="${departmentFilter == null || departmentFilter.id == ''}" th:href="@{/search(d=${departmentFilter.id})}" style="color: #005cbf">
+                            <i class="icon-on-demand" style="color: #006A9B;font-size: 12px"></i> Περιεχόμενο</a>
+                    </li>
+                    <li th:if="${landing_page == 'live'}" class="breadcrumb-item active">
+                        <i class="icon-live-lecture mr-1" style="color: red;font-size: 14px"></i> Ζωντανές Μεταδόσεις
+                    </li>
+                    <li th:unless="${landing_page == 'live'}" class="breadcrumb-item">
+                        <a th:if="${departmentFilter == null || departmentFilter.id == ''}" th:href="@{/live}" style="color: #005cbf">
+                            <i class="icon-live-lecture" style="color: red;font-size: 14px"></i> Ζωντανές Μεταδόσεις</a>
+                        <a th:unless="${departmentFilter == null || departmentFilter.id == ''}" th:href="@{/live(d=${departmentFilter.id})}" style="color: #005cbf">
+                            <i class="icon-live-lecture" style="color: red;font-size: 14px"></i> Ζωντανές Μεταδόσεις</a>
+                    </li>
+                    <li th:if="${landing_page == 'daily' || landing_page == 'calendar'}" class="breadcrumb-item active">
+                            <i class="icon-scheduled mr-1" style="color: #347834;font-size: 12px"></i> Ημερολόγιο Μεταδόσεων
+                    </li>
+                    <li th:unless="${landing_page == 'daily' || landing_page == 'calendar'}" class="breadcrumb-item">
+                        <a th:if="${departmentFilter == null || departmentFilter.id == ''}" th:href="@{/calendar}" style="color: #005cbf">
+                            <i class="icon-scheduled" style="color: #347834;font-size: 12px"></i> Ημερολόγιο Μεταδόσεων</a>
+                        <a th:unless="${departmentFilter == null || departmentFilter.id == ''}" th:href="@{/calendar(d=${departmentFilter.id})}" style="color: #005cbf">
+                            <i class="icon-scheduled" style="color: #347834;font-size: 12px"></i> Ημερολόγιο Μεταδόσεων</a>
+                     </li>-->
+                </ol>
+            </div>
+</header>

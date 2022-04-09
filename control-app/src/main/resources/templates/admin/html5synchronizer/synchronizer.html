@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Rich Lecture - Slide synchronizer</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/themes/base/jquery.ui.all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/richLecture_addons/css/style_synchronizer.css}"/>
+</head>
+<body>
+    <div class="header">
+	    <button type="button" disabled class="save_btn" th:title="#{richlecture.save}" onclick="actions.send_json()"></button>
+	    <a th:href="@{/admin/html5synchronizer/synchronizer_help}" class="help_btn" th:title="#{richlecture.help}" target="_blank"></a>
+
+	    <button type="button"  class="go_to_unsynced_slide" th:title="#{richlecture.go_to_unsynced_slide}" onclick="actions.go_to_unsynced_slide()"></button>
+	    <div class="presentation_of_work_done">
+	        <div class="presentation_of_work_done_background">
+                <div class="presentation_of_work_done_text">
+                    <span th:text="#{richlecture.synchronized_slides}"></span>
+                    <span class="number_of_synced_slides">-</span> / <span class="number_of_total_slides">-</span> <span class="number_of_synced_slides_outside_vid"></span>
+	            </div>
+	        </div>
+	    </div>        
+    </div>     
+    <div id="pagewrapper">
+        <div id="maincontent">
+                <div id="active_slide">
+                    <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/blank.gif}" alt="" ondblclick="actions.zoom_active_slide()"/>
+                    <div class="zoom_active_slide" onclick="actions.zoom_active_slide()"></div>
+                </div>   
+            
+                <div id="marker_list">
+                    <div id="marker_list_header"><span th:text="#{richlecture.marker_list}"></span></div>
+                    <div id="marker_list_content_header">
+                        <div class="marker_selections">
+                            <div class="active_slide_title_div_header"><span th:text="#{richlecture.marker_list_slide}"></span></div>
+                            <div class="active_slide_time_div"><span th:text="#{richlecture.marker_list_time}"></span></div>
+                            <div class="buttons_marker_div_header"><span th:text="#{richlecture.marker_list_actions}"></span></div>
+                            <div style="clear:both"></div>
+                            <div class="marker_list_header_line"></div>
+                            <div style="clear:both"></div>
+                        </div>
+                    </div>
+                    <div style="clear:both"></div>
+                    <div id="marker_list_content">
+                    </div>
+                </div>
+            
+                <div id="movie_player">
+                    <video id='player_synchronizer' controls preload='none'>
+                        <source id='mp4' src="" type='video/mp4'>
+                    </video>
+                </div>
+            
+                <div id="sync_buttons_region">
+                    <div id="sync_and_go_buttons">
+                         <button type="button"  class="sync_button" th:title="#{richlecture.synchronize}" onclick="actions.synchronize()"></button>
+                         <button type="button"  class="sync_and_go_button" th:title="#{richlecture.synchronize_and_go}" onclick="actions.synchronize_and_go()"></button>
+                    </div>
+                </div>
+            
+                <div class="player_controls_synchronizer">      
+                    <button type="button" class="preview_mode_btn"  th:title="#{richlecture.preview_mode}" onclick="actions.activate_preview_mode()"></button>
+                    <button type="button" class="edit_mode_btn edit_mode_on" disabled th:title="#{richlecture.edit_mode}" onclick="actions.activate_edit_mode()"></button>
+                    <div class="player_fast_bwd" th:title="#{richlecture.go_5sec_back}" onclick="actions.fast_seek('bwd')"></div>
+                    <div class="player_play" th:title="#{richlecture.play_pause}" onclick="actions.play()"></div>
+                    <div class="player_fast_fwd" th:title="#{richlecture.go_5sec_later}" onclick="actions.fast_seek('fwd')"></div>
+                    <div class="player_vol_down" th:title="#{richlecture.vol_down}" onclick="actions.voldown()"></div>
+                    <div class="player_mute" th:title="#{richlecture.mute}" onclick="actions.mute()"></div>
+                    <div class="player_vol_up" th:title="#{richlecture.vol_up}" onclick="actions.volup()"></div>
+                    <input type="text" placeholder="HH:MM:SS" class="go_to_field"/>
+                    <!--<div class="go_to_field_trigger_button" title="Go to..." onclick="actions.go_to_time()"></div>-->
+                </div>
+        </div>
+
+
+        <div style="clear:both"></div>
+        <div class="timeline_mouse_position">
+            <div class="timeline">
+                <div class="draggable_container">
+                    <div class="timeline_progress_position"><div class="timeline_progress_position_time"></div></div>
+                </div>
+            </div>  
+        </div>
+        <div class="dummy_height"></div>
+		<div class="scroll-region">
+			<div class="scroll-bwd" ></div>
+			<div class="scroll-pane">
+				<div class="scroll-content"></div>
+			</div>
+			<div class="scroll-fwd" ></div>
+		</div>
+        
+    </div>
+    <div class="enlarged_active_slide"></div>
+    
+    <div id="shift_slides" th:title="#{richlecture.shift_slides_modal_title}" style="display:none">
+	<form>
+            <span th:text="#{richlecture.shift_slides_start_number}"></span>
+            <span id="slide_selected_for_shifting">sss</span> <span th:text="#{richlecture.shift_slides_all_following}"></span>
+            <input type="text" name="shift_time_diff" id="shift_time_diff" class="">
+            <span th:text="#{richlecture.shift_slides_time_change}"></span>
+            <input type="text" placeholder="HH:MM:SS" name="shift_time_start" id="shift_time_start" class="">.
+            <div id="shift_attention"><span th:text="#{richlecture.shift_slides_attention}"></span></div>
+	</form>
+    </div>
+    <div id="dvLoading"></div>
+    <div id="info"></div>
+
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery.tools.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.widget.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.mouse.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.core.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.draggable.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/jquery.ui.resizable_nickorfas.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.dialog.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.position.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.button.min.js}"></script>
+
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery.mousewheel.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/bPopup.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/ion.sound.min.js}"></script>
+
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/lang/el.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/html5synchronizer/html5synchronizer.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/html5synchronizer/html5script.js}"></script>
+
+    <script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+    <script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+    <script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+
+</body>
+</html>

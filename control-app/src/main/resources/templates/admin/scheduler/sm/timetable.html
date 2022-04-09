@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΕΚΠΑ :: Προγραμματισμός Μεταδόσεων</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="stylesheet" th:href="@{/css/datatables-dp.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+  <!--  <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+    <!-- classic theme datatable with various plugins -->
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+    <!-- responsive extension -->
+    <link rel="stylesheet" type="text/css" th:href="@{https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css}"/>
+    <!-- bootstrap-toggle -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-toggle/bootstrap-toggle.min.css}"/>
+    <!-- select2 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <!-- bootstrap date-picker -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.css}"/>
+
+</head>
+<body class="c-app">
+<input type="hidden" id="institutionIdentity" th:value="${mInstitution.identity}" />
+<input type="hidden" id="institutionId" th:value="${mInstitution.id}" />
+<input type="hidden" id="institutionName" th:value="${institutionName}" />
+<input type="hidden" id="currentPeriod" th:value="${currentPeriod}" />
+<input type="hidden" id="currentAcademicYear" th:value="${currentAcademicYear}" />
+<input type="hidden" id="isEditorStaffMember" th:value="${isEditorStaffMember}" />
+<input type="hidden" id="userId" th:value="${user.id}" />
+<input type="hidden" id="userName" th:value="${user.name}" />
+
+<input type="hidden" id="school_filter"/><input type="hidden" id="school_filter_name" value=""/>
+<input type="hidden" id="period_filter" th:value="${current_period}"/><input type="hidden" id="period_filter_name" th:value="#{${current_period}}"/>
+<input type="hidden" id="department_filter" value=""/> <input type="hidden" id="department_filter_name" value=""/>
+<input type="hidden" id="repeat_filter"/><input type="hidden" id="repeat_filter_name" value=""/>
+<input type="hidden" id="dow_filter"/><input type="hidden" id="dow_filter_name" value=""/>
+<input type="hidden" id="staff_filter" th:value="${user.id}"/><input type="hidden" id="staff_filter_name" th:value="${user.name}"/>
+<input type="hidden" id="course_filter"/><input type="hidden" id="course_filter_name" value=""/>
+
+
+<!--<div th:replace="~{admin/fragments/a-sidebar-scheduler :: a-sidebar}"></div>-->
+<div class="c-wrapper">
+    <div th:replace="~{admin/fragments/a-topnav :: a-topnav}"></div>
+    <nav class="navbar navbar-expand navbar-light py-0" style="background-color:white;margin-top: 50px!important;">
+        <div class="collapse navbar-collapse" id="subBar">
+            <div class="navbar-nav">
+                Προγραμματισμός ::
+            </div>
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" th:href="@{/admin/scheduler/timetable}"><span class="icon-main-menu-scheduler mr-1" ></span>Προγραμματιστής Μεταδόσεων <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" th:href="@{/admin/scheduler/calendar}"><span class="fas fa-calendar-week mr-1"></span>Ημερολόγιο Μεταδόσεων  </a>
+                <!--<a class="nav-item nav-link " th:href="@{/admin/scheduler/daily}"><span class="fas fa-calendar-day mr-1"></span>Πρόγραμμα Ημέρας</a>-->
+                <a class="nav-item nav-link" th:href="@{/admin/scheduler/live}"><span class="icon-live-lecture mr-1"></span>Ζωντανές Μεταδόσεις!</a>
+            </div>
+            <ul class="c-header-nav ml-auto" style="min-height: 20px!important">
+            </ul>
+        </div>
+    </nav>
+    <div class="header-divider py-0"></div>
+
+    <div class="c-body">
+        <main class="c-main pt-0">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">
+                        <div class="card">
+                            <div class="card-header px-0" style="border: none">
+                                <h4><span class="icon-main-menu-scheduler mr-1" style="font-size: 1.3em"></span>Προγραμματιστής Μεταδόσεων</h4>
+                                <div class="text-muted font-italic">
+                                    Προγραμματισμός μεταδόσεων και καταγραφών διαλέξεων και εκδηλώσεων
+                                </div>
+                                <div class="my-2 font-weight-bolder">
+                                    Ενεργή Περίοδος: <span th:text="#{${current_period}}"></span> - Ακαδημαϊκό Έτος: <span th:text="${currentAcademicYear}"></span>
+                                </div>
+                                <div class="row justify-content-end">
+                                        <a  th:href="@{/admin/scheduler/wizard}" class="new-button btn" role="button">
+                                            <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέα Αίτηση
+                                        </a>
+                                    </div>
+                            </div>
+                            <div class="container mt-3 mb-2"  style="display: none">
+                                <div th:replace="~{admin/scheduler/sm/filters_row :: filters_row}"></div>
+                                <div th:replace="~{admin/scheduler/sm/event_filters_row :: event_filters_row}"></div>
+                            </div>
+                            <div class="card-body pb-0 pt-2 px-0 pl-0">
+                                <h5 class="mb-4">Κατάλογος Ενεργών Μεταδόσεων</h5>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <!-- TABS -->
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link  active" id="lectures-tab" data-toggle="tab" href="#t-lectures" role="tab" aria-controls="t-lectures" aria-selected="true">Διαλέξεις</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="events-tab" data-toggle="tab" href="#t-events" role="tab" aria-controls="t-events" aria-selected="false">Εκδηλώσεις</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade  show active" id="t-lectures" role="tabpanel" aria-labelledby="lectures-tab">
+                                                <div th:replace="~{admin/scheduler/sm/timetables_tabs/lectures_tab :: lectures_tab}"></div>
+                                            </div>
+                                            <div class="tab-pane fade  show" id="t-events" role="tabpanel" aria-labelledby="events-tab">
+                                                <div th:replace="~{admin/scheduler/sm/timetables_tabs/events_tab :: events_tab}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="offset-1 col-lg-10" style="font-size: 0.8em">
+                    <div class="mb-2">
+                        <i class="fas fa-circle" style="color:greenyellow"></i> Ενεργή Μετάδοση |
+                        <i class="fas fa-circle" style="color:red"></i> Ανεργή Μετάδοση
+                    </div>
+                    <div class="mb-2">
+                        <img title="έκτακτη" th:src="@{/public/images/icons/IconEidosEktakti.png}" width="15px"> Έκτακτη Μετάδοση |
+                        <img title="τακτική" th:src="@{/public/images/icons/IconEidosTaktiki.png}" width="15px"> Τακτική Μετάδοση
+                        <i class="fas fa-wave-square mx-3"></i>
+                        <img th:src="@{/public/images/icons/IconMetadosiOn.png}" width="15px " alt=""/> Μετάδοση |
+                        <img th:src="@{/public/images/icons/IconMetadosiOff.png}" width="15px " alt=""/> Χωρίς Μετάδοση
+                        <i class="fas fa-wave-square mx-3"></i>
+                        <img th:src="@{/public/images/icons/IconRecAuto.png}" width="15px"/> Με Καταγραφή |
+                        <img th:src="@{/public/images/icons/IconRecOff.png}" width="15px"/> Χωρίς Καταγραφή
+                    </div>
+                    <div class="mb-0">
+                        <img th:src="@{/public/images/icons/IconMetadosiStatusOpen.png}" width="15px"/> Ανοικτή |
+                        <img th:src="@{/public/images/icons/IconMetadosiStatusPassword.png}" width="15px"/> Με Κωδικό Τμήματος |
+                        <img th:src="@{/public/images/icons/IconMetadosiStatusUserName.png}" width="15px"/> Με Κωδικό Πρόσβασης
+                        <i class="fas fa-wave-square mx-3"></i>
+                        <img th:src="@{/public/images/icons/IconRecStatusPrivate.png}" width="15px "/> Χωρίς Δημοσιοποίηση
+                        <img th:src="@{/public/images/icons/IconProsvasiNA.png}" width="15px "/> Άγνωστη Δημοσιοποίηση |
+                        <img th:src="@{/public/images/icons/IconRecStatusPublic.png}" width="15px " /> Άμεση Δημοσιοποίηση
+                    </div>
+                </div>
+            </div>
+            </div>
+        </main>
+    </div>
+    <footer class="c-footer">
+        <input id="search_filters" type="hidden" th:value="${timetable_search_history}" size="200"/>
+        <!-- Scheduled Events Filters-->
+        <input type="hidden" id="etype_filter"/><input type="hidden" id="etype_filter_name" value=""/>
+        <input type="hidden" id="estatus_filter"/><input type="hidden" id="estatus_filter_name" value=""/>
+        <input id="search_event_filters" type="hidden" th:value="${timetable_events_search_history}" size="200"/>
+        <i class="far fa-copyright mr-1"></i> <span th:text="#{default.institution.title}"></span>
+    </footer>
+</div>
+
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+<div th:replace="~{modals/staff_select_modal :: staffmember_select_modal}"></div>
+<div th:replace="~{modals/course_select_modal :: course_select_modal}"></div>
+
+<!-- Optional JavaScript -->
+<script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+<script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+<!-- bootstrap-toggle -->
+<script th:src="@{/lib/bootstrap-toggle/bootstrap-toggle.min.js}"></script>
+
+<!-- DATATABLES -->
+<!-- required by excel button -->
+<script th:src="@{/lib/datatables-classic/jszip.min.js}" type="application/javascript" ></script>
+<script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+<!-- responsive extension -->
+<script th:src="@{https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js}" type="application/javascript"></script>
+<!-- select2 -->
+<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+<!-- TESTING LISTNAV -->
+<script th:src="@{/lib/datatables-listnav/jquery.dtListNav.dt1.10.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/admin/scheduler/sm/timetable/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/scheduler/sm/timetable/dashboard.lectab.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/scheduler/sm/timetable/dashboard.evtab.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/scheduler/sm/timetable/dashboard.department.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/scheduler/sm/timetable/dashboard.staffmembers.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/scheduler/sm/timetable/dashboard.course.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/scheduler/lang/el.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+
+<!-- bootstrap datepicker -->
+<script th:src="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.js}" type="application/javascript"></script>
+<script th:src="@{/lib/bootstrap-datepicker/bootstrap-datepicker.el.min.js}" type="application/javascript"></script>
+</body>
+</html>

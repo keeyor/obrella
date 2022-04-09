@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<body>
+<div th:fragment="footer" class="footer" style="font-size: 0.9em!important;background-color: #006A9B !important;color:whitesmoke">
+      <div class="container pt-2">
+          <div class="row">
+              <div class="col-md-4 col-sm-12">
+                  <div>
+                      <img class="mt-1 mb-md-3" th:src="@{${'/public/images/logos/uoa_logo_' + localeCode + '_black.png'}}" th:alt="#{default.institution.title}" style="max-height: 79px;" alt="" src="">
+                  </div>
+              </div>
+              <div class="col-md-8 col-sm-12 text-muted">
+                  <ul class="ps-0" style="line-height: 20px;list-style-type: none">
+                      <li>
+                          <button type="button" class="btn btn-default btn-sm" style="color: whitesmoke" data-coreui-toggle="modal" data-coreui-target="#about_modal">
+                              Σχετικά
+                          </button>
+                          <button type="button" class="btn btn-default btn-sm" style="color: whitesmoke"  data-coreui-toggle="modal" data-coreui-target="#terms_modal">
+                              Όροι Χρήσης
+                          </button>
+                          <button type="button" class="btn btn-default btn-sm" style="color: whitesmoke"  data-coreui-toggle="modal" data-coreui-target="#faq_modal">
+                              Συχνές Ερωτήσεις
+                          </button>
+                          <a role="button" th:href="@{feedback}" class="text-decoration-none text-white btn btn-sm">
+                              Επικοινωνία
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+         </div>
+          <div class="row mt-1">
+              <div class="col-12" style="border-top: whitesmoke 1px solid">
+                  <span th:text="${'ΕΚΠΑ'}"></span> &copy; <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2022</span>
+                  <span th:text="${'Με επιφύλαξη παντός δικαιώματος'}"></span>
+              </div>
+          </div>
+      </div>
+</div>
+</body>
+</html>

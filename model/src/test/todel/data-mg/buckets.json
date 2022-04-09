@@ -1,0 +1,109 @@
+[ {
+  "id" : 1,
+  "title" : "Μαθήματα για εκπαιδευτικούς",
+  "description" : "Μαθαίνω να χρησιμοποιώ ΤΠΕ και ψηφιακό υλικό στην εκπαίδευση.",
+  "categories" : [ ],
+  "audience" : [ 9 ],
+  "skills" : [ ],
+  "groups" : [ ],
+  "level" : null
+}, {
+  "id" : 2,
+  "title" : "Μαθήματα για επιχειρηματίες  και στελέχη επιχειρήσεων",
+  "description" : "Μαθαίνω και χρησιμοποιώ ψηφιακά εργαλεία και τεχνολογίες αιχμής στην επιχείρησή μου",
+  "categories" : [ ],
+  "audience" : [ 12 ],
+  "skills" : [ ],
+  "groups" : [ ],
+  "level" : null
+}, {
+  "id" : 3,
+  "title" : "Μαθήματα Δικτύων Επικοινωνιών και Κυβερνοασφάλειας",
+  "description" : "Μαθαίνω να σχεδιάζω, υλοποιώ και λειτουργώ Δίκτυα Επικοινωνιών και Υπηρεσίες Κυβερνοασφάλειας",
+  "categories" : [ ],
+  "audience" : [ 10 ],
+  "skills" : [ 19, 25 ],
+  "groups" : [ ],
+  "level" : null
+}, {
+  "id" : 4,
+  "title" : "Μαθήματα τεχνολογιών αιχμής",
+  "description" : "Μαθαίνω να αξιολογώ και αξιοποιώ τεχνολογίες, όπως η Τεχνητή Νοημοσύνη, το Υπολογιστικό Νέφος, τα Μεγάλα Δεδομένα, η Μηχανική Μάθηση και τα Πληροφοριακά Συστήματα.",
+  "categories" : [ ],
+  "audience" : [ 10 ],
+  "skills" : [ 15, 20, 21, 22, 27 ],
+  "groups" : [ ],
+  "level" : null
+}, {
+  "id" : 5,
+  "title" : "Μαθήματα σχεδίασης και ανάπτυξης λογισμικού",
+  "description" : "Μαθαίνω να σχεδιάζω και αναπτύσσω λογισμικό και Βάσεις Δεδομένων.",
+  "categories" : [ ],
+  "audience" : [ 10 ],
+  "skills" : [ 7, 8, 12, 16 ],
+  "groups" : [ ],
+  "level" : null
+}, {
+  "id" : 6,
+  "title" : "Μαθήματα για δημοσίους υπαλλήλους",
+  "description" : "ΔΕΘ 2021",
+  "categories" : [ ],
+  "audience" : [ ],
+  "skills" : [ ],
+  "groups" : [ 11 ],
+  "level" : null
+}, {
+  "id" : 7,
+  "title" : "Μαθήματα για ανέργους",
+  "description" : "ΔΕΘ 2021",
+  "categories" : [ ],
+  "audience" : [ ],
+  "skills" : [ ],
+  "groups" : [ 12 ],
+  "level" : null
+}, {
+  "id" : 8,
+  "title" : "Μαθήματα για επιχειρήσεις",
+  "description" : "ΔΕΘ 2021",
+  "categories" : [ ],
+  "audience" : [ ],
+  "skills" : [ ],
+  "groups" : [ 13 ],
+  "level" : null
+}, {
+  "id" : 9,
+  "title" : "Μαθήματα για την Γυναικεία Επιχειρηματικότητα",
+  "description" : "ΔΕΘ 2021",
+  "categories" : [ ],
+  "audience" : [ ],
+  "skills" : [ ],
+  "groups" : [ 14 ],
+  "level" : null
+}, {
+  "id" : 10,
+  "title" : "Μαθήματα για Αγρότες και Γεωργικές Επιχειρήσεις",
+  "description" : "ΔΕΘ 2021",
+  "categories" : [ ],
+  "audience" : [ ],
+  "skills" : [ ],
+  "groups" : [ 15 ],
+  "level" : null
+}, {
+  "id" : 11,
+  "title" : "Μαθήματα για την Τρίτη Ηλικία",
+  "description" : "ΔΕΘ 2021",
+  "categories" : [ ],
+  "audience" : [ ],
+  "skills" : [ ],
+  "groups" : [ 16 ],
+  "level" : null
+}, {
+  "id" : 12,
+  "title" : "Μαθήματα με Νέες Τεχνολογίες",
+  "description" : "ΔΕΘ 2021",
+  "categories" : [ ],
+  "audience" : [ ],
+  "skills" : [ ],
+  "groups" : [ 17 ],
+  "level" : null
+} ]

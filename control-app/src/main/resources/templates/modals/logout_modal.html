@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div th:fragment="logout_modal">
+    <div class="modal fade" id="logout_modal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true" style="font-size: 1.1em">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-body pt-3">
+                    <div class="text-center blue-link-wcag-color">
+                        <div class="card">
+                            <div class="card-body">
+                                <div th:with="uid=#{institution.identity}">
+                                    <img class="blue-link-wcag-color" height="60px" th:alt="#{default.institution.title}" th:src="@{'/public/images/logos/' + ${uid} + '.png'}" alt="" src="">
+                                </div>
+                                <span>Aποσύνδεση του χρήστη </span><span class="font-weight-bold" sec:authentication="name"></span>
+                                <div>
+                                    <a th:href="@{/logout}" role="button" class="btn btn-primary btn-primary blue-btn-wcag-bgnd-color mt-2">
+                                        <span class="fas fa-sign-out-alt"></span> Aποσύνδεση
+                                    </a>
+                                </div>
+                                <div class="mt-4">
+                                    Αν χρησιμοποιείτε την υπηρεσία από δημόσιο υπολογιστή, αντί της απλής αποσύνδεσης, συνιστάται η
+                                    <br/>
+                                    <a th:href="@{/logout/cas}">
+                                        <i class="fas fa-sign-out-alt"></i> Αποσύνδεση από την Κεντρική Υπηρεσία Πιστοποίησης
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-light" data-coreui-dismiss="modal">Ακύρωση</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

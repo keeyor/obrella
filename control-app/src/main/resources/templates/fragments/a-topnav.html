@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<!-- @thymesVar id="section" type="java.lang.String" -->
+<!-- @thymesVar id="user" type="org.opendelos.model.users.OoUserDetails" -->
+<header th:fragment="a-topnav">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: black;color:white">
+    <a class="navbar-brand" th:href="@{/}">
+        <i class="fas fa-photo-video"> MU.RE</i> | uoa
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="navbar-nav">
+                <th:block sec:authorize="hasAnyRole('ROLE_SA', 'ROLE_MANAGER', 'ROLE_SUPPORT', 'ROLE_STAFFMEMBER')">
+                    <a th:if="${section == 'admin_home'}" class="nav-item nav-link active" th:href="@{/admin}">Home</a>
+                    <a th:unless="${section == 'admin_home'}" class="nav-item nav-link" th:href="@{/admin}">Home</a>
+                    <a th:if="${section == 'admin_content'}" class="nav-item nav-link active" th:href="@{/admin/search}">Περιεχόμενο</a>
+                    <a th:unless="${section == 'admin_content'}" class="nav-item nav-link" th:href="@{/admin/search}">Περιεχόμενο</a>
+                    <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+                        <a th:if="${section == 'admin_institution'}" class="nav-item nav-link active" th:href="@{/admin/institution/structure}">Ίδρυμα </a>
+                        <a th:unless="${section == 'admin_institution'}" class="nav-item nav-link" th:href="@{/admin/institution/structure}">Ίδρυμα </a>
+                    </th:block>
+                    <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_SA')">
+                        <a th:if="${section == 'admin_department'}" class="nav-item nav-link active" th:href="@{/admin/department/courses}">Τμήματα</a>
+                        <a th:unless="${section == 'admin_department'}" class="nav-item nav-link" th:href="@{/admin/department/courses}">Τμήματα</a>
+                    </th:block>
+                    <a th:if="${section == 'admin_scheduler'}" class="nav-item nav-link active" th:href="@{/admin/scheduler/timetable}">Προγραμματισμός</a>
+                    <a th:unless="${section == 'admin_scheduler'}" class="nav-item nav-link" th:href="@{/admin/scheduler/timetable}">Προγραμματισμός</a>
+                    <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+                        <a th:if="${section == 'admin_system'}" class="nav-item nav-link active" th:href="@{/admin/system/messages}">Ιστότοπος</a>
+                        <a th:unless="${section == 'admin_system'}" class="nav-item nav-link" th:href="@{/admin/system/messages}">Ιστότοπος</a>
+                    </th:block>
+                </th:block>
+        </div>
+        <ul class="c-header-nav ml-auto" style="min-height: 20px!important">
+            <li class="c-header-nav-item dropdown">
+                <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color: white">
+                    <i class="far fa-user-circle mr-1"></i><span th:text="${user.name}"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right pt-0">
+                    <a class="dropdown-item" th:href="@{/admin/user_profile}">
+                        <span class="fas fa-user mr-1"></span> Προφίλ
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a sec:authorize="isAuthenticated()" class="dropdown-item" href="#" title="logout" data-toggle="modal" data-target="#logout_modal" >
+                        <i class="fas fa-sign-out-alt mr-1"></i> Αποσύνδεση
+                    </a>
+                    <a sec:authorize="isAnonymous()" class="dropdown-item" th:href="@{/admin}">
+                        <i class="fas fa-sign-in-alt mr-1"></i> Σύνδεση
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+</header>

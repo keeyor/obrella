@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--@thymesVar id="resourceQuery" type="org.opendelos.dashboard.repository.resource.ResourceQuery"-->
+<div th:fragment="r-search-bar" style="font-size: 1em" >
+            <form id="search-form" th:object="${resourceQuery}" th:action="@{/search}" method="post">
+                <input type="hidden" id="departmentId"  th:field="*{departmentId}" />
+                <input type="hidden" id="schoolId"      th:field="*{schoolId}" />
+                <input type="hidden" id="courseId"      th:field="*{courseId}" />
+                <input type="hidden" id="eventId"       th:field="*{eventId}" />
+                <input type="hidden" id="staffId"       th:field="*{staffMemberId}" />
+                <input type="hidden" id="categoryCode"  th:field="*{categoryCode}" />
+                <input type="hidden"                    th:field="*{period}" />
+                <input type="hidden"                    th:field="*{academicYear}" />
+                <input type="hidden"                    th:field="*{skip}" />
+                <input type="hidden" id="sortField"     th:field="*{sort}" />
+                <input type="hidden" id="directionField" th:field="*{direction}" />
+                <input type="hidden"                    th:field="*{totalResults}"/>
+
+                <nav class="navbar navbar-expand-md navbar-light bg-light" style="background-color: #f8f8f8!important;border-radius: 25px!important;border: 1px lightgrey solid!important;">
+                    <button class="navbar-toggler btn-secondary" type="button" data-toggle="collapse" data-target="#searchbarSupportedContent" aria-controls="searchbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fas fa-bars" style="color:grey"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="searchbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle gray-accesskeys-link-wcag-color" href="#" id="catDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Θεματική Περιοχή
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="catDropdown" id="category-list"></ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle gray-accesskeys-link-wcag-color" href="#" id="department-dropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Τμήμα
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="department-dropdown" id="department-columns"></ul>
+                            </li>
+                            <li class="nav-item dropdown ">
+                                <a class="nav-link btn-xs btn-default gray-accesskeys-link-wcag-color"  title="άνοιγμα καταλόγου διδασκόντων" href="#" role="button" id="staff_list" style="">
+                                    Καθηγητής <i class="ml-1 fas fa-caret-down"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link btn-xs btn-default gray-accesskeys-link-wcag-color"   title="άνοιγμα καταλόγου μαθημάτων" href="#" role="button" id="course_list">
+                                    Μάθημα <i class="ml-1 fas fa-caret-down"></i>
+                                </a>
+                            </li>
+<!--                        <li class="nav-item dropdown">
+                                <a class="nav-link btn-xs btn-default gray-accesskeys-link-wcag-color" title="άνοιγμα καταλόγου εκδηλώσεων" href="#" role="button" id="event_list">
+                                   Εκδήλωση <i class="ml-1 fas fa-caret-down"></i>
+                                </a>
+                            </li>-->
+                        </ul>
+                        <span class="d-flex">
+                            <input class="form-control mr-2"  id="search-box" type="search" placeholder="Αναζήτηση με λέξεις" aria-label="Search" th:field="*{ft}">
+                            <button class="btn btn-sm btn-light btn-pill my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+                        </span>
+                    </div>
+                </nav>
+            </form>
+</div>
+</body>
+</html>

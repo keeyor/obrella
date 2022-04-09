@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<div th:fragment="show_slide_modal">
+    <div class="modal fade" id="showslide_modal" tabindex="-1"  aria-hidden="true" style="font-size: 0.9em">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header pb-1">
+                    <h5 class="modal-title" th:text="#{richlecture.marker_list_slide}"></h5><br/>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-3">
+                    <img class="img-fluid" id="show_slide_id" src=""  alt=""/>
+                </div>
+                <div class="modal-footer">
+                    <span th:with="uid=#{institution.identity}" class="mr-auto">
+                        <a th:href="@{/}"><img th:alt="#{default.institution.title}" width="48px"  class="mr-auto" th:src="@{'/public/images/logos/' + ${uid} + '.png'}" alt="" src=""></a>
+                         <span th:text="#{default.institution.title}"></span>
+                    </span>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Κλείσιμο</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

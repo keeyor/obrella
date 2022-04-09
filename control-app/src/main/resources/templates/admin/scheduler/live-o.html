@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>OpenDelos Live</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+</head>
+<body class="c-app">
+<!-- @thymesVar id="QR" type="org.opendelos.dashboard.repository.resource.QueryResourceResults"-->
+<!-- @thymesVar id="queryString" type="java.lang.String" -->
+<input type="hidden" id="queryString"  th:value="${queryString}" />
+
+<span th:if="${queryString != null && queryString != ''}">
+                 <input id="departmentFilterId"         type="hidden" th:value="${departmentFilter.id}"/>
+                 <input id="departmentFilterText"       type="hidden" th:value="${departmentFilter.text}"/>
+</span>
+<!--<div th:replace="~{admin/fragments/a-sidebar-scheduler :: a-sidebar}"></div>-->
+<div class="c-wrapper">
+    <div th:replace="~{admin/fragments/a-topnav :: a-topnav}"></div>
+    <nav class="navbar navbar-expand navbar-light py-0" style="background-color:white;margin-top: 50px!important;">
+        <div class="collapse navbar-collapse" id="subBar">
+            <div class="navbar-nav">
+                Προγραμματισμός ::
+            </div>
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" th:href="@{/admin/scheduler/timetable}"><span class="fas fa-search mr-1"></span>Προγραμματιστής Μεταδόσεων</a>
+                <a class="nav-item nav-link" th:href="@{/admin/scheduler/calendar}"><span class="fas fa-map-marked-alt mr-1"></span>Ημερολόγιο Μεταδόσεων  </a>
+                <a class="nav-item nav-link " th:href="@{/admin/scheduler/daily}"><span class="fas fa-server mr-1"></span>Πρόγραμμα Ημέρας</a>
+                <a class="nav-item nav-link    active" th:href="@{/admin/scheduler/live}"><span class="fas fa-chart-pie mr-1"></span>Ζωντανές Μεταδόσεις! <span class="sr-only">(current)</span></a>
+            </div>
+            <ul class="c-header-nav ml-auto" style="min-height: 20px!important">
+            </ul>
+        </div>
+    </nav>
+    <div class="header-divider py-0"></div>
+
+    <div class="c-body">
+        <div id="stats-info"></div>
+        <main class="c-main pt-0">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">
+                        <div class="card mb-0">
+                            <div class="card-header px-0">
+                                <h4>Ζωντανές Μεταδόσεις!</h4>
+                                <div class="text-muted font-italic">
+                                    Διαχείριση ζωντανών μεταδόσεων και καταγραφών
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-right">
+                                        <a  th:href="@{/admin/scheduler/schedule}" class="new-button btn" role="button">
+                                            <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέα Μετάδοση
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body px-0 pt-0">
+                                <th:block th:if="${QR.totalResults > 0}">
+                                    <div class="row mt-2 pb-0">
+                                        <div class="col-12 text-muted" style="font-style: italic;font-size: 0.9em">
+                                            <span class="float-right">
+                                                Η σελίδα ανανεώνεται αυτόματα κάθε 1' της ώρας. Για άμεση ανανέωση κάντε κλικ στο σύνδεσμο 'Ανανέωση'
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 pb-0">
+                                        <div class="col-12 text-muted" style="font-style: italic">
+                                            <div class="float-right">
+                                                <span id="daily_date_now" class="mt-2"></span>
+                                                <a class="ml-2 mr-2" style="color: #005cbf" href="#" id="refresh_table"  title="Κάντε κλίκ για ανανέωση της σελίδας">
+                                                    <i class="fas fa-sync-alt"></i> Ανανέωση | <span class="mr-2" id="time"></span>
+                                                </a>
+                                                <span class="mr-2 ml-2" id="last_updated"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 text-muted">
+                                            <div th:if="${QR.totalResults > 0}">
+                                                <span th:text="${'Βρέθηκαν ' + QR.totalResults + ' ζωντανές μεταδόσεις σε εξέλιξη (' + PageLoadTime + ' ms)'}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+        <!--                                        <div th:replace="~{admin/fragments/live/u-sort-and-display :: u-sort-and-display}"></div>-->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+<!--                                        <div class="col-lg-2 d-none d-lg-block pt-3" style="font-size: 0.9em">
+                                            <div th:replace="~{fragments/search-common/l-applied-filters :: l-applied-filters}">Applied Filters</div>
+                                            <div id="Statistics_Live_gl mr-5" class="card" style="font-size: 0.9em">
+                                                <div th:class="${'card-header'}" style="color: whitesmoke;background-color: #2C3E50">
+                                                    <i class="fas fa-chart-line"></i> Στατιστικά <span class="text-muted"> / Σύνολο</span>
+                                                </div>
+                                            </div>
+                                            <dl class="row pl-3">
+                                                <dt class="col-9  font-weight-normal">Ζωντανές Μεταδόσεις σε Εξέλιξη</dt>
+                                                <dd class="col-3 text-right"><span id="overall_live" class="badge badge-secondary badge-pill" th:text="${QR.totalResults}"></span></dd>
+                                                <dt class="col-9  font-weight-normal"> Ενεργές Συνεδρίες</dt>
+                                                <dd class="col-3 text-right"><span id="totalConnections" class="badge badge-secondary badge-pill">-</span></dd>
+                                            </dl>
+                                            <div id="Statistics_Live_st mr-5" class="card" style="font-size: 0.9em">
+                                                <div th:class="${'card-header'}" style="color: whitesmoke;background-color: #2C3E50">
+                                                    <i class="fas fa-user-check"></i> Ενεργές Συνεδρίες <span class="text-muted"> / Μετάδοση</span>
+                                                </div>
+                                            </div>
+                                            <dl class="row pl-3 mt-2" id="streams_panel"></dl>
+                                            <div id="Statistics_Live_dp mr-5" class="card" style="font-size: 0.9em">
+                                                <div th:class="${'card-header'}" style="color: whitesmoke;background-color: #2C3E50">
+                                                    <i class="fas fa-user-check"></i> Ενεργές Συνεδρίες <span class="text-muted"> / Τμήμα</span>
+                                                </div>
+                                            </div>
+                                            <dl class="row pl-3 mt-2" id="departments_panel"></dl>
+                                            <div class="row pl-3 mt-2">
+                                                <div class="col-12 text-muted"  style="border-top: #cccccc 1px solid">
+                                                    <i>* Τα στατιστικά ανανεώνονται κάθε 60'' ή κατά την ανανέωση της σελίδας</i>
+                                                </div>
+                                            </div>
+                                        </div>-->
+<!--                                        <div class="col-lg-10 col-12">-->
+                                        <div class="col-12">
+                                            <div th:if="${QR.skip > 1000}">
+                                                Δεν επιτρέπεται η εξυπηρέτηση περισσότερων από 1000 αποτελεσμάτων τη φορά. Περιορίστε τον αριθμό των αποτελεσμάτων προσθέτοντας νέα κριτήρια αναζήτησης
+                                                (Ζητήσατε αποτελέσματα μετά τα <span th:text="${QR.skip}"></span>)
+                                            </div>
+                                            <div th:unless="${QR.skip > 1000}">
+                                                <div th:replace="~{admin/fragments/live/live-query-results :: live-query-results}">QUERY RESULTS</div>
+                                            </div>
+                                            <!-- Pager -->
+                                            <div class="row my-3">
+                                                <div class="col-12 text-center">
+                                                    <div th:replace="~{fragments/search-common/u-pager :: u-pager('true')}">Pager</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                                <th:block th:if="${QR == null || QR.totalResults == 0}">
+                                    <!-- @thymesVar id="department" type="org.opendelos.model.structure.Department"-->
+                                    <div class="row mt-3">
+                                        <th:block th:if="${queryString != null && queryString != ''}">
+                                            <div class="col-3">
+                                                <div th:replace="~{fragments/search-common/l-applied-filters :: l-applied-filters}">Applied Filters</div>
+                                            </div>
+                                            <div class="col justify-content-center">
+                                                <h6>Η αναζήτηση δε βρήκε κάποια καταχώρηση</h6>
+                                                <p class="mt-2">Υποδείξεις:</p>
+                                                <ul>
+                                                    <li>Επιλέξτε διαφορετικά φίλτρα</li>
+                                                    <li>Περιορίστε τον αριθμό των φίλτρων</li>
+                                                    <li th:if="${department == null}">
+                                                        Συμβουλευτείτε το <a th:href="@{/calendar}">αναλυτικό ημερολόγιο μεταδόσεων</a></li>
+                                                    <li th:unless="${department == null}">
+                                                        Συμβουλευτείτε το <a th:href="@{/calendar(id=${department.id})}">ημερολόγιο μεταδόσεων</a> του Τμήματος</li>
+                                                </ul>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${queryString == '' || queryString == null}">
+                                            <div class="col-12">
+                                                <h6>Δεν υπάρχουν ζωντανές μεταδόσεις αυτή την ώρα</h6>
+                                                <p class="mt-2">Υποδείξεις:</p>
+                                                <ul>
+                                                    <li>Δοκιμάστε αργότερα πατώντας "Ανανέωση" ή συμβουλευτείτε το <a th:href="@{/admin/scheduler/calendar}">ημερολόγιο μεταδόσεων</a></li>
+                                                </ul>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                        <!-- @thymesVar id="QR" type="org.opendelos.dashboard.repository.resource.QueryResourceResults"-->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="c-footer">
+            <i class="far fa-copyright mr-1"></i> <span th:text="#{default.institution.title}"></span>
+    </footer>
+</div>
+<div th:replace="~{modals/resource_view_modal :: resource_view_modal}"></div>
+<div th:replace="~{admin/video-editor/modals/play_edited_modal :: play_edited_modal}"></div>
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+
+<!-- Optional JavaScript -->
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+<script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+
+<script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+<script th:src="@{/lib/datatables-classic/sum().js}" type="application/javascript"></script>
+
+<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+
+<script th:src="@{/js/live/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/live/dashboard.schools.js}" type="application/javascript"></script>
+<script th:src="@{/js/live/dashboard.departments.js}" type="application/javascript"></script>
+<script th:src="@{/js/live/dashboard.categories.js}" type="application/javascript"></script>
+<script th:src="@{/js/live/dashboard.course.js}" type="application/javascript"></script>
+<script th:src="@{/js/live/dashboard.staffmembers.js}" type="application/javascript"></script>
+<script th:src="@{/js/live/dashboard.sevents.js}" type="application/javascript"></script>
+<script th:src="@{/js/live/dashboard.afilters.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/live/dashboard.wowza.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/search/el.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+</body>
+</html>

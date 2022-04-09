@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="institution_edit_modal">
+<div class="modal fade" id="institutionModal" tabindex="-1" role="dialog" aria-labelledby="institutionModalLabel" aria-hidden="true" style="padding-right: 17px">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img  style="color: silver" th:src="@{/public/images/icons/IconInstitution-sm.png}" alt="regular" src=""/>
+                <h5 class="modal-title ml-2" id="institutionModalLabel"></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
+                    <div class="card card-body" style="background-color: #f7f7f9;border: none">
+
+                        <input type="hidden" id="institution_edit_mode" value=""/>
+                        <input type="hidden" id="institution_id" value=""/>
+
+                        <!-- TITLE -->
+                        <div class="form-group row">
+                            <label for="institution_title" class="col-sm-3 col-form-label">Τίτλος</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="institution_title" class="form-control" disabled/>
+                            </div>
+                        </div>
+                        <!-- Url -->
+                        <div class="form-group row">
+                            <label for="institution_url" class="col-sm-3 col-form-label">Url</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="institution_url" class="form-control "/>
+                            </div>
+                        </div>
+                        <!-- Logo Url -->
+                        <div class="form-group row">
+                            <label for="institution_logourl" class="col-sm-3 col-form-label">Logo Url</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="institution_logourl" class="form-control "/>
+                            </div>
+                        </div>
+                        <!-- Admin Name -->
+                        <div class="form-group row">
+                            <label for="institution_admin_name" class="col-sm-3 col-form-label">Όνομα Διαχειριστή</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="institution_admin_name" class="form-control "/>
+                            </div>
+                        </div>
+                        <!-- Admin Email -->
+                        <div class="form-group row">
+                            <label for="institution_admin_email" class="col-sm-3 col-form-label">E-mail Διαχειριστή</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="institution_admin_email" class="form-control "/>
+                            </div>
+                        </div>
+                    </div> <!-- card body -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateInstitution"><i class="far fa-save"></i> Αποθήκευση</button>
+                <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal"><i class="fas fa-ban"></i> Ακύρωση</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

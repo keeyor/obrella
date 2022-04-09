@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <style>
+       body {
+                                  padding: 0;
+                                  margin:0;
+                                  font-family: "Trebuchet MS", Tahoma, Geneva, sans-serif;
+                                  font-size: 13px;
+                                  color: #777777;
+                                  background: #ffffff;
+                                  width:800px;
+                                  height:350px;
+       }
+       #player_edited{
+                                  display:block;
+                                  padding: 8px;
+                                  background-color: #f8f8f8;
+                                  -moz-box-shadow: 0 0 2px 2px #dcddde;
+                                  -webkit-box-shadow: 0 0 2px 2px #dcddde;
+                                  box-shadow: 0 0 2px 2px #dcddde;
+                                  filter: progid:DXImageTransform.Microsoft.Shadow(color='#dcddde', Direction=120, Strength=5);
+                                  -webkit-border-radius: 0;
+                                  -moz-border-radius: 0;
+                                  border-radius: 0;
+       }
+    </style>
+</head>
+<body>
+    <div class="container-fluid" id="player_edited_container" style="display: none">
+        <h6 class="text-muted">Προεπισκόπηση Βίντεο: Αποδοχή ή Απόρριψη κοπής</h6>
+        <div class="row">
+            <div class="col-6">
+                <video id="player_edited" controls preload='none' style="width: 400px">
+                    <source id='mp4' src="" type='video/mp4'>
+                </video>
+            </div>
+            <div class="col-4 col-md-offset-2 ml-2">
+                <p>Πατήστε 'Αποδοχή' αν το βίντεο είναι αποδεκτό. Θα αντικαταστήσει το υπάρχον βίντεο στην καταχώρηση</p>
+                <p>Παήστε 'Απόρριψη' για να ακυρωθεί η πραγματική κοπή. Μπορείτε να δοκιμάσετε ξανά</p>
+                <button id="real_approve_bt" class="btn btn-sm btn-success">Αποδοχή</button>
+                <button id="real_reject_bt"  class="btn btn-sm btn-danger">Απόρριψη</button>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" id="player_isprogress_container">
+        <h5>Η επεξεργασία του βίντεο είναι σε εξέλιξη. Παρακαλώ περιμένετε</h5>
+        <div class="align-content-center justify-content-center"><img th:src="@{/public/images/icons/loading-x.gif}" alt="" src=""/></div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+    <script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+    <script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+    <!-- alertify -->
+    <script th:src="@{/lib/alertify/alertify.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/richLecture_addons/js/html5editor/html5editorPlayEdited.js}"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2014 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="info" unicode="&#xe802;" d="m383 63c-72-136-157-205-253-205c-33 0-58 11-77 32s-29 48-29 82c5 33 12 67 21 102l82 291c13 49 20 82 20 101c0 28-26 43-79 43l-1 39c101 9 203 25 305 47l-154-579c0-26 9-40 27-40c31 0 67 36 107 108l31-21z m49 675c0-28-10-53-30-73c-20-21-44-31-72-31c-30 0-55 10-75 30c-20 20-31 45-31 74c0 28 10 53 30 73c20 21 44 31 73 31c30 0 55-10 75-29c20-20 30-45 30-75z" horiz-adv-x="438" />
+<glyph glyph-name="slides" unicode="&#xe803;" d="m357 529q0-45-31-76t-76-32t-76 32t-31 76t31 76t76 31t76-31t31-76z m572-215v-250h-786v107l178 179l90-89l285 285z m53 393h-893q-7 0-12-5t-6-13v-678q0-7 6-13t12-5h893q7 0 13 5t5 13v678q0 8-5 13t-13 5z m89-18v-678q0-37-26-63t-63-27h-893q-36 0-63 27t-26 63v678q0 37 26 63t63 27h893q37 0 63-27t26-63z" horiz-adv-x="1063" />
+<glyph glyph-name="titles" unicode="&#xe804;" d="m847 572h-33c-17 75-39 124-67 146c-28 23-82 34-159 34h-78v-727c0-51 9-85 28-101c19-16 55-24 108-24v-26h-408v26c57 0 93 10 111 30c14 18 21 56 21 113v709h-79c-79 0-132-11-160-33c-28-22-49-71-63-147h-37l6 242h801l9-242z" horiz-adv-x="875" />
+<glyph glyph-name="nextslide" unicode="&#xe800;" d="m6-140l344 490l-344 490v-980z" horiz-adv-x="344" />
+<glyph glyph-name="prevslide" unicode="&#xe801;" d="m356 840l-344-490l344-490v980z" horiz-adv-x="344" />
+<glyph glyph-name="cc" unicode="&#xe805;" d="m90 788h880c49 0 89-51 89-114v-640c0-62-40-113-89-113h-880c-50 0-90 51-90 113v640c0 63 40 114 90 114l0 0z m-11-602v-95h165v95h-165l0 0z m246 0v-95h164v95h-164l0 0z m245 0v-95h165v95h-165l0 0z m246 0v-95h164v95h-164l0 0z" horiz-adv-x="1063" />
+<glyph glyph-name="ccoutline" unicode="&#xe806;" d="m101 185h157v-91h-157v91l0 0z m10 602h845v1h0v-1c31 0 60-15 80-41c19-24 30-56 30-92h0v0v-615l0 0h0c0-35-11-68-30-92l0 0c-20-25-49-41-80-41v0h0v0h-845v0h0v0c-32 0-60 16-80 41c-19 24-31 57-31 92h0l0 0v615v0h0c0 36 12 69 31 92l0 0c20 26 48 41 80 41l0 1h0v-1l0 0z m845-48h-845v0h0v0c-16 0-31-9-42-23v0c-13-16-20-37-20-62h0v0v-615l0 0h0c0-24 7-46 20-61c11-15 26-23 42-23v0l0 0v0h845v0h0v0c16 0 30 8 42 22v1c12 15 20 37 20 61h0l0 0v615v0h0c0 25-8 47-20 62c-12 14-26 23-42 23l0 0h0v0l0 0z m-620-554h158v-91h-158v91l0 0z m236 0h158v-91h-158v91l0 0z m236 0h158v-91h-158v91l0 0z" horiz-adv-x="1063" />
+</font>
+</defs>
+</svg>

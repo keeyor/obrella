@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!-- @thymesVar id="localeData" type="java.lang.String" -->
+<!-- @thymesVar id="page" type="java.lang.String" -->
+<!-- @thymesVar id="localeCode" type="java.lang.String" -->
+<header th:fragment="a-topnav">
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark" style="background-color: black;color:white">
+        <div class="container-fluid mt-0">
+                <a class="navbar-brand" th:href="@{/}">
+                    <th:block th:if="${page != 'home'}" style="font-weight:400;font-size: 1.5em">
+                        <img th:src="@{/public/images/logos/uoa_sm_ts.png}" alt="" class="pt-0 d-inline-block" src=""/>
+                            <small><span style="color: whitesmoke" th:text="${'ΕΚΠΑ '}"></span></small>
+                            <span class="font-weight-bold text-white" th:text="#{site.head.main.label}"></span>
+                    </th:block>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="c-header-nav ml-auto" style="min-height: 20px!important">
+                                    <th:block th:if="${page != 'live_player'}">
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                <input type="hidden" id="lang_code" th:value="${localeCode}"/><i class="far fa-flag mr-1"></i><span th:text="#{${localeData}}"></span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <form id="form-gr" method="post" class="form-inline" th:action="@{/locale/change}">
+                                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                                    <input type="hidden" name="localeCode" value="el"/>
+                                                </form>
+                                                <a th:text="#{lang.el}" id="a-el" class="dropdown-item" href="javascript:void(0);" onclick="$(this).closest('form').submit();">
+                                                    <span class="flag-icon flag-icon-gr mr-2"></span>
+                                                </a>
+                                                <form id="form-en" method="post"  class="form-inline" th:action="@{/locale/change}">
+                                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                                    <input type="hidden" name="localeCode" value="en"/>
+                                                </form>
+                                                <a th:text="#{lang.eng}" id="a-en" class="dropdown-item" href="javascript:void(0);" onclick="$(this).closest('form').submit();">
+                                                    <span class="flag-icon flag-icon-gb mr-2"></span>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </th:block>
+                                    <li class="c-header-nav-item">
+                                        <a class="c-header-nav-link" th:href="@{feedback}" style="color: white" th:title="#{header.link.contact}">
+                                            <i class="fas fa-at mr-1"></i><span  th:text="#{header.link.contact}">Επικοινωνία</span>
+                                        </a>
+                                    </li>
+                                    <th:block sec:authorize="isAuthenticated()">
+                                        <li class="c-header-nav-item" >
+                                            <a class="c-header-nav-link text-white" href="#" title="logout" data-toggle="modal" data-target="#logout_modal">
+                                                <i class="fas fa-sign-out-alt mx-1"></i><span sec:authentication="name"></span>
+                                            </a>
+                                        </li>
+                                    </th:block>
+                                </ul>
+                </div>
+
+        </div>
+    </nav>
+
+</header>

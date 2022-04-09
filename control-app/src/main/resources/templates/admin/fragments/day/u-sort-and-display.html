@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--@thymesVar id="QR" type="org.opendelos.dashboard.repository.resource.QueryResourceResults"-->
+<!--@thymesVar id="resourceQuery" type="org.opendelos.dashboard.repository.resource.ResourceQuery"-->
+<div th:fragment="u-sort-and-display">
+    <div th:if="${QR.totalResults > 0}" class="row mt-2">
+            <div class="col-3 text-left">
+                    <span th:text="${'Εμφάνιση ' + (QR.skip+1)} + '-'"></span>
+                    <span th:if="${QR.totalResults < (QR.skip+QR.limit)}"><span th:text="${QR.totalResults}"></span></span>
+                    <span th:unless="${QR.totalResults < (QR.skip+QR.limit)}"><span th:text="${(QR.skip + QR.limit)}"></span></span>
+                    <span th:text="${' από ' + QR.totalResults}"></span>
+            </div>
+            <div class="col-9" style="font-size: 0.8em;display: flex; justify-content: flex-end">
+                <div class="btn-group">
+                    <label for="sort_select">
+                        <i class="fas fa-sort"></i>
+                        <select id="sort_select" class="form-control" th:attr="disabled=${resourceQuery.ft != ''} ? 'true' : 'false'">
+                            <option value="date"> Ώρα Εκκίνησης</option>
+                            <option value="title"> Τίτλος</option>
+                        </select>
+                    </label>&nbsp;
+                    <label for="direction_select">
+                        <i class="fas fa-long-arrow-alt-up"></i>
+                        <i class="fas fa-long-arrow-alt-down"></i>
+                        <select id="direction_select" th:attr="disabled=${resourceQuery.sort == 'rel'} ? 'true' : 'false'" class="form-control">
+                                <option value="asc"> Αύξουσα</option>
+                                <option value="desc"> Φθίνουσα</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+    </div>
+</div>
+</body>
+</html>

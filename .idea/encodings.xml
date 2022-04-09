@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/control-app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/control-app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dashboard/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dashboard/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/events-app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/live-app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/live/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/model/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/root-app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/root-app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sync/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vod-app/src/main/java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

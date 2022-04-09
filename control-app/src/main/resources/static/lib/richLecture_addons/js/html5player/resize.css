@@ -1,0 +1,104 @@
+.draggable
+{
+    position: relative;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    zoom: 1;
+    *display: inline;
+    cursor: hand;
+    cursor: pointer;
+    background-color:#666;
+    top: 20%;
+    left:50%;
+}
+
+.resizable
+{
+    /*width: 100%;*/
+    border: 1px solid #bb0000;
+    padding: 10px;
+}
+.resizable video
+{
+    height: 90%;
+    width: 100%;
+    margin-right: 10px;
+
+}
+
+.ui-resizable-handle
+{
+    background: #f5dc58;
+    border: 1px solid #FFF;
+    width: 9px;
+    height: 9px;
+
+    z-index: 2;
+}
+.ui-resizable-se
+{
+    right: -5px;
+    bottom: -5px;
+}
+
+.ui-rotatable-handle
+{
+    background: #f5dc58;
+    border: 1px solid #FFF;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    cursor: pointer;
+
+    height:        10px;
+    left:          50%;
+    margin:        0 0 0 -5px;
+    position:      absolute;
+    top:           -5px;
+    width:         10px;
+}
+.ui-rotatable-handle.ui-draggable-dragging
+{
+    visibility:  hidden;
+}
+/*
+#container {
+    width: 90%;
+    height: 100px;
+    margin: 0 auto;
+    position: relative;
+}
+#A, #B, #Z {
+    position: absolute;
+    top: 0;
+    height: 100%;
+}
+#A {
+    left: 0;
+    width: 39%;
+    background-color: #ccffcc;
+}
+#B {
+    right: 0;
+    width: 59%;
+    background-color: #ccccff;
+}
+#Z {
+    left: 39%;
+    width: 2%;
+    background-color: #cc0000;
+    cursor: move;
+}
+#A div, #B div {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+#info {
+    text-align: center;
+    line-height: 2em;
+}
+*/

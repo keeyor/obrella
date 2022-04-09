@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="department_edit_modal">
+
+<div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModalLabel" aria-hidden="true" style="padding-right: 17px">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" >
+                <img  style="color: silver" th:src="@{/public/images/icons/IconDepartment-sm.png}" alt="regular" src=""/>
+                <h5 class="modal-title ml-2" id="departmentModalLabel"></h5><br/>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                <input type="hidden" id="dp_rowIdx_edited" value=""/>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
+                    <div class="card card-body" style="background-color: #f7f7f9;border: none">
+
+                        <input type="hidden" id="department_edit_mode" value=""/>
+                        <input type="hidden" id="department_id" value=""/>
+                        <!-- SCHOOL -->
+                        <div class="form-group row mt-3">
+                            <label for="department_school" class="col-sm-2 col-form-label"><b>Σχολή*</b></label>
+                            <div class="col-sm-8">
+                                <select id="department_school" style="width: 100%" class="form-control">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- TITLE -->
+                        <div class="form-group row mt-3">
+                            <label for="department_title" class="col-sm-2 col-form-label"><b>Τίτλος*</b></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="department_title" class="form-control"/>
+                            </div>
+                        </div>
+                        <!-- TITLE -->
+                        <div class="form-group row mt-3">
+                            <label for="department_title_en" class="col-sm-2 col-form-label"><b>Τίτλος (en)*</b></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="department_title_en" class="form-control"/>
+                            </div>
+                        </div>
+                        <!-- Identity -->
+                        <div class="form-group row mt-3">
+                            <label for="department_identity" class="col-sm-2 col-form-label"><b>Σύμβολο*</b></label>
+                            <div class="col-sm-2">
+                                <input type="text" id="department_identity" class="form-control "/>
+                            </div>
+                        </div>
+                        <!-- Url -->
+                        <div class="form-group row mt-3">
+                            <label for="department_url" class="col-sm-2 col-form-label">Ιστότοπος (URL)</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="department_url" class="form-control "/>
+                            </div>
+                        </div>
+                        <!-- Url -->
+                        <div class="form-group row mt-3">
+                            <label for="department_logourl" class="col-sm-2 col-form-label">Logo Url</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="department_logourl" class="form-control "/>
+                            </div>
+                        </div>
+                        <!-- Password -->
+                        <div class="form-group row mt-3">
+                            <label for="department_password" class="col-sm-2 col-form-label">Κωδικός Τμήματος</label>
+                            <div class="col-sm-3">
+                                <input type="text" id="department_password" class="form-control "/>
+                            </div>
+                        </div>
+                        <div>
+
+                            <div style="font-size: 1.2em;color: red;font-weight: bold"><i style="color:red" class="fas fa-exclamation-triangle"></i> ΠΡΟΣΟΧΗ:</div>
+                            <div>Η τροποποίηση του τίτλου ενός Τμήματος θα ενημερώσει τον τίτλο σε όλα τα σημεία που αναφέρεται το επιλεγμένο Τμήμα (Μαθήματα, Προσωπικό,                                                  Διαλέξεις, Εκδηλώσεις κλπ). Η τροποποίηση του τίτλου ενός Τμήματος προτείνεται <b>ΜΟΝΟ</b> για διορθώσεις λαθών. Αν το επιλεγμένο Τμήμα άλλαξε την επίσημη ονομασία του, τότε  αντί της μετονομασίας, <b>ΔΗΜΙΟΥΡΓΉΣΤΕ ΕΝΑ ΝΕΟ ΤΜΗΜΑ ΜΕ ΤΟΝ ΝΕΟ ΤΙΤΛΟ & ΝΕΟ ΣΥΜΒΟΛΟ</b>. Οι υπάρχουσες διαλέξεις θα κρατήσουν τον παλιό τίτλο και οι νέες θα καταχωρούν τον νέο.
+                            </div>
+                        </div>
+                    </div> <!-- card body -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"  id="deleteDepartment"><i class="far fa-trash-alt"></i> Διαγραφή</button>
+                <button type="button" class="btn btn-primary  blue-btn-wcag-bgnd-color"  id="addOrUpdateDepartment"><i class="far fa-save"></i>  Αποθήκευση</button>
+                <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal"><i class="fas fa-ban"></i> Ακύρωση</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

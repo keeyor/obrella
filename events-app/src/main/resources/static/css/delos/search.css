@@ -1,0 +1,33 @@
+
+.popover-content div button{
+	font-size: small;
+}
+
+.row-buttons {
+    display: none;
+}
+		
+.row-style {
+	border:1px solid  #ffffff; 
+	margin: 15px 0px 15px 0px; 
+	padding:10px;
+	-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+	-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+	box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+
+	min-width: 600px;
+}
+	
+.row-style:hover {
+	border: 1px solid #CCC; 
+	margin: 15px 0px 15px 0px; 
+	padding:10px;
+	background-color: #F5F5F5;
+	-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.4);
+	-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.4);
+	box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.4);
+}
+	
+.row-style:hover .row-buttons{
+    display: block;
+}

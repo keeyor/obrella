@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OpenDelos Live</title>
+    <link rel="stylesheet" th:href="@{/css/global41.css}"/>
+    <link rel="stylesheet" th:href="@{/css/datatables-dp.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+
+    <!-- font awesome 5 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fa5/css/all.css}"/>
+    <!-- classic theme datatable with various plugins -->
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+
+    <!-- bootstrap-toggle -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-toggle/bootstrap-toggle.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+
+    <!-- loader -->
+    <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+</head>
+<body style="font-size: 0.89em">
+<input type="hidden" id="signInUserid" th:value="${user.id}"/>
+<!--@thymesVar id="department" type="org.opendelos.model.structure.Department" -->
+<!--@thymesVar id="school" type="org.opendelos.model.structure.School" -->
+<input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
+<input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
+<input th:if="${department != null}" type="hidden" id="department_id" th:value="${department.id}"/>
+<input th:if="${department != null}" type="hidden" id="department_name" th:value="${department.title}"/>
+<input th:if="${school != null}" type="hidden" id="school_id" th:value="${school.id}"/>
+<input th:if="${school != null}" type="hidden" id="school_name" th:value="${school.title}"/>
+
+
+<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div class="wrapper d-flex flex-column min-vh-100 bg-light" >
+    <div class="loading-overlay"></div>
+    <div class="loading-overlay-image-container">
+        <img th:src="@{/public/images/icons/512px-Loader.gif}" class="loading-overlay-img" alt=""/>
+    </div>
+    <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+            <ul class="header-nav d-none d-md-flex">
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/courses}">Μαθήματα</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/staff}">Προσωπικό</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/department/programs}">Προγράμματα Σπουδών</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/acalendar}">Ακαδημαϊκό Ημερολόγιο</a></li>
+            </ul>
+            <ul class="header-nav ms-auto">
+
+            </ul>
+        </div>
+        <div class="header-divider"></div>
+        <div class="container-fluid">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb my-0 ms-2">
+                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item active"><span>Προγράμματα Σπουδών</span></li>
+                </ol>
+            </nav>
+        </div>
+    </header>
+
+    <div class="body flex-grow-1 px-3">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-start" >
+                                            <div th:replace="~{admin/fragments/search/a-department-select :: a-deparment-select}"></div>
+                                        </div>
+                                        <div class="text-muted font-italic">
+                                            Διαχείριση στοιχείων τμήματος: προγράμματα σπουδών
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white"  id="newProgramBt" role="button">
+                                            <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέο Πρόγραμμα Σπουδών
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" id="programs_card" style="display: none">
+                                    <h4>Προγράμματα Σπουδών</h4>
+                                    <div class="text-muted">Βρέθηκαν <span id="count_programs_results"></span> προγράμματα σπουδών</div>
+                                    <div style="border-top: #efefef 2px solid">
+
+
+                                                <div class="d-flex justify-content-start pb-2 pt-2" >
+                                                    <div class="btn-toolbar d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                                                        <label for="program_study_filter"><i class="fas fa-microscope me-2"></i>σπουδές</label>
+                                                        <select id="program_study_filter" class="custom-select" style="width: 300px">
+                                                            <option value="_all"> -- όλες --</option>
+                                                            <option value="under">Προπτυχιακές Σπουδές</option>
+                                                            <option value="post">Μεταπτυχιακές Σπουδές</option>
+                                                            <option value="master">Ξενόγλωσσα Προγράμματα</option>
+                                                            <option value="cont">Επιμόρφωση & Δια Βίου Μάθηση</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="table-responsive" style="margin-top: 40px">
+                                                    <table id="programsDataTable"  style="width:100%" class="row-border table-striped">
+                                                <thead>
+                                                <tr style="font-weight: 700">
+                                                    <td style="width: 20px">#</td>
+                                                    <td>[id]</td>
+                                                    <td>Τίτλος</td>
+                                                    <td>[study]</td>
+                                                    <td>Σπουδές</td>
+                                                    <td>[schoolId]</td>
+                                                    <td>[departmentId]</td>
+                                                    <td>[τμήμα]</td>
+                                                    <td>[edit]</td>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                                </div>
+
+                                    </div>
+                                </div>
+                            <div class="card-body" id="programs_edit_card" style="display: none">
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span>
+                                            <h6 class="modal-title" id="programModalLabel"></h6>
+                                            <input type="hidden" id="pr_rowIdx_edited" value=""/>
+                                        </span>
+                                        <span class="float-end">
+                                                            <button type="button" class="btn btn-secondary" id="closeUpdateProgram"><i class="fas fa-undo"></i> Επιστροφή</button>
+                                                            <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateProgram"><i class="far fa-save"></i>  Αποθήκευση</button>
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
+                                        <div class="card card-body" style="background-color: #f7f7f9;border: none">
+                                            <form id="programs_form" name="programs_form">
+                                                <input type="hidden" id="program_edit_mode" value=""/>
+                                                <input type="hidden" id="program_id" value=""/>
+                                                <!-- DEPARTMENT -->
+                                                <div class="form-group row mt-3">
+                                                    <label for="program_department" class="col-sm-2 col-form-label"><b>Τμήμα*</b></label>
+                                                    <div class="col-sm-7">
+                                                        <select id="program_department" name="program_department" style="width: 100%" class="form-control">
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Studies -->
+                                                <div class="form-group row mt-3">
+                                                    <label for="program_study" class="col-sm-2 col-form-label"><b>Σπουδές*</b></label>
+                                                    <div class="col-sm-7">
+                                                        <select id="program_study" name="program_study" style="width: 100%" class="form-control">
+                                                            <option value="post" th:text="#{post}"></option>
+                                                            <option value="master" th:text="#{master}"></option>
+                                                            <option value="cont" th:text="#{cont}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- TITLE -->
+                                                <div class="form-group row mt-3">
+                                                    <label for="program_title" class="col-sm-2 col-form-label"><b>Τίτλος*</b></label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" id="program_title" name="program_title" class="form-control"/>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div> <!-- card body -->
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-danger"  id="deleteStudyProgram"><i class="fas fa-ban"></i>  Διαγραφή</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+    <footer class="c-footer">
+        <i class="far fa-copyright mr-1"></i> <span th:text="#{default.institution.title}"></span>
+    </footer>
+</div>
+
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+<!-- Optional JavaScript -->
+<script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
+
+<!-- bootstrap-toggle -->
+<script th:src="@{/lib/bootstrap-toggle/bootstrap-toggle.min.js}"></script>
+
+<script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+
+<script th:src="@{/js/admin/departments/programs/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.institutions.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.schools.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.departments.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.courses.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.programs.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.staffmembers.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.classrooms.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/search/el.js}" type="application/javascript"></script>
+
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+<!-- loader -->
+<script th:src="@{/lib/loader/loader.js}"></script>
+</body>
+</html>

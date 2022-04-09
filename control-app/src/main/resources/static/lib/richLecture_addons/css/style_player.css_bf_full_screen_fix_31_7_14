@@ -1,0 +1,324 @@
+/*---------------------------------------------------------
+   CSS STYLES -  LIGHT theme - videolectures.uoa.gr
+---------------------------------------------------------*/
+html {
+    height:100% !important;
+}
+ 
+body {
+    width:100%;
+    max-width:1650px;
+    height:100%;
+    margin:0 auto !important; 
+    /*Fonts and color are defined by bootstrap*/
+    /*
+    font-family: "Trebuchet MS", Tahoma, Geneva, sans-serif; 
+    font-size: 13px;
+    color: #777777;
+    */
+    background: #ffffff; 
+    background: -moz-linear-gradient(top, #ebebeb 0%, #ffffff 100%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebebeb), color-stop(100%,#ffffff)); 
+    background: -webkit-linear-gradient(top, #ebebeb 0%,#ffffff 100%);
+    background: -o-linear-gradient(top, #ebebeb 0%,#ffffff 100%); 
+    background: -ms-linear-gradient(top, #ebebeb 0%,#ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebebeb', endColorstr='#ffffff',GradientType=0 );
+    background: linear-gradient(top, #ebebeb 0%,#ffffff 100%);
+}
+ 
+a {
+    color: #777777;
+    text-decoration:none;
+}
+
+a:hover { 
+    text-decoration:underline;
+} 
+ 
+img {
+    border: 0; 
+    vertical-align:middle;
+}
+
+.header { 
+    position: absolute;
+    top: 0px;
+    width:100%;
+    max-width:1650px;
+    min-width:1000px;
+    background-color: #CCCCCC;
+    color: #000;
+    height:50px;
+    line-height:50px; 
+    vertical-align:middle;
+    
+    -moz-box-shadow: 0 0 2px 2px #c8c8c8;
+    -webkit-box-shadow: 0 0 2px 2px #c8c8c8;
+    box-shadow: 0 0 2px 2px #c8c8c8;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#c8c8c8', Direction=120, Strength=5);
+}
+
+.header-logo{
+    float:left;
+    background: url(images_player/Delos-logo-black.png) no-repeat;
+    width:60px;
+    height:50px;        
+    margin-right: 10px;
+}
+
+.header-item{
+    float:left;
+    font-size: 17px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 100px;   /*This value is customised by JS*/
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header_menu{
+    float:right;
+    padding-right:10px;
+}
+
+#contentwrapper {    
+    position: absolute;
+    top: 50px;
+    bottom: 0px;
+    width:96%;
+    max-width:1620px; /*1650 - 15x2 margin = 1620*/
+    min-width:960px; /*1000 * 0.96 = 960px*/
+    margin: 15px 2%;
+}
+
+.contentwrapper_max{
+    margin:15px !important;
+}
+
+.main_content{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    height:100%;
+    width:80%;
+    display:table;
+    /*TODO needs test*/
+    min-height:450px;
+}
+
+.right_sidebar{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    height:100%;
+    width:20%;
+}
+
+.scroll-pane { 
+    float:right;
+    overflow-x:hidden;
+    height: 100%; 
+    width:96%;
+    padding:0px 15px 0px 15px; /*bottom is for shadow of last content-item**/
+    margin:0px auto 0px auto;
+}
+
+.scroll-content { 
+    height: 7000px; 
+}
+
+.scroll-content-item { 
+    display: inline;
+    position:relative; 
+    float: left; 
+    margin-top: 5px; 
+    margin-bottom: 5px;
+    text-align: center;    
+
+    width: 100%;
+    max-width: 253px;
+    
+    -moz-box-shadow: 0 0 2px 2px #c8c8c8;
+    -webkit-box-shadow: 0 0 2px 2px #c8c8c8;
+    box-shadow: 0 0 2px 2px #c8c8c8;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#c8c8c8', Direction=120, Strength=5);
+
+ }
+ 
+ .scroll-content-item img{
+    cursor: pointer;
+    width:100%;
+    max-width: 253px;
+    margin:auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+
+.scroll-content-img-number{
+    position: absolute;
+    background-color: #FFF;
+    width:20px;
+    height:20px;
+    top:0px;
+    right:0px;
+    color: #000;            
+    -moz-box-shadow: 0 0 1px 1px #c8c8c8;
+    -webkit-box-shadow: 0 0 1px 1px #c8c8c8;
+    box-shadow: 0 0 1px 1px #c8c8c8;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#c8c8c8', Direction=120, Strength=3);
+}
+
+.active{
+    -moz-box-shadow: 0 0 3px 3px #5199d7;
+    -webkit-box-shadow: 0 0 3px 3px #5199d7;
+    box-shadow: 0 0 3px 3px #428BCA;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#5199d7', Direction=120, Strength=5);
+}
+
+#movie {
+    min-width:200px;
+    max-width: 720px;      
+    display:table-cell;
+    vertical-align: middle;
+    text-align: center;    
+    height:100%;
+}
+
+#player {    
+    left:0px;
+    max-width: 720px;      
+    width: 100%; 
+    margin:0px auto;
+    background-color: #cccccc;
+    -moz-box-shadow: 0 0 2px 2px #dcddde;
+    -webkit-box-shadow: 0 0 2px 2px #dcddde;
+    box-shadow: 0 0 2px 2px #dcddde;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#dcddde', Direction=120, Strength=5);	 
+}
+
+#player_wrapper { /*This id is auto set when JW player fallbacks to Flash mode*/
+    left:0px;
+    max-width: 720px;      
+    width: 100%; 
+    margin:0px auto;
+    background-color: #cccccc;
+    -moz-box-shadow: 0 0 2px 2px #dcddde;
+    -webkit-box-shadow: 0 0 2px 2px #dcddde;
+    box-shadow: 0 0 2px 2px #dcddde;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#dcddde', Direction=120, Strength=5);	 
+}
+
+#resize_icon{
+    display: table-cell;
+    vertical-align: middle;    
+    cursor: e-resize;
+    width: 50px;
+    height: 32px; 
+    background: transparent url('images_player/drag.png') no-repeat center center !important;
+    
+    right:0px;
+    top:0px;
+    left: 0px;
+    position: relative;
+}
+
+#active_slide{
+    min-width:200px;
+    max-width: 800px;      
+    width: 60%; 
+    display:table-cell;
+    vertical-align: middle;
+    text-align: left;
+    height:100%;
+    position:relative;
+}
+
+#active_slide img{
+    width: 100%;
+    max-width: 800px;      
+    background-color: #f8f8f8;
+    -moz-box-shadow: 0 0 2px 2px #dcddde;
+    -webkit-box-shadow: 0 0 2px 2px #dcddde;
+    box-shadow: 0 0 2px 2px #dcddde;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#dcddde', Direction=120, Strength=5);
+}
+
+.go_to_time{
+    width:73px !important; 
+    display:inline !important; 
+    padding:5px !important;   
+}
+
+.go_to_slide{
+    width:30px !important; 
+    display:inline !important; 
+    padding:5px !important;
+    text-align: center !important;
+}
+
+.scroll-content-img-title{
+    display: none;
+    padding: 5px 25px 5px 5px;
+    text-align: left;
+    cursor: pointer;
+}
+
+#previous_slide{
+    display:none;
+    position:absolute;
+    z-index: 100;
+    top: 50%;
+    left:10px;
+    cursor:pointer;
+    
+    opacity: 0.5;
+    filter:alpha(opacity=50);
+    font-size: 2.5em;
+
+}
+
+#next_slide{
+    display:none;
+    position:absolute;
+    z-index: 100;
+    top: 50%;
+    /*right:10px;*/ /*Positioning based on jquery script since FF had bug with right option*/
+    cursor:pointer;
+    
+    opacity: 0.5;
+    filter:alpha(opacity=50);
+    font-size: 2.5em;
+}
+
+.caret{
+    border-style: solid;
+}
+
+#show_lecture_info{
+    display:none;
+}
+
+#show_lecture_info form div{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#show_lecture_info form div span{
+    font-weight:normal;
+}
+
+#dvLoading{
+   background: #ccc url(images_player/imageloading.gif) no-repeat center center;   
+   opacity: 0.5;
+   filter:alpha(opacity=50);
+   height: 100%;
+   width: 100%;
+   max-width:1650px;
+   position: fixed;
+   z-index: 100000;
+}

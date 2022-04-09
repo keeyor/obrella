@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="ontop-event-filters"  id="event-filters" style="display: none" >
+        <div class="card mb-2  mt-2">
+            <div class="card-header" style="vertical-align: center;line-height: 30px">
+                <i class="fas fa-sliders-h"></i> Κριτήρια Αναζήτησης
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                        <div class="text-muted" id="none_event_filter">κανένα επιλεγμένο κριτήριο</div>
+                        <button id="status-filter-applied" style="display: none"  class="my-2 mx-1 btn blue-btn-wcag-bgnd-color btn-sm clear-filter">
+                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" data-target="estatus">
+                                <span id="status-dd-header"></span>
+                            </a>
+                        </button>
+                </div>
+                <div id="AllEventFilters">
+                    <div class="row pt-3" style="border-top: #006A9B solid 3px">
+                           <div class="col-12">
+                                    <a id="statusCanvasLink" style="display: none"  class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasStatus" role="button" aria-controls="offcanvasStatus" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε κατάσταση">
+                                        <i class="fas fa-plus-circle"></i> | Κατάσταση Μετάδοσης
+                                    </a>
+                               <div class="text-muted" id="no_dyna_event_filters"></div>
+                            </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OffCanvas Event Status -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStatus" aria-labelledby="offcanvasStatusLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasDepLabel">Κατάσταση</h5>
+                <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>
+                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Κατάσταση Μετάδοσης</b> από την παρακάτω λίστα.
+                </div>
+                <ul class="mt-3 list-group" id="statusFilters"></ul>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+</body>
+
+</html>

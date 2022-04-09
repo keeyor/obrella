@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>    
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Rich Lecture - Slide synchronizer Help</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/richLecture_addons/css/style_synchronizer.css}"/>
+    <style>
+        body {width: 90%;
+            background:#F0F0F0;
+        }
+        .HelpTableHeader
+        { 	background-color:#999999;
+            color:#FFFFFF;
+        }
+        .HelpTable  {border-collapse:collapse;border-spacing:0; width:100%;}
+        .HelpTable td{font-family:Arial;font-size:12px;padding:3px 3px;border-style:solid;border-width:1px; text-align:center;}
+        .HelpTable th{font-family:Arial;font-size:12px;font-weight:normal;padding:5px 5px;border-style:solid;border-width:1px; text-align:center;}
+
+
+        .selectedRow {
+            background-color: #ffffff;
+        }
+        .helpdiv {
+            color: #000000;
+            font-size: 14px;
+            padding:0px;
+            padding-top:5px;
+            margin: 0px;
+            background-color: #f8f8f8;
+            -moz-box-shadow: 0 0 2px 2px #dcddde;
+            -webkit-box-shadow: 0 0 2px 2px #dcddde;
+            box-shadow: 0 0 2px 2px #dcddde;
+            filter: progid:DXImageTransform.Microsoft.Shadow(color='#dcddde', Direction=120, Strength=5);
+            -webkit-border-radius: 0px;
+            -moz-border-radius: 0px;
+            border-radius: 0px;
+            height: 30px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .helpdiv:hover{
+            background-color:#999999;
+            color:#FFFFFF;
+            cursor:pointer;
+        }
+        .ReturnTop{
+            text-align:right;
+        }
+
+    </style>
+</head>
+<body>
+
+
+
+<p><a name="HelpTop"></a><span th:text="#{richlecture.sync.help.2}"></span></p>
+<div style="width:80%;float:left">
+    <div id="Hheader" class="helpdiv" style="width:90%" onclick="location.href='#AHeader'"><span th:text="#{richlecture.sync.help.3}"></span></div>
+	<div style="float:left;width:30%;height:60px;" class="helpdiv" onclick="location.href='#ASelectedSlide'"><span th:text="#{richlecture.sync.help.4}"></span></div>
+    <div style="float:left;width:30%;height:60px;" class="helpdiv" onclick="location.href='#AMarkerList'"><span th:text="#{richlecture.sync.help.5}"></span></div>
+    <div style="float:left;width:30%;height:60px;" class="helpdiv" onclick="location.href='#AVideo'">Video</div> 
+    <div id="HTimeLine" class="helpdiv" style="clear:both;width:90%" onclick="location.href='#ATimeLine'"><span th:text="#{richlecture.sync.help.6}"></span></div>
+    <div id="HThumbnail" class="helpdiv" style="position:relative;width:90%" onclick="location.href='#AThumbNails'"><span th:text="#{richlecture.sync.help.7}"></span></div>
+</div>
+<div style="width:20%;float:right"><a th:href="@{/lib/richLecture_addons/help_files/Slide-Synchronization-Editor-Help-el.docx}" th:title="#{richlecture.sync.help.8}">
+    <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/download_doc.png}" th:alt="#{richlecture.sync.help.8}" height="128" width="128"></a></div>
+<div style="clear:both"></div>
+<h2> <a name="AHeader"></a><span th:text="#{richlecture.sync.help.3}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th>Edit Mode  <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewEditON.png}" alt="Edit" height="30" width="90"></th>
+         <th>Preview Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewONEdit.png}" alt="Preview" height="30" width="90"></th>
+     </tr>
+  </thead>
+   <tbody>
+      <tr class="">
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/GotoUnSyncSlide.png}" alt="GotoUnsyncSlide" height="25" width="40"></td>
+         <td><span th:text="#{richlecture.sync.help.9}"></span></td>
+         <td>-</td>
+     </tr>
+      <tr class="">
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/saveButton-el.png}" alt="Save" height="30" width="120"></td>
+         <td colspan="2"><p><span th:text="#{richlecture.sync.help.10}"></span></p></td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.sync.help.1}"></span></a></div>
+<h2> <a name="ASelectedSlide"></a><span th:text="#{richlecture.sync.help.11}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th>Edit Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewEditON.png}" alt="Edit" height="30" width="90"></th>
+         <th>Preview Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewONEdit.png}" alt="Preview" height="30" width="90"></th>
+     </tr>
+   </thead>
+   <tbody>
+
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/magnify.png}" alt="Maginfy Glass" height="22" width="22"></td>
+         <td colspan="2"><span th:text="#{richlecture.sync.help.12}"></span></td>
+     </tr>
+     
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.sync.help.1}"></span></a></div>
+<h2> <a name="AMarkerList"></a><span th:text="#{richlecture.sync.help.13}"></span> </h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th>Edit Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewEditON.png}" alt="Edit" height="30" width="90"></th>
+         <th>Preview Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewONEdit.png}" alt="Preview" height="30" width="90"></th>
+     </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/SyncButtonGreen.png}" alt="sync" height="30" width="233"></td>
+         <td><span th:text="#{richlecture.sync.help.14}"></span></td>
+         <td>-</td>
+     </tr>
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/SyncGoButtonGreen.png}" alt="Sync&amp;Go" height="30" width="82"></td>
+        <td><p><span th:text="#{richlecture.sync.help.15}"></span></p></td>
+         <td>-</td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/MarkerEdit.png}" alt="Edit" height="13" width="13"></td>
+        <td><p><span th:text="#{richlecture.sync.help.16}"></span></p></td>
+         <td>-</td>
+     </tr>
+                <tr>
+         <td>[Shift]+<img th:src="@{/lib/richLecture_addons/css/images_synchronizer/MarkerEdit.png}" alt="Edit" height="13" width="13"></td>
+        <td><p><span th:text="#{richlecture.sync.help.17}"></span></p></td>
+         <td>-</td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/MarkerGoto.png}" alt="GotoMarker" height="13" width="13"></td>
+        <td colspan="2"><p><span th:text="#{richlecture.sync.help.18}"></span></p></td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/MarkerDelete.png}" alt="DeleteMarker" height="13" width="13"></td>
+        <td><p><span th:text="#{richlecture.sync.help.19}"></span><br>
+        </p></td>
+         <td>-</td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.sync.help.1}"></span></a></div>
+<h2> <a name="AVideo"></a><span th:text="#{richlecture.sync.help.20}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th>Edit Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewEditON.png}" alt="Edit" height="30" width="90"></th>
+         <th>Preview Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewONEdit.png}" alt="Preview" height="30" width="90"></th>
+     </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PreviewModeButton.png}" alt="PreviewMode" height="30" width="45"></td>
+         <td><span th:text="#{richlecture.sync.help.21}"></span></td>
+         <td>-</td>
+     </tr>
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/EditModeButton.png}" alt="EditMode" height="30" width="45"></td>
+        <td><p>-</p></td>
+         <td><span th:text="#{richlecture.sync.help.22}"></span></td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/fast-backward-large.png}" alt="fback" height="35" width="35"></td>
+        <td colspan="2"><p><span th:text="#{richlecture.sync.help.23}"></span></p></td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/play-large.png}" alt="play" height="35" width="35"></td>
+        <td colspan="2"><p><span th:text="#{richlecture.sync.help.24}"></span></p></td>
+     </tr>
+           <tr>
+             <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/fast-forward-large.png}" alt="fforward" height="35" width="35"></td>
+             <td colspan="2"><p><span th:text="#{richlecture.sync.help.25}"></span></p></td>
+           </tr>
+          <tr>
+             <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/volume-minus-large.png}" alt="vol-" height="35" width="26"></td>
+             <td colspan="2"><p><span th:text="#{richlecture.sync.help.26}"></span></p></td>
+           </tr>
+                      <tr>
+             <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/unmute-large.png}" alt="vol" height="35" width="35"></td>
+             <td colspan="2"><p><span th:text="#{richlecture.sync.help.27}"></span></p></td>
+           </tr>
+                      <tr>
+             <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/volume-plus-large.png}" alt="Vol+" height="35" width="26"></td>
+             <td colspan="2"><p><span th:text="#{richlecture.sync.help.28}"></span></p></td>
+           </tr>
+                      <tr>
+             <td><span th:text="#{richlecture.sync.help.29}"></span></td>
+             <td colspan="2"><p><span th:text="#{richlecture.sync.help.30}"></span></p></td>
+           </tr>
+                      <tr>
+             <td>Video</td>
+             <td colspan="2"><p><span th:text="#{richlecture.sync.help.31}"></span></p></td>
+           </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.sync.help.1}"></span></a></div>
+<h2> <a name="ATimeLine"></a><span th:text="#{richlecture.sync.help.6}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th>Edit Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewEditON.png}" alt="Edit" height="30" width="90"></th>
+         <th>Preview Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewONEdit.png}" alt="Preview" height="30" width="90"></th>
+     </tr>
+   </thead>
+   <tbody>
+
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/timer.png}" alt="Time" height="60" width="11"></td>
+         <td colspan="2"><span th:text="#{richlecture.sync.help.32}"></span></td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.sync.help.1}"></span></a></div>
+<h2> <a name="AThumbNails"></a><span th:text="#{richlecture.sync.help.33}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th>Edit Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewEditON.png}" alt="Edit" height="30" width="90"></th>
+         <th>Preview Mode <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/PeviewONEdit.png}" alt="Preview" height="30" width="90"></th>
+     </tr>
+   </thead>
+   <tbody>
+
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_synchronizer/scroll-arrow-left.png}" alt="ff" height="41" width="8"> - <img th:src="@{/lib/richLecture_addons/css/images_synchronizer/scroll-arrow-right.png}" alt="ff" height="41" width="8"></td>
+         <td colspan="2"><span th:text="#{richlecture.sync.help.34}"></span></td>
+     </tr>
+           <tr>
+         <td><span th:text="#{richlecture.sync.help.35}"></span></td>
+         <td><span th:text="#{richlecture.sync.help.36}"></span></td>
+         <td><span th:text="#{richlecture.sync.help.37}"></span></td>
+     </tr>
+      <tr>
+         <td><span th:text="#{richlecture.sync.help.38}"></span></td>
+         <td><span th:text="#{richlecture.sync.help.39}"></span></td>
+         <td>-</td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.sync.help.1}"></span></a></div>
+<p></p>
+
+
+<script>
+    $(function() {
+        $('table tbody tr').mouseover(function() {
+            $(this).addClass('selectedRow');
+        }).mouseout(function() {
+            $(this).removeClass('selectedRow');
+        });
+        $(".ReturnTop").html('<a href="#HelpTop"><span th:text="#{richlecture.sync.help.1}"></span></a>');
+    });
+</script>
+
+<script type="text/javascript" th:src="@{/lib/richLecture_addons/js/ext_js/jquery.tools.min.js}"></script>
+</body></html>

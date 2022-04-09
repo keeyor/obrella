@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+
+    <script>
+        var auth2;
+
+        gapi.load('auth2', function() {
+                auth2 = gapi.auth2.init ({
+                    client_id: '765663939465-da4te8qs5dnqbg5n314gcdmbhfaqkopr.apps.googleusercontent.com',
+                    scope: 'https://www.googleapis.com/auth/youtube.force-ssl'
+                    // Scopes to request in addition to 'profile' and 'email'
+                    //scope: 'additional_scope'
+                });
+        });
+
+        function authenticate() {
+             auth2.grantOfflineAccess().then(signInCallback);
+        }
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+                let siteUrl = getRootSitePath();
+                // Hide the sign-in button now that the user is authorized, for example:
+                $('#signinButton').attr('style', 'display: none');
+
+                // Send the code to the server
+                $.ajax({
+                    type: 'POST',
+                    url: siteUrl +  '/youtube/insert_stream',
+                    // Always include an `X-Requested-With` header in every AJAX request,
+                    // to protect against CSRF attacks.
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    success: function(result) {
+                        console.log("AUTH CODE STORAGE RESPONSE:" + result);
+                    },
+                    processData: false,
+                    data: authResult['code']
+                });
+            } else {
+                // There was an error.
+            }
+        }
+        function transitionToLive() {
+            let broadcastId = "smething"; //$("#broadcastId").val();
+            let siteUrl = getRootSitePath();
+
+                $.ajax({
+                    type: 'POST',
+                    url: siteUrl + '/youtube/transitiontolive',
+                    // Always include an `X-Requested-With` header in every AJAX request,
+                    // to protect against CSRF attacks.
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    processData: false,
+                    data: broadcastId
+                });
+        }
+        function loadSequence() {
+            let broadcastId = "my broadcast title "; //$("#broadcastId").val();
+            let siteUrl = getRootSitePath();
+
+            $.ajax({
+                type: 'POST',
+                url: siteUrl + '/youtube/scheduleAndStart',
+                // Always include an `X-Requested-With` header in every AJAX request,
+                // to protect against CSRF attacks.
+                contentType: 'application/octet-stream; charset=utf-8',
+                success: function (result) {
+                    console.log(result);
+                },
+                processData: false,
+                data: broadcastId
+            });
+        }
+
+
+        function getRootSitePath () {
+
+            let _location = document.location.toString();
+            let applicationNameIndex = _location.indexOf('/', _location.indexOf('://') + 3);
+            let applicationName = _location.substring(0, applicationNameIndex) + '/';
+            let webFolderIndex = _location.indexOf('/', _location.indexOf(applicationName) + applicationName.length);
+
+            return _location.substring(0, webFolderIndex);
+        }
+
+    </script>
+</head>
+<body>
+    <div id="authcode">authCode:<span th:text="${authcode}"></span></div>
+<!--    <div id="accessToken">accessToken:<span th:text="${accessToken}"></span></div>
+    <div id="refreshToken">refreshToken:<span th:text="${refreshToken}"></span></div>-->
+    <div id="broadcastId">broadcastId:<span th:text="${broadcastId}"></span></div>
+
+
+
+<button onclick="authenticate()">authorize and load</button>
+<!--<button onclick="execute()">execute</button>-->
+<!--<form method="post" >
+    <button type="submit">SET SCHEDULED</button>
+</form>-->
+
+<button onclick="loadSequence()">Go Live</button>
+
+
+
+</body>
+</html>

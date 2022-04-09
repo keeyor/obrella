@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--@thymesVar id="QR" type="org.opendelos.dashboard.repository.resource.QueryResourceResults"-->
+<!--@thymesVar id="resourceQuery" type="org.opendelos.dashboard.repository.resource.ResourceQuery"-->
+<div th:fragment="u-sort-and-display">
+    <div th:if="${QR.totalResults > 0}">
+        <div class="btn-group float-right ml-2">
+            <button class="btn dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="direction_dd">
+                <span th:if="${resourceQuery.direction == 'desc'}" th:text="φθίνουσα"></span>
+                <span th:unless="${resourceQuery.direction == 'desc'}" th:text="αύξουσα"></span>
+                <i class="fas fa-exchange-alt fa-rotate-90 fa-lg" style="color: #006A9B !important"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" style="margin: 0;">
+                <a class="dropdown-item direction_select" data-value="asc" href="#">Αύξουσα</a>
+                <a class="dropdown-item direction_select" data-value="desc"  href="#">Φθίνουσα</a>
+            </div>
+        </div>
+        <div class="btn-group float-right">
+            <button class="btn dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span th:if="${resourceQuery.sort == 'title'}" th:text="τίτλος"></span>
+                <span th:if="${resourceQuery.sort == 'rel'}" th:text="σχετικότητα"></span>
+                <span th:unless="${resourceQuery.sort == 'title' || resourceQuery.sort == 'rel'}" th:text="ημερομηνία"></span>
+                <i class="fas fa-sort-alpha-down fa-lg" style="color: #006A9B !important"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" style="margin: 0;">
+                <a class="dropdown-item sort_select" data-value="date" href="#">Ημερομηνία</a>
+                <a class="dropdown-item sort_select" data-value="title"  href="#">Τίτλος</a>
+                <a th:if="${resourceQuery.ft != ''}" class="dropdown-item sort_select" data-value="rel" href="#">Σχετικότητα</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="runit_select_modal">
+<div class="modal fade" id="runitSelectModal" tabindex="-1" role="dialog" aria-labelledby="runitSelectModalLabel" aria-hidden="true" style="padding-right: 17px">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #0b6da8">
+                <h5 class="modal-title ml-2 text-white" id="runitSelectModalLabel"></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                <input type="hidden" id="ru_rowIdx_edited" value=""/>
+                <input type="hidden" id="default_dp_id" value=""/>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="font-italic mb-3">
+                        Επιλέξτε όλες τις μονάδες που επιθυμείτε να προσθέσετε στη λίστα των οργανωτών της Εκδήλωσης. Απο-επιλέξτε τις μονάδες που επιθυμείτε να διαγραφούν από τη λίστα των διοργανωτών
+                    </div>
+                        <div class="table-responsive">
+                            <table id="runitSelectDataTable" style="width:100%" class="table table-hover table-striped compact">
+                                <thead>
+                                <tr class="text-high-emphasis">
+                                    <td></td>
+                                    <td>Τύπος</td>
+                                    <td>Τίτλος</td>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn-wcag-bgnd-color text-white"  id="addAssignedUnits">Εισαγωγή Επιλεγμένων</button>
+                <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Ακύρωση</button>
+            </div>
+    </div>
+</div>
+</div>

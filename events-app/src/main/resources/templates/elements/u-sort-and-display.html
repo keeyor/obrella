@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
+<!--@thymesVar id="resourceQuery" type="org.opendelos.model.repo.ResourceQuery"-->
+<div th:fragment="u-sort-and-display">
+    <div th:if="${QR.totalResults > 0}">
+        <div class="row my-2">
+            <div class="col-6">
+                    <span class="float-left text-muted">
+                    <span th:text="#{results.header} + ${' ' + (QR.skip+1) + '-'}"></span>
+                    <span th:if="${QR.totalResults < (QR.skip+QR.limit)}"><span th:text="${QR.totalResults}"></span></span>
+                    <span th:unless="${QR.totalResults < (QR.skip+QR.limit)}"><span th:text="${(QR.skip + QR.limit)}"></span></span>
+                    <span th:text="#{results.header.from} + ${ ' ' + QR.totalResults}"></span>
+                </span>
+            </div>
+            <div class="col-6">
+                <div class="btn-group ml-2 float-right">
+                    <button th:title="#{sort.alt.direction}" class="btn dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="direction_dd">
+                        <span th:if="${resourceQuery.direction == 'desc'}"  class="hide-md" th:text="#{sort.direction.down}"></span>
+                        <span th:unless="${resourceQuery.direction == 'desc'}"  class="hide-md" th:text="#{sort.direction.up}"></span>
+                        <i class="fas fa-exchange-alt fa-rotate-90 fa-lg" style="color: #006A9B !important"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" style="margin: 0;">
+                        <a class="dropdown-item direction_select" data-value="asc" href="#"><span th:text="#{sort.direction.up}"></span></a>
+                        <a class="dropdown-item direction_select" data-value="desc"  href="#"><span th:text="#{sort.direction.down}"></span></a>
+                    </div>
+                </div>
+                <div class="btn-group float-right">
+                    <button th:title="#{sort.alt.text}" class="btn dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span th:if="${resourceQuery.sort == 'title'}"  class="hide-md" th:text="#{sort.field.title}"></span>
+                        <span th:if="${resourceQuery.sort == 'views'}"  class="hide-md" th:text="#{sort.field.views}"></span>
+                        <span th:if="${resourceQuery.sort == 'rel'}"  class="hide-md" th:text="#{sort.field.rel}"></span>
+                        <span th:unless="${resourceQuery.sort == 'title' || resourceQuery.sort == 'views' || resourceQuery.sort == 'rel'}"  class="hide-md" th:text="#{sort.field.date}"></span>
+                        <i class="fas fa-sort-alpha-down fa-lg" style="color: #006A9B !important"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" style="margin: 0;">
+                        <a class="dropdown-item sort_select" data-value="date" href="#"><span th:text="#{sort.field.date}"></span></a>
+                        <a class="dropdown-item sort_select" data-value="title"  href="#"><span th:text="#{sort.field.title}"></span></a>
+                        <a class="dropdown-item sort_select" data-value="views"  href="#"><span th:text="#{sort.field.views}"></span></a>
+                        <a th:if="${resourceQuery.ft != ''}" class="dropdown-item sort_select" data-value="rel" href="#"><span th:text="#{sort.field.rel}"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:unless="${QR.totalResults > 0}">
+        <div class="row">
+            <div class="col-12 text-left">
+                Δεν βρέθηκαν αποτελέσματα
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

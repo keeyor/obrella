@@ -1,0 +1,100 @@
+.wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    font-weight: bold;
+    /*text-align: center;*/
+}
+
+.wrapper > * {
+    padding: 10px;
+    flex: 1 100%;
+}
+
+.header {
+    /* background: tomato;*/
+    background-color:#FFF;
+    -moz-box-shadow: 0 8px 6px -6px #999999;
+    -webkit-box-shadow: 0 8px 6px -6px #999999;
+    box-shadow: 0 8px 6px -6px #999999;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#c8c8c8', Direction=120, Strength=5);
+}
+
+.footer {
+    /* background: lightgreen;*/
+}
+
+.main {
+    text-align: left;
+    /* background: deepskyblue;*/
+}
+/*
+
+.aside-1 {
+    !*  background: gold;*!
+    background-image: url(img/bg-image-1.svg), url(img/bg-image-22.svg);
+    background-position: bottom center, top center;
+    background-repeat: no-repeat;
+    !*background-size: 100% 32%, 100% 60%;*!
+}
+
+.aside-2 {
+    !*  background: hotpink;*!
+    background-image: url(img/bg-image-1.svg), url(img/bg-image-22.svg);
+    background-position: bottom center, top center;
+    background-repeat: no-repeat;
+    !*background-size: 100% 32%, 100% 60%;*!
+}
+!* Medium screens *!
+@media all and (min-width: 768px) {
+    .aside-1 { flex: 1 0 0; }
+    .aside-2 { flex: 1 0 0; }
+}
+*/
+
+body {
+    padding: 1em;
+}
+.header-logo{
+    float:left;
+    height:60px;
+    margin-right: 10px;
+    padding-left: 0;
+}
+.header-item{
+
+}
+
+.carousel-indicators {
+    overflow-x:auto;
+    position: static;
+    justify-content: left;
+}
+.carousel-indicators > li {
+    width: initial;
+    height: initial;
+    text-indent: initial;
+    opacity: 1.0;
+}
+
+.carousel-indicators > li.active img {
+    border: #6f42c1 1px solid;
+}
+#lecture_info_modal div{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#lecture_info_modal div span{
+    font-weight:normal;
+}
+.scrolling-wrapper-flexbox {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+.list-inline-item {
+    flex: 0 0 auto;
+}
+.live_slide {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}

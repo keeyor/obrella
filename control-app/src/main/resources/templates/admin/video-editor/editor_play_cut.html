@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style type="text/css">
+        body {
+        padding: 0;
+        margin:0;
+        font-family: "Trebuchet MS", Tahoma, Geneva, sans-serif; 
+        font-size: 13px;
+        color: #777777;
+        background: #ffffff;
+        width:616px;
+        height:390px;
+        }
+        #player_cut{
+            display:block; 
+            padding: 8px;
+            background-color: #f8f8f8;
+            -moz-box-shadow: 0 0 2px 2px #dcddde;
+            -webkit-box-shadow: 0 0 2px 2px #dcddde;
+            box-shadow: 0 0 2px 2px #dcddde;
+            filter: progid:DXImageTransform.Microsoft.Shadow(color='#dcddde', Direction=120, Strength=5);
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            width:600px;
+            height:338px;
+        }
+
+        #cutted_pediod_div{
+            height:20px;
+            font-size:15px;
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <video id="player_cut" controls preload='none'>
+        <source id='mp4' src="" type='video/mp4'>
+    </video>
+    <div id="cutted_pediod_div"><span th:text="#{richlecture.play_cutted_period}"></span><span class="cutted_pediod_time"></span></div>
+
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery.tools.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.widget.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.mouse.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.core.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.draggable.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/jquery.ui.resizable_nickorfas.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.dialog.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.position.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.button.min.js}"></script>
+
+    <script type="text/javascript" th:src="@{/lib/richLecture_addons/js/html5editor/html5editorPlayCut.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/richLecture_addons/js/html5editor/html5scriptPlayCut.min.js}"></script>
+</body>
+</html>

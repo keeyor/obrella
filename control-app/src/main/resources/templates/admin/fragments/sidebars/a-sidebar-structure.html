@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="">
+
+<div th:fragment="a-sidebar" class="c-sidebar c-sidebar-light c-sidebar-lg-show" id="sidebar" style="margin-top:50px">
+    <ul class="c-sidebar-nav" style="overflow: visible">
+        <th:block sec:authorize="hasRole('ROLE_SA')">
+            <li class="c-sidebar-nav-title gray-link-wcag-color" style="text-transform: none">
+                <span class="text-muted">Ίδρυμα</span>
+                <br/>
+                <div class="h5 text-wrap" style="color: #4f5d73" th:text="#{default.institution.title}"></div>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a  th:if="${page == 'structure'}" class="c-sidebar-nav-link schoolModalButton" href="#">
+                    <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέα Σχολή
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a  th:if="${page == 'structure'}" class="c-sidebar-nav-link departmentModalButton" href="#">
+                    <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέο Τμήμα
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a  th:if="${page == 'user'}" class="c-sidebar-nav-link" id="newStaffBt" href="#">
+                    <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέος Διαχειριστής
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a  th:if="${page == 'classroom'}" class="c-sidebar-nav-link" id="newRoomBt" href="#">
+                    <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέα Αίθουσα
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a  th:if="${page == 'streamer'}" class="c-sidebar-nav-link" id="newStreamerBt" href="#">
+                    <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέος Εξυπηρετητής
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a  th:if="${page == 'calendar'}" class="c-sidebar-nav-link" id="newCalendarBt" href="#">
+                    <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέο Ακαδημαϊκό Έτος
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item mt-3">
+                <a class="c-sidebar-nav-link" th:href="@{/admin/institution/structure}">
+                    <i class="c-sidebar-nav-icon fas fa-sitemap"></i> Σχολές & Τμήματα
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" th:href="@{/admin/institution/users}">
+                    <i class="c-sidebar-nav-icon fas fa-user-shield"></i> Διαχειριστές
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" th:href="@{/admin/institution/classrooms}">
+                    <i class="c-sidebar-nav-icon fas fa-map-marked-alt"></i> Αίθουσες
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" th:href="@{/admin/institution/streamers}">
+                    <i class="c-sidebar-nav-icon fas fa-server"></i> Εξυπηρετητές
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" th:href="@{/admin/institution/acalendar}">
+                    <i class="c-sidebar-nav-icon fas fa-chart-pie"></i> Ακαδημαϊκό Ημερολόγιο
+                </a>
+            </li>
+        </th:block>
+    </ul>
+    <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
+</div>

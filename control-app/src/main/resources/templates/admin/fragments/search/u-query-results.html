@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" >
+
+<!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
+<div th:fragment="u-query-results">
+    <div th:each="lecture, iStat: ${QR.searchResultList}" th:style="${iStat.odd}? ''">
+        <div class="card p-0 my-1" th:attr="data-lec=${lecture.id}">
+                                    <div class="card-body py-0">
+                                        <div class="row row-style mb-2">
+                                            <div class="col-md-9 col-sm-12 col-lg-9">
+                                                <span th:unless="${lecture.status.inclMultimedia == 1}" style="font-size: 1.1em;color:#006A9B;font-weight: 550" th:text="${(iStat.count+QR.skip) + '. ' + lecture.title}"></span>
+                                                <span th:if="${lecture.status.inclMultimedia == 1}" style="font-size: 1.1em;font-weight: 550" title="Αναπαραγωγή">
+                                                    <a target="_blank" style="color:#006A9B" th:href="@{/player(id=${lecture.id})}" th:text="${(iStat.count+QR.skip) + '. ' + lecture.title}"></a>
+                                                </span>
+                                                <span th:if="${lecture.partNumber != 0}">
+                                                        <span style="font-size: 0.8em" class="badge rounded-pill bg-light text-dark ml-1"  th:text="${'Μέρος ' + lecture.partNumber}"></span>
+                                                </span>
+                                                <th:block th:if="${lecture.course != null}">
+                                                    <button class="btn btn-transparent text-dark dropdown-toggle pl-0 pt-0" data-toggle="dropdown" id="staffMenuButton" aria-expanded="false">
+                                                        <span title="επιστημονικός υπεύθυνος" th:text="${lecture.supervisor.name + ', ' + lecture.supervisor.affiliation}"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="staffMenuButton" style="font-size: 0.9em">
+                                                        <a class="dropdown-item" th:href="@{/admin/search(s=${lecture.supervisor.id})}">
+                                                            <i class="fas fa-search mr-1"></i> αναζήτηση καταχωρήσεων από τον ίδιο καθηγητή (ήτρια)</a>
+                                                    </div>
+                                                </th:block>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="mb-0">
+                                                            <th:block th:if="${lecture.course != null}">
+                                                                <div>
+                                                                    <span th:text="${lecture.course.title + ', Τμήμα ' + lecture.department.title}" class="text-dark pl-0"></span>
+                                                                    <th:block th:if="${lecture.course.departmentsRelated !=null}">
+                                                                        <i class="fas fa-share-alt ml-2 mr-1" title="διατμηματικό μάθημα"></i>
+                                                                        <span th:each="unit,iStat: ${lecture.course.departmentsRelated}">
+                                                                            <span th:unless="${iStat.first}" th:text="${', '}"></span>
+                                                                            <span th:text="${unit.title}" title="διατμηματικό μάθημα"></span>
+                                                                        </span>
+                                                                    </th:block>
+                                                                </div>
+                                                                </th:block>
+                                                            </th:block>
+                                                            <th:block th:if="${lecture.getEvent != null}" class="mb-2">
+                                                                <div class="btn-group">
+                                                                    <button th:text="${lecture.getEvent.title}" class="btn btn-transparent text-dark dropdown-toggle pl-0"
+                                                                            data-toggle="dropdown" id="eventMenuButton" aria-expanded="false">
+                                                                    </button>
+                                                                    <div class="dropdown-menu" aria-labelledby="eventMenuButton" style="font-size: 0.9em">
+                                                                        <a class="dropdown-item" th:href="@{/admin/search(e=${lecture.getEvent.id})}">
+                                                                            <i class="fas fa-search mr-1"></i> αναζήτηση καταχωρήσεων από την ίδια Εκδήλωση</a>
+                                                                    </div>
+                                                                </div>
+                                                                <div th:if="${lecture.getEvent.responsibleUnit != null}" style="color:black;font-style: italic" class="text-muted ml-1">
+                                                                         <span th:each="unit,iStat: ${lecture.getEvent.responsibleUnit}">
+                                                                             <span th:text="${iStat.first}? '' : ', '"></span>
+                                                                             <span th:if="${#strings.trim(unit.structureType) == 'DEPARTMENT'}"> Τμήμα</span>
+                                                                             <span th:if="${#strings.trim(unit.structureType) == 'SCHOOL'}"> Σχολή </span>
+                                                                             <span th:text="${unit.title + ' '}"></span>
+                                                                         </span>
+                                                                </div>
+                                                                <div th:if="${lecture.getEvent.responsiblePerson != null}" class="mb-2 font-italic ml-1 text-muted">
+                                                                    <span th:text="${lecture.getEvent.responsiblePerson.name + ', ' + lecture.getEvent.responsiblePerson.affiliation }"></span>
+                                                                </div>
+                                                            </th:block>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-12 col-lg-3 row-buttons">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="button-line" th:if="${lecture.status.inclMultimedia == 1}">
+                                                            <a  class="mr-1 btn btn-sm blue-btn-wcag-bgnd-color btn-pill" target="_blank" role="button" title="αναπαραγωγή σε νέο παράθυρο"
+                                                                th:href="@{/player(id=${lecture.id})}"><i class="fas fa-play" style="color: white"></i>
+                                                            </a> Αναπαραγωγή
+                                                        </div>
+                                                        <div class="button-line" th:if="${lecture.type == 'COURSE'}" >
+                                                            <a th:if="${lecture.status.inclMultimedia == 1}" class="mr-1 btn btn-sm btn-pill blue-btn-wcag-bgnd-color text-white"  href="#"
+                                                                style="color: #3c4b64" th:href="@{/admin/lecture-editor(id=${lecture.id})}">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+                                                            <a  th:unless="${lecture.status.inclMultimedia == 1}" class="mr-1 btn btn-sm btn-pill red-btn-wcag-bgnd-color text-white"  href="#"
+                                                                style="color: #3c4b64" th:href="@{/admin/lecture-editor(id=${lecture.id})}">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a> Επεξεργασία
+                                                        </div>
+                                                        <div class="button-line" th:if="${lecture.type == 'EVENT'}">
+                                                            <a  th:if="${lecture.status.inclMultimedia == 1}" role="button" class="mr-1 btn btn-sm btn-pill blue-btn-wcag-bgnd-color text-white"  href="#"
+                                                                style="color: #3c4b64" th:href="@{/admin/event-editor(id=${lecture.id})}">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+                                                            <a  th:unless="${lecture.status.inclMultimedia == 1}" role="button" class="mr-1 btn btn-sm btn-pill red-btn-wcag-bgnd-color text-white"  href="#"
+                                                                style="color: #3c4b64" th:href="@{/admin/event-editor(id=${lecture.id})}">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a> Επεξεργασία
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <th:block th:if="${lecture.course != null}">
+                                                    <span th:if="${lecture.period != ''}" th:text="#{${lecture.period}}"  th:class="${lecture.period}"></span>
+                                                    <i class="fas fa-graduation-cap me-1"></i>
+                                                    <span class="academic-year"  th:text="${lecture.academicYear}"></span>
+                                                </th:block>
+                                                <i class="fas fa-calendar-alt"></i>
+                                                <span th:text="${#temporals.format(lecture.date, 'dd MMMM YYYY') + ' - ' + #temporals.format(lecture.date, 'HH:mm')}"></span> |
+                                                <span th:if="${lecture.accessPolicy == 'private'}" title="πρόσβαση">
+                                                    <i class="fas fa-lock"></i> Ιδιωτικό
+                                                </span>
+                                                <span th:unless="${lecture.accessPolicy == 'private'}"  title="πρόσβαση">
+                                                    <i class="fas fa-lock-open"></i> Δημόσιο
+                                                </span> |
+                                                <i class="fas fa-edit"></i>
+                                                <div th:replace="fragments/format-resource-date.html:: formatDate(field=${lecture.dateModified})"></div> |
+                                                <span th:if="${lecture.realDuration != null}">
+                                                    <i class="fas fa-video"></i> <span th:text="${lecture.realDuration}" title="διάρκεια"></span> |
+                                                </span>
+                                                <span th:unless="${lecture.realDuration != null}">
+                                                    <span th:if="${lecture.resourceAccess != null}">
+                                                        <i class="fas fa-video"></i> <span th:text="${lecture.resourceAccess.duration}" title="διάρκεια"></span> |
+                                                    </span>
+                                                </span>
+                                                <span th:if="${lecture.presentation != null && lecture.presentation.slides != null && lecture.presentation.slides.size > 0 }">
+                                                    <i class="icon-presentation mr-1"></i><span title="Αριθμός Διαφανιών" th:text="${lecture.presentation.slides.size}"></span> |
+                                                </span>
+                                                <i class="fas fa-eye"></i> <span th:text="${lecture.statistics}" title="εμφανίσεις"></span>
+                                            </div>
+                                            <span th:if="${lecture.accessPolicy == 'public'}" class="float-right" style="position: absolute;right:20px;bottom:10px" aria-expanded="false">
+                                                        <a class="blue-link-wcag-color" href="#" id="copy-url" title=" Αντιγραφή δημόσιου συνδέσμου"><i class="far fa-copy mr-1"></i></a>
+                                                        <a class="blue-link-wcag-color" href="#" id="copy-embed" title="Αντιγραφή κώδικα ενσωμάτωσης"><i class="fas fa-code mr-1"></i></a>
+                                                        <input id="cp_resource_id" type="hidden" th:attr="data-target=${lecture.id}"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+    </div>
+</div>

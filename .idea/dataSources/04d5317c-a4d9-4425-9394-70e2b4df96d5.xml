@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MongoDB - OpenDelosLive@localhost">
+  <database-model serializer="dbm" dbms="MONGO" family-id="MONGO" format-version="4.23">
+    <root id="1"/>
+    <schema id="2" parent="1" name="OpenDelosLive">
+      <Current>1</Current>
+    </schema>
+  </database-model>
+</dataSource>

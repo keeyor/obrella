@@ -1,0 +1,120 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.ehcache.org/v3"
+		xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+		xsi:schemaLocation="
+            http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+            http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+
+	<cache alias="departments">
+		<key-type>java.lang.String</key-type>
+		<value-type>org.opendelos.model.structure.Department</value-type>
+		<listeners>
+			<listener>
+				<class>org.opendelos.control.conf.CacheEventLogger</class>
+				<event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+				<event-ordering-mode>UNORDERED</event-ordering-mode>
+				<events-to-fire-on>CREATED</events-to-fire-on>
+				<events-to-fire-on>EXPIRED</events-to-fire-on>
+			</listener>
+		</listeners>
+		<resources>
+			<offheap unit="MB">2</offheap>
+		</resources>
+	</cache>
+	<cache alias="users">
+		<key-type>java.lang.String</key-type>
+		<value-type>org.opendelos.model.delos.OpUser</value-type>
+		<listeners>
+			<listener>
+				<class>org.opendelos.control.conf.CacheEventLogger</class>
+				<event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+				<event-ordering-mode>UNORDERED</event-ordering-mode>
+				<events-to-fire-on>CREATED</events-to-fire-on>
+				<events-to-fire-on>EXPIRED</events-to-fire-on>
+			</listener>
+		</listeners>
+		<resources>
+			<offheap unit="MB">2</offheap>
+		</resources>
+	</cache>
+	<cache alias="classrooms">
+		<key-type>java.lang.String</key-type>
+		<value-type>org.opendelos.model.structure.Classroom</value-type>
+		<listeners>
+			<listener>
+				<class>org.opendelos.control.conf.CacheEventLogger</class>
+				<event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+				<event-ordering-mode>UNORDERED</event-ordering-mode>
+				<events-to-fire-on>CREATED</events-to-fire-on>
+				<events-to-fire-on>EXPIRED</events-to-fire-on>
+			</listener>
+		</listeners>
+		<resources>
+			<offheap unit="MB">2</offheap>
+		</resources>
+	</cache>
+	<cache alias="courses">
+		<key-type>java.lang.String</key-type>
+		<value-type>org.opendelos.model.structure.Course</value-type>
+		<listeners>
+			<listener>
+				<class>org.opendelos.control.conf.CacheEventLogger</class>
+				<event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+				<event-ordering-mode>UNORDERED</event-ordering-mode>
+				<events-to-fire-on>CREATED</events-to-fire-on>
+				<events-to-fire-on>EXPIRED</events-to-fire-on>
+			</listener>
+		</listeners>
+		<resources>
+			<offheap unit="MB">2</offheap>
+		</resources>
+	</cache>
+	<cache alias="scheduledEvents">
+		<key-type>java.lang.String</key-type>
+		<value-type>org.opendelos.model.resources.ScheduledEvent</value-type>
+		<listeners>
+			<listener>
+				<class>org.opendelos.control.conf.CacheEventLogger</class>
+				<event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+				<event-ordering-mode>UNORDERED</event-ordering-mode>
+				<events-to-fire-on>CREATED</events-to-fire-on>
+				<events-to-fire-on>EXPIRED</events-to-fire-on>
+			</listener>
+		</listeners>
+		<resources>
+			<offheap unit="MB">2</offheap>
+		</resources>
+	</cache>
+	<cache alias="studyPrograms">
+		<key-type>java.lang.String</key-type>
+		<value-type>org.opendelos.model.structure.StudyProgram</value-type>
+		<listeners>
+			<listener>
+				<class>org.opendelos.control.conf.CacheEventLogger</class>
+				<event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+				<event-ordering-mode>UNORDERED</event-ordering-mode>
+				<events-to-fire-on>CREATED</events-to-fire-on>
+				<events-to-fire-on>EXPIRED</events-to-fire-on>
+			</listener>
+		</listeners>
+		<resources>
+			<offheap unit="MB">2</offheap>
+		</resources>
+	</cache>
+	<cache alias="streamers">
+		<key-type>java.lang.String</key-type>
+		<value-type>org.opendelos.model.structure.StreamingServer</value-type>
+		<listeners>
+			<listener>
+				<class>org.opendelos.control.conf.CacheEventLogger</class>
+				<event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+				<event-ordering-mode>UNORDERED</event-ordering-mode>
+				<events-to-fire-on>CREATED</events-to-fire-on>
+				<events-to-fire-on>EXPIRED</events-to-fire-on>
+			</listener>
+		</listeners>
+		<resources>
+			<offheap unit="MB">2</offheap>
+		</resources>
+	</cache>
+</config>

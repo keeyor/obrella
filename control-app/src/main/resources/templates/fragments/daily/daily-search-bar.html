@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--@thymesVar id="resourceQuery" type="org.opendelos.dashboard.repository.resource.ResourceQuery"-->
+<div th:fragment="daily-search-bar" style="font-size: 1em" >
+    <nav class="navbar navbar-expand-md navbar-light bg-light" style="background-color: #f8f8f8!important;border-radius: 25px!important;border: 1px lightgrey solid!important;">
+        <button class="navbar-toggler btn-secondary" type="button" data-toggle="collapse" data-target="#calenderOptions" aria-controls="calenderOptions"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars" style="color:grey"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="calenderOptions">
+            <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle gray-accesskeys-link-wcag-color" href="#" id="department-dropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Τμήμα
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="department-dropdown" id="department-columns"></ul>
+                    </li>
+                </ul>
+            </ul>
+            <span class="form-inline my-2 my-lg-0">
+                                        <h6 id="daily_date_now" class="mt-2 mr-2"></h6> |
+                                        <a class="ml-2" style="color: #005cbf" href="#" id="refresh_table"  title="Κάντε κλίκ για ανανέωση της σελίδας">
+                                            <i class="fas fa-sync-alt"></i> Ανανέωση  <span class="mr-2" id="time"></span>
+                                        </a> |
+                                    </span>
+            <span class="mr-2 ml-2" id="last_updated"></span>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+    <title>OpenDelos: Κέντρο Ελέγχου</title>
+</head>
+<body class="c-app">
+       <!-- <div th:replace="~{admin/fragments/a-sidebar :: a-sidebar}"></div>-->
+        <div class="c-wrapper">
+            <div th:replace="~{admin/fragments/a-topnav :: a-topnav}"></div>
+            <div class="c-body" style="margin-top: 50px">
+                <div class="container mt-3">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active" aria-current="page">Αρχική</li>
+                        </ol>
+                    </nav>
+                    <div class="row mt-3">
+                            <div th:if="${userIsStaffMember}" class="card col-lg-4 col-md-6 col-xs-12">
+                                <div class="card-header" style="background-color: #f7f7f9">
+                                    <h5><span class="fas fa-user mr-2"></span><span th:text="${user.name}"></span></h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-12 px-0">
+                                        <div class="py-1" style="border: none">
+                                                    <a th:href="@{/admin/user_profile}" class="blue-link-wcag-color">Ο Λογαριασμός μου</a>
+                                                    <p class="text-muted py-1 mb-0">
+                                                        Πληροφορίες λογαρασμού και στατιστικά χρήσης
+                                                    </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Content -->
+                            <div class="card col-lg-4 col-md-6 col-xs-12">
+                                <div class="card-header" style="background-color: #f7f7f9">
+                                    <h5><span class="icon-on-demand mr-2"></span> Περιεχόμενο</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-12 px-0">
+                                        <div  class="py-1" style="border: none">
+                                            <a th:unless="${userIsStaffMember}" th:href="@{/admin/search}" class="blue-link-wcag-color">Διαχείριση Περιεχομένου</a>
+                                            <a th:if="${userIsStaffMember}" th:href="@{/admin/search}" class="blue-link-wcag-color">
+                                                Οι Αναρτήσεις μου - Διαλέξεις & Πολυμέσα Εκδηλώσεων
+                                            </a>
+                                            <p class="text-muted py-1 mb-0">Διαχείριση Διαλέξεων & Πολυμέσων Εκδηλώσεων</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 px-0">
+                                        <div  class="py-1" style="border: none">
+                                            <a th:href="@{/admin/lecture-editor}" class="blue-link-wcag-color">Νέα Διάλεξη</a>
+                                            <p class="text-muted py-1 mb-0">Δημιουργία νέας διάλεξης από μαγνητοσκοπημένο βίντεο</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 px-0">
+                                        <div  class="py-1" style="border: none">
+                                            <a th:href="@{/admin/lecture-editor}" class="blue-link-wcag-color">Νέο Πολυμέσο Εκδήλωσης</a>
+                                            <p class="text-muted py-1 mb-0">Δημιουργία νέου πολυμέσου εκδήλωσης από μαγνητοσκοπημένο βίντεο</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Scheduled Events -->
+                            <div class="card col-lg-4 col-md-6 col-xs-12">
+                                <div class="card-header" style="background-color: #f7f7f9">
+                                    <h5><span class="icon-lecture-event mr-2"></span> Εκδηλώσεις</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-12 px-0">
+                                        <div class="py-1" style="border: none">
+                                            <a th:href="@{/admin/sevent-editor}"  class="blue-link-wcag-color">
+                                                Νέα Εκδήλωση</a>
+                                            <p class="text-muted py-1 mb-0">Δημιουργία-Δήλωση νέας Εκδήλωσης</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 px-0">
+                                        <div class="py-1" style="border: none">
+                                            <a th:unless="${userIsStaffMember}" th:href="@{/admin/sevents}"  class="blue-link-wcag-color">
+                                                Διαχείριση Εκδηλώσεων</a>
+                                            <a th:if="${userIsStaffMember}" th:href="@{/admin/sevents}"  class="blue-link-wcag-color">
+                                                Οι Εκδηλώσεις μου</a>
+                                            <p class="text-muted py-1 mb-0">Διαχείριση Εκδηλώσεων</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SCHEDULER -->
+                            <div class="card col-lg-4 col-md-6 col-xs-12">
+                                <div class="card-header" style="background-color: #f7f7f9">
+                                    <h5><span class="icon-scheduler-menu-calendar mr-1"></span> Προγραμματισμός</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-12 px-0">
+                                        <div class="py-1" style="border: none">
+                                            <a th:href="@{admin/scheduler/schedule}" class="blue-link-wcag-color">
+                                                Νέα Μετάδοση
+                                            </a>
+                                            <p class="text-muted py-1 mb-0">Προγραμματισμός Τακτικής ή Έκτακτης Μετάδοσης</p>
+                                        </div>
+                                    </div>
+                                    <div th:unless="${userIsStaffMember}" class="col-12 px-0">
+                                        <div class="py-1" style="border: none">
+                                            <a th:href="@{admin/scheduler/timetable}" class="blue-link-wcag-color">
+                                                Πρόγραμμα
+                                            </a>
+                                            <p class="text-muted py-1 mb-0">Πρόγραμμα Μεταδόσεων & Καταγραφών</p>
+                                        </div>
+                                    </div>
+                                    <div th:if="${userIsStaffMember}" class="col-12 px-0">
+                                        <div class="py-1" style="border: none">
+                                            <a th:href="@{admin/scheduler/sm/timetable}" class="blue-link-wcag-color">
+                                                Οι Μεταδόσεις μου
+                                            </a>
+                                            <p class="text-muted py-1 mb-0">Διαχείριση Προγραμματισμένων Μεταδόσεων</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 px-0">
+                                        <div class="py-1" style="border: none">
+                                            <a th:href="@{/admin/scheduler/calendar}" class="blue-link-wcag-color">Ημερολόγιο</a>
+                                            <p class="text-muted py-1 mb-0">Αναλυτικό ημερολόγιο μεταδόσεων</p>
+                                        </div>
+                                    </div>
+                                    <div th:unless="${userIsStaffMember}" class="col-12 px-0">
+                                        <div class="py-1" style="border: none">
+                                            <a  th:href="@{/admin/scheduler/live}" class="blue-link-wcag-color">Ζωντανές Μεταδόσεις</a>
+                                            <p class="text-muted py-1 mb-0">Διαχείριση ζωντανών μεταδόσεων</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+                                <div class="card col-lg-4 col-md-6 col-xs-12">
+                                    <div class="card-header" style="background-color: #f7f7f9">
+                                        <h5 class="mb-0"><i class="icon-main-menu-irm mr-2" style="font-size: 1.3em"></i>Ίδρυμα</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/institution/structure}" class="blue-link-wcag-color">Σχολές & Τμήματα</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διαχείριση Σχολών και Τμημάτων</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/institution/classrooms}" class="blue-link-wcag-color">Αίθουσες</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διαχείριση αιθουσών διδασκαλίας και χώρων εκδηλώσεων</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/institution/acalendar}" class="blue-link-wcag-color">Ακαδημαϊκό Ημερολόγιο</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διαχείριση περιόδων διδασκαλίας και αργιών</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                            <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_SA')">
+                                <div class="card col-lg-4 col-md-6 col-xs-12">
+                                    <div class="card-header" style="background-color: #f7f7f9">
+                                        <h5 class="mb-0"><i class="icon-lecture-lesson mr-2" style="font-size: 1.3em"></i>Τμήματα</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/department/courses}" class="blue-link-wcag-color">Μαθήματα</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διαχείριση μαθημάτων τμήματος</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/department/staff}" class="blue-link-wcag-color">Προσωπικό</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διδακτικό προσωπικό τμήματος</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/department/programs}" class="blue-link-wcag-color">Προγράμματα Σπουδών</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διαχείριση προγραμμάτων σπουδών τμήματος</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/department/acalendar}" class="blue-link-wcag-color">Ακαδημαϊκό Ημερολόγιο</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διαχείριση περιόδων διδασκαλίας και αργιών τμήματος</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                            <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+                                <div class="card col-lg-4 col-md-6 col-xs-12">
+                                    <div class="card-header" style="background-color: #f7f7f9">
+                                        <h5 class="mb-0"><i class="icon-parameters mr-2" style="font-size: 1.3em"></i>Ιστότοπος</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/system/users}" class="blue-link-wcag-color">Διαχειριστές</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διαχειριστές περιεχομένου</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/system/streamers}" class="blue-link-wcag-color">Εξυπηρετητές</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Εξυπηρετητές Streaming</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a th:href="@{/admin/system/messages}" class="blue-link-wcag-color">Μηνύματα Χρηστών</a>
+                                                <p class="text-muted py-1 mb-0 p-note">Διαχείριση και ανάρτηση διαχειριστικών μηνυμάτων</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="py-1" style="border: none">
+                                                <a href="http://localhost:5601" target="_blank" class="blue-link-wcag-color">Αρχεία Καταγραφής
+                                                    <span class="fas fa-external-link-alt fa-sm"></span>
+                                                </a>
+                                                <p class="text-muted py-1 mb-0 p-note">Αρχεία καταγραφής συστήματος</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+                </div>
+            </div>
+            <footer class="c-footer">
+                <i class="far fa-copyright mr-1"></i> <span th:text="#{default.institution.title}"></span>
+            </footer>
+        </div>
+        <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+<!-- Optional JavaScript -->
+<script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+<script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+
+</body>

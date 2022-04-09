@@ -1,0 +1,61 @@
+	.main-title { font-family: 'Roboto Condensed', sans-serif; }
+
+	.bottom-shadow {
+		background-color: #FFF !important;
+	    -webkit-box-shadow: 0 8px 6px -6px #999999 !important;
+	       -moz-box-shadow: 0 8px 6px -6px #999999 !important;
+	            box-shadow: 0 8px 6px -6px #999999 !important;
+
+	}
+
+	.institute-brand { 
+		max-height: 50px; 
+		overflow: visible;
+		padding-top: 0;
+		padding-bottom: 0; 
+		float:left; 
+		margin-right:5px;
+		margin-left:15px;} 
+	
+	.institute-text { 
+		font-family: 'Roboto Condensed', sans-serif;
+		font-size:20px;
+		max-height: 50px; 
+		overflow: visible;
+		padding-top: 0;
+		padding-bottom: 0; 
+		float:left; 
+		margin-left:0px;
+		height:50px; 
+		line-height:50px;
+		text-align:left; 
+		vertical-align:middle
+		}
+
+	.institute-logo {
+		 height:85px
+	}
+	
+    /* Lastly, apply responsive CSS fixes as necessary */
+	@media (max-width: 940px) {
+		.institute-text {
+			overflow: hidden;
+			font-size:16px;
+		} 
+
+		.login-text {
+		display:none}
+	}
+	
+	@media (max-width: 540px) {
+		.institute-text { 
+			display:none;
+		} 
+	
+	}
+
+	.institute-text h1{
+	    margin: 0 0 10px;
+	    line-height: 50px;
+	    font-size: 20px;
+	}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--@thymesVar id="QR" type="org.opendelos.dashboard.repository.resource.QueryResourceResults"-->
+<!--@thymesVar id="nSkip" type="java.lang.String"-->
+<div th:fragment="u-pager(gotoTop)">
+                        <div th:if="${QR.totalResults > QR.limit}" >
+                                    <nav class="pagination justify-content-center" th:with="page_index=${(QR.skip/QR.limit)}">
+                                        <ul class="pagination mb-0">
+                                             <li th:if="${(page_index) >= 1}" class="page-item">
+                                                <a th:href="${#strings.replace(nSkip,'skip=N','skip=0')}" class="page-link">
+                                                    <i title="Μετάβαση στην πρώτη σελίδα αποτελεσμάτων" class="fas fa-home" style="color: #005cbf"></i>
+                                                </a>
+                                             </li>
+                                            <li th:unless="${(page_index) >= 1}" class="page-item disabled">
+                                                <a href="#" class="page-link">
+                                                    <i title="Μετάβαση στην πρώτη σελίδα αποτελεσμάτων" class="fas fa-home" aria-disabled="true"></i>
+                                                </a>
+                                            </li>
+                                        <!-- Previous Page -->
+                                         <li th:if="${(page_index) >= 1}"  class="page-item">
+                                                <a th:href="${#strings.replace(nSkip,'skip=N','skip=' + (page_index - 1) * QR.limit)}" class="page-link">
+                                                    <span title="Μετάβαση στην προηγούμενη σελίδα αποτελεσμάτων" th:text="Προηγούμενη"  style="color: #005cbf"></span>
+                                                </a>
+                                         </li>
+                                         <li th:unless="${(page_index) >= 1}" class="page-item disabled">
+                                                <a href="#" class="page-link">
+                                                    <span title="Μετάβαση στην προηγούμενη σελίδα αποτελεσμάτων" th:text="Προηγούμενη" aria-disabled="true"></span>
+                                                </a>
+                                         </li>
+                                        <!-- Previous Page Numbers -->
+                                        <span th:each="i : ${#numbers.sequence(4, 1)}" th:value="${i}">
+                                             <span th:with="start_at=${(page_index-i)*QR.limit}">
+                                                 <li th:if="${start_at >= 0}"  class="page-item">
+                                                      <a th:href="${#strings.replace(nSkip,'skip=N','skip=' + start_at)}" class="page-link">
+                                                         <span title="Μετάβαση στην σελίδα" th:text="${page_index-i+1}" style="color: #005cbf"></span>
+                                                      </a>
+                                                 </li>
+                                             </span>
+                                        </span>
+                                        <!-- Current Page -->
+                                         <li class="page-item active">
+                                              <span class="page-link blue-btn-wcag-bgnd-color" th:text="${page_index+1}">
+                                                    <span class="sr-only">(current)</span>
+                                              </span>
+                                         </li>
+                                        <!-- Next Page Numbers -->
+                                        <span th:each="i : ${#numbers.sequence(1, 4)}" th:value="${i}">
+                                             <span th:with="start_at=${(page_index+i)*QR.limit}">
+                                                 <li th:if="${start_at < QR.totalResults && start_at < 1000}" class="page-item">
+                                                      <a th:href="${#strings.replace(nSkip,'skip=N','skip=' + start_at)}" class="page-link">
+                                                         <span title="Μετάβαση στην σελίδα"  th:text="${page_index+i+1}" style="color: #005cbf"></span>
+                                                      </a>
+                                                 </li>
+                                             </span>
+                                        </span>
+                                        <!-- Next Page-->
+                                        <span th:if="${(((page_index + 1) * QR.limit) < QR.totalResults) && (((page_index + 1) * QR.limit) < 1000)}">
+                                            <li  class="page-item">
+                                               <a th:href="${#strings.replace(nSkip,'skip=N','skip=' + (page_index + 1) * QR.limit)}" class="page-link">
+                                                    <span title="Μετάβαση στην επόμενη σελίδα αποτελεσμάτων"  th:text="Επόμενη" style="color: #005cbf"></span>
+                                                </a>
+                                            </li>
+                                        </span>
+                                        </ul>
+                                    </nav>
+                         </div>
+                         <div th:if="${gotoTop == 'true'}" class="text-right text-muted">
+                            <a href="#" onclick="window.scroll({top: 0, left: 0, behavior: 'smooth'});" title="αρχή σελίδας"><i class="fas fa-arrow-circle-up fa-lg"></i></a>
+                         </div>
+</div>
+</body>
+</html>

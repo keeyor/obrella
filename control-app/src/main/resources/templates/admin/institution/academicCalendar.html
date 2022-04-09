@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/global41.css}"/>
+    <title>OpenDelos Live</title>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+    <!-- classic theme datatable with various plugins -->
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+    <!-- bootstrap-toggle -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-toggle/bootstrap-toggle.min.css}"/>
+    <!-- select2 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <!-- bootstrap date-picker -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.css}"/>
+    <!-- loader -->
+    <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+</head>
+<body style="font-size: 0.89em">
+<input type="hidden" id="institutionIdentity" th:value="${mInstitution.identity}" />
+<input type="hidden" id="institutionId" th:value="${mInstitution.id}" />
+<input type="hidden" id="institutionName" th:value="${institutionName}" />
+<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div class="wrapper d-flex flex-column min-vh-100 bg-light" >
+    <div class="loading-overlay"></div>
+    <div class="loading-overlay-image-container">
+        <img th:src="@{/public/images/icons/512px-Loader.gif}" class="loading-overlay-img" alt=""/>
+    </div>
+    <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+            <ul class="header-nav d-none d-md-flex">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/institution/structure}">Σχολές & Τμήματα</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/institution/classrooms}">Αίθουσες</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/institution/acalendar}">Ακαδημαϊκό Ημερολόγιο</a></li>
+            </ul>
+            <ul class="header-nav ms-auto">
+
+            </ul>
+        </div>
+        <div class="header-divider"></div>
+        <div class="container-fluid">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb my-0 ms-2">
+                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item active"><span>Σχολές & Τμήματα</span></li>
+                </ol>
+            </nav>
+        </div>
+    </header>
+
+    <div class="body flex-grow-1 px-3">
+
+        <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Ακαδημαϊκό Ημερολόγιο</h5>
+                                <div class="text-muted font-italic">
+                                    Διαχείριση περιόδων διδασκαλίας και αργιών/παύσεων
+                                </div>
+                                <span class="float-end">
+                                        <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white" id="newCalendarBt" role="button">
+                                            <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέo Ακαδημαϊκό Έτος
+                                        </a>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-start pb-2 pt-2" >
+                                            <div class="btn-toolbar d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                                                <label for="year_select2" class="mr-2"><i class="fas fa-calendar-alt mr-2"></i></label>
+                                                <select id="year_select2" class="form-control" aria-label="" style="width: 300px">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="card" style="margin-top: 40px;border: none">
+                                            <!-- TABS -->
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link  active" id="periods-tab" data-coreui-toggle="tab" href="#t-periods" role="tab" aria-controls="t-periods" aria-selected="true">Περίοδοι Διδασκαλίας</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="argies-tab" data-coreui-toggle="tab" href="#t-argies" role="tab" aria-controls="t-argies" aria-selected="false">Επίσημες Αργίες & Παύσεις</a>
+                                                </li>
+                                            </ul>
+                                            <!-- TAB CONTENT -->
+                                            <div class="tab-content" id="myTabContent">
+                                                <div class="tab-pane fade  show active" id="t-periods" role="tabpanel" aria-labelledby="periods-tab">
+                                                    <div class="card" id="streamers_card">
+                                                        <div class="card-body">
+                                                            <div class="row mb-2">
+                                                                <div class="col-md-12">
+                                                                    <h6 class="float-left" th:text="#{default.institution.title}"></h6>
+                                                                    <span class="float-end">
+                                                                                 <button id="system-button-edit" type="button" class="btn  btn-sm btn-pill blue-btn-wcag-bgnd-color text-white"  title="Επεξεργασία Περιόδων">
+                                                                                      <i class="far fa-edit"></i>
+                                                                                 </button>
+                                                                             </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <table id="table_system" style="width: 100%" class="row-border table-striped">
+                                                                        <thead>
+                                                                        <tr style="font-weight: 700">
+                                                                            <td>#</td>
+                                                                            <td style="width:0"></td>
+                                                                            <td style="width:160px">Όνομα Περιόδου</td>
+                                                                            <td>Ημερομηνία Έναρξης</td>
+                                                                            <td>Ημερομηνία Λήξης</td>
+                                                                        </tr>
+                                                                        </thead>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="t-argies" role="tabpanel" aria-labelledby="argies-tab">
+                                                    <div class="card" id="argies_card">
+                                                        <div class="card-body">
+                                                            <div class="row mb-2">
+                                                                <div class="col-md-12">
+                                                                    <h6 class="float-left" th:text="#{default.institution.title}"></h6>
+                                                                    <span class="float-end">
+                                                                         <button id="system-argies-edit"  type="button" class="btn  btn-sm btn-pill blue-btn-wcag-bgnd-color text-white"  title="Επεξεργασία Αργιών Ιδρύματος">
+                                                                              <i class="far fa-edit"></i>
+                                                                         </button>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <table id="table_system_a" style="width: 100%" class="row-border table-striped">
+                                                                        <thead>
+                                                                        <tr style="font-weight: 700">
+                                                                            <td>#</td>
+                                                                            <td style="width:0"></td>
+                                                                            <td style="width:160px">Όνομα Αργίας</td>
+                                                                            <td>Ημερομηνία Έναρξης</td>
+                                                                            <td>Ημερομηνία Λήξης</td>
+                                                                        </tr>
+                                                                        </thead>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+</div>
+
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+<div th:replace="~{admin/calendar-modals/edit_period_modal :: edit_period_modal}"></div>
+<div th:replace="~{admin/calendar-modals/edit_pause_modal :: edit_pause_modal}"></div>
+<!-- Optional JavaScript -->
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
+<!-- bootstrap-toggle -->
+<script th:src="@{/lib/bootstrap-toggle/bootstrap-toggle.min.js}"></script>
+<script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+<!-- select2 -->
+<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+
+<script th:src="@{/js/admin/institution/dates/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/institution/dates/dashboard.system.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/institution/dates/dashboard.department.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/institution/dates/dashboard.study.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/institution/dates/dashboard.modal.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/institution/dates/dashboard.systema.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/institution/dates/dashboard.modala.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/admin/institution/dates/lang/el.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+
+<!-- bootstrap datepicker -->
+<script th:src="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.js}" type="application/javascript"></script>
+<script th:src="@{/lib/bootstrap-datepicker/bootstrap-datepicker.el.min.js}" type="application/javascript"></script>
+
+<!-- loader -->
+<script th:src="@{/lib/loader/loader.js}"></script>
+</body>
+</html>

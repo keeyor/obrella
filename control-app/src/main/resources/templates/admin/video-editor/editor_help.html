@@ -1,0 +1,259 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>    
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Rich Lecture - Video Editor Help</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/richLecture_addons/css/style_editor.css}"/>
+    <style>
+        body {
+            width: 90%;
+            background:#F0F0F0;
+        }
+        .HelpTableHeader
+        {
+            background-color:#999999;
+            color:#FFFFFF;
+        }
+        .HelpTable  {border-collapse:collapse;border-spacing:0; width:100%;}
+        .HelpTable td{font-family:Arial;font-size:12px;padding:3px 3px;border-style:solid;border-width:1px; text-align:center;}
+        .HelpTable th{font-family:Arial;font-size:12px;font-weight:normal;padding:5px 5px;border-style:solid;border-width:1px; text-align:center;}
+
+        .selectedRow {
+            background-color: #ffffff;
+        }
+        .helpdiv {
+            color: #000000;
+            font-size: 14px;
+            padding:0px;
+            padding-top:5px;
+            margin: 0px;
+            background-color: #f8f8f8;
+            -moz-box-shadow: 0 0 2px 2px #dcddde;
+            -webkit-box-shadow: 0 0 2px 2px #dcddde;
+            box-shadow: 0 0 2px 2px #dcddde;
+            filter: progid:DXImageTransform.Microsoft.Shadow(color='#dcddde', Direction=120, Strength=5);
+            -webkit-border-radius: 0px;
+            -moz-border-radius: 0px;
+            border-radius: 0px;
+            height: 30px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .helpdiv:hover{
+            background-color:#999999;
+            color:#FFFFFF;
+            cursor:pointer;
+        }
+        .ReturnTop{
+            text-align:right;
+        }
+    </style>
+</head>
+<body>
+
+<p><a name="HelpTop"></a><span th:text="#{richlecture.editor.help.1}"></span></p>
+<div style="width:80%;float:left">
+	<div id="Hheader" class="helpdiv" style="width:90%" onClick="location.href='#AHeader'"><span th:text="#{richlecture.editor.help.2}"></span></div>
+  <div style="float:left;width:60%;height:155px;" class="helpdiv" onClick="location.href='#AVideo'">Video</div> 
+  <div style="float:left;width:30%">
+    <div id="HThumbnail" class="helpdiv" style="position:relative;width:100%;height:50px;" onClick="location.href='#AList'"><span th:text="#{richlecture.editor.help.3}"></span><br>
+      (Trim & Cut) </div>
+        <div id="HThumbnail2" class="helpdiv" style="position:relative;width:100%;" onClick="location.href='#ATrimCutButtons'">Trim & Cut Buttons</div>
+            <div id="HThumbnai3l" class="helpdiv" style="position:relative;width:100%;" onClick="location.href='#AVideoButtons'">Video Buttons</div>
+            <div id="HThumbnai32" class="helpdiv" style="position:relative;width:100%;" onClick="location.href='#ARealEdit'">Real Edit</div></div>  
+    <div id="HTimeLine" class="helpdiv" style="clear:both;width:90%" onClick="location.href='#ATimeLine'"><span th:text="#{richlecture.editor.help.4}"></span></div>
+</div>
+<div style="width:20%;float:right">
+    <a  th:href="@{/lib/richLecture_addons/help_files/Video-Editor-Help-el.docx}" th:title="#{richlecture.editor.help.5}">
+    <img th:src="@{/lib/richLecture_addons/css/images_editor/download_doc.png}" th:alt="#{richlecture.editor.help.5}" height="128" width="128"></a>
+</div>
+<div style="clear:both"></div>
+<h2> <a name="AHeader"></a><span th:text="#{richlecture.editor.help.2}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th><span th:text="#{richlecture.editor.help.7}"></span></th>
+     </tr>
+  </thead>
+   <tbody>
+      <tr class="">
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/saveButton-el.png}" th:alt="#{richlecture.editor.help.8}"></td>
+         <td><p><span th:text="#{richlecture.editor.help.9}"></span></p></td>
+     </tr>
+  	<tr class="">
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/help.png}" th:alt="#{richlecture.editor.help.10}"></td>
+         <td><p><span th:text="#{richlecture.editor.help.11}"></span></p></td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.editor.help.12}"></span></a></div>
+<h2> <a name="AVideo" id="AVideo"></a>Video</h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th><span th:text="#{richlecture.editor.help.7}"></span></th>
+     </tr>
+   </thead>
+   <tbody>
+
+      <tr>
+         <td>Video</td>
+         <td><span th:text="#{richlecture.editor.help.13}"></span></td>
+     </tr>
+     
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.editor.help.12}"></span></a></div>
+<h2> <a name="AVideoButtons" id="AVideoButtons"></a>Video Buttons</h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th><span th:text="#{richlecture.editor.help.7}"></span></th>
+     </tr>
+   </thead>
+   <tbody>
+           <tr class="selectedRow">
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/fast-backward-large.png}" alt="fback" height="35" width="35"></td>
+        <td><p><span th:text="#{richlecture.editor.help.14}"></span></p></td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/play-large.png}" alt="play" height="35" width="35"></td>
+        <td><p><span th:text="#{richlecture.editor.help.15}"></span></p></td>
+     </tr>
+           <tr>
+             <td><img th:src="@{/lib/richLecture_addons/css/images_editor/fast-forward-large.png}" alt="fforward" height="35" width="35"></td>
+             <td><p><span th:text="#{richlecture.editor.help.16}"></span></p></td>
+           </tr>
+                      <tr>
+             <td><img th:src="@{/lib/richLecture_addons/css/images_editor/volume-minus-large.png}" alt="vol-" height="35" width="26"></td>
+             <td><p><span th:text="#{richlecture.editor.help.17}"></span></p></td>
+           </tr>
+                      <tr>
+             <td><img th:src="@{/lib/richLecture_addons/css/images_editor/unmute-large.png}" alt="vol" height="35" width="35"></td>
+             <td><p><span th:text="#{richlecture.editor.help.18}"></span></p></td>
+           </tr>
+                      <tr>
+             <td><img th:src="@{/lib/richLecture_addons/css/images_editor/volume-plus-large.png}" alt="Vol+" height="35" width="26"></td>
+             <td><p><span th:text="#{richlecture.editor.help.19}"></span></p></td>
+           </tr>
+                      <tr>
+             <td><span th:text="#{richlecture.editor.help.20}"></span></td>
+             <td><p><span th:text="#{richlecture.editor.help.21}"></span></p></td>
+           </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.editor.help.12}"></span></a></div>
+
+<h2> <a name="AList" id="AList"></a><span th:text="#{richlecture.editor.help.22}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th><span th:text="#{richlecture.editor.help.7}"></span></th>
+     </tr>
+  </thead>
+   <tbody>
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/MarkerEdit.png}" alt="Edit" height="13" width="13"></td>
+         <td><span th:text="#{richlecture.editor.help.23}"></span></td>
+     </tr>
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/PlayCuttedSection.png}" alt="Play" height="13" width="13"></td>
+        <td><p><span th:text="#{richlecture.editor.help.24}"></span></p></td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/MarkerGoto.png}" alt="GotoMarker" height="13" width="13"></td>
+        <td><p><span th:text="#{richlecture.editor.help.25}"></span></p></td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/MarkerDelete.png}" alt="DeleteMarker" height="13" width="13"></td>
+        <td><p><span th:text="#{richlecture.editor.help.26}"></span><br>
+        </p></td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.editor.help.12}"></span></a></div>
+<h2> <a name="ATrimCutButtons" id="ATrimCutButtons"></a>Trim & Cut Buttons</h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th><span th:text="#{richlecture.editor.help.7}"></span></th>
+     </tr>
+  </thead>
+   <tbody>
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/set-start-time.png}" height="35" width="35"></td>
+         <td><span th:text="#{richlecture.editor.help.27}"></span></td>
+     </tr>
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/set-end-time.png}" height="35" width="35"></td>
+        <td><p><span th:text="#{richlecture.editor.help.28}"></span></p></td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/begin-cut.png}" height="35" width="35"></td>
+        <td><p><span th:text="#{richlecture.editor.help.29}"></span><br>
+        </p></td>
+     </tr>
+           <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/end-cut.png}" height="35" width="35"></td>
+        <td><p><span th:text="#{richlecture.editor.help.30}"></span><br>
+        </p></td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.editor.help.12}"></span></a></div>
+
+
+<h2> <a name="ARealEdit"></a><span th:text="#{richlecture.editor.help.31}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th><span th:text="#{richlecture.editor.help.7}"></span></th>
+     </tr>
+   </thead>
+   <tbody>
+
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/RealEditButton.png" alt="RealEdit" height="35" width="100"></td>
+         <td><span th:text="#{richlecture.editor.help.32}"></span></td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.editor.help.12}"></span></a></div>
+
+<h2> <a name="ATimeLine"></a><span th:text="#{richlecture.editor.help.4}"></span></h2>
+<table class="HelpTable">
+  <thead class="HelpTableHeader">
+      <tr>
+         <th>Button</th>
+         <th><span th:text="#{richlecture.editor.help.7}"></span></th>
+     </tr>
+   </thead>
+   <tbody>
+
+      <tr>
+         <td><img th:src="@{/lib/richLecture_addons/css/images_editor/timer.png}" alt="Time" height="60" width="11"></td>
+         <td><span th:text="#{richlecture.editor.help.33}"></span></td>
+     </tr>
+   </tbody>
+</table>
+<div class="ReturnTop"><a href="#HelpTop"><span th:text="#{richlecture.editor.help.12}"></span></a></div>
+<p></p>
+
+<script>
+    $(function() {
+        $('table tbody tr').mouseover(function() {
+            $(this).addClass('selectedRow');
+        }).mouseout(function() {
+            $(this).removeClass('selectedRow');
+        });
+        $(".ReturnTop").html('<a href="#HelpTop"><span th:text="#{richlecture.editor.help.12}"></span></a>');
+    });
+</script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery.tools.min.js}"></script>
+</body></html>

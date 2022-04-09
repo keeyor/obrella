@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="runit_select_modal">
+<div class="modal fade" id="runitSelectModal" tabindex="-1" role="dialog" aria-labelledby="runitSelectModalLabel" aria-hidden="true" style="padding-right: 17px">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header blue-btn-wcag-bgnd-color text-white">
+                <h6 class="modal-title ml-2" id="runitSelectModalLabel" style="font-size: 1em">
+
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input type="hidden" id="ru_rowIdx_edited" value=""/>
+                <input type="hidden" id="default_dp_id" value=""/>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="text-muted"><i class="far fa-question-circle"></i> Επιλέξτε μονάδα και πατήστε "Εισαγωγή"
+                    </div>
+                    <div class="card card-body" style="background-color: #f7f7f9;border: none">
+                        <div class="table-responsive">
+                            <table id="runitSelectDataTable" style="width:100%" class="display compact">
+                                <thead>
+                                <tr>
+                                    <th scope="row" style="height: 12px;width: 20px">[id]</th>
+                                    <th scope="row" style="height: 12px;width: 20px">[parentId]</th>
+                                    <th scope="row">μονάδα</th>
+                                    <th scope="row">τίτλος</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  id="addAssignedUnits">Εισαγωγή</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+            </div>
+    </div>
+</div>
+</div>

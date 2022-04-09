@@ -1,0 +1,13 @@
+[ {
+  "id" : 1,
+  "provider" : 43,
+  "name" : "Ψηφιακός Πολίτης",
+  "code" : "dicitizen",
+  "description" : "Απευθύνεται στους πολίτες και περιλαμβάνει μαθήματα για τις βασικές ψηφιακές δεξιότητες κατά DigComp.",
+  "status" : "RELEASED",
+  "certification" : true,
+  "certExam" : true,
+  "hasExam" : false,
+  "unPublishDate" : null,
+  "unPublishMsg" : null
+} ]

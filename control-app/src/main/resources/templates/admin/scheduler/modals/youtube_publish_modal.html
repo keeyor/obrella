@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div th:fragment="youtube_publish_modal">
+    <div class="modal fade" id="youtube_publish_modal" role="dialog" aria-labelledby="YouTubeModal" aria-hidden="true" style="padding-right: 17px">
+        <div class="modal-dialog modal-lg" role="document">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title ml-2" id="YouTubeModal">
+                        <img th:src="@{/public/images/youtube.png}" alt="youtube" src=""> Ενεργοποίηση Δημοσίευσης
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <div id="broadcast-status mt-3" style="border-bottom: blue 1px solid">Η διαδικασία προγραμματισμού δημοσίευσης στο YouTube είναι σε εξέλιξη<br/>
+                        <b>Παρακαλώ περιμένετε...</b> (μήν κλείσετε το παράθυρο)
+                    </div>
+                    <div id="waiting-gif" class="text-center">
+                        <img th:src="@{/public/images/icons/loading-x.gif}" alt="wait..." src="">
+                    </div>
+                    <div id="link_panel" style="display: none">
+                        <h5 class="mt-2">Σύνδεσμος Δημοσίευσης:</h5>
+                        <a id="broadcast-link-text">Go to YouTube</a><br/>
+                        <a id="broadcast-link" href="#" target="_blank">Επίσκεψη</a>
+                        <div class="mt-3 font-weight-bolder">Η διαδικασία ολοκληρώθηκε. Μπορείτε να κλείσετε αυτό το παράθυρο</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Κλείσιμο</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

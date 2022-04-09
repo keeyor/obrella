@@ -1,0 +1,53 @@
+
+.popover-content div button{
+	font-size: small;
+}
+
+.row-style {
+	border:1px solid  #ffffff;
+	margin: 7px 0px 7px 0px;
+	padding:10px;
+	-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+	-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+	box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+}
+.row-style:hover {
+	border: 1px solid #CCC;
+	margin: 7px 0px 7px 0px;
+	padding:10px;
+	background-color: #F5F5F5;
+	-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.4);
+	-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.4);
+	box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.4);
+}
+
+.row-style:hover .row-buttons{
+	opacity: 1;
+	filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+
+.button-line {
+	margin-bottom:3px
+}
+
+.action-icon {
+	 background-color: #0b6da8;
+	 border-color: #1385ba !important;
+	 width: 30px;
+	 max-width: 30px;
+	 margin-right: 5px;
+}
+.action-icon-white {
+	width: 30px;
+	max-width: 30px;
+	margin-right: 5px;
+}
+
+/**{
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+}*/
+.btn-pill {
+	border-radius: 50em!important;
+}

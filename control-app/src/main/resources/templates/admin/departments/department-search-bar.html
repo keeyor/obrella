@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--@thymesVar id="resourceQuery" type="org.opendelos.dashboard.repository.resource.ResourceQuery"-->
+<div th:fragment="admin-calendar-search-bar" style="font-size: 1em" >
+    <nav class="navbar navbar-expand navbar-dark bg-light px-1 fixed-top">
+        <div class="collapse navbar-collapse" id="navbarTop">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle gray-accesskeys-link-wcag-color" href="#" id="department-dropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Τμήμα
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="department-dropdown" id="department-columns"></ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

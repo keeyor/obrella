@@ -1,0 +1,690 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="stylesheet" th:href="@{/css/datatables-dp.css}"/>
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <!-- classic theme datatable with various plugins -->
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+    <!-- bootstrap-slider from: https://seiyria.com/bootstrap-slider/ -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-slider/bootstrap-slider.min.css}"/>
+    <!-- datetime-picker from: https://www.malot.fr/bootstrap-datetimepicker/demo.php -->
+    <link rel="stylesheet" th:href="@{/lib/datetime-picker/bootstrap-datetimepicker.min.css}"/>
+    <!-- bootstrap-switch-button -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-switch-button/bootstrap-switch-button.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <!-- select2 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- time-picker-bootstrap -->
+    <!-- https://www.jqueryscript.net/time-clock/time-picker-bootstrap.html -->
+    <link rel="stylesheet" th:href="@{/lib/time-picker-bootstrap/timepicker.css}"/>
+    <!-- bootstrap date-picker -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.css}"/>
+
+    <!-- Js-Wizard -->
+    <link rel="stylesheet" th:href="@{/lib/js-wizard/main.css}"/>
+
+    <style>
+        .form-error {
+            font-size: 0.9em;
+            color: red;
+        }
+        div.dt-buttons .toggle_ {
+            float: right;
+        }
+        .help-scedule {
+            font-weight: 400;
+            font-style: italic;
+        }
+        .sc_info {
+            font-weight: 500;
+        }
+        .wizard-btn {
+            background-color: #006A9B !important;
+        }
+    </style>
+    <!-- loader -->
+    <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+    <title>OpenDelos: Διαχείριση Μεταδόσεων</title>
+</head>
+<body class="c-app">
+<!--<div th:replace="~{admin/fragments/a-sidebar-scheduler :: a-sidebar}"></div>-->
+  <div class="c-wrapper">
+      <div th:replace="~{admin/fragments/a-topnav :: a-topnav}"></div>
+      <nav class="navbar navbar-expand navbar-light py-0" style="background-color:white;margin-top: 50px!important;">
+          <div class="collapse navbar-collapse" id="subBar">
+              <div class="navbar-nav">
+                  Προγραμματισμός ::
+              </div>
+              <div class="navbar-nav">
+                  <a class="nav-item nav-link  active" th:href="@{/admin/scheduler/timetable}"><span class="fas fa-search mr-1"></span>Προγραμματιστής Μεταδόσεων <span class="sr-only">(current)</span></a>
+                  <a class="nav-item nav-link " th:href="@{/admin/scheduler/calendar}"><span class="fas fa-map-marked-alt mr-1"></span>Ημερολόγιο Μεταδόσεων</a>
+                  <!--<a class="nav-item nav-link " th:href="@{/admin/scheduler/daily}"><span class="fas fa-server mr-1"></span>Πρόγραμμα Ημέρας</a>-->
+                  <a class="nav-item nav-link " th:href="@{/admin/scheduler/live}"><span class="fas fa-chart-pie mr-1"></span>Ζωντανές Μεταδόσεις!</a>
+              </div>
+              <ul class="c-header-nav ml-auto" style="min-height: 20px!important">
+              </ul>
+          </div>
+      </nav>
+      <div class="header-divider py-0"></div>
+
+      <div class="c-body">
+        <main class="c-main pt-0">
+            <input type="hidden" id="authorized"  th:value="${authorized}"/>
+            <input type="hidden" id="institutionId"  th:value="${institutionId}"/>
+            <input type="hidden" id="editor_id"  th:value="${user.id}"/>
+            <!--@thymesVar id="msg_val" type="java.lang.String"-->
+            <input type="hidden" id="msg_val" th:value="${msg_val}"/>
+            <!--@thymesVar id="msg_type" type="java.lang.String"-->
+            <input type="hidden" id="msg_type" th:value="${msg_type}"/>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">
+                        <div class="card">
+
+                            <div class="card-body pb-0 px-0 pt-2">
+                                <div class="pb-2" >
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h5 class="modal-title" id="seventModalLabel"></h5>
+                                            <div id="s_event_info"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12 pr-4">
+                                            <!--@thymesVar id="user_scheduler_search_history" type="java.lang.String"-->
+                                            <a th:if="${ScheduleDTO.type == 'lecture'}" th:href="@{'/admin/scheduler/timetable#t-lectures'}" role="button"
+                                               class="btn btn-secondary cancel_button cancelResource_top">
+                                                <i class="fas fa-undo"></i> Επιστροφή
+                                            </a>
+                                            <a th:if="${ScheduleDTO.type == 'event'}" th:href="@{'/admin/scheduler/timetable#t-events'}" role="button"
+                                               class="btn btn-secondary cancel_button cancelResource_top">
+                                                <i class="fas fa-undo"></i> Επιστροφή
+                                            </a>
+                                            <a th:if="${ScheduleDTO.type == ''}" th:href="@{'/admin/scheduler/timetable'}" role="button"
+                                               class="btn btn-secondary cancel_button cancelResource_top">
+                                                <i class="fas fa-undo"></i> Επιστροφή
+                                            </a>
+                                            <button type="button" class="btn btn-danger" id="deleteSchedule" title="Διαγραφή Μετάδοσης"
+                                                    th:href="@{'/admin/scheduler/timetable' + ${user_scheduler_search_history}}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                              <div class="row">
+                                  <div class="col-12">
+                                  <div class="card" id="edit_panel">
+                                      <div class="card-header px-0" style="border: none">
+                                          <h4>Αίτηση Μετάδοσης/Καταγραφής</h4>
+                                          <p>
+                                              Συμπληρώστε τα βήματα της αίτησης με τη σειρά που εμφανίζονται. Για την αποφυγή λαθών ή παραλείψεων πάντα συμπληρώνετε το προηγούμενο βήμα πριν μεταβείτε στο επόμενο. Χρησιμοποιείστε τα κουμπιά "Επόμενο" και "Προηγούμενο" της φόρμας για την μετακίνησή σας και όχι τα κουμπιά του browser. Πριν τη συμπλήρωση κάθε βήματος, διαβάστε τις επεξηγηματικές σημειώσεις που βρίσκονται στο κάτω μέρος.
+                                          </p>
+                                      </div>
+                                        <!--@thymesVar id="Resource" type="org.opendelos.dashboard.model.resources.Resource"-->
+                                        <form id="schedule-form" th:object="${ScheduleDTO}" th:action="@{wizard}" method="post">
+                                            <input type="hidden" id="id"  th:field="*{id}" />
+                                            <input type="hidden" id="_editor"  th:field="*{editor.id}" />
+
+
+                                            <section class="wizard" style="margin-top: 40px">
+                                                <aside class="wizard-nav">
+                                                    <div class="wizard-step" data-type="form">
+                                                        <span class="dot"></span>
+                                                        <span>1. Είδος - Τύπος</span>
+                                                    </div>
+                                                    <div class="wizard-step" data-type="form">
+                                                        <span class="dot"></span>
+                                                        <span>2. Στοιχεία Διάλεξης | Εκδήλωσης</span>
+                                                    </div>
+                                                    <div class="wizard-step" data-type="form">
+                                                        <span class="dot"></span>
+                                                        <span>3. Χώρος - Χρόνος</span>
+                                                    </div>
+                                                    <div class="wizard-step" data-type="form">
+                                                        <span class="dot"></span>
+                                                        <span>4. Περίοδος - Έτος</span>
+                                                    </div>
+                                                    <div class="wizard-step" data-type="form">
+                                                        <span class="dot"></span>
+                                                        <span>5. Μετάδοση</span>
+                                                    </div>
+                                                    <div class="wizard-step" data-type="form">
+                                                        <span class="dot"></span>
+                                                        <span>6. Καταγραφή</span>
+                                                    </div>
+                                                    <div class="wizard-step" data-type="form">
+                                                        <span class="dot"></span>
+                                                        <span>7. Έλεγχος</span>
+                                                    </div>
+                                                </aside>
+                                                <aside class="wizard-content container">
+                                                    <!-- Type -->
+                                                    <div class="wizard-step">
+
+                                                            <div class="form-group">
+                                                              <label for="_type"><b>Είδος*</b></label>
+                                                                <p>
+                                                                    Επιλέξτε <b>"Διάλεξη"</b> για μετάδοση διάλεξης μαθήματος. Σε κάθε άλλη περίπτωση επιλέξτε <b>"Εκδήλωση" **</b>
+                                                                </p>
+                                                               <input id="_active" type="hidden" th:field="*{enabled}">
+                                                               <select id="_type" class="form-control" th:field="*{type}" style="width: 100%">
+                                                                        <option value="lecture"> Διάλεξη Μαθήματος</option>
+                                                                        <option value="event"> Εκδήλωση</option>
+                                                              </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="_repeat"><b>Τύπος*</b></label>
+                                                                <p>
+                                                                    Επιλέξτε αν πρόκειται για <b>"Τακτική"</b> ή για <b>"Έκτακτη"</b> μετάδοση
+                                                                </p>
+                                                                    <select id="_repeat" class="form-control" th:field="*{repeat}" style="width: 100%">
+                                                                        <option value="regular"> Τακτική</option>
+                                                                        <option value="onetime"> Έκτακτη</option>
+                                                                    </select>
+                                                            </div>
+                                                        <p class="mt-4 mb-2" style="background-color: #fdf59a;border-top: #efefef 1px solid;font-weight: 500">
+                                                            <i class="fas fa-question"></i> Σημειώσεις - Παρατηρήσεις
+                                                        </p>
+                                                        <div class="help-scedule">
+                                                            <div class="font-weight-bolder">Είδος</div>
+                                                            <p style="font-weight: 500">
+                                                                <b>"Εκδήλωση"</b>: <u>Θα πρέπει να έχει προηγηθεί</u> η δημιουργία και η καταγραφή των στοιχείων της Εκδήλωσης στη σελίδα
+                                                                <a th:href="@{/admin/sevents}"> Περιεχόμενο - Κατάλογος Εκδηλώσεων </a> και <u>να έχει ενεργοποιηθεί το ημερολόγιο της εκδήλωσης</u>
+                                                            </p>
+                                                        </div>
+                                                        <div class="help-scedule">
+                                                            <div class="font-weight-bolder">Τύπος</div>
+
+                                                        </div>
+                                                        <p class="help-scedule">
+                                                            <b>"Τακτική"</b>: οι μεταδόσεις θα είναι πολλαπλές και θα πραγματοποιούνται την επιλεγμένη ημέρα και ώρα της εβδομάδας (βλ. Ημερομηνία-΄Ώρα) από τον επιλεγμένο χώρο (βλ. Χώρος) μέχρι το τέλος του τρέχοντος εξαμήνου -- εκτός εορτών και επίσημων αργιών. Θα πρέπει να καταθέσετε ξεχωριστική αίτηση για κάθε μια από τις ημέρες της εβδομάδας, που επιθυμείτε μετάδοση<br/><br/>
+                                                            <b>"Εκτακτη"</b>: η μετάδοση θα πραγματοποιηθεί μία και μοναδική φορά την επιλεγμένη ημερομηνία και ώρα (βλ. Ημερομηνία-Ώρα) από τον επιλεγμένο χώρο (βλ. Χώρος). <u>Δεν υποστηρίζονται τακτικές "Εκδηλώσεις"</u>. Αν για κάποια Εκδήλωση απαιτούνται περισσότερες από μια μεταδόσεις, τότε αιτηθείτε μια Έκτακτη μετάδοση <u>για κάθε</u> ημέρα και ώρα της Εκδήλωσης
+                                                        </p>
+                                                    </div>
+                                                    <!-- Course - Event -->
+                                                    <div class="wizard-step">
+                                                        <div class="form-group lecture_panel">
+                                                            <input type="hidden" id="_course" th:field="*{course.id}"/>
+                                                            <label for="courses_s2"><b>Μάθημα*</b></label>
+                                                            <p class="help-scedule">
+                                                                Επιλέξτε το <b>"Μάθημα"</b>** που αφορά η μετάδοση/καταγραφή
+                                                            </p>
+                                                            <select id="courses_s2" class="form-control js-courses-tags reset_control" style="width: 100%">
+                                                                    <option value=""></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group lecture_panel">
+                                                            <input type="hidden" id="_supervisor"  th:field="*{supervisor.id}"/>
+                                                            <label for="supervisor_s2"><b>Καθηγητής (-ήτρια)*</b></label>
+                                                            <p class="help-scedule">
+                                                                Επιλέξτε τον (-ην) υπεύθυνο <b>"Καθηγητή (-ήτρια)"</b> (επιλέξτε πρώτα το μάθημα, για να ενεργοποιηθεί η λίστα των Καθηγητών
+                                                            </p>
+                                                            <select id="supervisor_s2" class="form-control js-staffMembers-tags reset_control" style="width: 100%">
+                                                                    <option value=""></option>
+                                                             </select>
+                                                        </div>
+                                                        <div class="form-group event_panel">
+                                                            <input type="hidden" id="_event" th:field="*{scheduledEvent.id}"/>
+                                                            <p class="help-scedule">
+                                                                Επιλέξτε την <b>"Εκδήλωση"</b> που αφορά η μετάδοση/καταγραφή
+                                                            </p>
+                                                            <label for="events_s2"><b>Επιλέξτε Εκδήλωση*</b></label>
+                                                            <select id="events_s2" class="form-control js-courses-tags reset_control" style="width: 100%">
+                                                                <option value=""></option>
+                                                            </select>
+                                                        </div>
+                                                        <p class="mt-4 mb-2" style="background-color: #fdf59a;border-top: #efefef 1px solid;font-weight: 500">
+                                                            <i class="fas fa-question"></i> Σημειώσεις - Παρατηρήσεις
+                                                        </p>
+                                                        <div class="help-scedule lecture_panel">
+                                                            <div class="font-weight-bolder">Μάθημα</div>
+                                                            Αν δεν βρίσκετε το Μάθημα ή τον Καθηγητή που επιθυμείτε στις αντίστοιχες λίστες: Επικοινωνήστε με τον διαχειριστή για την ενημέρωση της λίστα των μαθημάτων ή/και των διδασκόντων
+                                                        </div>
+                                                        <div class="help-scedule event_panel">
+                                                            <div class="font-weight-bolder">Εκδήλωση</div>
+                                                            <u>θα πρέπει να έχει προηγηθεί</u> η δημιουργία και η καταγραφή των στοιχείων της Εκδήλωσης στη σελίδα
+                                                            <a th:href="@{/admin/sevents}"> Περιεχόμενο - Κατάλογος Εκδηλώσεων </a> και <u>να έχει ενεργοποιηθεί το ημερολόγιο της εκδήλωσης</u>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Date -Time -->
+                                                    <div class="wizard-step">
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="_classroom" th:field="*{classroom.id}"/>
+                                                            <label for="classrooms_s2"><b>Χώρος Διδασκαλίας/Εκδήλωσης*</b></label>
+                                                            <p class="help-scedule">
+                                                                Επιλέξτε την <b>"Αίθουσα Διδασκαλίας"</b> ή τον <b>"Χώρο της Εκδήλωσης"</b>
+                                                            </p>
+                                                            <select id="classrooms_s2" style="width: 100%" class="form-control js-classrooms-tags reset_control">
+                                                                <option value=""></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group dayOfWeek">
+                                                            <label for="_dayOfWeek"><b>Ημέρα*</b></label>
+                                                            <p class="help-scedule">
+                                                                Επιλέξτε <b>"Ημέρα"</b> της Εβδομάδας.
+                                                            </p>
+                                                            <select id="_dayOfWeek" class="custom-select" th:field="*{dayOfWeek}"  style="width: 100%">
+                                                                <option value=""></option>
+                                                                <option th:value="MONDAY"> Δευτέρα</option>
+                                                                <option th:value="TUESDAY"> Τρίτη</option>
+                                                                <option th:value="WEDNESDAY"> Τετάρτη</option>
+                                                                <option th:value="THURSDAY"> Πέμπτη</option>
+                                                                <option th:value="FRIDAY"> Παρασκευή</option>
+                                                                <option th:value="SATURDAY"> Σάββατο</option>
+                                                                <option th:value="SUNDAY"> Κυριακή</option>
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="form-group dayOfMonth">
+                                                            <label for="_date"><b>Ημερομηνία*</b></label>
+                                                            <p class="help-scedule">
+                                                                Επιλέξτε την <b>"Ημερομηνία"</b> Μετάδοσης της Έκτακτης Διάλεξης ή της Εκδήλωσης
+                                                            </p>
+                                                            <div class="input-group date">
+                                                                <input class="form-control" value="" aria-label="" id="_date" th:field="*{date}" />
+                                                                <span class="input-group-addon">
+                                                                        <i class="glyphicon glyphicon-calendar "></i>
+                                                                    </span>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="_timeOfDay"><b>Ώρα Εκκίνησης*</b></label>
+                                                            <p class="help-scedule">
+                                                                Πατώντας στο πλαίσιο, επιλέξτε την <b>"Ώρα"</b> της μετάδοσης. Κάντε κλικ πρώτα στην ώρα και μετά στα λεπτά
+                                                            </p>
+                                                            <input id="_timeOfDay" class="form-control" type="text" th:field="*{startTime}" autocomplete="off"/>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="_duration_hours"><b>Διάρκεια*</b></label>
+                                                            <p class="help-scedule">
+                                                                Χρησιμοποιείστε τα κουμπιά <b>+</b> και <b>-</b> για να επιλέξετε διάρκεια σε ώρες και λεπτά
+                                                            </p>
+                                                            <div class="form-inline">
+                                                                <label for="_duration_hours" class="ml-2 mr-2"> Ώρες </label>
+                                                                <input type="number" id="_duration_hours" value="0" min="0" max="12" step="1" th:field="*{durationHours}"/>
+
+                                                                <label for="_duration_minutes"  class="ml-2 mr-2">Λεπτά </label>
+                                                                <input type="number" id="_duration_minutes" value="0" min="0" max="59" step="1" th:field="*{durationMinutes}"/>
+                                                            </div>
+                                                        </div>
+                                                        <p class="mt-4 mb-2" style="background-color: #fdf59a;border-top: #efefef 1px solid;font-weight: 500">
+                                                            <i class="fas fa-question"></i> Σημειώσεις - Παρατηρήσεις
+                                                        </p>
+                                                        <p class="help-scedule lecture_panel">
+                                                        <div class="font-weight-bolder">Χώρος</div>
+                                                        Στον κατάλογο των χώρων εμφανίζονται οι διαθέσιμοι χώροι/αίθουσες του τμήματος του Καθηγητή <b><u>και</u></b> οι χώροι/αίθουσες του τμήματος που ανήκει το μάθημα (αν πρόκειται για διαφορετικά τμήματα)
+                                                        </p>
+                                                        <p class="help-scedule">
+                                                        <div class="font-weight-bolder">Ημέρα (Τακτική Μετάδοση)</div>
+                                                        Η μετάδοση θα πραγματοποιείτε <u>κάθε εβδομάδα</u> την ίδια ημέρα και ώρα, από τον επιλεγμένο χώρο (βλ. Χώρος) για το υπόλοιπο του εξαμήνου  -- εκτός εορτών και επίσημων αργιών.
+                                                        Μπορείτε ανά πάσα στιγμή να ζητήσετε την ακύρωση μεμονωμένων ημερομηνιών ή συνολικά της μετάδοσης
+                                                        </p>
+                                                        <p class="help-scedule">
+                                                        <div class="font-weight-bolder">Ημερομηνία (Έκτατη Μετάδοση ή Εκδήλωση)</div>
+                                                        Η μετάδοση θα πραγματοποιηθεί μία και μοναδική φορά την επιλεγμένη ημερομηνία και ώρα από τον επιλεγμένο χώρο (βλ. Χώρος)
+                                                        </p>
+                                                    </div>
+                                                    <!-- Year -- Period -->
+                                                    <div class="wizard-step">
+                                                        <!--@thymesVar id="ayList" type="java.util.List"-->
+                                                        <!--@thymesVar id="ayListText" type="java.util.List"-->
+                                                        <p class="help-scedule">
+                                                            Επιλέξτε την <b>"Ακαδημαϊκό Έτος"</b> και <b>"Περίοδο Διδασκαλίας"</b> αν είναι διαφορετικά από τα προ-επιλεγμένα
+                                                        </p>
+                                                        <div class="form-group">
+                                                            <label for="resource_ay"><b>Ακαδημαϊκό Έτος*</b></label>
+                                                            <select id="resource_ay" class="form-control" th:field="*{academicYear}" style="width: 100%">
+                                                                    <option value=""></option>
+                                                                    <option th:each="i, iter : ${ayList}" th:value="${i}" th:text="${ayListText[iter.index]}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <!--@thymesVar id="pdList" type="java.util.HashMap<String,String>"-->
+                                                        <div class="form-group lecture_panel">
+                                                            <label for="resource_pd"><b>Περίοδος*</b></label>
+                                                            <select id="resource_pd" class="form-control" th:field="*{period}" style="width: 100%">
+                                                                    <option value=""></option>
+                                                                    <option th:each="period: ${pdList}" th:value="${period.key}" th:text="${period.value}"></option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="px-2 lecture_panel" id="period_info" style="background-color: dimgrey;color:white;font-size: 1em"></div>
+                                                    </div>
+                                                    <!-- Broadcast -->
+                                                    <div class="wizard-step">
+                                                        <div class="form-group">
+                                                            <label for="_broadcast"><b>Μετάδοση*</b></label>
+                                                            <p class="help-scedule">
+                                                                Επιλέξτε αν θα πραγματοποιηθεί ζωντανή <b>"Μετάδοση"</b> ή όχι. Αν δεν επιθυμείτε την μετάδοση παρά μόνο την καταγραφή, επιλέξτε <b>"Χωρίς Μετάδοση"</b> και προχωρήστε στο επόμενο βήμα
+                                                            </p>
+                                                            <select id="_broadcast" class="form-control" th:field="*{broadcast}"  style="width: 100%">
+                                                                    <option th:value="1"> Μετάδοση</option>
+                                                                    <option th:value="0"> Χωρίς Μετάδοση</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="_access"><b>Πρόσβαση*</b></label>
+                                                            <select id="_access" class="form-control" th:field="*{access}"  style="width: 100%">
+                                                                    <option value="open"> Ανοιχτή</option>
+                                                                    <option value="sso"> Με Ιδρυματικό Λογαριασμό</option>
+                                                                    <option value="password"> Με Κωδικό Μετάδοσης</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="_password"><b>Κωδικός Μετάδοσης*</b></label>
+                                                            <div class="form-inline">
+                                                                <input id="_password" class="form-control" type="text" th:field="*{broadcastCode}"/>
+                                                                <button id="reveal_passfield" class="btn-sm btn-secondary ml-1" title="εμφάνιση κωδικού"><i class="far fa-eye"></i></button>
+                                                            </div>
+                                                        </div>
+
+                                                        <p class="mt-4 mb-2" style="background-color: #fdf59a;border-top: #efefef 1px solid;font-weight: 500">
+                                                            <i class="fas fa-question"></i> Σημειώσεις - Παρατηρήσεις
+                                                        </p>
+                                                        <p class="help-scedule">
+                                                        <div class="font-weight-bolder">Πρόσβαση</div>
+                                                        Είναι διαθέσιμες οι παρακάτω επιλογές: <br/><b>Ανοιχτή</b>: H ζωντανή μετάδοση είναι ελεύθερη σε <u>όλους τους χρήστες του διαδικτύου</u><br/><b>Με Ιδρυματικό Λογαριασμό</b>: Τη ζωντανή μετάδοση μπορούν να παρακολουθήσουν <u>μόνο όσοι χρήστες διαθέτουν λογαριασμό στο Πανεπιστήμιο Αθηνών</u> (email - password) <br/><b>Με Κωδικό Πρόσβασης</b>: Τη ζωντανή μετάδοση μπορούν να παρακολουθήσουν <u>μόνο όσοι χρήστες γνωρίζουν τον κωδικό πρόσβασης</u> που θα ορίσετε <u>εσείς</u> παρακάτω
+                                                        </p>
+                                                        <p class="help-scedule">
+                                                        <div class="font-weight-bolder">Κωδικός Πρόσβασης (password)</div>
+                                                           Αν επιλέξετε πρόσβαση "Με Κωδικό Μετάδοσης", πληκτρολογήστε στο πεδίο αυτό, τον κωδικό που επιθυμείτε. H γνωστοποίηση του κωδικού πρόσβασης στους αποδέκτες, γίνεται από τον υπεύθυνο καθηγητή με όποιο τρόπο αυτός κρίνει κατάλληλο (μέσω e-mail, e-class κτλ)
+                                                        </p>
+                                                    </div>
+                                                    <!-- Record -->
+                                                    <div class="wizard-step">
+                                                        <div class="form-group">
+                                                            <label for="_record"><b>Καταγραφή*</b></label>
+                                                            <p class="help-scedule">
+                                                                Επιλέξτε αν θα επιθυμείτε την <b>"Καταγραφή"</b> της μετάδοσης ή όχι  - <b>"Χωρίς Καταγραφή"</b>
+                                                            </p>
+                                                            <select id="_record" class="form-control" th:field="*{recording}"  style="width: 100%">
+                                                                    <option th:value="1"> Καταγραφή</option>
+                                                                    <option th:value="0"> Χωρίς Καταγραφή</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="_publish"><b>Δημοσίευση*</b></label>
+                                                            <select id="_publish" class="form-control" th:field="*{publication}"  style="width: 100%">
+                                                                    <option value="private"> Ιδιωτικό (απαιτείται έγκριση)</option>
+                                                                    <option value="public"> Δημόσιο (άμεση δημοσίευση)</option>
+                                                             </select>
+                                                        </div>
+                                                        <p class="mt-4 mb-2" style="background-color: #fdf59a;border-top: #efefef 1px solid;font-weight: 500">
+                                                            <i class="fas fa-question"></i> Σημειώσεις - Παρατηρήσεις
+                                                        </p>
+                                                        <p class="help-scedule">
+                                                        <div class="font-weight-bolder">Δημοσίευση</div>
+                                                        Αν επιλέξατε "Καταγραφή", επιλέξτε αν θα επιθυμείτε το βίντεο της καταγραφής να γίνει διαθέσιμο στους χρήστες, άμεσα - με τη λήξη της μετάδοσης (<b>Δημόσιο</b>) - ή να αποθηκευτεί ως <b>Ιδιωτικό</b>. Στη δεύτερη περίπτωση μπορείτε, αν το επιθυμείτε, να δημοσιοποιήσετε το βίντεο σε μετέπειτα χρόνο.
+                                                        <br/>Όλα τα καταγεγραμμένα βίντεο (Δημόσια <u>και</u> Ιδιωτικά),είναι εν δυνάμει προσβάσιμα από όλους τους εγγεγραμμένους χρήστες του αντίστοιχου Μαθήματος στο e-class (βλ. οδηγίες στο e-class).
+                                                        </p>
+                                                    </div>
+                                                    <!-- Summary -->
+                                                    <div class="wizard-step">
+                                                        <div class="form-group">
+                                                            <p class="mb-3">
+                                                                Παρακάτω εμφανίζονται συνοπτικά οι παράμετροι της Μετάδοσης
+                                                            </p>
+                                                            <p id="errors_warning" class="font-weight-bolder" style="color:red;display: none" >
+                                                                Γυρίστε στα προηγούμενα βήματα (..) και διορθώστε τα λάθη ή τις παραλείψεις, που σημειώνονται με κόκκινο χρώμα. Η 'Αποθήκευση' έχει προσωρινά απενεργοποιηθεί
+                                                            </p>
+
+                                                             <table style="margin:0 auto;width: 66%">
+                                                                            <tr><td>Τύπος</td><td><span class="sc_info" id="user_type"></span></td></tr>
+                                                                            <tr><td>Είδος</td><td><span class="sc_info" id="user_repeat"></span></td></tr>
+                                                                            <tr id="broadcast_period" style="display: none"><td></td><td><span id="broadcast_period_info"></span></td></tr>
+                                                                            <tr><td class="lecture_panel">Μάθημα</td><td><span  class="sc_info lecture_panel" id="user_lecture"></span></td></tr>
+                                                                            <tr><td class="event_panel">Εκδήλωση</td><td><span class="sc_info event_panel"  id="user_event"></span></td></tr>
+                                                                            <tr><td class="lecture_panel">Καθηγητής</td><td><span   class="sc_info lecture_panel" id="user_supervisor"></span></td></tr>
+                                                                            <tr><td >Χώρος</td><td><span class="sc_info" id="user_classroom"></span></td></tr>
+                                                                            <tr><td>Ακαδημαϊκό Έτος</td><td><span class="sc_info" id="user_year"></span></td></tr>
+                                                                            <tr><td class="lecture_panel">Περίοδος</td><td  class="sc_info lecture_panel" ><span id="user_period"></span></td></tr>
+                                                                            <tr><td class="lecture_panel">Ημέρα</td><td><span   class="sc_info lecture_panel" id="user_dayOfWeek"></span></td></tr>
+                                                                            <tr><td class="event_panel">Ημερομηνία</td><td><span  class="sc_info event_panel"  id="user_date"></span></td></tr>
+                                                                            <tr><td>Ώρα Εκκίνησης</td><td><span class="sc_info" id="user_time"></span></td></tr>
+                                                                            <tr><td>Διάρκεια</td><td><span class="sc_info" id="user_duration"></span></td></tr>
+                                                                            <tr><td>Μετάδοση</td><td><span class="sc_info" id="user_broadcast"></span></td></tr>
+                                                                            <tr><td>Πρόσβαση</td><td><span class="sc_info" id="user_access"></span></td></tr>
+                                                                            <tr><td>Κωδικός Μετάδοσης</td><td><span class="sc_info" id="user_passwd"></span></td></tr>
+                                                                            <tr><td>Καταγραφή</td><td><span class="sc_info" id="user_record"></span></td></tr>
+                                                                            <tr><td>Δημοσίευση</td><td><span class="sc_info" id="user_publication"></span></td></tr>
+
+                                                             </table>
+                                                            <p class="mt-3" style="font-weight: 600;font-size: 1.1em">
+                                                                Κατά την αποθήκευση, <u>θα πραγματοποιηθεί έλεγχος διαθεσιμότητας</u> της Αίθουσα/Χώρου κατά την ημέρα-ημερομηνία και ώρα που έχετε επιλέξει. Αν ο χώρος δεν είναι διαθέσιμος, θα εμφανιστεί το ανάλογο μήνυμα και θα πρέπει να τροποποιήσετε κάποια ή κάποιες από τις εν λόγω παραμέτρους.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </aside>
+                                        </section>
+                                            <div class="form-error lecture_panel" th:if="${#fields.hasErrors('course.id')}" th:errors="*{course.id}"></div>
+                                            <div class="form-error lecture_panel" th:if="${#fields.hasErrors('supervisor.id')}" th:errors="*{supervisor.id}"></div>
+                                            <div class="form-error event_panel" th:if="${#fields.hasErrors('scheduledEvent.id')}" th:errors="*{scheduledEvent.id}"></div>
+                                            <div class="form-error" th:if="${#fields.hasErrors('classroom.id')}" th:errors="*{classroom.id}"></div>
+                                            <div class="form-error" th:if="${#fields.hasErrors('dayOfWeek')}" th:errors="*{dayOfWeek}"></div>
+                                            <div class="form-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
+                                            <div class="form-error" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></div>
+                                            <div class="form-error" th:if="${#fields.hasErrors('durationHours')}" th:errors="*{durationHours}"></div>
+                                            <div class="form-error" th:if="${#fields.hasErrors('broadcastCode')}" th:errors="*{broadcastCode}"></div>
+                                        </form>
+                                  </div>
+                                  </div>
+                                </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <!-- ΠΡΟΓΡΑΜΜΑ ΜΕΤΑΔΟΣΕΩΝ -->
+                                    <div class="card" id="schedule_panel" style="display: none">
+                                        <div class="card-header px-0">
+                                            <h5>Πρόγραμμα Μεταδόσεων</h5>
+                                            <div class="lecture_panel">
+                                                <div>Μάθημα: <span  style="font-style: italic" class="font-weight-bolder" id="_course_title" th:text="${ScheduleDTO.course.title}"></span>
+                                                    - Τμήμα <span  id="_department_title" th:if="${ScheduleDTO.department != null}" style="font-style: italic"
+                                                                   class="font-weight-bolder" th:text="${ScheduleDTO.department.title}">[dep]</span>
+                                                </div>
+                                                <div>Υπεύθυνος Καθηγητής (-ήτρια):
+                                                    <span  style="font-style: italic" class="font-weight-bolder" id="_staff_name"
+                                                           th:text="${ScheduleDTO.supervisor.name}">
+                                                    </span>
+                                                </div>
+                                                <div>Περίοδος: <span  th:if="${ScheduleDTO.type == 'lecture'}" style="font-style: italic" class="font-weight-bolder" id="_period_title"
+                                                                      th:text="#{${ScheduleDTO.period}}"></span>
+                                                    <span class="pl-2" id="_effective_dates"></span>
+                                                </div>
+                                                <div>Αίθουσα: <span  style="font-style: italic" class="font-weight-bolder" id="_classroom_name"
+                                                                     th:text="${ScheduleDTO.classroom.name}"></span>
+                                                </div>
+                                                <div id="_broadcast_info" class="p-0 m-0">Μετάδοση:
+                                                    <span th:if="${ScheduleDTO.broadcast && ScheduleDTO.access == 'sso'}" style="font-style: italic" class="font-weight-bolder" th:text="${' Μετάδοση - Με Ιδρυματικό Λογαριασμό'}"></span>
+                                                    <span th:if="${ScheduleDTO.broadcast && ScheduleDTO.access == 'password'}" style="font-style: italic" class="font-weight-bolder" th:text="${' Μετάδοση - Με Κωδικό Πρόσβασης'}"></span>
+                                                    <span th:if="${ScheduleDTO.broadcast && ScheduleDTO.access == 'open'}" style="font-style: italic" class="font-weight-bolder" th:text="${' Μετάδοση - Ανοικτή'}"></span>
+                                                    <span th:unless="${ScheduleDTO.broadcast}" style="font-style: italic" class="font-weight-bolder" th:text="${'Χωρίς Μετάδοση'}"> </span>
+                                                </div>
+                                                <div id="_recording_info"  class="p-0 m-0">Καταγραφή:
+                                                    <span th:if="${ScheduleDTO.recording}" style="font-style: italic" class="font-weight-bolder" th:text="${'Με Καταγραφή'}"></span>
+                                                    <span th:unless="${ScheduleDTO.recording}" style="font-style: italic" class="font-weight-bolder" th:text="${'Χωρίς Καταγραφή'}"></span>
+                                                </div>
+                                                <div id="_publication_info"  class="p-0 m-0">Δημοσίευση:
+                                                    <span th:if="${ScheduleDTO.publication == 'public'}" style="font-style: italic" class="font-weight-bolder" th:text="${'Δημόσιο'}"></span>
+                                                    <span th:unless="${ScheduleDTO.publication == 'public'}" style="font-style: italic" class="font-weight-bolder" th:text="${'Ιδιωτικό'}"></span>
+                                                </div>
+                                                <div class="row mt-2 align-items-end">
+                                                    <div class="col-6">
+                                                        <div style="color: orangered" id="timetable_msg_pauses"></div>
+                                                        <div style="color: orangered" id="timetable_msg_cancellations"></div>
+                                                        <div style="color: orangered" id="timetable_msg_overlaps"></div>
+                                                        <div class="text-muted pt-3"><i class="far fa-question-circle"></i>
+                                                            Αποθηκεύστε τυχόν τροποποιήσεις για τον υπολογισμό του νέου προγράμματος μεταδόσεων
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <button type="submit" title="Απενεργοποίηση Προγράμματος" class="btn btn-secondary float-right mr-2" id="disable-co-button">
+                                                            Απενεργοποίηση <i class="fas fa-ban"></i>
+                                                        </button>
+                                                        <button type="submit" title="Ενεργοποίηση Προγράμματος" class="btn btn-secondary float-right mr-2" id="enable-co-button">
+                                                            Ενεργοποίηση <i style="color:red" class="fas fa-circle-notch"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="event_panel">
+                                                <div>Εκδήλωση:   <span  style="font-style: italic" class="font-weight-bolder" id="_event_title" th:text="${ScheduleDTO.scheduledEvent.title}"></span>
+                                                </div>
+                                                <div class="row mt-1">
+                                                    <div class="col-6">
+                                                        <span class="text-muted"><i class="far fa-question-circle"></i>
+                                                        Αποθηκεύστε τυχόν τροποποιήσεις για τον υπολογισμό του νέου προγράμματος μεταδόσεων
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span class="float-right pr-3 pt-3" id="count_eresults"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body px-0">
+                                            <div class="row lecture_panel">
+                                                <div class="col-12">
+                                                    <table id="schedule_table" style="width: 100%" class="row-border table-striped">
+                                                        <thead>
+                                                        <tr style="font-weight: 700">
+                                                            <td style="width: 16px">#</td>
+                                                            <td style="width: 16px"><i class="fas fa-plug"></i></td>
+                                                            <td>[id]</td>
+                                                            <td style="width: 18px">Τύπος </td>
+                                                            <td>Περίοδος </td>
+                                                            <td>Ημέρα</td>
+                                                            <td>Ημερομηνία</td>
+                                                            <td>Ημερομ.</td>
+                                                            <td>Ώρα</td>
+                                                            <td>Διάρκεια</td>
+                                                            <td>Διάρκεια mm</td>
+                                                            <td>resource </td>
+                                                            <td>Τμήμα </td>
+                                                            <td>Μάθημα </td>
+                                                            <td>Υπ. Καθηγητής</td>
+                                                            <td>Άιθουσα / Χώρος</td>
+                                                            <td style="width: 15px">Μετάδοση</td>
+                                                            <td style="width: 15px">Πρόσβαση</td>
+                                                            <td style="width: 15px">Καταγραφή</td>
+                                                            <td style="width: 15px">Δημοσίευση</td>
+                                                            <td style="width: 15px"></td>
+                                                            <td style="width:0">[fromDate]</td>
+                                                            <td style="width:0">[toDate]</td>
+                                                            <td style="width:0">[argia]</td>
+                                                            <td style="width:0">[cancellation]</td>
+                                                            <td style="width:0">[overlap]</td>
+                                                        </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row event_panel">
+                                                <div class="col-12">
+                                                    <table id="schedule_etable" style="width: 100%" class="row-border table-striped">
+                                                        <thead>
+                                                        <tr style="font-weight: 700">
+                                                            <td style="width: 16px">#</td>
+                                                            <td style="width: 16px"><i class="fas fa-plug"></i></td>
+                                                            <td>[id]</td>
+                                                            <td style="width: 18px">Τύπος</td>
+                                                            <td>Ημέρα</td>
+                                                            <td>Ημερομηνία</td>
+                                                            <td>Ημερομ.</td>
+                                                            <td>Ώρα</td>
+                                                            <td>Διάρκεια</td>
+                                                            <td>Διάρκεια mm</td>
+                                                            <td>resource </td>
+                                                            <td>Τμήμα </td>
+                                                            <td>Εκδήλωση </td>
+                                                            <td>Άιθουσα / Χώρος</td>
+                                                            <td style="width: 15px">Μετάδοση</td>
+                                                            <td style="width: 15px">Πρόσβαση</td>
+                                                            <td style="width: 15px">Καταγραφή</td>
+                                                            <td style="width: 15px">Δημοσίευση</td>
+                                                            <td style="width: 15px">[edit]</td>
+                                                            <td style="width:0">[cancellation]</td>
+                                                        </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+  </div>
+
+  <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+   <div th:replace="~{admin/scheduler/modals/youtube_publish_modal :: #youtube_publish_modal}"></div>
+  <!-- Optional JavaScript -->
+    <script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
+  <script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+  <script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+  <script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+
+  <script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+  <!-- required by excel button -->
+  <script th:src="@{/lib/datatables-classic/jszip.min.js}" type="application/javascript" ></script>
+
+  <script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+  <!-- boostrap-slider -->
+  <script th:src="@{/lib/bootstrap-slider/bootstrap-slider.min.js}"></script>
+  <!-- datetime-picker -->
+  <script th:src="@{/lib/datetime-picker/bootstrap-datetimepicker.min.js}"></script>
+  <!-- alertify -->
+  <script th:src="@{/lib/alertify/alertify.min.js}"></script>
+  <!-- time-picker-bootstrap -->
+  <script th:src="@{/lib/time-picker-bootstrap/timepicker.js}"></script>
+  <!-- bootstrap-input-spinner -->
+  <script th:src="@{/lib/bootstrap-input-spinner/bootstrap-input-spinner.js}"></script>
+  <!-- bootstrap datepicker -->
+  <script th:src="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.js}" type="application/javascript"></script>
+  <script th:src="@{/lib/bootstrap-datepicker/bootstrap-datepicker.el.min.js}" type="application/javascript"></script>
+  <!-- custom -->
+  <script th:src="@{/js/admin/scheduler/wizard/dashboard.js}" type="application/javascript"></script>
+  <script th:src="@{/js/admin/scheduler/wizard/dashboard.staffmembers.js}" type="application/javascript"></script>
+  <script th:src="@{/js/admin/scheduler/wizard/dashboard.courses.js}" type="application/javascript"></script>
+  <script th:src="@{/js/admin/scheduler/wizard/dashboard.classrooms.js}" type="application/javascript"></script>
+  <script th:src="@{/js/admin/scheduler/wizard/dashboard.events.js}" type="application/javascript"></script>
+
+  <script th:src="@{/js/admin/scheduler/wizard/dashboard.lectimetable.js}" type="application/javascript"></script>
+  <script th:src="@{/js/admin/scheduler/wizard/dashboard.evtimetable.js}" type="application/javascript"></script>
+
+  <!-- bootstrap-switch-button -->
+  <!-- <script  th:href="@{/lib/bootstrap-switch-button/bootstrap-switch-button.js}"></script>-->
+  <script th:src="@{/lib/bootstrap-switch-button/bootstrap-switch-button.min.js}" type="application/javascript"></script>
+
+  <script th:src="@{/js/admin/scheduler/lang/el.js}" type="application/javascript"></script>
+
+  <script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+  <script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+  <script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+  <!-- loader -->
+  <script th:src="@{/lib/loader/loader.js}"></script>
+<!-- Js-Wizard -->
+<script th:src="@{/lib/js-wizard/wizard.min.js}"></script>
+</body>

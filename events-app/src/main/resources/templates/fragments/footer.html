@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title></title>
+</head>
+<body>
+<!--/*  Multiple fragments may be defined in one file */-->
+<div th:fragment="footer">
+  <div style="background-color: black; line-height: 50px">
+      <div class="container pt-4">
+          <div class="row">
+              <div class="col-lg-4 col-md-6 col-xs-12">
+                  <div>
+                      <img class="mt-1 mb-md-3" th:src="@{${'/public/images/logos/uoa_logo_' + localeCode + '_black.png'}}" th:alt="#{default.institution.title}" style="max-height: 79px;" alt="" src="">
+                  </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-xs-12 text-muted">
+                  <ul style="line-height: 20px;list-style-type: none;">
+                      <li>
+                          <a href="https://www.uoa.gr/anakoinoseis_kai_ekdiloseis/" target="_blank" style="text-decoration: none" class="text-muted" th:text="#{footer.link.news}">Ανακοινώσεις και Εκδηλώσεις</a></li>
+                      <li>
+                          <a class="text-muted" href="#" th:title="#{footer.link.about}" data-toggle="modal" data-target="#about_modal">
+                              <span th:text="#{footer.link.about}">Σχετικά</span>
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-lg-4 col-md-6 col-xs-12 "></div>
+          </div>
+          <div class="row mt-1">
+              <div class="col-12 text-muted" style="border-top: whitesmoke 1px solid">
+                  <span th:text="#{footer.link.copyright.1}"></span> &copy; <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2022</span>
+                  <span th:text="#{footer.link.copyright.2}"></span>
+              </div>
+          </div>
+      </div>
+  </div>
+
+</div>
+</body>
+</html>

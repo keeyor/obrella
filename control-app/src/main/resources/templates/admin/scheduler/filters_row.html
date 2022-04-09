@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<header th:fragment="filters_row" id="filters_row">
+    <nav class="navbar navbar-expand-md navbar-light bg-light" style="background-color: #f8f8f8!important;border-radius: 25px!important;border: 1px lightgrey solid!important;">
+        <button class="navbar-toggler" type="button"  title="Φίλτρα Αναζήτησης"
+                data-toggle="collapse" data-target="#gen-nav" aria-controls="gen-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fas fa-bars text-black-50"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="gen-nav">
+            <ul class="navbar-nav mr-auto ms-2">
+                <!-- PERIOD FILTER -->
+                <li id="period_clear" class="nav-item  clear-filter" style="display:none">
+                    <a data-target="period" style="padding-right: 0" class="nav-link" title="ακύρωση φίλτρου" href="#">
+                        <i class="fa fa-ban   gray-accesskeys-link-wcag-color" aria-hidden="true" style="padding: 0"> </i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown disabled">
+                    <a class="nav-link dropdown-toggle  gray-accesskeys-link-wcag-color" href="#" id="period_load" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                        Περίοδος
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="period_load" style="max-height: 400px;overflow-y: auto;font-size: 1em">
+                        <a class="dropdown-item filter-item" href="#" th:each="period: ${pdList}" th:attr="data-target=${period.key},data-filter=period" th:text="${period.value}"></a>
+                    </div>
+                </li>
+                <!-- DEPARTMENT FILTER -->
+                <li id="department_clear" class="nav-item clear-filter" style="display:none">
+                    <a data-target="department" style="padding-right: 0" class="nav-link" title="ακύρωση φίλτρου" href="#">
+                        <i class="fa fa-ban gray-accesskeys-link-wcag-color " aria-hidden="true" style="padding: 0"> </i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle  gray-accesskeys-link-wcag-color" href="#" id="department_load" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                        Τμήμα
+                    </a>
+                    <ul class="dropdown-menu" id="department-filter"  aria-labelledby="department_load" style="font-size: 1em"></ul>
+                </li>
+
+                <!-- REPEAT FILTER -->
+                <li id="repeat_clear" class="nav-item clear-filter" style="display:none">
+                    <a data-target="repeat" style="padding-right: 0" class="nav-link" title="ακύρωση φίλτρου" href="#">
+                        <i class="fa fa-ban gray-accesskeys-link-wcag-color " aria-hidden="true" style="padding: 0"> </i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle  gray-accesskeys-link-wcag-color" href="#" id="repeat_load" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                        Τύπος
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="repeat_load" style="max-height: 400px;overflow-y: auto;font-size: 1em">
+                        <a class="dropdown-item filter-item" href="#" data-target="regular" data-filter="repeat">Τακτική</a>
+                        <a class="dropdown-item filter-item" href="#" data-target="onetime" data-filter="repeat">Έκτακτη</a>
+                    </div>
+                </li>
+                <!-- DOW FILTER -->
+                <li id="dow_clear" class="nav-item  clear-filter" style="display:none">
+                    <a data-target="dow" style="padding-right: 0" class="nav-link  gray-accesskeys-link-wcag-color" title="ακύρωση φίλτρου" href="#">
+                        <i class="fa fa-ban gray-accesskeys-link-wcag-color " aria-hidden="true" style="padding: 0"> </i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle  gray-accesskeys-link-wcag-color" href="#" id="dow_load" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                        Ημέρα
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dow_load" style="max-height: 400px;overflow-y: auto;font-size: 1em">
+                        <a class="dropdown-item filter-item" href="#" data-target="MONDAY" data-filter="dow">Δευτέρα</a>
+                        <a class="dropdown-item filter-item" href="#" data-target="TUESDAY" data-filter="dow">Τρίτη</a>
+                        <a class="dropdown-item filter-item" href="#" data-target="WEDNESDAY" data-filter="dow">Τετάρτη</a>
+                        <a class="dropdown-item filter-item" href="#" data-target="THURSDAY" data-filter="dow">Πέμπτη</a>
+                        <a class="dropdown-item filter-item" href="#" data-target="FRIDAY" data-filter="dow">Παρασκευή</a>
+                        <a class="dropdown-item filter-item" href="#" data-target="SATURDAY" data-filter="dow">Σάββατο</a>
+                        <a class="dropdown-item filter-item" href="#" data-target="SUNDAY" data-filter="dow">Κυριακή</a>
+                    </div>
+                </li>
+                <li id="staff_clear" class="nav-item  clear-filter" style="display:none">
+                    <a data-target="staff" style="padding-right: 0" class="nav-link  gray-accesskeys-link-wcag-color" title="ακύρωση φίλτρου" href="#">
+                        <i class="fa fa-ban gray-accesskeys-link-wcag-color " aria-hidden="true" style="padding: 0"> </i>
+                    </a>
+                </li>
+                <a class="nav-link btn-xs btn-default" style="color: #4f5d73" title="άνοιγμα καταλόγου διδασκόντων" href="#" role="button" id="staff_load">
+                    Διδάσκων <span class="ml-1 fas fa-caret-down"></span>
+                </a>
+                <li id="course_clear" class="nav-item  clear-filter" style="display:none">
+                    <a data-target="course" style="padding-right: 0" class="nav-link  gray-accesskeys-link-wcag-color" title="ακύρωση φίλτρου" href="#">
+                        <i class="fa fa-ban gray-accesskeys-link-wcag-color " aria-hidden="true" style="padding: 0"> </i>
+                    </a>
+                </li>
+                <a class="nav-link btn-xs btn-default" style="color: #4f5d73" title="άνοιγμα καταλόγου μαθημάτων" href="#" role="button" id="course_load">
+                    Μάθημα <span class="ml-1 fas fa-caret-down"></span>
+                </a>
+            </ul>
+
+        </div>
+    </nav>
+</header>

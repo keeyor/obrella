@@ -1,0 +1,1 @@
+mvn clean package && mkdir .\target\extracted && java -Djarmode=layertools -jar .\target\opendelos-root-app.jar extract --destination .\target\extracted && docker build -t opendelos-root-app . && docker tag opendelos-root-app  michaelgatzonis/opendelos-root-app:0.1 && docker push michaelgatzonis/opendelos-root-app:0.1

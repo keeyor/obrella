@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div th:fragment="contact_modal">
+    <div class="modal fade " id="contact_modal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true" style="max-height: 800px">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header pb-1">
+                    <h4 class="modal-title" id="modalTitle"> <i class="fas fa-at"></i> Επικοινωνία</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-1">
+                    <div class="container-fluid mt-2">
+                        <div class="row">
+                            <div class="col-3">
+                                <img th:src="@{/public/images/logos/noc_logo_01.png}" alt="" src=""/>
+                            </div>
+                            <div class="col-9">
+                                Την υπηρεσία υποστηρίζει το <a href="http://www.noc.uoa.gr/" target="_blank">Κέντρο Λειτουργίας και Διαχείρισης Δικτύου (ΚΛΕΙΔΙ)</a><br/>
+                                Μπορείτε να επικοινωνήσετε μαζί μας ηλεκτρονικά στην διεύθυνση  <strong>video[at]noc[dot]uoa[dot]gr</strong>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Κλείσιμο</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

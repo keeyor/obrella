@@ -1,0 +1,1 @@
+mvn clean package && mkdir .\target\extracted && java -Djarmode=layertools -jar .\target\opendelos-vod-app.jar extract --destination .\target\extracted && docker build -t opendelos-vod-app . && docker tag opendelos-vod-app  michaelgatzonis/opendelos-vod-app:0.1 && docker push michaelgatzonis/opendelos-vod-app:0.1

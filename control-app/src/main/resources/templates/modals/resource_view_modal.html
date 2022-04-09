@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="resource_view_modal">
+    <div class="modal fade" id="resource_view_modal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true" style="font-size: 1em">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">">
+            <div class="modal-content">
+                <div class="modal-header pb-1">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-1">
+                    <div class="container-fluid" id="dl_info">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Κλείσιμο</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

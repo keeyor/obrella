@@ -1,0 +1,224 @@
+#main-title h1{ 
+	font-family: 'Roboto Condensed', sans-serif;
+	font-size:28px;
+	line-height:35px;
+	display:table;
+	padding-left:20px;
+	display: -webkit-box;
+    -webkit-box-align: center;
+} 
+
+ #main-title-navbar h1{ 
+    margin: 0 0 10px;
+    line-height: 50px;
+    font-size: 20px;
+} 
+
+.dropdown-menu-large .dropdown-header {
+ 	color: #005ba3 !important;
+}
+
+#btn-carret-ondemand {
+	background-color:#004367 !important;
+  	border-color:#1385ba !important;
+}  
+#btn-carret-ondemand:hover {
+	background-color: #002133 !important;
+	border-color:#05609f !important;
+}
+
+.blue-link-wcag-color {
+	 color: #006A9B !important;
+	 background-color:transparent !important;
+ }
+
+.blue-link-wcag-color:hover {
+	 color: #004367 !important;
+	 background-color:transparent !important;
+ }
+
+.blue-btn-wcag-bgnd-color {
+	background-color: #006A9B !important;
+	border-color:#1385ba !important;
+}
+   
+.blue-btn-wcag-bgnd-color:hover {
+	background-color: #004367 !important;
+	border-color:#05609f !important;
+}
+
+.red-btn-wcag-bgnd-color {
+	background-color: #d33a35 !important;
+	border-color:#a62924 !important;
+}
+   
+.red-btn-wcag-bgnd-color:hover {
+	background-color: #a62924 !important;
+	border-color:#a62924 !important;
+}
+
+.green-btn-wcag-bgnd-color {
+	background-color: #347834 !important;
+	border-color:#006000 !important;
+}
+   
+.green-btn-wcag-bgnd-color:hover {
+	background-color: #006000 !important;
+	border-color:#006000 !important;
+}
+
+.green-future-btn-wcag-bgnd-color {
+	background-color: #208920 !important;
+	border-color: #0e6e0e !important;
+}
+   
+.green-future-btn-wcag-bgnd-color:hover {
+	background-color: #0e6e0e !important;
+	border-color:#0e6e0e !important;
+}
+
+/*
+
+.gray-link-wcag-color {
+ 	color: #555555 !important;
+}
+
+.gray-link-wcag-color:hover {
+	 color: #000000 !important;
+}
+
+.gray-link-wcag-color {
+	 color: #555555 !important;
+ 	 background-color:transparent !important;
+}
+
+.gray-link-wcag-color:hover {
+	 color: #000000 !important;
+}
+*/
+
+.transp-bg-color {
+	background-color:transparent !important;
+}
+
+.gray-accesskeys-link-wcag-color {
+	color: #555555 !important;
+	background-color:transparent !important;
+ }
+
+ .img-contr{
+ 	height:60px;
+ }
+
+ .article_presentation_content a{
+ 	color: #005ba3;
+    background-color:transparent;
+ }
+
+ .text-muted-wcag{
+ 	color: #575757;
+ }
+
+ /***************************************************************************
+ 
+ new styles 09/2015 
+ 
+ ************************************************************************************/
+ 
+ .wcag-black {
+	 color: #000;
+ }
+ 
+ .wcag-alert-success-color {
+	 color:#2a5d2a;
+ }
+ 
+ .wcag-alert-info-color {
+	 color:#113e5d;
+ }
+ 
+ .wcag-alert-warning-color {
+ 	color:#644720;
+ }
+ 
+ .wcag-alert-danger-color {
+ 	color:#7b1c1b;
+ }
+
+ .h1-login {
+	 font-size:24px;
+	 padding-bottom:20px;
+	 color:#666;
+ }
+ 
+ .dark-blue-btn-wcag-bgnd-color {
+	background-color: #00609e !important;
+	border-color:#1385ba !important;
+}
+   
+.dark-blue-btn-wcag-bgnd-color:hover {
+	background-color: #004b7b !important;
+	border-color:#05609f !important;
+}
+
+ .header-reset-password {
+	 font-size:24px;
+	 padding-bottom:20px;
+	 color:#575757;
+ }
+
+ .text-grey-wcag {
+	 color: #575757;
+ }
+ 
+ .transp-bg-color-search {
+	background-color:transparent !important;
+}
+
+ .transp-bg-color-search:hover {
+	background-color:#f5f5f5 !important;
+}
+
+ .gray-accesskeys-link-wcag-color:hover {
+	background-color:#f5f5f5 !important;
+ } 
+  
+ .italic-wcag {
+ font-style: italic;
+ }
+ 
+ a .fix-glyphicon{
+ 	margin-right:2px;
+ }
+ 
+ a:hover .fix-glyphicon{
+ 	margin-right:0px;
+ }
+ 
+  a .fix-glyphicon-after{
+ 	margin-right:0px;
+ }
+ 
+ a:hover .fix-glyphicon-after{
+ 	margin-right:2px;
+ }
+ 
+ #DisconnectModal {
+    background-color: transparent;
+    border:0px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    top: 30%;
+ }
+ 
+ .pagination li a {
+	color: #006A9B;
+	background-color:#FFF;
+}
+ 
+ .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus
+ {
+	color: #6a6a6a;
+ }
+ 

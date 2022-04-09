@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<div th:fragment="wait_realedit_modal">
+    <div class="modal fade" id="wait_realedit_modal" tabindex="-1"  aria-hidden="true" style="font-size: 0.9em">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" style="width: 550px">
+            <div class="modal-content">
+                <div class="modal-body pt-3">
+                    <div class="container-fluid" id="player_isprogress_container">
+                        <div>Η επεξεργασία του βίντεο είναι σε εξέλιξη<br/>
+                             Παρακαλώ περιμένετε</div>
+                        <div><img th:src="@{/public/images/icons/loading-x.gif}" alt="" src="" width="480px"/></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span th:with="uid=#{institution.identity}" class="mr-auto">
+                        <a th:href="@{/}"><img th:alt="#{default.institution.title}" width="48px"  class="mr-auto" th:src="@{'/public/images/logos/' + ${uid} + '.png'}" alt="" src=""></a>
+                         <span th:text="#{default.institution.title}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

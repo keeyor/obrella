@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="staffmember_select_modal">
+<div class="modal fade" id="StaffMemberSelectModal" tabindex="-1" role="dialog" aria-labelledby="StaffMemberSelectModalLabel" aria-hidden="true" style="padding-right: 17px">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="border: none">
+                <h5 class="modal-title ml-2" id="StaffMemberSelectModalLabel">
+                    <span class="fa fa-list-alt"></span> Κατάλογος Διδασκόντων<br/>
+                    <small>Εφαρμογή φίλτρου αναζήτησης</small>
+                </h5>
+            </div>
+            <div class="modal-body" style="font-size: 1em">
+                            <table id="StaffMembersSelectDataTable"  style="width:100%" class="compact row-border table-striped">
+                                <thead>
+                                <tr style="font-weight: 700">
+                                    <td></td>
+                                    <td>Όνομα</th>
+                                    <td>Ιδιότητα</td>
+                                    <td>Τμήμα</td>
+                                </tr>
+                                </thead>
+                            </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  id="applyStaffMemberFilter">Εφαρμογή</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+            </div>
+    </div>
+    </div>
+</div>
+</div>

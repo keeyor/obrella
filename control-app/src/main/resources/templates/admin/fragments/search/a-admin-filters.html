@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Header</title>
+</head>
+<div th:fragment="a-admin-filters" style="display: none" id="a-admin-filters">
+<div id="AllFilters" class="card" style="font-size: 0.9em">
+        <div th:class="${'card-header ' + color + '-btn-wcag-bgnd-color'}" style="color: whitesmoke">
+            <span>Διαχειριστικά Φίλτρα</span>
+        </div>
+        <div class="card-body">
+            <div class="mb-3" id="table-apfilter">
+                <div class="row py-2" style="border-bottom: black 1px solid">
+                    <div class="col-6 font-weight-bold" >
+                        <i class="fas fa-globe-europe mt-2"></i> Πρόσβαση
+                    </div>
+                    <div class="col-6 input-group pr-0"></div>
+                </div>
+                <div class="row" style="max-height: 300px;overflow-y: auto">
+                    <div class="col-12 pr-0">
+                        <table  class="compact" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3" id="table-typefilter" >
+                <div class="row py-2" style="border-bottom: black 1px solid">
+                    <div class="col-6 font-weight-bold">
+                        <i class="fab fa-hubspot"></i> Τύπος
+                    </div>
+                    <div class="col-6 input-group pr-0"></div>
+                </div>
+                <div class="row" style="max-height: 300px;overflow-y: auto">
+                    <div class="col-12 pr-0">
+                        <table class="compact" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="row py-2" style="border-bottom: black 1px solid">
+                    <div class="col-6 font-weight-bold">
+                        <i class="fas fa-laptop-medical"></i> Ελλείψεις*
+                    </div>
+                    <div class="col-6 input-group pr-0"></div>
+                </div>
+                <div class="row" style="max-height: 300px;overflow-y: auto">
+                    <div class="col-12 pr-0">
+                        <table id="table-tagfilters" class="compact" style="width:100%">
+                            <tr th:if="${resourceQuery.tag != 'ResApp'}">
+                                <td style="width: 100%" class="pl-0"><a id="ResAppLink"   style="color: #005cbf" href="#">Απαιτείται Αποδοχή</a></td>
+                            </tr>
+                            <tr th:if="${resourceQuery.tag != 'MetEdt'}">
+                                <td style="width: 100%" class="pl-0"><a id="MetEdtLink"  style="color: #005cbf"  href="#">Ελλιπή Μεταδεδομένα</a></td>
+                            </tr>
+                            <tr th:if="${resourceQuery.tag != 'PreUp'}">
+                                <td style="width: 100%" class="pl-0"><a id="PreUpLink"   style="color: #005cbf" href="#">Απαιτείται Μεταφόρτωση Παρουσίασης</a></td>
+                            </tr>
+                            <tr th:if="${resourceQuery.tag != 'MultUp'}">
+                                <td style="width: 100%" class="pl-0"><a id="MultUpLink" style="color: #005cbf"  href="#">Απαιτείται Μεταφόρτωση Βίντεο</a></td>
+                            </tr>
+                            <tr th:if="${resourceQuery.tag != 'MultEdt'}">
+                                <td style="width: 100%" class="pl-0"><a id="MultEdtLink" style="color: #005cbf"  href="#">Απαιτείται Επεξεργασία Βίντεο</a></td>
+                            </tr>
+                            <tr th:if="${resourceQuery.tag != 'MultRed'}">
+                                <td style="width: 100%" class="pl-0"><a id="MultRedLink"  style="color: #005cbf" href="#">Απαιτείται Πραγματική Κοπή</a></td>
+                            </tr>
+                            <tr th:if="${resourceQuery.tag != 'PreSyn'}">
+                                <td style="width: 100%" class="pl-0"><a id="PreSynLink"   style="color: #005cbf" href="#">Απαιτείται Συγχρονισμός</a></td>
+                            </tr>
+                            <tr>
+                                <td class="pl-0 pt-2" style="width: 100%;border-top:none">
+                                    <div class="text-muted"><i>* Αναζήτηση καταχωρήσεων που έχουν επισημανθεί με ελλείψεις</i></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--            <div class="mt-3">
+                    <table style="width: 100%" class="table" id="table-apfilter">
+                        <tr>
+                            <th class="pl-0 pt-0" style="width: 92%;border-top:none"><i class="fas fa-globe-europe mt-2"></i> Πρόσβαση</th>
+                            <th style="border-top:none;vertical-align: bottom">#</th>
+                        </tr>
+                    </table>
+                    <table style="width: 100%" class="table" id="table-typefilter">
+                        <tr>
+                            <th class="pl-0 pt-0" style="width: 92%;border-top:none"><i class="fab fa-hubspot"></i> Τύπος</th>
+                            <th style="border-top:none;vertical-align: bottom">#</th>
+                        </tr>
+                    </table>
+                </div>-->
+
+
+
+<!--
+
+    <div th:fragment="a-tag-filters" style="display: none" id="a-tag-filters">
+        &lt;!&ndash; @thymesVar id="resourceQuery" type="org.opendelos.dashboard.repository.resource.ResourceQuery"&ndash;&gt;
+        <div class="mt-4">
+            <table style="width: 100%" class="table" id="table-tagfilters">
+                <tr>
+                    <th class="pl-0 pt-0" style="width: 92%;border-top:none"><i class="fas fa-laptop-medical"></i> Ελλείψεις</th>
+                </tr>
+                <tr>
+                    <td class="pl-0 pt-0" style="width: 100%;border-top:none">
+                        <div class="text-muted"><i>* Αναζήτηση καταχωρήσεων που έχουν επισημανθεί με ελλείψεις</i></div>
+                    </td>
+                </tr>
+                <tr th:if="${resourceQuery.tag != 'ResApp'}">
+                    <td style="width: 100%" class="pl-0"><a id="ResAppLink"  href="#">Απαιτείται Αποδοχή</a></td>
+                </tr>
+                <tr th:if="${resourceQuery.tag != 'MetEdt'}">
+                    <td style="width: 100%" class="pl-0"><a id="MetEdtLink"  href="#">Ελλιπή Μεταδεδομένα</a></td>
+                </tr>
+                <tr th:if="${resourceQuery.tag != 'PreUp'}">
+                    <td style="width: 100%" class="pl-0"><a id="PreUpLink"  href="#">Απαιτείται Μεταφόρτωση</a></td>
+                </tr>
+                <tr th:if="${resourceQuery.tag != 'MultEdt'}">
+                    <td style="width: 100%" class="pl-0"><a id="MultEdtLink" href="#">Απαιτείται Επεξεργασία Βίντεο</a></td>
+                </tr>
+                <tr th:if="${resourceQuery.tag != 'MultRed'}">
+                    <td style="width: 100%" class="pl-0"><a id="MultRedLink" href="#">Απαιτείται Πραγματική Κοπή</a></td>
+                </tr>
+                <tr th:if="${resourceQuery.tag != 'PreSyn'}">
+                    <td style="width: 100%" class="pl-0"><a id="PreSynLink"  href="#">Απαιτείται Συγχρονισμός</a></td>
+                </tr>
+            </table>`
+        </div>
+    </div>
+-->
+
+</div>
+
+</html>

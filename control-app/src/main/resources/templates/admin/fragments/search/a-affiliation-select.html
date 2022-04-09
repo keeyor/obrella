@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<nav th:fragment="a-affiliation-select" class="navbar navbar-expand pl-0 pt-0 pb-0">
+    <div class="collapse navbar-collapse" id="navbarTop">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle gray-link-wcag-color p-0" href="#" id="department-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="text-muted">Τμήμα</span>
+                    <br/>
+                    <span th:unless="${affiliation_code== null}" class="h5" th:text="${affiliation}"></span>
+                    <span th:if="${affiliation_code == null}" class="h5" th:text="${'Επιλέξτε Ιδιότητα'}"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="affiliation-dropdown" id="affiliation-columns" style="font-size: 0.9em"></ul>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'OpenDelos Live:' + resource.title}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/checkbox-css/checkbox.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/navbar.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/player/player.css}"/>
+    <style>
+        .demo-wrap {
+            position: relative;
+        }
+        .demo-wrap:before {
+            content: ' ';
+            display: block;
+            position: absolute;
+            left: 0;
+            top: -20px;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+            background-image: url('/live/public/images/site-bg-wo.jpg');
+            background-repeat: no-repeat;
+            background-position: 50% 0;
+            background-size: cover;
+        }
+        .demo-content {
+            position: relative;
+        }
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body style="font-size: 0.88em">
+<!--@thymesVar id="resource" type="org.opendelos.model.resources.Resource"-->
+<input type="hidden" id="showIntro"    th:value="${resource.playerOptions.showLicenseIntro}"/>
+<input type="hidden" id="video_url"    th:value="${video_url}" size="100"/>
+<input type="hidden" id="intro_url"    th:value="${ccLicense.intro_url}" size="100"/>
+<input type="hidden" id="hasSlides"    th:value="${hasSlides}"/>
+<input type="hidden" id="slidesSynced" th:value="${slidesSynced}"/>
+<input type="hidden" id="duration"     th:value="${resource.realDuration}"/>
+<input type="hidden" id="showOverlay"  th:value="${resource.playerOptions.overlay}"/>
+<input type="hidden" id="resource_type"  th:value="${resource.type}"/>
+
+<input type="hidden" id="st_data" th:attr="data-ss=${resource.streamingServerId},data-st=${resource.streamId}"/>
+
+<div class="wrapper d-flex flex-column min-vh-100"  style="background-color: white">
+    <div th:replace="~{elements/a-topnav-41 :: a-topnav}"></div>
+    <div class="body flex-grow-1 px-3">
+                <div class="container-fluid" style="margin-top: 50px">
+                    <div class="row">
+                        <div class="offset-lg-1 col-lg-10 col-md-12">
+                            <div class="row">
+                                <div class="colp-2 colp-s-3 p-0"></div>
+                                <div class="colp-6 colp-s-9 mt-3" id="left-box">
+                                    <div id="video_wrapper" style="margin: 0 auto;" >
+                                        <div th:replace="~{fragments/player/u-videoplayer :: u-videoplayer}">Video Player</div>
+                                        <div id="overlay_1" style="visibility:hidden" th:if="${resource.course != null}" th:text="${resource.supervisor.name}"></div>
+                                        <div id="overlay_2" style="visibility:hidden" th:if="${resource.getEvent != null}" th:text="${resource.classroomName}"></div>
+                                    </div>
+                                </div>
+                                <div class="colp-4 text_panel">
+                                    <h5 class="blue-link-wcag-color">
+                                        <span th:if="${#strings.substringBefore(resource.title,'(') != null}" th:text="${#strings.substringBefore(resource.title,'(')}"></span>
+                                        <span th:unless="${#strings.substringBefore(resource.title,'(') != null}" th:text="${resource.title}"></span>
+                                        <span th:if="${resource.partNumber != 0}" th:text="${' / Μέρος ' + resource.partNumber}"></span>
+                                    </h5>
+                                    <h6>
+                                        <th:block th:if="${resource.course != null}">
+                                            <div class="mb-2">
+                                                <strong>Μάθημα:</strong> <span th:text="${resource.course.title + ' - '}"></span>
+                                                <strong>Τμήμα </strong> <span th:text="${resource.course.department.title}"></span>
+                                            </div>
+                                            <div><strong>Διδάσκων:</strong> <span th:text="${resource.supervisor.name + ', ' + resource.supervisor.affiliation}"></span></div>
+                                        </th:block>
+                                    </h6>
+                                    <ul class="pl-3">
+                                        <li th:if="${resource.getEvent != null}">
+                                            <div th:if="${resource.getEvent.responsibleUnit != null}">
+                                                                                      Οργάνωση:
+                                                                                     <span th:each="unit,iStat: ${resource.getEvent.responsibleUnit}">
+                                                                                         <span th:text="${iStat.first}? '' : ', '"></span>
+                                                                                         <span th:if="${#strings.trim(unit.structureType) == 'DEPARTMENT'}"> Τμήμα</span>
+                                                                                         <span th:if="${#strings.trim(unit.structureType) == 'SCHOOL'}"> Σχολή </span>
+                                                                                         <span th:text="${unit.title + ' '}"></span>
+                                                                                     </span>
+                                            </div>
+                                            <div th:if="${resource.getEvent.responsiblePerson != null}">
+                                                Υπεύθυνος Εκδήλωσης: <b><span th:text="${resource.getEvent.responsiblePerson.name}"></span></b>
+                                            </div>
+                                        </li>
+                                        <li class="pt-2">
+                                            Ημερομηνία:
+                                             <span th:replace="fragments/format-resource-date.html:: formatDate(field=${resource.date})"></span>
+                                        </li>
+                                        <li>
+                                            'Εναρξη:
+                                            <span th:replace="fragments/format-resource-date.html:: formatDateTime (field=${resource.date})"></span> |
+                                             Διάρκεια:
+                                                <span th:if="${resource.realDuration != null}">
+                                                  <span th:text="${resource.realDuration}"></span>
+                                                </span>
+                                                <span th:unless="${resource.realDuration != null}">
+                                                      <span th:if="${resource.resourceAccess != null}">
+                                                           <span th:text="${resource.resourceAccess.duration}"></span>
+                                                      </span>
+                                                </span>
+                                        </li>
+                                        <li>
+                                            Χρόνος που απομένει:
+                                            <input type="hidden" id="time_left_sec" th:value="${seconds_to_end}">
+                                            <span id="time_left_badge">?</span>
+                                        </li>
+                                        <li>
+                                            Ενεργές Συνεδρίες:
+                                            <span id="stream_conn_badge">?</span>
+                                        </li>
+                                    </ul>
+                                   <!-- <canvas id="myChart" width="200" height="100"></canvas>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+    <div th:replace="~{fragments/footer-411 :: footer}">Footer</div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
+
+<script th:src="@{/css/bootstrap-switch/bootstrap-switch.min.js}" type="application/javascript"></script>
+<script th:src="@{/lib/hls/hls.min.js}"></script>
+
+<script th:src="@{/js/live_player/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/live_player/dashboard.player.js}" type="application/javascript"></script>
+<script th:src="@{/js/live_player/dashboard.wowza.js}" type="application/javascript"></script>
+<!--<script th:src="@{/js/live_player/dashboard.chart.js}" type="application/javascript"></script>-->
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+
+<script th:src="@{https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js}" type="text/javascript" ></script>
+</body>
+</html>

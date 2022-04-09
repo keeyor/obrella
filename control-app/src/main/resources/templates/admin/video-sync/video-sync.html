@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <!-- nickorfas -->
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/richLecture_addons/css/style_synchronizer.css}"/>
+
+    <title>Video Editor</title>
+    <style>
+    </style>
+</head>
+<body class="c-app" id="top_mark">
+        <div class="c-wrapper">
+            <div th:replace="~{admin/fragments/a-topnav :: a-topnav}"></div>
+            <nav class="navbar navbar-expand navbar-light py-0" style="background-color:white;margin-top: 50px!important;">
+                <div class="collapse navbar-collapse" id="subBar">
+                    <div class="navbar-nav">
+                        Περιεχόμενο ::
+                    </div>
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" th:href="@{/admin/search}"><span class="fas fa-search mr-1"></span>Αναζήτηση <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link " th:href="@{/admin/sevents}"><span class="fas fa-calendar-alt mr-1"></span>Κατάλογος Εκδηλώσεων</a>
+                    </div>
+                    <ul class="c-header-nav ml-auto" style="min-height: 20px!important">
+                    </ul>
+                </div>
+            </nav>
+            <div class="header-divider py-0"></div>
+
+            <div class="c-body">
+                <main class="c-main pt-0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12" id="content">
+                                <!-- Main content here :: VIDEO SYNC-->
+                                <div th:replace="~{admin/video-sync/video-sync-content :: video-sync-content}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <footer class="c-footer">
+                <!-- Footer content here -->
+            </footer>
+        </div>
+
+<div th:replace="~{modals/logout_modal :: logout_modal}"></div>
+<div th:replace="~{admin/video-sync/modals/show_slide_modal :: show_slide_modal}"></div>
+<!-- Optional JavaScript -->
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+<script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.widget.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.mouse.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.core.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery-ui-1.10.3.custom/development-bundle/ui/minified/jquery.ui.draggable.min.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/ext_js/jquery.mousewheel.js}"></script>
+
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+<!-- custom -->
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/lang/el.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/html5synchronizer/html5synchronizer.js}"></script>
+<script type="text/javascript"  th:src="@{/lib/richLecture_addons/js/html5synchronizer/html5script.js}"></script>
+
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+</body>

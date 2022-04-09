@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" >
+
+<!--@thymesVar id="HR" type="org.opendelos.dashboard.repository.resource.QueryResourceResults"-->
+<div th:fragment="u-history-results">
+    <div class="row mt-1" style="border-bottom: #cccccc 1px solid">
+        <div class="col-lg-2 col-md-12 mb-2" style="font-size: 1.1em">
+            <b>Τελευταία Ενημέρωση</b><br/>
+        </div>
+    </div>
+    <div th:each="lecture, iStat: ${HR.searchResultList}"
+                         th:style="${iStat.odd}? ''">
+                                <div class="row mt-1" style="border-bottom: #cccccc 1px solid">
+                                    <div class="col-lg-2 col-md-12" style="font-size: 1.2em">
+                                       <div th:replace="fragments/format-resource-date.html:: formatDateTimeCustom(field=${lecture.dateModified})"></div>
+                                    </div>
+                                    <div class="col-lg-7 col-md-12">
+                                        <div style="font-size: 1.2em;color:#005cbf;font-weight: bold">
+                                            <span th:if="${#strings.substringBefore(lecture.title,'(') != null}">
+                                                            <span th:text="${#strings.substringBefore(lecture.title,'(')}"></span>
+                                             </span>
+                                            <span th:unless="${#strings.substringBefore(lecture.title,'(') != null}">
+                                                            <span th:text="${lecture.title}"></span>
+                                             </span>
+                                            <span th:if="${lecture.partNumber != 0}">
+                                                         <span th:text="${' / Μέρος ' + lecture.partNumber}"></span>
+                                                     </span>
+                                            <span th:if="${lecture.course != null}" style="font-size: 0.9em;color:black" class="mb-2">
+                                                        <span class="font-weight-bolder" th:text="${' (' + #strings.trim(lecture.supervisor.name)}"></span>
+                                                        <span th:text="${', ' + lecture.supervisor.affiliation + ' )'}"></span>
+                                            </span>
+                                        </div>
+                                        <div th:if="${lecture.course != null}" class="mb-2 font-weight-bolder">
+                                            <span th:text="${lecture.course.title + ',' + ' Τμήμα ' + lecture.department.title}"></span>
+                                        </div>
+                                        <div th:if="${lecture.getEvent != null}" style="color: maroon" class="mb-2 font-weight-bolder">
+                                            <span th:text="${lecture.getEvent.title}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-12">
+                                        <span>
+                                            <a class="btn btn-sm blue-btn-wcag-bgnd-color" data-toggle="modal" th:attr="data-lec=${lecture.id}" data-target="#resource_view_modal"
+                                               style="margin-bottom:2px;color:white">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                        </span>
+                                        <span th:if="${lecture.rteStatus == null || (lecture.rteStatus.status != 'DRE' && lecture.rteStatus.status != 'DARE')}">
+                                             <span th:if="${lecture.type == 'COURSE'}">
+                                                <a  class="btn btn-sm blue-btn-wcag-bgnd-color" style="margin-bottom:2px;color:white" th:href="@{/admin/lecture-editor(id=${lecture.id})}">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </span>
+                                            <span th:if="${lecture.type == 'EVENT'}">
+                                                <a class="btn btn-sm blue-btn-wcag-bgnd-color" style="margin-bottom:2px;color:white" th:href="@{/admin/event-editor(id=${lecture.id})}">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </span>
+                                        </span>
+                                        <span th:if="${lecture.rteStatus != null && lecture.rteStatus.status == 'DARE'}">
+                                            <a id="play_edited_video" th:attr="data-info=${lecture.id + '::' + lecture.title}" title="απαιτείται έγκριση ή απόρριψη κοπής" class="btn btn-sm btn-warning" style="margin-bottom:2px;color:white" href="#">
+                                                <i class="far fa-thumbs-up"></i>
+                                            </a>
+                                        </span>
+                                        <span th:if="${lecture.rteStatus != null && lecture.rteStatus.status == 'DRE'}">
+                                            <a title="κοπή σε εξέλιξη" class="btn btn-sm btn-warning" style="margin-bottom:2px;color:white" href="#">
+                                                <i class="far fa-thumbs-up"></i>
+                                            </a>
+                                        </span>
+                                        <span th:if="${lecture.status.inclMultimedia == 1}">
+                                            <a role="button" class="btn btn-sm blue-btn-wcag-bgnd-color" style="margin-bottom:2px;color:white" target="_blank"
+                                               th:href="@{/player(id=${lecture.id})}">
+                                                <i class="fas fa-play"></i>
+                                            </a>
+                                        </span>
+                                        <span th:unless="${lecture.status.inclMultimedia == 1}">
+                                            <a role="button" class="btn btn-sm blue-btn-wcag-bgnd-color disabled" aria-disabled="true" style="margin-bottom:2px;color:white" target="_blank"
+                                                href="#">
+                                                <i class="fas fa-play"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+
+    </div>
+</div>

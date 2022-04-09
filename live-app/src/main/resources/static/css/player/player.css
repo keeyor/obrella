@@ -1,0 +1,192 @@
+
+@media (min-width: 641px) {
+    .text_panel {
+        border-left: #006A9B 2px solid;
+        margin-top: 20px;
+    }
+}
+@media (max-width: 639px) {
+
+}
+
+* {
+    box-sizing: border-box;
+}
+
+video {
+    width: 100%;
+    height: auto;
+}
+
+.rowp:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+[class*="colp-"] {
+    float: left;
+    padding: 15px;
+    width: 100%;
+}
+
+ .carousel {
+     border:1px solid  #ffffff;
+     -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+     -moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+     box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.2);
+ }
+
+@media only screen and (min-width: 768px) {
+    .colp-s-1 {width: 8.33%;}
+    .colp-s-2 {width: 16.66%;}
+    .colp-s-3 {width: 25%;}
+    .colp-s-4 {width: 33.33%;}
+    .colp-s-5 {width: 41.66%;}
+    .colp-s-6 {width: 50%;}
+    .colp-s-7 {width: 58.33%;}
+    .colp-s-8 {width: 66.66%;}
+    .colp-s-9 {width: 75%;}
+    .colp-s-10 {width: 83.33%;}
+    .colp-s-11 {width: 91.66%;}
+    .colp-s-12 {width: 100%;}
+}
+
+@media only screen and (min-width: 1024px) {
+    .colp-1 {width: 8.33%;}
+    .colp-2 {width: 16.66%;}
+    .colp-3 {width: 25%;}
+    .colp-4 {width: 33.33%;}
+    .colp-5 {width: 41.66%;}
+    .colp-6 {width: 50%;}
+    .colp-7 {width: 58.33%;}
+    .colp-8 {width: 66.66%;}
+    .colp-9 {width: 75%;}
+    .colp-10 {width: 83.33%;}
+    .colp-11 {width: 91.66%;}
+    .colp-12 {width: 100%;}
+}
+
+/*@media only screen and (min-width: 600px) {
+    .colp-s-1 {width: 8.33%;}
+    .colp-s-2 {width: 16.66%;}
+    .colp-s-3 {width: 25%;}
+    .colp-s-4 {width: 33.33%;}
+    .colp-s-5 {width: 41.66%;}
+    .colp-s-6 {width: 50%;}
+    .colp-s-7 {width: 58.33%;}
+    .colp-s-8 {width: 66.66%;}
+    .colp-s-9 {width: 75%;}
+    .colp-s-10 {width: 83.33%;}
+    .colp-s-11 {width: 91.66%;}
+    .colp-s-12 {width: 100%;}
+}
+
+@media only screen and (min-width: 768px) {
+    .colp-1 {width: 8.33%;}
+    .colp-2 {width: 16.66%;}
+    .colp-3 {width: 25%;}
+    .colp-4 {width: 33.33%;}
+    .colp-5 {width: 41.66%;}
+    .colp-6 {width: 50%;}
+    .colp-7 {width: 58.33%;}
+    .colp-8 {width: 66.66%;}
+    .colp-9 {width: 75%;}
+    .colp-10 {width: 83.33%;}
+    .colp-11 {width: 91.66%;}
+    .colp-12 {width: 100%;}
+}*/
+
+@media only screen and (max-width: 1024px) {
+    .institute-text { display: none }
+}
+
+html {
+    font-family: "Lucida Sans", sans-serif;
+}
+
+.header {
+    background-color: #9933cc;
+    color: #ffffff;
+    padding: 15px;
+}
+
+.menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+  /*  font-size: 0.9em;*/
+    padding: 8px;
+    margin-bottom: 7px;
+    background-color: #cbd3da;
+    color: black;
+/*    background-color: #33b5e5;
+    color: #ffffff;*/
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.menu li:hover {
+   /* background-color: #0099cc;*/
+}
+
+.aside {
+    /* font-size: 0.9em;*/
+    /*background-color: #cbd3da;*/
+    color: black;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 7px;
+    padding-right: 7px;
+    /*box-shadow: 0 2px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);*/
+    max-width: 800px;
+}
+
+.footer {
+    background-color: #FFFFFF;
+    color: black;
+    text-align: center;
+   /* font-size: 12px;*/
+    /*padding: 15px;*/
+}
+
+#overlay_1 {
+    position: relative;
+    bottom: 215px;
+    color: #FFF;
+    text-align: left;
+    font-size: 20px;
+    background-color: rgba(221, 221, 221, 0.3);
+    padding: 10px 10px;
+    z-index: 2147483647;
+    visibility: hidden;
+}
+#overlay_2 {
+    position: relative;
+    bottom: 215px;
+    color: #FFF;
+    text-align: left;
+    font-size: 20px;
+    background-color: rgba(221, 221, 221, 0.3);
+    padding: 10px 10px;
+    z-index: 2147483647;
+    visibility: hidden;
+}
+
+#channel_overlay {
+    position: relative;
+    bottom: 215px;
+    color: #FFF;
+    text-align: left;
+    font-size: 20px;
+    background-color: black;
+    padding: 10px 10px;
+    z-index: 2147483647;
+    visibility: hidden;
+}
+
+#player {
+    z-index: 1;
+}

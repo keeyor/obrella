@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>OpenDelos Live</title>
+    <link rel="stylesheet" th:href="@{/css/global41.css}"/>
+    <link rel="stylesheet" th:href="@{/css/datatables-dp.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+
+    <!-- font awesome 5 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fa5/css/all.css}"/>
+    <!-- classic theme datatable with various plugins -->
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
+
+    <!-- bootstrap-toggle -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-toggle/bootstrap-toggle.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <!-- loader -->
+    <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+</head>
+<body style="font-size: 0.89em">
+<input type="hidden" id="signInUserid" th:value="${user.id}"/>
+<!--@thymesVar id="department" type="org.opendelos.model.structure.Department" -->
+<!--@thymesVar id="school" type="org.opendelos.model.structure.School" -->
+<input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
+<input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
+<input th:if="${department != null}" type="hidden" id="department_id" th:value="${department.id}"/>
+<input th:if="${department != null}" type="hidden" id="department_name" th:value="${department.title}"/>
+<input th:if="${school != null}" type="hidden" id="school_id" th:value="${school.id}"/>
+<input th:if="${school != null}" type="hidden" id="school_name" th:value="${school.title}"/>
+<!--<div th:replace="~{admin/fragments/a-sidebar-department :: a-sidebar}"></div>-->
+<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div class="wrapper d-flex flex-column min-vh-100 bg-light" >
+    <div class="loading-overlay"></div>
+    <div class="loading-overlay-image-container">
+        <img th:src="@{/public/images/icons/512px-Loader.gif}" class="loading-overlay-img" alt=""/>
+    </div>
+    <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+            <ul class="header-nav d-none d-md-flex">
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/courses}">Μαθήματα</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/department/staff}">Προσωπικό</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/programs}">Προγράμματα Σπουδών</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/acalendar}">Ακαδημαϊκό Ημερολόγιο</a></li>
+            </ul>
+            <ul class="header-nav ms-auto">
+
+            </ul>
+        </div>
+        <div class="header-divider"></div>
+        <div class="container-fluid">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb my-0 ms-2">
+                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item active"><span>Προσωπικό</span></li>
+                </ol>
+            </nav>
+        </div>
+    </header>
+    <div class="body flex-grow-1 px-3">
+        <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-start" >
+                                            <div th:replace="~{admin/fragments/search/a-department-select :: a-deparment-select}"></div>
+                                        </div>
+                                        <div class="text-muted font-italic">
+                                            Διαχείριση στοιχείων τμήματος: διδακτικό προσωπικό
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white"  id="newStaffBt" role="button">
+                                            <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέο Μέλος Προσωπικού
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" id="staff_card" style="display: none">
+                                    <h4>Προσωπικό</h4>
+                                    <div class="text-muted">Βρέθηκαν <span id="count_staff_results"></span> μέλη προσωπικού</div>
+                                    <!-- FILTERS -->
+                                    <div class="card-body pb-0 px-0 pt-2"  style="border-top: #efefef 2px solid">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" style="margin-top: 40px">
+                                              <table id="staffDataTable"  style="width:100%" class="row-border table-striped">
+                                                 <thead>
+                                                    <tr style="font-weight: 700">
+                                                        <td style="height: 12px;max-width: 20px"></td>
+                                                        <td>#</td>
+                                                        <td></td>
+                                                        <td>uid</td>
+                                                        <td>Όνομα - Ιδιότητα</th>
+                                                        <td>Όνομα (en)</td>
+                                                        <td># Μαθήματα</td>
+                                                        <td>Ιδιότητα</td>
+                                                        <td>E-mail</td>
+                                                        <td style="width: 55px;"></td>
+                                                        <td style="height: 12px;width: 20px"></td>
+                                                    </tr>
+                                                 </thead>
+                                              </table>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="card-body" id="staff_edit_card" style="display: none">
+
+                                  <div class="card">
+                                      <div class="card-header">
+                                          <span>
+                                            <h6 class="modal-title" id="staffModalLabel"></h6>
+                                            <input type="hidden" id="st_rowIdx_edited" value=""/>
+                                          </span>
+                                          <span class="float-end">
+                                              <button type="button" class="btn btn-secondary" id="closeUpdateStaff"><i class="fas fa-undo"></i>  Επιστροφή</button>
+                                                            <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateStaff"><i class="far fa-save"></i>  Αποθήκευση</button>
+                                          </span>
+                                      </div>
+                                      <div class="card-body">
+                                          <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
+                                          <div class="card card-body" style="background-color: #f7f7f9;border: none">
+                                              <form id="staff_form" name="staff_form">
+                                                  <input type="hidden" id="staff_edit_mode" value=""/>
+                                                  <input type="hidden" id="staff_id" value=""/>
+                                                  <div class="form-group row mt-3">
+                                                      <label for="staff_name" class="col-sm-2 col-form-label"><b>Όνομα*</b></label>
+                                                      <div class="col-sm-7">
+                                                          <input type="text" id="staff_name" name="staff_name" class="form-control"/>
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group row mt-3">
+                                                      <label for="staff_altname" class="col-sm-2 col-form-label">Όνομα (en)</label>
+                                                      <div class="col-sm-7">
+                                                          <input type="text" id="staff_altname"  name="staff_altname" class="form-control"/>
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group row mt-3">
+                                                      <label for="staff_aff" class="col-sm-2 col-form-label"><b>Ιδιότητα*</b></label>
+                                                      <div class="col-sm-7">
+                                                          <input type="text" id="staff_aff"  name="staff_aff" class="form-control"/>
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group row mt-3">
+                                                      <label for="staff_department" class="col-sm-2 col-form-label"><b>Τμήμα*</b></label>
+                                                      <div class="col-sm-4">
+                                                          <input type="text" id="staff_department" disabled class="form-control"/>
+                                                      </div>
+                                                  </div>
+                                                  <!-- Διαχειριστής -->
+                                                  <div class="form-group row mt-3">
+                                                      <label for="staff_department" class="col-sm-2 col-form-label"><b>Διαχειριστής*</b></label>
+                                                      <div class="col-sm-7">
+                                                          <div class="no_manager_info mb-2" style="font-size: 1em;color: black;font-weight: normal">
+                                                              <i class="fas fa-info-circle"></i>
+                                                              Μπορείτε να παραχωρήσετε στο χρήστη το δικαίωμα του Διαχειριστή.
+                                                              Η επεξεργασία του δικαιώματος μπορεί να γίνει μόνο από τη σελίδα "Διαχειριστές"<br/>
+                                                              [σημ: Η ενεργοποίηση του δικαιώματος από μόνη της, δεν επιφέρει αλλαγές στα δικαιώματα του χρήστη]
+                                                          </div>
+                                                          <div class="manager_warning mb-2" style="font-size: 0.9em;color: black;font-weight: normal">
+                                                              <i class="fas fa-info-circle mb-2"></i>
+                                                              Έχει παραχωρηθεί στο χρήστη το δικαίωμα του Διαχειριστή. Η ανάκληση ή τροποποίηση του δικαιώματος μπορεί να γίνει μόνο από τη σελίδα "Διαχειριστές"
+                                                          </div>
+                                                          <input id="staff_manager_toggle" name="staff_manager_toggle" type="checkbox">
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group  mt-3 row title_change_warning">
+                                                      <label class="col-sm-2 col-form-label">&nbsp;</label>
+                                                      <div class="col-sm-7">
+                                                          <div style="font-size: 1em;color: red;font-weight: bold"><i style="color:red" class="fas fa-exclamation-triangle"></i> ΠΡΟΣΟΧΗ:<br/>
+                                                              <span style="color:black;font-weight: normal">
+                                                                                            Ο κωδικός ταυτοποίησης <b>uid</b> του μέλους είναι το username του χρήστη στην υπηρεσία. Η καταχώρηση πρέπει να ακριβώς ίδια με αυτή που υπάρχει στη βάση δεδομένων του Ιδρύματος (SSO), αλλιώς η είσοδος στο σύστημα θα αποτύχει.
+                                                                                            Η Τροποποίηση του uid συνιστάται <b>ΜΟΝΟ</b> για τη διόρθωση τυπογραφικών λαθών ή αν αυτό έχει αλλάξει σε προγενέστερο χρόνο στη βάση δεδομένων του Ιδρύματος.
+                                                                                        </span>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group row mt-3">
+                                                      <label for="staff_email" class="col-sm-2 col-form-label"><b>Κωδικός Ταυτοποίησης (uid)</b></label>
+                                                      <div class="col-sm-4">
+                                                          <input type="text" id="staff_uid"  name="staff_email" class="form-control"/>
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group row mt-3">
+                                                      <label for="staff_email" class="col-sm-2 col-form-label"><b>E-mail</b></label>
+                                                      <div class="col-sm-4">
+                                                          <input type="text" id="staff_email"  name="staff_email" class="form-control"/>
+                                                      </div>
+                                                  </div>
+                                                  <!-- Ανάθεση Μαθημάτων -->
+                                                  <div class="form-group row mt-3">
+                                                      <label class="col-sm-2 col-form-label"><b>Διδασκόμενα Μαθήματα</b></label>
+                                                      <div class="col-sm-7 text-muted">
+                                                          <i class="far fa-question-circle"></i>
+                                                          Στη λίστα που ακολουθεί, εμφανίζονται τα μαθήματα που διδάσκει το επιλεγμένο μέλος του προσωπικού. Μπορείτε να αφαιρέσετε μαθήματα
+                                                          κάνοντας κλίκ στο αντίστοιχο κουμπί αφαίρεσης <i class="fas fa-minus"></i>. Για να προσθέσετε μαθήματα, κάντε κλίκ στο κουμπί
+                                                          'Προσθήκη'΄. Μπορείτε να επιλέξετε μαθήματα από όλα τα τμήματα του ιδρύματος.
+                                                          <b>Οι τροποποιήσεις στα διδασκόμενα μαθήματα εφαρμόζονται άμεσα και ανεξάρτητα από την αποθήκευση της εγγραφής</b>
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group row  mt-3 course_assign_warning" style="">
+                                                      <label class="col-sm-2 col-form-label"></label>
+                                                      <div class="col-sm-7" style="font-size: 1em;color:orangered">
+                                                          <i class="fas fa-exclamation-triangle"></i>
+                                                          Αποθηκεύστε την εγγραφή για να εμφανιστούν οι επιλογές μαθημάτων (Διδασκόμενα Μαθήματα)
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group row  mt-3 course_assign">
+                                                      <label for="staff_email" class="col-sm-2 col-form-label"></label>
+                                                      <div class="col-sm-7">
+                                                          <div class="table-responsive">
+                                                              <table id="staffCoursesDataTable" style="width:100%" class=" compact">
+                                                                  <thead>
+                                                                  <tr>
+                                                                      <th scope="row" style="height: 12px;width: 20px"></th>
+                                                                      <th scope="row">τίτλος</th>
+                                                                      <th scope="row">τμήμα</th>
+                                                                      <th scope="row">πρόγραμμα</th>
+                                                                      <th scope="row" style="width: 55px;"></th>
+                                                                  </tr>
+                                                                  </thead>
+                                                              </table>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </form>
+                                          </div> <!-- card body -->
+                                      </div>
+                                      <div class="card-footer">
+                                          <button type="button" class="btn btn-danger"  id="deleteStaffBt"><i class="fas fa-ban"></i> Διαγραφή</button>
+                                      </div>
+                                  </div>
+
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <footer class="c-footer">
+        <i class="far fa-copyright mr-1"></i> <span th:text="#{default.institution.title}"></span>
+    </footer>
+</div>
+<div th:replace="~{admin/departments/department-modals/course_select_modal :: course_select_modal}"></div>
+
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+
+
+
+<!-- Optional JavaScript -->
+<script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
+
+<!-- bootstrap-toggle -->
+<script th:src="@{/lib/bootstrap-toggle/bootstrap-toggle.min.js}"></script>
+
+<script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+
+<script th:src="@{/js/admin/departments/staff/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.institutions.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.schools.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.departments.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.courses.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.programs.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.staffmembers.js}" type="application/javascript"></script>
+<script th:src="@{/js/admin/departments/dashboard.classrooms.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/search/el.js}" type="application/javascript"></script>
+
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+<!-- loader -->
+<script th:src="@{/lib/loader/loader.js}"></script>
+</body>
+</html>

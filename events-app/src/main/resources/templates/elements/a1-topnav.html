@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<header th:fragment="a-topnav">
+    <nav class="navbar navbar-expand navbar-dark py-0" style="background-color: black;color:white;font-size: 1.1em">
+        <div class="container-fluid mt-0">
+                <div class="offset-lg-1 col-lg-10">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav1" aria-controls="navbarNav1" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav1">
+                        <div class="navbar-nav">
+                            <a class="nav-item nav-link active" th:href="@{/}" th:title="#{menu.homepage}">
+                                <i class="fas fa-home mr-1 hide-lg"></i>
+                                <span class="hide-md"  th:text="#{menu.homepage}">Αρχική</span>
+                            </a>
+                            <a class="nav-item nav-link active" th:href="@{/search-uas}" th:title="#{ea_uas}">
+                                <i class="fas fa-users mr-1 hide-lg"></i>
+                                <span class="hide-md" th:text="#{ea_uas}">Πανεπιστήμιο και Κοινωνία</span>
+                            </a>
+                            <a class="nav-item nav-link active" th:href="@{/search-evs}" th:title="#{ea_es}">
+                                <i class="fas fa-graduation-cap mr-1  hide-lg"></i>
+                                <span class="hide-md" th:text="#{ea_es}">Εκδηλώσεις</span>
+                            </a>
+                            <a class="nav-item nav-link active" th:href="@{/search}" th:title="#{menu.advsearch}">
+                                <i class="fas fa-search mr-1  hide-lg"></i>
+                                <span class="hide-md" th:text="#{menu.advsearch}">Σύνθετη Αναζήτηση</span>
+                            </a>
+                            <a class="nav-item nav-link active" th:href="@{/calendar}" th:title="#{menu.calendar}">
+                                <i class="fas fa-calendar-alt mr-1  hide-lg"></i>
+                                <span class="hide-md" th:text="#{menu.calendar}">Ημερολόγιο</span>
+                            </a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+ </nav>
+</header>

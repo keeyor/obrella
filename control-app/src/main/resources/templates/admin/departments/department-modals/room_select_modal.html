@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="room_select_modal">
+    <div class="modal fade" id="roomSelectModal" tabindex="-1" role="dialog" aria-labelledby="roomSelectModalLabel" aria-hidden="true" style="padding-right: 17px">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title ml-2" id="roomSelectModalLabel"></h6>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                    <input type="hidden" id="rm_rowIdx_edited" value=""/>
+                    <input type="hidden" id="default_dp_id" value=""/>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="text-muted font-italic">Επιλέξτε τις <b>αίθουσες</b> επιθυμείτε να προσθέσετε στη λίστα των διαθέσιμων χώρων διδασκαλίας πατήστε 'Προσθήκη Επιλεγμένων'. Οι αίθουσες που είναι ήδη διαθέσιμες, δεν εμφανίζονται.
+                        </div>
+                            <div class="table-responsive mt-3">
+                                <table id="roomSelectDataTable" style="width:100%"  class="row-border table-hover compact">
+                                    <thead>
+                                    <tr class="text-muted" style="font-size: 0.9em">
+                                        <td style="height: 12px;width: 20px"></td>
+                                        <td style="width: 40%;"></td>
+                                        <td style="width: 150px">κωδικός</td>
+                                        <td>Περιγραφή</td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"  id="addAssignedRooms">Προσθήκη Επιλεγμένων</button>
+                    <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Ακύρωση</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

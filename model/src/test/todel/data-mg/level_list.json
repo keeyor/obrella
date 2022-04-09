@@ -1,0 +1,11 @@
+[ {
+  "id" : 1,
+  "name" : "Γενική",
+  "description" : null,
+  "value" : 1
+}, {
+  "id" : 2,
+  "name" : "Εξειδικευμένη",
+  "description" : null,
+  "value" : 2
+} ]

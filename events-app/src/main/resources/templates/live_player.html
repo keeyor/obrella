@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'ΕΚΠΑ :: LIVE ' + resource.title}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+
+  <!--  <link rel="stylesheet" type="text/css" th:href="@{/css/checkbox-css/checkbox.min.css}"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/navbar.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/player/player.css}"/>
+    <style>
+        .demo-wrap {
+            position: relative;
+        }
+        .demo-wrap:before {
+            content: ' ';
+            display: block;
+            position: absolute;
+            left: 0;
+            top: -20px;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+            /*background-image: url('/public/images/site-bg-wo.jpg');*/
+            background-repeat: no-repeat;
+            background-position: 50% 0;
+            background-size: cover;
+        }
+        .demo-content {
+            position: relative;
+        }
+    </style>
+</head>
+<body class="c-app demo-wrap" style="background-color: white">
+<!--@thymesVar id="resource" type="org.opendelos.model.resources.Resource"-->
+<input type="hidden" id="showIntro"    th:value="${resource.playerOptions.showLicenseIntro}"/>
+<input type="hidden" id="video_url"    th:value="${video_url}" size="100"/>
+<input type="hidden" id="intro_url"    th:value="${ccLicense.intro_url}" size="100"/>
+<input type="hidden" id="hasSlides"    th:value="${hasSlides}"/>
+<input type="hidden" id="slidesSynced" th:value="${slidesSynced}"/>
+<input type="hidden" id="duration"     th:value="${resource.realDuration}"/>
+<input type="hidden" id="showOverlay"  th:value="${resource.playerOptions.overlay}"/>
+<input type="hidden" id="resource_type"  th:value="${resource.type}"/>
+
+<input type="hidden" id="st_data" th:attr="data-ss=${resource.streamingServerId},data-st=${resource.streamId}"/>
+
+<div class="c-wrapper">
+    <div th:replace="~{elements/a-topnav :: a-topnav}"></div>
+    <div class="c-body">
+        <main class="c-main pt-1">
+                <div class="container-fluid" style="margin-top: 60px">
+                    <div class="row">
+                        <div class="offset-lg-1 col-lg-10 col-md-12">
+                            <!-- HEADER -->
+                            <div class="row">
+                                <div class="colp-2"></div>
+                                <div class="colp-6">
+                                    <h4 class="blue-link-wcag-color">
+                                        <span th:if="${#strings.substringBefore(resource.title,'(') != null}" th:text="${#strings.substringBefore(resource.title,'(')}"></span>
+                                        <span th:unless="${#strings.substringBefore(resource.title,'(') != null}" th:text="${resource.title}"></span>
+                                        <span th:if="${resource.partNumber != 0}">
+                                            <span th:text="#{label.part}"></span>
+                                             <span th:text="${resource.partNumber}"></span>
+                                        </span>
+                                    </h4>
+                                    <h6>
+                                        <th:block th:if="${resource.course != null}">
+                                            <div class="mb-2">
+                                                <strong><span th:text="#{filter.header.course}"></span>:</strong> <span th:text="${resource.course.title + ' - '}"></span>
+                                                <strong><span th:text="#{filter.header.department}"></span> </strong> <span th:text="${resource.course.department.title}"></span>
+                                            </div>
+                                            <div><strong><span th:text="#{filter.header.professor}"></span>:</strong> <span th:text="${resource.supervisor.name + ', ' + resource.supervisor.affiliation}"></span></div>
+                                        </th:block>
+                                        <th:block th:if="${resource.getEvent != null}">
+                                            <div class="mb-2"><strong> <span th:text="#{filter.header.action}"></span>:</strong> <span th:text="${resource.getEvent.title}"></span></div>
+                                        </th:block>
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="colp-2 colp-s-3 menu py-0">
+                                </div>
+                                <div class="colp-6 colp-s-9" id="left-box">
+                                    <div id="video_wrapper" style="margin: 0 auto;" >
+                                        <div th:replace="~{fragments/player/u-videoplayer :: u-videoplayer}">Video Player</div>
+                                        <div id="overlay_1" style="visibility:hidden" th:if="${resource.course != null}" th:text="${resource.supervisor.name}"></div>
+                                        <div id="overlay_2" style="visibility:hidden" th:if="${resource.getEvent != null}" th:text="${resource.classroomName}"></div>
+                                    </div>
+                                </div>
+                                <div class="colp-4" style="border-left: #006A9B 2px solid">
+                                    <ul>
+                                        <li th:if="${resource.getEvent != null}">
+                                            <div th:text="#{filter.header.action}"></div>
+                                            <div class="ml-4" style="font-weight: 500" th:text="${resource.getEvent.title}"></div>
+                                            <div th:if="${resource.getEvent.responsibleUnit != null}">
+                                                <div th:text="#{filter.header.org}"></div>
+                                                <span th:each="unit,iStat: ${resource.getEvent.responsibleUnit}">
+                                                    <th:block th:if="${#strings.trim(unit.structureType) == 'DEPARTMENT'}">
+                                                        <span class="ml-4" style="font-weight: 500" th:text="#{filter.header.department}"></span>
+                                                        <span style="font-weight: 500" th:text="${#strings.trim(unit.title) + ' '}"></span><br/>
+                                                    </th:block>
+                                                    <th:block th:if="${#strings.trim(unit.structureType) == 'SCHOOL'}">
+                                                        <span class="ml-4" style="font-weight: 500" th:text="#{filter.header.school}"></span>
+                                                        <span style="font-weight: 500"th:text="${#strings.trim(unit.title) + ' '}"></span><br/>
+                                                    </th:block>
+                                                    <th:block th:if="${#strings.trim(unit.structureType) != 'SCHOOL' && #strings.trim(unit.structureType) != 'DEPARTMENT'}">
+                                                        <span class="ml-4" style="font-weight: 500" th:text="${#strings.trim(unit.title) + ' '}"></span><br/>
+                                                    </th:block>
+                                                </span>
+                                            </div>
+                                            <div th:if="${resource.getEvent.responsiblePerson != null}">
+                                                <div th:text="#{filter.header.resp}"></div>
+                                                 <div class="ml-4" style="font-weight: 500" th:text="${resource.getEvent.responsiblePerson.name}"></div>
+                                            </div>
+                                        </li>
+                                        <li class="pt-2 font-italic">
+                                            <span th:text="#{label.date}"></span>:
+                                            <span style="font-weight: 500" th:insert="fragments/format-resource-date.html:: formatDate(field=${resource.date})"></span> |
+                                            <span th:text="#{label.start}"></span>:
+                                            <span style="font-weight: 500" th:insert="fragments/format-resource-date.html:: formatDateTime (field=${resource.date})"></span> |
+                                            <span th:text="#{label.duration}"></span>:
+
+                                                <span th:if="${resource.realDuration != null}">
+                                                  <span style="font-weight: 500" th:text="${resource.realDuration}"></span>
+                                                </span>
+                                                <span th:unless="${resource.realDuration != null}">
+                                                      <span th:if="${resource.resourceAccess != null}">
+                                                           <span style="font-weight: 500" th:text="${resource.resourceAccess.duration}"></span>
+                                                      </span>
+                                                </span>
+
+                                            |
+                                            <span th:text="#{label.left}"></span>:
+                                            <input type="hidden" id="time_left_sec" th:value="${seconds_to_end}">
+                                             <span style="font-weight: 500" id="time_left_badge"></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}">Footer</div>
+</div>
+<div th:replace="~{modals/about-modal :: #about_modal}"></div>
+<div th:replace="~{modals/contact-modal :: #contact_modal}"></div>
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+<!-- Optional JavaScript -->
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+<script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+
+<script th:src="@{/css/bootstrap-switch/bootstrap-switch.min.js}" type="application/javascript"></script>
+<script th:src="@{/lib/hls/hls.min.js}"></script>
+
+<!-- locale -->
+<script th:src="@{/js/scripts/i18n/locale.js}"></script>
+
+<script th:src="@{/js/live_player/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/live_player/dashboard.player.js}" type="application/javascript"></script>
+<!--<script th:src="@{/js/live_player/dashboard.wowza.js}" type="application/javascript"></script>-->
+<!--<script th:src="@{/js/live_player/dashboard.chart.js}" type="application/javascript"></script>-->
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+
+<script th:if="${localeCode == 'el'}" th:src="@{/js/scripts/i18n/el.js}"></script>
+<script th:if="${localeCode == 'en'}" th:src="@{/js/scripts/i18n/en.js}"></script>
+
+<!--<script th:src="@{https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js}" type="text/javascript" ></script>-->
+</body>
+</html>

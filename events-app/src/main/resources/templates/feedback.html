@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>ΕΚΠΑ :: Σχόλια & Παρατηρήσεις</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="shortcut icon" th:href="@{/public/images/icons/delos.ico}">
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+    <style>
+        a {
+            text-decoration: none;
+        }
+        .form-error {
+            font-size: 0.9em;
+            color: red;
+        }
+        .banner {
+            height:164px;
+            background-size: cover;
+            background-image: url([[@{(${'/public/images/nea_anakoinoseis_02.png'})}]]);
+        }
+        @media (max-width: 768px) {
+            .hide-md {
+                display: none;
+            }
+        }
+        @media (min-width: 768px) {
+            .hide-lg {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="c-app" style="background-color: white">
+<div class="c-wrapper">
+    <div th:replace="~{elements/a-topnav :: a-topnav}"></div>
+    <div class="c-body">
+        <main class="c-main pt-1">
+            <div class="container-fluid px-0" style="margin-top: 50px">
+                <div class="container-fluid px-0 banner"></div>
+                <div th:replace="~{elements/a1-topnav :: a-topnav}"></div>
+                <!-- MAIN CONTENT -->
+                    <div class="container" style="margin-top: 30px">
+                        <div class="row">
+                            <div class="col-lg-2 col-12">
+                                <img th:src="@{/public/images/logos/noc_logo_01.png}" alt="" src=""/>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                Την υπηρεσία υποστηρίζει το <a class="blue-link-wcag-color" href="http://www.noc.uoa.gr/" target="_blank">Κέντρο Λειτουργίας και Διαχείρισης Δικτύου (ΚΛΕΙΔΙ)</a><br/>
+                                Μπορείτε να επικοινωνήσετε μαζί μας ηλεκτρονικά στην διεύθυνση  <strong>video[at]noc[dot]uoa[dot]gr</strong> ή να καταθέσετε τα σχόλια και τις παρατηρήσεις σας χρησιμοποιώντας την παρακάτω φόρμα
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-8 col-12" style="font-weight: 500">
+                                <!--@thymesVar id="msg_val" type="java.lang.String"-->
+                                <!--@thymesVar id="msg_type" type="java.lang.String"-->
+                                <input type="hidden" id="msg_type" th:value="${msg_type}"/>
+                                <div class="ps-2" id="msg_text" th:text="${msg_val}"></div>
+                                <input type="hidden" id="submitted" th:value="${submitted}"/>
+                            </div>
+                        </div>
+                        <div class="card" id="feedback_card" style="border: none">
+                            <h5 class="mt-3">Επικοινωνία</h5>
+                            <div style="margin-bottom: 20px">
+                                Γράψτε μας τη γνώμη, τις παρατηρήσεις ή τις υποδείξεις σας για τον ιστότοπο.
+                            </div>
+
+                            <!--@thymesVar id="Feedback" type="org.opendelos.model.common.Feedback"-->
+                            <form id="feedback-form" th:object="${Feedback}" th:action="@{feedback}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <input type="hidden" id="feedback_id" th:value="*{id}">
+                                <div class="form-group row">
+                                    <label  for="name" class="col-lg-2 col-12 col-form-label">Όνομα</label>
+                                    <div class="col-lg-6 col-12">
+                                         <input class="form-control" id="name" type="text" th:field="*{name}">
+                                         <div class="form-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect name</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-2">
+                                    <label for="email" class="col-lg-2 col-12 col-form-label">e-mail</label>
+                                    <div class="col-lg-6 col-12">
+                                        <input class="form-control" id="email" type="email" th:field="*{email}">
+                                        <div class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect e-mail</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-2">
+                                    <label for="comment" class="col-lg-2 col-12 col-form-label">Παρατηρήσεις - Σχόλια - Υποδείξεις</label>
+                                    <div class="col-lg-6 col-12">
+                                        <textarea class="form-control" id="comment" type="text" rows="5" cols="20"  th:field="*{feedback}"></textarea>
+                                        <div class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{feedback}">Incorrect feedback</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row mt-3 mb-5">
+                                    <label for="captcha" class="col-lg-2 col-12 col-form-label">Captcha</label>
+                                    <div class="col-lg-6 col-12" id="captcha">
+                                        <input class="jCaptcha form-control" type="text" placeholder="Παρακαλώ, πληκτρολογήστε το αποτέλεσμα της πράξης"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="row mt-3 mb-5">
+                                    <div class="col-8">
+                                        <span class="float-right">
+                                           <button class="btn btn-sm btn-secondary" type="submit" id="submit_form_button" style="color: black">Καταχώρηση</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}">Footer</div>
+</div>
+
+        <div th:replace="~{modals/about-modal :: #about_modal}"></div>
+        <div th:replace="~{modals/terms-modal :: #terms_modal}"></div>
+        <div th:replace="~{modals/faq-modal :: #faq_modal}"></div>
+
+
+        <script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+        <script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
+        <script th:src="@{/js/feedback/dashboard.js}" type="application/javascript"></script>
+        <script th:src="@{/js/feedback/captcha.min.js}" type="application/javascript"></script>
+</body>
+</html>

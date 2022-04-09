@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ΕΚΠΑ :: Διαλέξεις</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <!-- CoreUI CSS -->
+    <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+   <!-- <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>-->
+
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <style>
+        .table td {
+            padding: 0.1rem;
+        }
+        @media (max-width: 768px) {
+            .hide-md {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+<body style="font-size: 0.89em">
+    <!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
+    <!--@thymesVar id="queryString" type="java.lang.String"-->
+    <input type="hidden" id="queryString"  th:value="${queryString}" />
+    <span th:if="${queryString != null && queryString != ''}">
+                     <input id="departmentFilterId"         type="hidden" th:value="${departmentFilter.id}"/>
+                     <input id="departmentFilterText"       type="hidden" th:value="${departmentFilter.text}"/>
+                     <input id="courseFilterId"             type="hidden" th:value="${courseFilter.id}"/>
+                     <input id="courseFilterText"           type="hidden" th:value="${courseFilter.text}"/>
+                     <input id="staffMemberFilterId"        type="hidden" th:value="${staffMemberFilter.id}"/>
+                     <input id="staffMemberFilterText"      type="hidden" th:value="${staffMemberFilter.text}"/>
+                     <input id="scheduledEventFilterId"     type="hidden" th:value="${scheduledEventFilter.id}"/>
+                     <input id="scheduledEventFilterText"   type="hidden" th:value="${scheduledEventFilter.text}"/>
+    </span>
+    <span th:if="${resourceQuery.categoryCode != null && resourceQuery.categoryCode != ''}">
+         <input type="hidden" id="categoryTitle" th:value="#{${resourceQuery.categoryCode}}" />
+    </span>
+    <div class="wrapper d-flex flex-column min-vh-100"  style="background-color: white">
+    <div th:replace="~{elements/a-topnav-41 :: a-topnav}"></div>
+        <div class="body flex-grow-1 px-3">
+            <div class="container-lg" style="margin-top: 60px">
+                <!-- Upper logo -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-0" style="border: none">
+                            <div class="card-header px-0" style="background-color: white;border: none">
+                                <h5><span class="icon-on-demand" style="color: #006A9B;font-size: 1.5em"></span> ΔΙΑΛΕΞΕΙΣ</h5>
+                            </div>
+                        </div>
+                        <hr class="float-left my-1" style="border-top: #005cbf 3px solid;width: 100%"/>
+                    </div>
+                </div>
+                <!-- bradcrumb -->
+                <div class="row mt-0 mb-2">
+                    <div class="col-12">
+                        <div class="subheader px-1">
+                            <ol class="breadcrumb border-0 m-0">
+                                <li class="breadcrumb-item">
+                                    <a   class="blue-link-wcag-color" th:href="@{/}">Αρχική</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    Αποτελέσματα αναζήτησης
+                                </li>
+                            </ol>
+                            <ol class="breadcrumb border-0 m-0 float-end">
+                                <li class="breadcrumb-item active">
+                                    <a   class="blue-link-wcag-color" th:href="@{/departments}"> Τμήμα</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a   class="blue-link-wcag-color" th:href="@{/staffmembers}"> Διδάσκων</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a   class="blue-link-wcag-color" th:href="@{/courses}"> Μάθημα</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a   class="blue-link-wcag-color" th:href="@{/themareas}"> Θεματική Περιοχή</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-1" style="font-weight: 400">
+                    Μπορείτε να εκκινήσετε μια <u>νέα αναζήτηση</u>, επιλέγοντας ένα διαφορετικό κριτήριο από τη λίστα των βασικών κριτηρίων στο πάνω μέρος της σελίδας
+                </div>
+                <!-- Content -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-0" style="border: none">
+                            <div class="container mt-3" style="display: none">
+                                <div th:insert="~{fragments/search/r-search-bar :: r-search-bar}">Search Bar</div>
+                            </div>
+                            <div class="card-body pb-0 px-0">
+                                <div th:if="${QR != null && QR.totalResults > 0}">
+                                    <span th:replace="~{fragments/search-common/ontop-dyna-filters :: ontop-dyna-filters}"></span>
+                                </div>
+                                <th:block th:if="${QR != null}">
+                                    <div th:replace="~{fragments/search-common/ontop-applied-filters :: ontop-applied-filters}">Applied Filters</div>
+                                </th:block>
+                                <th:block th:if="${QR != null && QR.totalResults >0}">
+                                    <div class="row">
+                                        <div class="col-7">
+                                                <span class="float-left">
+                                                    <span th:text="${'Εμφάνιση ' + (QR.skip+1)} + '-'"></span>
+                                                    <span th:if="${QR.totalResults < (QR.skip+QR.limit)}"><span th:text="${QR.totalResults}"></span></span>
+                                                    <span th:unless="${QR.totalResults < (QR.skip+QR.limit)}"><span th:text="${(QR.skip + QR.limit)}"></span></span>
+                                                    <span th:text="${' από ' + QR.totalResults}"></span>
+                                                </span>
+                                        </div>
+                                        <div class="col-5">
+                                            <div th:replace="~{fragments/search/u-sort-and-display :: u-sort-and-display}"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Pager -->
+                                    <div class="row my-1">
+                                        <div class="col-12 text-center">
+                                            <div th:insert="~{fragments/search-common/u-pager :: u-pager('false')}">Pager</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div th:if="${QR.skip > 1000}">
+                                                Δεν επιτρέπεται η εξυπηρέτηση περισσότερων από 1000 αποτελεσμάτων τη φορά. Περιορίστε τον αριθμό των αποτελεσμάτων προσθέτοντας νέα κριτήρια αναζήτησης
+                                                (Ζητήσατε αποτελέσματα μετά τα <span th:text="${QR.skip}"></span>)
+                                            </div>
+                                            <div th:unless="${QR.skip > 1000}">
+                                                <div th:replace="~{fragments/search/u-query-results :: u-query-results}">R-MAIN-CONTENT</div>
+                                            </div>
+                                            <!-- Pager -->
+                                            <div class="row my-3">
+                                                <div class="col-12 text-center">
+                                                    <div th:replace="~{fragments/search-common/u-pager :: u-pager('true')}">Pager</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                                <th:block th:if="${QR == null || QR.totalResults == 0}">
+                                    <div class="row mt-3">
+                                        <th:block th:if="${queryString != null && queryString != ''}">
+                                            <div class="col justify-content-center">
+                                                <h6>Η αναζήτηση δεν βρήκε κάποια καταχώρηση</h6>
+                                                <p class="mt-2">Υποδείξεις:</p>
+                                                <ul>
+                                                    <li>Επιλέξτε διαφορετικά κριτήρια</li>
+                                                    <li>Περιορίστε τον αριθμό των κριτηρίων</li>
+                                                </ul>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${queryString == '' || queryString == null}">
+                                            <div class="col-12 px-3">
+                                                <h6>Καμία αναζήτηση σε εξέλιξη</h6>
+                                            </div>
+                                            <div class="col-12 px-3">
+                                                Ξεκινήστε μια νέα αναζήτηση, επιλέγοντας Τμήμα, Καθηγητή, Μάθημα ή Θεματική Περιοχή
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <div class="row py-2" style="font-size: 1em">
+                                                    <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
+                                                        <a role="button"  title="Αναζήτηση με Τμήμα" style="width: 80%" class="blue-link-wcag-color me-1  py-2  btn btn-secondary" th:href="@{departments}">
+                                                            <i class="fas fa-building"></i> Τμήμα
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
+                                                        <a  role="button" title="Αναζήτηση με Τμήμα" style="width: 80%" class="blue-link-wcag-color me-1  py-2  btn btn-secondary" th:href="@{staffmembers}">
+                                                            <i class="fas fa-graduation-cap"></i> Διδάσκων
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
+                                                        <a  role="button" title="Αναζήτηση με Τμήμα" style="width: 80%" class="blue-link-wcag-color me-1   py-2 btn btn-secondary" th:href="@{courses}">
+                                                            <i class="fa fa-book"></i> Μάθημα
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
+                                                        <a role="button" title="Αναζήτηση με Θεματική Περιοχή"  style="width: 80%" class="blue-link-wcag-color me-1  py-2 btn btn-secondary" th:href="@{themareas}">
+                                                            <i class="fas fa-share-alt"></i> Θεματική Περιοχή
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+    <div th:replace="~{fragments/footer-411 :: footer}">Footer</div>
+</div>
+
+<div th:replace="~{modals/resource_view_modal :: resource_view_modal}"></div>
+
+<div th:replace="~{modals/staff_select_modal :: staffmember_select_modal}"></div>
+<div th:replace="~{modals/course_select_modal :: course_select_modal}"></div>
+<div th:replace="~{modals/event_select_modal :: event_select_modal}"></div>
+
+<div th:replace="~{modals/about-modal :: #about_modal}"></div>
+<div th:replace="~{modals/terms-modal :: #terms_modal}"></div>
+<div th:replace="~{modals/faq-modal :: #faq_modal}"></div>
+<div th:replace="~{modals/contact-modal :: #contact_modal}"></div>
+
+<!-- Optional JavaScript -->
+<script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
+
+
+<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+<!-- alertify -->
+<script th:src="@{/lib/alertify/alertify.min.js}"></script>
+
+<script th:src="@{/js/search/dashboard.js}" type="application/javascript"></script>
+<script th:src="@{/js/search/dashboard.departments.js}" type="application/javascript"></script>
+<script th:src="@{/js/search/dashboard.categories.js}" type="application/javascript"></script>
+<script th:src="@{/js/search/dashboard.course.js}" type="application/javascript"></script>
+<script th:src="@{/js/search/dashboard.staffmembers.js}" type="application/javascript"></script>
+<script th:src="@{/js/search/dashboard.sevents.js}" type="application/javascript"></script>
+
+<!--<script th:src="@{/js/search/resource-view.js}" type="application/javascript"></script>-->
+<script th:src="@{/js/search/el.js}" type="application/javascript"></script>
+
+<script th:src="@{/js/player/dashboard.player.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
+<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
+
+    <script src="https://kit.fontawesome.com/3f3838d3ae.js" crossorigin="anonymous"></script>
+</body>
+</html>

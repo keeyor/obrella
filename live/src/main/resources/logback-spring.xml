@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<springProperty scope="context" name="app_name" source="spring.application.name"/>
+	<springProperty scope="context" name="app_port" source="server.port"/>
+
+	<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+			<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+			</Pattern>
+		</layout>
+	</appender>
+
+ 	<appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+		<param name="Encoding" value="UTF-8"/>
+		<remoteHost>logstash</remoteHost>
+		<port>5000</port>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+			<provider class="net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider"/>
+		</encoder>
+	</appender>
+
+	<appender name="FileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/delos-etc/logback/OpenDelosRunner.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/delos-etc/logback/OpenDelosRunner.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%date{dd MMM yyyy;HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+		</encoder>
+	</appender>
+
+	<root level="debug">
+		<appender-ref ref="FileAppender" />
+	</root>
+
+	<root level="info">
+		<appender-ref ref="logstash" />
+		<appender-ref ref="Console" />
+	</root>
+
+</configuration>

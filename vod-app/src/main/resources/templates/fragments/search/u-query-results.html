@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" >
+
+<!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
+
+<div th:fragment="u-query-results">
+
+    <div th:each="lecture, iStat: ${QR.searchResultList}" th:style="${iStat.odd}? ''">
+         <div class="mt-2" style="font-weight: 500">
+             <span th:text="${iStat.count + '.'}"></span>
+             <a class="text-decoration-none blue-link-wcag-color" style="font-size: 1.1em" th:href="@{/player(id=${lecture.id})}" target="_blank" title=" τίτλος - κλικ για αναπαραγωγή">
+                 <span th:text="${lecture.title}"></span>
+             </a>
+             <span th:if="${lecture.partNumber != 0}">
+               <span class="me-1" th:text="${'- Μέρος ' + lecture.partNumber}"></span>
+             </span>
+             <span th:if="${lecture.course != null}" class="mb-2" style="font-weight: 600"  title="διδάσκων ή υπεύθυνος καθηγητής (-ήτρια)">
+                <span th:text="${' - ' + lecture.supervisor.name}"></span>
+             </span>
+         </div>
+        <div class="card-header row">
+            <div class="col-lg-1 col-2 date_info" style="align-items: center"  title="ημερομηνία καταγραφής">
+                <span  class="me-1 day_of_month" th:text="${#temporals.format(lecture.date, 'dd')}"></span>
+                <span  class="me-1 month" th:text="${#temporals.format(lecture.date, 'MMM')}"></span>
+                <span  class="me-1" th:text="${#temporals.format(lecture.date, 'YY')}"></span>
+            </div>
+            <div class="vr"></div>
+            <div class="col-9">
+                <span class="font-italic course_info" style="font-weight: 450" th:text="${lecture.course.title}" title="τίτλος μαθήματος"></span>
+                <span class="font-italic" th:text="${' Τμήμα ' + lecture.department.title}"  title="τμήμα μαθήματος"></span>
+                <th:block th:if="${lecture.course.departmentsRelated !=null}">
+                    <i class="fas fa-share-alt ms-2 me-1" title="διατμηματικό μάθημα"></i>
+                        <span th:each="unit,iStat: ${lecture.course.departmentsRelated}">
+                            <span th:unless="${iStat.first}" th:text="${', '}"></span>
+                            <span th:text="${unit.title}" title="διατμηματικό μάθημα"></span>
+                        </span>
+                </th:block>
+                <div class="row  row-cols-auto mt-2" style="font-size: 0.9em">
+                    <div class="col" title="περίοδος">
+                        <span th:text="#{${lecture.period}}" th:class="${lecture.period}"></span>
+                    </div>
+                    <div class="col" title="ακαδημαϊκό έτος">
+                        <i class="fas fa-graduation-cap me-1"></i>
+                        <span class="academic-year"  th:text="${lecture.academicYear}"></span>
+                    </div>
+                    <div class="col" title="διάρκεια βίντεο">
+                        <th:block th:if="${lecture.realDuration != null}">
+                            <i class="icon-time-duration ms-lg-1 me-1"></i> <span th:text="${lecture.realDuration}"></span>
+                         </th:block>
+                        <th:block th:unless="${lecture.realDuration != null}" class="xxx">
+                            <span th:if="${lecture.resourceAccess != null}">
+                                <i class="icon-time-duration ms-lg-1 me-1"></i><span th:text="${lecture.resourceAccess.duration}"></span>
+                            </span>
+                        </th:block>
+                    </div>
+                    <div class="col" th:if="${lecture.presentation != null && lecture.presentation.slides != null && lecture.presentation.slides.size > 0 }" title="παρουσίαση">
+                        <i class="icon-presentation me-1"></i><span title="Αριθμός Διαφανειών" th:text="${lecture.presentation.slides.size}"></span>
+                    </div>
+                    <div class="col" title="αριθμός αναπαραγωγών">
+                        <i class="fas fa-eye"></i> <span th:text="${lecture.statistics}"></span>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--
+
+    <div th:each="lecture, iStat: ${QR.searchResultList}" th:style="${iStat.odd}? ''">
+          <div class="row row-style player_tab mr-0">
+                                    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 px-0 date_info" >
+                                            <span  class="day_of_month" th:text="${#temporals.format(lecture.date, 'dd')}"></span>
+                                            <span  class="month" th:text="${#temporals.format(lecture.date, 'MMMM')}"></span>
+                                            <span  th:text="${#temporals.format(lecture.date, 'YYYY')}"></span>
+                                    </div>
+                                    <div class="col-lg-8 col-md-10 col-sm-10 col-xs-10">
+                                        <div style="color:#006A9B">
+                                            <span style="font-weight: bolder" th:text="${iStat.count + '.'}"></span>
+                                            <a class="text-decoration-none" th:href="@{/player(id=${lecture.id})}" target="_blank" title="Αναπαραγωγή" style="color:#006A9B">
+                                                <strong><span th:text="${lecture.title}"></span></strong>
+                                            </a>
+                                            <span th:if="${lecture.course != null}" class="mb-2" style="font-weight: 600">
+                                                        <span th:text="${'[' + lecture.supervisor.name}"></span>
+                                            </span>
+                                            <span th:if="${lecture.course != null}" class="mb-2">
+                                                        <span th:text="${', ' + lecture.supervisor.affiliation + ']'}"></span>
+                                            </span>
+                                            <span th:if="${lecture.partNumber != 0}">
+                                                         <span th:text="${'- Μέρος ' + lecture.partNumber}"></span>
+                                            </span>
+                                        </div>
+                                        <div th:if="${lecture.course != null}" class="mb-2">
+                                            &lt;!&ndash;<i class="fas fa-book mr-1" style="color: #555555" title="μάθημα"></i>&ndash;&gt;
+                                             <span class="font-italic" th:text="${lecture.course.title + ',' + ' Τμήμα ' + lecture.department.title}"></span>
+                                             <div style="font-weight: normal;font-style: italic" class="text-muted mt-2">
+                                                <i class="fas fa-quote-left fa-pull-left"></i>
+                                                <span th:text="${(#strings.trim(lecture.description) != '' && lecture.description != null) ? lecture.description:'χωρίς περιγραφή'}"></span>
+                                            </div>
+                                            <div th:unless="${lecture.description != ''}" style="font-weight: normal;font-style: italic" class="text-muted mt-2"></div>
+                                            <div class="mt-3">
+                                                <i class="fas fa-cloud-sun-rain"></i>
+                                                <span th:if="${lecture.course.semester != null && lecture.course.semester != 'SEM13'}" th:text="#{${lecture.course.semester}}"></span>
+                                                <span th:if="${lecture.course.semester != null && lecture.course.semester != 'SEM13'}" th:text="${ ' εξάμηνο '}"></span>
+                                                <span th:if="${lecture.course.semester == 'SEM13'}" th:text="#{${lecture.course.semester}}"></span>
+                                                <span th:unless="${lecture.course.semester != null}"> - </span> |
+                                                <span th:if="${lecture.realDuration != null}">
+                                                             <i class="fas fa-video"></i> <span th:text="${lecture.realDuration}" text="διάρκεια"></span>
+                                                         </span>
+                                                <span th:unless="${lecture.realDuration != null}" class="xxx">
+                                                                 <span th:if="${lecture.resourceAccess != null}">
+                                                                    <i class="fas fa-video"></i> <span th:text="${lecture.resourceAccess.duration}" text="διάρκεια"></span>
+                                                                 </span>
+                                                </span> |
+                                                <span th:if="${lecture.presentation != null && lecture.presentation.slides != null && lecture.presentation.slides.size > 0 }">
+                                                        <i class="icon-presentation mr-1"></i><span title="Αριθμός Διαφανιών" th:text="${lecture.presentation.slides.size}"></span> |
+                                                </span>
+                                                <i class="fas fa-eye"></i> <span th:text="${lecture.statistics}" text="εμφανίσεις"></span>
+                                            </div>
+                                        </div>
+                                        <div th:if="${lecture.getEvent != null}" class="mb-2">
+                                            &lt;!&ndash;<i class="icon-event" style="color: #555555" title="εκδήλωση"></i>&ndash;&gt;
+                                            <span  class="font-italic"  th:text="${lecture.getEvent.title}"></span>
+                                            <div th:if="${lecture.getEvent.responsibleUnit != null}" style="color:black;font-style: italic" class="text-muted ml-1">
+                                                     <span th:each="unit,iStat: ${lecture.getEvent.responsibleUnit}">
+                                                         <span th:text="${iStat.first}? '' : ', '"></span>
+                                                         <span th:if="${#strings.trim(unit.structureType) == 'DEPARTMENT'}"> Τμήμα</span>
+                                                         <span th:if="${#strings.trim(unit.structureType) == 'SCHOOL'}"> Σχολή </span>
+                                                         <span th:text="${unit.title + ' '}"></span>
+                                                     </span>
+                                            </div>
+                                            <div class="mt-3" style="font-size: 1em">
+                                                <span th:if="${lecture.realDuration != null}">
+                                                             <i class="fas fa-video"></i> <span th:text="${lecture.realDuration}" text="διάρκεια"></span>
+                                                         </span>
+                                                <span th:unless="${lecture.realDuration != null}" class="xxx">
+                                                                 <span th:if="${lecture.resourceAccess != null}" text="διάρκεια">
+                                                                    <i class="fas fa-video"></i> <span th:text="${lecture.resourceAccess.duration}"  text="διάρκεια"></span>
+                                                                 </span>
+                                                         </span> |
+                                                <span th:if="${lecture.presentation != null && lecture.presentation.slides != null && lecture.presentation.slides.size > 0 }">
+                                                        <i class="icon-presentation mr-1"></i><span title="Αριθμός Διαφανιών" th:text="${lecture.presentation.slides.size}"></span> |
+                                                </span>
+                                                <i class="fas fa-eye"></i> <span title="εμφανίσεις" th:text="${lecture.statistics}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 mt-3 px-0">
+                                         <a role="button" class="btn btn-sm blue-btn-wcag-bgnd-color mb-1" style="width:100%;color:whitesmoke;font-size: 0.9em;display: none" target="_blank"
+                                                   th:href="@{/player(id=${lecture.id})}">
+                                                    <i class="fas fa-play"></i> Αναπαραγωγή
+                                        </a>
+                                    </div>
+          </div>
+
+    </div>
+
+-->
+
+</div>

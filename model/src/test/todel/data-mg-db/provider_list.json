@@ -1,0 +1,866 @@
+[ {
+  "id" : 1,
+  "name" : "Αριστοτέλειο Πανεπιστήμιο Θεσσαλονίκης",
+  "description" : "",
+  "url" : "https://www.auth.gr ",
+  "image" : "1.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.297000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 2,
+  "name" : "E-Learning Ε.Κ.Π.Α",
+  "description" : "Σημειώνοντας μια εντυπωσιακά ανοδική πορεία από το 2001 έως σήμερα, το Πρόγραμμα Συμπληρωματικής εξ Αποστάσεως Εκπαίδευσης (E-Learning) του Κέντρου Επιμόρφωσης και Δια Βίου Μάθησης (Κ.Ε.ΔΙ.ΒΙ.Μ.) του Εθνικού και Καποδιστριακού Πανεπιστημίου Αθηνών προσφέρει 380 προγράμματα στην ελληνική γλώσσα (https://elearningekpa.gr) και πάνω από 40 στην αγγλική γλώσσα (https://elearninguoa.org), με περισσότερους από 100 Καθηγητές του Ιδρύματος να συμμετέχουν στην ανάπτυξη και την υλοποίησή τους, ενώ έχουν επιμορφωθεί περισσότερα από 90.000 άτομα και 400 εταιρείες ή φορείς έχουν εμπιστευθεί την επιμόρφωση του προσωπικού τους σε αυτό.",
+  "url" : "https://elearningekpa.gr",
+  "image" : "2.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.300000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 3,
+  "name" : "Εθνικό Μετσόβιο Πολυτεχνείο",
+  "description" : "",
+  "url" : "https://www.ntua.gr/el/",
+  "image" : "3.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.301000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 4,
+  "name" : "Ελληνικό Ανοικτό Πανεπιστήμιο (ΕΑΠ)",
+  "description" : "Αποστολή του ΕΑΠ είναι η εξ αποστάσεως παροχή προπτυχιακής και μεταπτυχιακής εκπαίδευσης και επιμόρφωσης, με την ανάπτυξη και αξιοποίηση κατάλληλου εκπαιδευτικού υλικού και μεθόδων διδασκαλίας. Στους σκοπούς του ΕΑΠ εντάσσεται η προαγωγή της επιστημονικής έρευνας, καθώς και η ανάπτυξη τεχνολογίας και μεθοδολογίας στο πεδίο της μετάδοσης της γνώσης από απόσταση.",
+  "url" : "https://www.eap.gr/el/",
+  "image" : "4.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.302000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 5,
+  "name" : "Οικονομικό Πανεπιστήμιο Αθηνών",
+  "description" : "",
+  "url" : "https://www.aueb.gr",
+  "image" : "5.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.302000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 6,
+  "name" : "Πανεπιστήμιο Δυτικής Αττικής",
+  "description" : "",
+  "url" : "https://www.uniwa.gr",
+  "image" : "6.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.303000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 7,
+  "name" : "Πανεπιστήμιο Δυτικής Μακεδονίας",
+  "description" : "",
+  "url" : "https://uowm.gr",
+  "image" : "7.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.304000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 8,
+  "name" : "Πανεπιστήμιο Ιωαννίνων",
+  "description" : "",
+  "url" : "https://www.uoi.gr/",
+  "image" : "8.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.304000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 9,
+  "name" : "Πανεπιστήμιο Πατρὠν",
+  "description" : "",
+  "url" : "http://www.upatras.gr",
+  "image" : "9.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.305000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 10,
+  "name" : "Ακαδημαϊκό Διαδίκτυο (GUnet)",
+  "description" : "",
+  "url" : "https://www.gunet.gr",
+  "image" : "10.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.305000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 11,
+  "name" : "Ελληνικό Κέντρο Ασφαλούς Διαδικτύου (ΙΤΕ)",
+  "description" : "",
+  "url" : "https://saferinternet4kids.gr",
+  "image" : "11.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.306000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 12,
+  "name" : "Οργανισμός Ανοιχτών Τεχνολογιών - ΕΕΛΛΑΚ",
+  "description" : "",
+  "url" : "https://ellak.gr/",
+  "image" : "12.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.306000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 13,
+  "name" : "Ίδρυμα Vodafone",
+  "description" : "Αποστολή του Ιδρύματος Vodafone είναι, να συμβάλει στη βελτίωση της ζωής των ανθρώπων και, ειδικότερα, των ευάλωτων κοινωνικών ομάδων. Συνδυάζοντας την κοινωνική συνεισφορά με τις τεχνολογίες των τηλεπικοινωνιών δραστηριοποιούμαστε για την αντιμετώπιση σημαντικών κοινωνικών ζητημάτων, με έμφαση στους τομείς της υγείας, της εκπαίδευσης και της αντιμετώπισης ανθρωπιστικών κρίσεων",
+  "url" : "https://www.vodafone.gr/vodafone-ellados/idryma-vodafone/",
+  "image" : "13.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.307000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 14,
+  "name" : "Μονάδα Οργάνωσης της Διαχείρισης Αναπτυξιακών Προγραμμάτων (ΜΟΔ)",
+  "description" : "",
+  "url" : "http://www.mou.gr/",
+  "image" : "14.jpg",
+  "contactPerson" : {
+    "name" : "Ευφροσύνη Κουντίου",
+    "email" : "effrossini.kountiou@gmail.com",
+    "telephone" : "6944204292",
+    "cellular" : "6944204292"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : ""
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.308000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 15,
+  "name" : "Τράπεζα Πειραιώς",
+  "description" : "",
+  "url" : "https://www.piraeusbank.gr",
+  "image" : "15.jpg",
+  "contactPerson" : {
+    "name" : "-",
+    "email" : "-",
+    "telephone" : "-",
+    "cellular" : "-"
+  },
+  "capacity" : {
+    "capability" : null,
+    "prerequisites" : ""
+  },
+  "enabled" : false,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.308000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 16,
+  "name" : "Alpha Bank",
+  "description" : "",
+  "url" : "https://www.alpha.gr/",
+  "image" : "16.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.309000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 17,
+  "name" : "eTwinning",
+  "description" : "To eTwinning είναι η κοινότητα των σχολείων της Ευρώπης. Το eTwinning προσφέρει μία ασφαλή πλατφόρμα για το προσωπικό (εκπαιδευτικούς, διευθυντές, βιβλιοθηκάριους κπλ) που εργάζεται σε σχολεία των συμμετεχουσών Ευρωπαϊκών χωρών, προκειμένου να επιικοινωνήσουν, να συνεργαστούν, να αναπτύξουν σχέδια, να μοιραστούν και εν ολίγοις να νιώσουν ότι αποτελούν μέρος της πιο συναρπαστικής μαθησιακής κοινότητας στην Ευρώπη.",
+  "url" : "https://www.etwinning.net/el/pub/index.htm",
+  "image" : "17.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.309000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 18,
+  "name" : "Eurobank",
+  "description" : "Το Digital Academy for Business είναι ένα νέο ψηφιακό κανάλι γνώσεων, πρακτικών και εμπειριών για επαγγελματίες και επιχειρηματίες. Σας δίνει τη δυνατότητα να αξιοποιείτε την εμπειρία, τις γνώσεις, τα εργαλεία και το συνολικό οικοσύστημα της Eurobank για να ενισχύετε την ανταγωνιστικότητα της επιχείρησής σας στο ταξίδι του ψηφιακού μετασχηματισμού της.",
+  "url" : "https://www.eurobank.gr/el/retail",
+  "image" : "18.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.310000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 19,
+  "name" : "gov.gr",
+  "description" : "",
+  "url" : "https://gov.gr",
+  "image" : "19.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.311000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 20,
+  "name" : "inte*learn",
+  "description" : "H INTE*LEARN προσφέρει υπηρεσίες σε οποιοδήποτε θέμα αφορά την εφαρμογή των νέων τεχνολογιών στην εκπαίδευση. Από το 1989 μέχρι σήμερα η εταιρία έχει αναπτύξει πληθώρα εκπαιδευτικών προγραμμάτων για όλες τις βαθμίδες της εκπαίδευσης (Προσχολική ηλικία, Πρωτοβάθμια και Δευτεροβάθμια εκπαίδευση, Συνεχιζόμενη Επαγγελματική Κατάρτιση). Η εταιρία έχει υλοποιήσει και διαθέσει στην Ελληνική, στην Κυπριακή και στην Ελληνόφωνη αγορά του εξωτερικού 106 εκπαιδευτικά προγράμματα.",
+  "url" : "https://www.intelearn.gr/",
+  "image" : "20.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.311000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 21,
+  "name" : "Mathesis",
+  "description" : "Tο Κέντρο Ανοικτών Διαδικτυακών Μαθημάτων Mathesis, ιδρύθηκε το 2015 —με πρωτοβουλία και κύρια ευθύνη του Στέφανου Τραχανά— ως ένα ιδιαίτερο τμήμα των Πανεπιστημιακών Εκδόσεων Κρήτης (ΠΕΚ) με αποκλειστικό σκοπό τη δημιουργία και δωρεάν προσφορά στους φοιτητές, τους επαγγελματίες επιστήμονες και το ευρύτερο κοινό, διαδικτυακών μαθημάτων στο επίπεδο των καλύτερων διεθνών προτύπων.",
+  "url" : "https://mathesis.cup.gr/",
+  "image" : "21.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.312000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 22,
+  "name" : "OTE Academy",
+  "description" : "",
+  "url" : "https://oteacademy.gr",
+  "image" : "22.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.312000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 23,
+  "name" : "SaferInternet.gr",
+  "description" : "Οι κύριοι στόχοι της δράσης Saferinternet.gr είναι α) η προστασία των ανηλίκων από ακατάλληλο ή επιβλαβές για αυτούς περιεχόμενο, ή από ακατάλληλη ή επιβλαβή συμπεριφορά και η προώθηση της υπεύθυνης και ασφαλούς χρήσης του Διαδικτύου, και β) ηενδυνάμωση γονέων και εκπαιδευτικών σε θέματα ασφάλειας στο Διαδίκτυο μέσω ενημερώσεων, εκπαιδεύσεων και κατάλληλου online και έντυπου υλικού.",
+  "url" : "http://saferinternet.gr",
+  "image" : "23.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.313000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 24,
+  "name" : "SQLearn",
+  "description" : "",
+  "url" : "https://www.sqlearn.gr/",
+  "image" : "24.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.313000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 25,
+  "name" : "Amazon",
+  "description" : "",
+  "url" : "https://aws.amazon.com/",
+  "image" : "25.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.314000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 26,
+  "name" : "Cisco Networking Academy",
+  "description" : "Το Cisco Networking Academy αποτελεί ένα πρόγραμμα εταιρικής κοινωνικής ευθύνης της Cisco, ένα πρόγραμμα δεξιοτήτων πληροφορικής και δημιουργίας σταδιοδρομίας διαθέσιμο σε εκπαιδευτικά ιδρύματα και άτομα σε όλο τον κόσμο. Το Cisco Networking Academy έχεται να καλύψει τις απαιτήσεις σε ένα κόσμο που αλλάζει γύρω μας, ατον οποίο η απόκτηση τεχνικών δεξιοτήτων είναι αυτό που φέρνει την ευκαιρία και η υπόσχεση της εκπαίδευσης είναι αυτή που προσφέρει ελπίδα.",
+  "url" : "https://www.netacad.com/",
+  "image" : "26.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.314000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 27,
+  "name" : "Coursera",
+  "description" : "Κάθε μάθημα στο Coursera διδάσκεται από κορυφαίους εκπαιδευτές από παγκόσμιας κλάσης πανεπιστήμια και εταιρείες, ώστε να μπορείτε να μάθετε κάτι νέο οποτεδήποτε, οπουδήποτε. Εκατοντάδες δωρεάν μαθήματασας δίνουν πρόσβαση σε διαλέξεις βίντεο, ασκήσεις εργασίας και φόρουμ συζητήσεων της κοινότητας. Τα μαθήματα επί πληρωμή παρέχουν επιπλέον κουίζ και εργασίες, καθώς και πιστοποιητικό μαθήματος μετά την ολοκλήρωσή τους.",
+  "url" : "https://www.coursera.org/",
+  "image" : "27.jpg",
+  "contactPerson" : {
+    "name" : "-",
+    "email" : "-",
+    "telephone" : "-",
+    "cellular" : "-"
+  },
+  "capacity" : {
+    "capability" : null,
+    "prerequisites" : ""
+  },
+  "enabled" : false,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.315000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 28,
+  "name" : "Edx",
+  "description" : "Αποστολή της Edx είναι η αύξηση της πρόσβασης στην υψηλής ποιότητας εκπαίδευση για όλους, παντού. Παράλληλα η Edx βελτιώνει καθημερινά τη διδασκαλία και τη μάθηση ατη δια ζώσης εκπαίδευση στο πανεπιστήμιο και στο διαδίκτυο, με προώθηση της διδασκαλίας και της μάθησης μέσω της έρευνας.",
+  "url" : "https://www.edx.org/",
+  "image" : "28.jpg",
+  "contactPerson" : {
+    "name" : "-",
+    "email" : "-",
+    "telephone" : "-",
+    "cellular" : "-"
+  },
+  "capacity" : {
+    "capability" : null,
+    "prerequisites" : ""
+  },
+  "enabled" : false,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.316000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 29,
+  "name" : "Google",
+  "description" : "",
+  "url" : "https://google.com",
+  "image" : "29.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.316000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 30,
+  "name" : "LinkedIn Learning",
+  "description" : "H LinkedIn αποτελεί το μεγαλύτερο επαγγελματικό δίκτυο στον κόσμο",
+  "url" : "https://www.linkedin.com/learning",
+  "image" : "30.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.317000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 31,
+  "name" : "Microsoft",
+  "description" : "Empower educators to unlock creativity, promote teamwork, and provide a simple and safe experience in a single, affordable solution built for education",
+  "url" : "https://www.microsoft.com/",
+  "image" : "31.jpg",
+  "contactPerson" : {
+    "name" : null,
+    "email" : null,
+    "telephone" : null,
+    "cellular" : null
+  },
+  "capacity" : null,
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.317000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 32,
+  "name" : "Oracle University",
+  "description" : "Το Oracle University είναι ο αξιόπιστος πάροχος εκπαίδευσης και πιστοποίησης για το Oracle Cloud και λογισμικό on-premise. Όλη η εκπαίδευση παρουσιάζεται από κορυφαίους διεθνείς εμπειρογνώμονες της Oracle και παρέχεται σε διάφορες μορφές, ώστε να μπορείτε να λάβετε μέρος οποιαδήποτε στιγμή, οπουδήποτε.",
+  "url" : "https://learn.oracle.com/ols/user-portal",
+  "image" : "32.jpg",
+  "contactPerson" : {
+    "name" : "Βίκυ Μαργαρίτη",
+    "email" : "-",
+    "telephone" : "-",
+    "cellular" : "-"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : ""
+  },
+  "enabled" : false,
+  "status" : null,
+  "dateCreated" : 1594179270.000000000,
+  "dateModified" : 1637423841.317000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 33,
+  "name" : "iServices",
+  "description" : "Εταιρεία ανάπτυξης ιστοσελίδων, e-shop, σχεδιασμού επιχειρησιακού πλάνου αξιοποίησης διαδικτύου από επιχειρήσεις.",
+  "url" : "https://iservices.gr/",
+  "image" : "33.jpg",
+  "contactPerson" : {
+    "name" : "Χρήστος Καψάλης",
+    "email" : "kapsalis@iservices.gr",
+    "telephone" : "2310455254",
+    "cellular" : "6948660277"
+  },
+  "capacity" : {
+    "capability" : "maybe",
+    "prerequisites" : ""
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1609765871.000000000,
+  "dateModified" : 1637423841.318000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 34,
+  "name" : "Letstudy",
+  "description" : "Η Letstudy είναι μια Πλατφόρμα Διαδικτυακής Εκπαίδευσης που αναπτύσσει, οργανώνει και φιλοξενεί μαθήματα και σεμινάρια με σκοπό την ταχύτερη και αποτελεσματικότερη εμπέδωση της Γνώσης.",
+  "url" : "https://letstudy.gr/",
+  "image" : "34.jpg",
+  "contactPerson" : {
+    "name" : "Σπάθης",
+    "email" : "info@letstudy.gr",
+    "telephone" : "2310-306123",
+    "cellular" : "2310-306123"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : null
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1609773332.000000000,
+  "dateModified" : 1637423841.319000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 35,
+  "name" : "HP",
+  "description" : "HP LIFE is a global training program available both online and offline via Learning HP LIFE gives people all over the world the opportunity to build skills for the future— whether they want to start or grow their own business, enter the workforce or secure a better job—by providing access to free, accessible IT and business skills training courses in seven languages. It is also an adaptable educational resource used on the ground by trainers, educators, and mentors to enrich curricula, support business creation, and improve employability skills. HP LIFE is a program of the HP Foundation.",
+  "url" : "https://www.life-global.org/about",
+  "image" : "35.jpg",
+  "contactPerson" : {
+    "name" : "Νίκος Χρηστάκης",
+    "email" : "christakis@hp.com",
+    "telephone" : "+30 6941 661025",
+    "cellular" : "+30 6941 661025"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : ""
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1609773713.000000000,
+  "dateModified" : 1637423841.320000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 36,
+  "name" : "NOKIA",
+  "description" : "",
+  "url" : "https://nokia.com",
+  "image" : "36.jpg",
+  "contactPerson" : {
+    "name" : "Νεκταρία Καλογεροπούλου",
+    "email" : "nektaria.kalogeropoulou@nokia.com",
+    "telephone" : " 6948 044 881",
+    "cellular" : " 6948 044 881"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : ""
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1613571181.000000000,
+  "dateModified" : 1637423841.320000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 37,
+  "name" : "Πανεπιστήμιο Ελσίνκι | Reaktor",
+  "description" : "Το Πανεπιστήμιο του Ελσίνκι είναι το παλιότερο πανεπιστήμιο της Φιλανδίας και λειτουργεί από το 1640. Η Reaktor είναι μια εταιρεία που αναπτύσσει καινοτόμα προγράμματα διαδικτυακής εκπαίδευσης. \r\nΜέσα από τη συνεργασία τους για την ανάπτυξη αυτού του μαθήματος, οι δύο φορείς θέτουν ως στόχο να υποστηρίξουν τους πολίτες, ώστε να μπορούν να συμμετέχουν σε μια ταχέως εξελισσόμενη παγκοσμιοποιημένη κοινωνία.\r\n",
+  "url" : "https://www.helsinki.fi/en",
+  "image" : "37.jpg",
+  "contactPerson" : {
+    "name" : "Καλίοπη Πολίτου",
+    "email" : "k.politou@mindigital.gr, soile.niemela@reaktor.com, sanna.reponen@helsinki.fi",
+    "telephone" : "6946517515",
+    "cellular" : "6946517515"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : ""
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1614699591.000000000,
+  "dateModified" : 1637423841.321000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 38,
+  "name" : "SPARKLE",
+  "description" : "Έργο SPARKLE",
+  "url" : "http://sparkle-project.eu/moodle/",
+  "image" : "38.jpg",
+  "contactPerson" : {
+    "name" : "-",
+    "email" : "greece@sparkle-project.eu",
+    "telephone" : "-",
+    "cellular" : "-"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : null
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1630311312.000000000,
+  "dateModified" : 1637423841.322000000,
+  "unPublishDate" : "",
+  "unpublishMsg" : null
+}, {
+  "id" : 39,
+  "name" : "iHeal",
+  "description" : "Το πρόγραμμα iHeal, συγχρηματοδοτούμενο από το Erasmus+ KA2 Στρατηγική Συνεργασία στον Τομέα της Εκπαίδευσης Ενηλίκων, στοχεύει στη δημιουργία ενός εκπαιδευτικού προγράμματος που θα διευκολύνει την πρόσβαση των ηλικιωμένων σε ηλεκτρονικές υπηρεσίες υγείας. Το πρόγραμμα προτείνει τον σχεδιασμό και την ανάπτυξη μίας διαδραστικής, φιλικής προς τον χρήστη και ελεύθερης πρόσβασης ψηφιακής πλατφόρμας, η οποία θα βελτιώσει τον ψηφιακό αλφαβητισμό υγείας του πληθυσμού των ηλικιωμένων στην Ευρώπη (50+).\r\n",
+  "url" : "https://iheal.eu/el/ ",
+  "image" : "39.jpg",
+  "contactPerson" : {
+    "name" : "-",
+    "email" : "-",
+    "telephone" : "-",
+    "cellular" : "-"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : null
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1630500047.000000000,
+  "dateModified" : 1637423841.322000000,
+  "unPublishDate" : "",
+  "unpublishMsg" : null
+}, {
+  "id" : 40,
+  "name" : "Κ.Ε.ΔΙ.ΒΙ.Μ. ΠΑΝΕΠΙΣΤΗΜΙΟΥ ΑΙΓΑΙΟΥ",
+  "description" : "Το Κέντρο Επιμόρφωσης και Δια Βίου Μάθησης (ΚΕ.ΔΙ.ΒΙ.Μ.) του Πανεπιστημίου Αιγαίου, αξιοποιώντας και διευρύνοντας την εμπειρία και τεχνογνωσία του Ιδρύματος στην οργάνωση και λειτουργία εκπαιδευτικών προγραμμάτων μέσω δια ζώσης, μεικτής και ηλεκτρονικής μάθησης, προσφέρει ένα σύνολο καινοτόμων Επιμορφωτικών Προγραμμάτων επαγγελματικής επιμόρφωσης και εξειδίκευσης σε επιστημονικά πεδία αιχμής",
+  "url" : "https://kedivim.aegean.gr/ ",
+  "image" : "40.jpg",
+  "contactPerson" : {
+    "name" : "Απόστολος Κώστας",
+    "email" : "apkostas@aegean.gr",
+    "telephone" : "22410 99284",
+    "cellular" : "6972699103"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : ""
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1632415939.000000000,
+  "dateModified" : 1637423841.323000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+}, {
+  "id" : 41,
+  "name" : "European Schoolnet",
+  "description" : "Το European Schoolnet είναι ένα δίκτυο περισσότερων από 30 Ευρωπαϊκών Υπουργείων Παιδείας, με έδρα τις Βρυξέλλες. Ως μη κερδοσκοπικός οργανισμός, στοχεύει να εισαγάγει την καινοτομία στη διδασκαλία και τη μάθηση στους βασικούς μας ενδιαφερόμενους φορείς: Υπουργεία Παιδείας, σχολεία, εκπαιδευτικούς, ερευνητές και βιομηχανικούς εταίρους.\r\n \r\nΑποστολή του δικτύου είναι να υποστηρίξει τους φορείς της εκπαίδευσης στην Ευρώπη στον μετασχηματισμό των εκπαιδευτικών διαδικασιών για τις ψηφιοποιημένες κοινωνίες του 21ου αιώνα. Το δίκτυο εντοπίζει και δοκιμάζει υποσχόμενες καινοτόμες πρακτικές, μοιράζει στοιχεία σχετικά με τον αντίκτυπό τους και υποστηρίζει την ενσωμάτωση των πρακτικών διδασκαλίας και μάθησης σύμφωνα με τα πρότυπα του 21ου αιώνα για την εκπαίδευση χωρίς αποκλεισμούς.\r\n \r\nΑπό την ίδρυσή του το 1997, το European Schoolnet χρησιμοποίησε τους δεσμούς του με τα υπουργεία παιδείας για να βοηθήσει τα σχολεία να γίνουν αποτελεσματικά στην παιδαγωγική χρήση της τεχνολογίας, εξοπλίζοντας τόσο τους εκπαιδευτικούς όσο και τους μαθητές με τις απαραίτητες δεξιότητες για να επιτύχουν στην ψηφιακή κοινωνία.\r\n",
+  "url" : "https://www.europeanschoolnetacademy.eu/",
+  "image" : "41.jpg",
+  "contactPerson" : {
+    "name" : "Φλούρου Μαρία",
+    "email" : ".",
+    "telephone" : ".",
+    "cellular" : "."
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : null
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1633467262.000000000,
+  "dateModified" : 1637423841.324000000,
+  "unPublishDate" : "",
+  "unpublishMsg" : null
+}, {
+  "id" : 42,
+  "name" : "DevOps Competencies for Smart Cities",
+  "description" : "Το έργο «DevOps Competencies for Smart Cities» υπό την αιγίδα του Πανεπιστημίου Θεσσαλίας, έχει εστιάσει στην ανάπτυξη των ικανοτήτων του προσωπικού των πόλεων που επιθυμούν να γίνουν «έξυπνες», αναπτύσσοντας τρία νέα επαγγελματικά προφίλ. Τα νέα αυτά επαγγελματικά προφίλ είναι:\r\n• σχεδιαστής έξυπνης πόλης (Smart City Planner), \r\n• προϊστάμενος του τμήματος πληροφορικής έξυπνης πόλης (Smart City ΙΤ Manager) και \r\n• ειδικός ψηφιακών συστημάτων έξυπνης πόλης (Smart City IT Officer). ",
+  "url" : "https://smartdevops.eu/dev/",
+  "image" : "42.jpg",
+  "contactPerson" : {
+    "name" : "ΠΑΝΟΣ ΦΙΤΣΙΛΗΣ",
+    "email" : "fitsilis@uth.gr",
+    "telephone" : "..",
+    "cellular" : "6955965975"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : null
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1636315306.000000000,
+  "dateModified" : 1637423841.325000000,
+  "unPublishDate" : "",
+  "unpublishMsg" : null
+}, {
+  "id" : 43,
+  "name" : "Εθνική Ακαδημία Ψηφιακών Ικανοτήτων",
+  "description" : "",
+  "url" : "https://nadia.gov.gr/",
+  "image" : "43.jpg",
+  "contactPerson" : {
+    "name" : "Ευγενία Λόκανα",
+    "email" : "lokanae@gmail.com",
+    "telephone" : "210 7474274",
+    "cellular" : "210 7474274"
+  },
+  "capacity" : {
+    "capability" : "yes",
+    "prerequisites" : ""
+  },
+  "enabled" : true,
+  "status" : null,
+  "dateCreated" : 1636403964.000000000,
+  "dateModified" : 1637423841.326000000,
+  "unPublishDate" : null,
+  "unpublishMsg" : null
+} ]
