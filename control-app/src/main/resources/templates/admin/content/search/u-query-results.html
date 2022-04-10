@@ -54,10 +54,10 @@
                                 <span class="font-italic course_info" style="font-weight: 450" th:text="${lecture.course.title}"></span>
                                 <span class="font-italic" th:text="${' Τμήμα ' + lecture.department.title}"></span>
                                 <th:block th:if="${lecture.course.departmentsRelated !=null}">
-                                    <i class="fas fa-share-square ms-2" title="διατμηματικό μάθημα"></i>
+                                        <i class="fas fa-share-square ms-2" title="διατμηματικό μάθημα"></i>
                                     <span th:each="unit,iStat: ${lecture.course.departmentsRelated}">
-                                <span th:text="${' Τμήμα ' + unit.title}"></span>
-                            </span>
+                                        <span th:text="${' Τμήμα ' + unit.title}"></span>
+                                    </span>
                                 </th:block>
                             </th:block>
                             <th:block th:if="${lecture.event != null}">
@@ -84,6 +84,13 @@
                                 <th:block th:unless="${lecture.accessPolicy == 'private'}" title="πρόσβαση">
                                     <i class="fas fa-lock-open me-1" style="color:green"></i> Δημόσιο
                                 </th:block>
+                            </div>
+                            <div class="col" th:if="${lecture.course != null}" title="περίοδος">
+                                <span th:text="#{${lecture.period}}" th:class="${lecture.period}"></span>
+                            </div>
+                            <div class="col" th:if="${lecture.course != null}" title="ακαδημαϊκό έτος">
+                                <i class="fas fa-graduation-cap me-1"></i>
+                                <span class="academic-year"  th:text="${lecture.academicYear}"></span>
                             </div>
                             <div class="col">
                                 <th:block th:if="${lecture.realDuration != null}">

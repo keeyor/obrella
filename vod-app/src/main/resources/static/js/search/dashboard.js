@@ -201,7 +201,12 @@
 
     function define_events() {
 
-
+        $(".academic-year").each(function(){
+            let academic_year = $(this).text();
+            let  parsed = parseInt(academic_year);
+            let set_text = academic_year + " - " + (parsed+1);
+            $(this).text(set_text);
+        });
 
         $( ".player_tab" ).mouseenter(function(e) {
             $(this).find(".btn").show();

@@ -147,7 +147,7 @@
                                 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                     <div class="card ps-2 mb-1" style="background-color: #f7f7f9" >
                                         <div class="form-group row mt-3">
-                                            <label for="resource_title" class="col-sm-3  col-form-label">Τίτλος*</label>
+                                            <label for="resource_title" class="col-sm-3  col-form-label emph-label">Τίτλος*</label>
                                             <div class="col-sm-7">
                                                 <input type="text" id="resource_title" class="form-control" th:field="*{title}" placeholder="πληκτρολογήστε έναν τίτλο"/>
                                                 <div class="form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</div>
@@ -157,7 +157,7 @@
                                         <th:block th:unless="${Resource.type == 'EVENT'}">
                                             <div class="form-group row mt-2">
                                                 <input type="hidden" id="course_id" th:field="*{course.id}"/>
-                                                <label for="courses_s2" class="col-sm-3 col-form-label">Μάθημα*</label>
+                                                <label for="courses_s2" class="col-sm-3 col-form-label emph-label">Μάθημα*</label>
                                                 <div class="col-sm-7 pr-1">
                                                     <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
                                                         <option value=""></option>
@@ -174,7 +174,7 @@
                                             <!-- Supervisor -->
                                             <div class="form-group row mt-2">
                                                 <input type="hidden" id="supervisor_id" th:field="*{supervisor.id}"/>
-                                                <label for="supervisor_s2" class="col-sm-3 col-form-label">Υπεύθυνος Καθηγητής*</label>
+                                                <label for="supervisor_s2" class="col-sm-3 col-form-label emph-label">Διδάσκων*</label>
                                                 <div class="col-sm-7">
                                                     <select id="supervisor_s2" style="width: 100%"
                                                             class="form-control js-staffMembers-tags reset_control">
@@ -187,7 +187,7 @@
                                         <th:block th:if="${Resource.type == 'EVENT'}">
                                             <div class="form-group row mt-2">
                                                 <input type="hidden" id="event_id" th:field="*{event.id}"/>
-                                                <label for="events_s2" class="col-sm-3 col-form-label">Εκδήλωση*</label>
+                                                <label for="events_s2" class="col-sm-3 col-form-label emph-label">Εκδήλωση*</label>
                                                 <div class="col-sm-7 pr">
                                                     <select id="events_s2" style="width: 100%" class="form-control js-events-tags reset_control" >
                                                         <option value=""></option>
@@ -212,19 +212,19 @@
                                         </div>
                                         <!-- DATE - TIME -->
                                         <div class="form-group row mt-2">
-                                            <label for="_date_part" class="col-sm-3  col-form-label">Ημερομηνία*</label>
+                                            <label for="_date_part" class="col-sm-3  col-form-label emph-label">Ημερομηνία*</label>
                                             <div class="col-sm-2">
                                                 <div class="input-group date">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                                        <input type="text" class="form-control" value="" id="_date_part" />
-                                                    </div>
-                                                    <div class="form-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
+                                                        <span class="input-group-addon input-group-text">
+                                                            <i class="fas fa-calendar-alt"></i>
+                                                        </span>
+                                                        <input type="text" class="form-control" name="date" value="" id="_date_part" />
                                                 </div>
+                                                <div class="form-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
                                             </div>
                                         </div>
                                         <div class="form-group row mt-2">
-                                            <label for="_date_part" class="col-sm-3  col-form-label">Ώρα*</label>
+                                            <label for="_date_part" class="col-sm-3  col-form-label emph-label">Ώρα*</label>
                                             <div class="col-sm-3">
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="fas fa-clock"></i></span>
@@ -235,7 +235,7 @@
                                                             </th:block>
                                                         </select>
                                                         <select id="resource_minutes" style="width: 75px">
-                                                            <th:block th:each="i: ${#numbers.sequence(0, 55)}">"
+                                                            <th:block th:each="i: ${#numbers.sequence(0, 59)}">"
                                                                 <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
                                                                 <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
                                                             </th:block>
@@ -249,7 +249,7 @@
                                             <!-- PERIOD -->
                                             <!--@thymesVar id="pdList" type="java.util.HashMap<String,String>"-->
                                             <div class="form-group row mt-2">
-                                                <label for="resource_pd" class="col-sm-3  col-form-label">Περίοδος*</label>
+                                                <label for="resource_pd" class="col-sm-3  col-form-label emph-label">Περίοδος*</label>
                                                 <div class="col-sm-3">
                                                     <select id="resource_pd" class="custom-select form-control" th:field="*{period}">
                                                         <option th:each="period: ${pdList}" th:value="${period.key}" th:text="${period.value}"></option>
@@ -262,7 +262,7 @@
                                         <!--@thymesVar id="ayList" type="java.util.List"-->
                                         <!--@thymesVar id="ayListText" type="java.util.List"-->
                                         <div class="form-group row mt-2 mb-2">
-                                            <label for="resource_ay" class="col-sm-3  col-form-label">Ακαδημαϊκό Έτος*</label>
+                                            <label for="resource_ay" class="col-sm-3  col-form-label emph-label">Ακαδημαϊκό Έτος*</label>
                                             <div class="col-sm-3">
                                                 <select id="resource_ay" class="custom-select form-control" th:field="*{academicYear}">
                                                     <option value=""></option>
@@ -273,7 +273,7 @@
                                         <th:block th:unless="${Resource.type == 'EVENT'}">
                                             <!--@thymesVar id="catList" type="java.util.HashMap<String, List<String>"-->
                                             <div class="form-group row mb-2 mt-0">
-                                                <label for="event_cats" class="col-sm-3 col-form-label">Θεματικές Περιοχές*</label>
+                                                <label for="event_cats" class="col-sm-3 col-form-label emph-label">Θεματικές Περιοχές*</label>
                                                 <div class="col-sm-7">
                                                     <select id="event_cats" style="width: 100%" class="form-control js-category-tags" multiple="multiple" th:field="*{categories}">
                                                         <optgroup th:each="cheader:${catList}" th:label="${#strings.listSplit(cheader.key,'::')[1]}" label="">

@@ -264,6 +264,13 @@
 
     function define_events() {
 
+        $(".academic-year").each(function(){
+            let academic_year = $(this).text();
+            let  parsed = parseInt(academic_year);
+            let set_text = academic_year + " - " + (parsed+1);
+            $(this).text(set_text);
+        })
+
         $('#resource_ay').on('select2:select', function (e) {
             let data = e.params.data;
             let sel_ay = data.id;

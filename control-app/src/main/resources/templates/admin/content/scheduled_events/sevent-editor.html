@@ -146,14 +146,14 @@
                                                 <div class="card ps-2 mb-1" style="background-color: #f7f7f9" >
                                                         <input type="hidden" id="sevent_id" th:field="*{id}"/>
                                                         <div class="form-group row mt-3">
-                                                             <label for="sevent_title" class="col-sm-3 col-form-label">Τίτλος*</label>
+                                                             <label for="sevent_title" class="col-sm-3 col-form-label  emph-label">Τίτλος*</label>
                                                             <div class="col-sm-7">
                                                                 <input type="text" th:field="*{title}" id="sevent_title" name="sevent_title" class="form-control" placeholder="πληκτρολογήσε ένα σύντομο τίτλο για την Εκδήλωση"/>
                                                                 <div class="form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="sevent_area" class="col-sm-3 col-form-label">Κατηγορία*</label>
+                                                                <label for="sevent_area" class="col-sm-3 col-form-label  emph-label">Κατηγορία*</label>
                                                                 <div class="col-sm-7">
                                                                     <select id="sevent_area" name="sevent_area" style="width: 100%" class="custom-select" th:field="*{area}">
                                                                         <option value=""></option>
@@ -163,7 +163,7 @@
                                                                 </div>
                                                          </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="sevent_type" class="col-sm-3 col-form-label">Τύπος*</label>
+                                                                <label for="sevent_type" class="col-sm-3 col-form-label  emph-label">Τύπος*</label>
                                                                 <div class="col-sm-7">
                                                                     <select id="sevent_type" name="sevent_type" style="width: 100%" class="custom-select" th:field="*{type}">
                                                                     </select>
@@ -171,7 +171,7 @@
                                                                 </div>
                                                          </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="sevent_cat" class="col-sm-3 col-form-label">Θεματικές Περιοχές*</label>
+                                                                <label for="sevent_cat" class="col-sm-3 col-form-label  emph-label ">Θεματικές Περιοχές*</label>
                                                                 <div class="col-sm-7">
                                                                     <select id="sevent_cat" name="sevent_cat" class="form-control js-category-tags" multiple="multiple" th:field="*{categories}" disabled>
                                                                         <optgroup th:each="cheader:${catList}" th:label="${#strings.listSplit(cheader.key,'::')[1]}" label="">
@@ -183,7 +183,7 @@
                                                                 </div>
                                                          </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="daterange" class="col-sm-3 col-form-label">Ημερομηνία* (Έναρξη - Λήξη)*</label>
+                                                                <label for="daterange" class="col-sm-3 col-form-label emph-label">Ημερομηνία* (Έναρξη - Λήξη)*</label>
                                                                 <div class="col-sm-3">
                                                                     <div class="input-group">
                                                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
@@ -195,7 +195,7 @@
                                                                 </div>
                                                          </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="sevent_rperson_text" class="col-sm-3 col-form-label">Επιστημονικός Υπεύθυνος ή Εκπρόσωπος*</label>
+                                                                <label for="sevent_rperson_text" class="col-sm-3 col-form-label  emph-label">Επιστημονικός Υπεύθυνος ή Εκπρόσωπος*</label>
                                                                 <div class="col-sm-5">
                                                                     <div class="input-group">
                                                                         <span class="input-group-text me-2">
@@ -220,7 +220,7 @@
                                                                 </div>
                                                          </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="sevent_rperson_text" class="col-sm-3 col-form-label">Διοργανωτές*</label>
+                                                                <label for="sevent_rperson_text" class="col-sm-3 col-form-label  emph-label">Διοργανωτές*</label>
                                                                 <div class="col-sm-7">
                                                                     <div class="input-group">
                                                                         <span class="input-group-text me-2 selectRunitBt" title="κλικ για επιλογή διοργανωτών">
@@ -255,13 +255,13 @@
                                                                 </div>
                                                           </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="sevent_isactive_toggle" class="col-sm-3 col-form-label">Ημερολόγιο*</label>
+                                                                <label for="sevent_isactive_toggle" class="col-sm-3 col-form-label  emph-label">Ημερολόγιο*</label>
                                                                 <div class="col-sm-7">
                                                                     <input id="sevent_isactive_toggle" name="sevent_isactive_toggle" type="checkbox" data-width="100" th:field="*{isActive}"/>
                                                                 </div>
                                                             </div>
                                                         <div class="form-group row my-3">
-                                                                <label for="sevent_isfeatured_toggle" class="col-sm-3 col-form-label">Προβεβλημένη Εκδήλωση*</label>
+                                                                <label for="sevent_isfeatured_toggle" class="col-sm-3 col-form-label  emph-label">Προβεβλημένη Εκδήλωση*</label>
                                                                 <div class="col-sm-7">
                                                                     <input id="sevent_isfeatured_toggle" name="sevent_isfeatured_toggle" type="checkbox" data-width="100" th:field="*{isFeatured}"/>
                                                                 </div>

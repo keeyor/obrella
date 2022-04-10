@@ -45,7 +45,7 @@
             font-size: 0.95em;
         }
         .select2-container .select2-selection--multiple {
-            height: 38px;
+            height: 36px;
             padding-top: 0.175rem!important;
             padding-bottom: 0.75rem!important;
             padding-left: 0.2rem!important;
@@ -156,27 +156,17 @@
                             <form id="schedule-form" th:object="${ScheduleDTO}" th:action="@{schedule}" method="post">
                                 <input type="hidden" id="id"  th:field="*{id}" />
                                 <input type="hidden" id="_editor"  th:field="*{editor.id}" />
-                                <div class="card-body pb-0 px-0 pt-2">
-                                    <div class="pb-2" >
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <h5 class="modal-title" id="seventModalLabel"></h5>
-                                                <div id="s_event_info"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body px-0">
+                                <div class="card" style="border: none">
+                                    <div class="card-body">
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="p-2" id="_lecture"><span class="text-muted">1. Αρχικοποίηση</span></div>
                                                 <div class="p-3" style="background-color: #f7f7f9;border-top: black 1px solid;">
                                                     <input id="_active" type="hidden" th:field="*{enabled}">
                                                     <div class="form-group row">
-                                                        <label for="_type" class="col-sm-3  col-form-label"><b>Είδος*</b></label>
+                                                        <label for="_type" class="col-sm-3  col-form-label emph-label">Είδος*</label>
                                                         <div class="col-sm-4">
-                                                            <select id="_type" class="custom-select" th:field="*{type}" style="width: 100%">
+                                                            <select id="_type" class="form-select" th:field="*{type}" style="width: 100%">
                                                                 <option value="lecture"> Διάλεξη</option>
                                                                 <option value="event"> Εκδήλωση</option>
                                                             </select>
@@ -184,9 +174,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mt-3">
-                                                        <label for="_repeat" class="col-sm-3  col-form-label"><b>Τύπος*</b></label>
+                                                        <label for="_repeat" class="col-sm-3  col-form-label emph-label">Τύπος*</label>
                                                         <div class="col-sm-4">
-                                                            <select id="_repeat" class="custom-select" th:field="*{repeat}"  style="width: 100%">
+                                                            <select id="_repeat" class="form-select" th:field="*{repeat}"  style="width: 100%">
                                                                 <option value="regular"> Τακτική</option>
                                                                 <option value="onetime"> Έκτακτη</option>
                                                             </select>
@@ -200,7 +190,8 @@
                                                     <!-- COURSE -->
                                                     <div class="form-group row">
                                                         <input type="hidden" id="_course" th:field="*{course.id}"/>
-                                                        <label for="courses_s2" class="col-sm-3 col-form-label"><b>Μάθημα*</b></label>
+                                                        <label for="courses_s2" class="col-sm-3 col-form-label emph-label">
+                                                            Μάθημα*</label>
                                                         <div class="col-sm-8">
                                                             <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control">
                                                                 <option value=""></option>
@@ -210,10 +201,10 @@
                                                     </div>
                                                     <div class="form-group row mt-3">
                                                         <input type="hidden" id="_supervisor"  th:field="*{supervisor.id}"/>
-                                                        <label for="supervisor_s2" class="col-sm-3 col-form-label"><b>Καθηγητής (-ήτρια)*</b></label>
+                                                        <label for="supervisor_s2" class="col-sm-3 col-form-label emph-label">
+                                                            Διδάσκων*</label>
                                                         <div class="col-sm-8">
-                                                            <select id="supervisor_s2" style="width: 100%"
-                                                                    class="form-control js-staffMembers-tags reset_control">
+                                                            <select id="supervisor_s2" style="width: 100%" class="form-control js-staffMembers-tags reset_control">
                                                                 <option value=""></option>
                                                             </select>
                                                             <div class="form-error" th:if="${#fields.hasErrors('supervisor.id')}" th:errors="*{supervisor.id}"></div>
@@ -225,7 +216,8 @@
                                                 <div class="p-3 event_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
                                                     <div class="form-group row">
                                                         <input type="hidden" id="_event" th:field="*{scheduledEvent.id}"/>
-                                                        <label for="events_s2" class="col-sm-3 col-form-label"><b>Επιλέξτε Εκδήλωση*</b></label>
+                                                        <label for="events_s2" class="col-sm-3 col-form-label emph-label">
+                                                            Επιλέξτε Εκδήλωση*</label>
                                                         <div class="col-sm-8">
                                                             <select id="events_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
                                                                 <option value=""></option>
@@ -241,11 +233,12 @@
                                                 <!-- CLASSROOM -->
                                                 <div class="form-group row mt-0 pt-0">
                                                         <input type="hidden" id="_classroom" th:field="*{classroom.id}"/>
-                                                        <label for="classrooms_s2" class="col-sm-3 col-form-label"><b>Χώρος Διδασκαλίας/Εκδήλωσης*</b></label>
+                                                        <label for="classrooms_s2" class="col-sm-3 col-form-label emph-label">
+                                                            Χώρος Διδασκαλίας/Εκδήλωσης*</label>
                                                         <div class="col-sm-8">
-                                                            <select id="classrooms_s2" style="width: 100%" class="form-control js-classrooms-tags reset_control">
-                                                                <option value=""></option>
-                                                            </select>
+                                                                <select id="classrooms_s2" style="width: 100%" class="form-control js-classrooms-tags reset_control">
+                                                                    <option value=""></option>
+                                                                </select>
                                                             <div class="form-error" th:if="${#fields.hasErrors('classroom.id')}" th:errors="*{classroom.id}"></div>
                                                         </div>
                                                     </div>
@@ -256,9 +249,9 @@
                                                     <!--@thymesVar id="ayList" type="java.util.List"-->
                                                     <!--@thymesVar id="ayListText" type="java.util.List"-->
                                                     <div class="form-group row">
-                                                        <label for="resource_ay" class="col-sm-3  col-form-label"><b>Ακαδημαϊκό Έτος*</b></label>
+                                                        <label for="resource_ay" class="col-sm-3  col-form-labe emph-label">Ακαδημαϊκό Έτος*</label>
                                                         <div class="col-sm-4">
-                                                            <select id="resource_ay" class="custom-select" th:field="*{academicYear}"  style="width: 100%">
+                                                            <select id="resource_ay" class="form-select" th:field="*{academicYear}"  style="width: 100%">
                                                                 <option value=""></option>
                                                                 <option th:each="i, iter : ${ayList}" th:value="${i}" th:text="${ayListText[iter.index]}"></option>
                                                             </select>
@@ -266,9 +259,9 @@
                                                     </div>
                                                     <!--@thymesVar id="pdList" type="java.util.HashMap<String,String>"-->
                                                     <div class="form-group row lecture_panel mt-3">
-                                                        <label for="resource_pd" class="col-sm-3  col-form-label"><b>Περίοδος*</b></label>
+                                                        <label for="resource_pd" class="col-sm-3  col-form-label emph-label">Περίοδος*</label>
                                                         <div class="col-sm-4">
-                                                            <select id="resource_pd" class="custom-select" th:field="*{period}" style="width: 100%">
+                                                            <select id="resource_pd" class="form-select" th:field="*{period}" style="width: 100%">
                                                                 <option value=""></option>
                                                                 <option th:each="period: ${pdList}" th:value="${period.key}" th:text="${period.value}"></option>
                                                             </select>
@@ -276,13 +269,13 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="px-2 lecture_panel" id="period_info" style="background-color: dimgrey;color:white"></div>
+                                                <div class="px-2 mt-2 lecture_panel" id="period_info" style="background-color: lightgoldenrodyellow;color:black"></div>
                                             </div>
                                             <div class="col-6">
                                                 <div class="p-2 dayOfWeek_panel"><span class="text-muted">5. Ημερομηνίες - Ώρα - Διάρκεια</span></div>
                                                 <div class="p-3 dayOfWeek_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
                                                     <div class="form-group row dayOfWeek">
-                                                        <label for="_dayOfWeek" class="col-sm-3  col-form-label"><b>Ημέρα*</b></label>
+                                                        <label for="_dayOfWeek" class="col-sm-3  col-form-label emph-label">Ημέρα*</label>
                                                         <div class="col-sm-4">
                                                             <select id="_dayOfWeek" class="custom-select" th:field="*{dayOfWeek}"  style="width: 100%">
                                                                 <option value=""></option>
@@ -298,33 +291,48 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row dayOfMonth">
-                                                        <label for="_date" class="col-sm-3  col-form-label"><b>Ημερομηνία*</b></label>
+                                                        <label for="_date" class="col-sm-3  col-form-label emph-label">Ημερομηνία*</label>
                                                         <div class="col-sm-4">
                                                             <div class="input-group date">
-                                                                <input class="form-control" value="" aria-label="" id="_date" th:field="*{date}" />
-                                                                <span class="input-group-addon">
-                                                                    <i class="glyphicon glyphicon-calendar "></i>
+                                                                <span class="input-group-addon input-group-text">
+                                                                    <i class="fas fa-calendar-alt"></i>
                                                                 </span>
+                                                                <input class="form-control" value="" aria-label="" id="_date" th:field="*{date}" />
                                                                 <div class="form-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mt-3">
-                                                        <label for="_timeOfDay" class="col-sm-3  col-form-label"><b>Ώρα Εκκίνησης*</b></label>
+                                                        <label for="_timeOfDay" class="col-sm-3  col-form-label emph-label">Ώρα Εκκίνησης*</label>
                                                         <div class="col-sm-4">
-                                                            <input id="_timeOfDay" class="form-control" type="text" th:field="*{startTime}" autocomplete="off"/>
+                                                            <div class="input-group">
+                                                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                                <select id="resource_hour" style="width: 75px">
+                                                                    <th:block th:each="i: ${#numbers.sequence(0, 23)}">"
+                                                                        <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
+                                                                        <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
+                                                                    </th:block>
+                                                                </select>
+                                                                <select id="resource_minutes" style="width: 75px">
+                                                                    <th:block th:each="i: ${#numbers.sequence(0, 59)}">"
+                                                                        <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
+                                                                        <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
+                                                                    </th:block>
+                                                                </select>
+                                                                <input type="hidden" class="form-control" value="" aria-label="" id="_timeOfDay" th:field="*{startTime}"/>
+                                                            </div>
                                                             <div class="form-error" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mt-3">
-                                                        <label for="_duration_hours" class="col-sm-3  col-form-label"><b>Διάρκεια*</b></label>
-                                                        <div class="col-sm-4 form-inline">
+                                                        <label for="_duration_hours" class="col-sm-3  col-form-label emph-label">Διάρκεια*</label>
+                                                        <div class="col-sm-3 form-inline">
                                                             <input type="number" id="_duration_hours" value="0" min="0" max="12" step="1" th:field="*{durationHours}"/>
-                                                            <label for="_duration_hours" class="ml-2">Ώρες </label>
+                                                            <label for="_duration_hours" class="mσ-2">Ώρες </label>
                                                         </div>
-                                                        <div class="col-sm-4 form-inline">
+                                                        <div class="col-sm-3 form-inline">
                                                             <input type="number" id="_duration_minutes" value="0" min="0" max="59" step="1" th:field="*{durationMinutes}"/>
-                                                            <label for="_duration_minutes"  class="ml-2">Λεπτά </label>
+                                                            <label for="_duration_minutes"  class="mσ-2">Λεπτά </label>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -336,7 +344,10 @@
                                                 <div class="p-2 broadcast_panel"><span class="text-muted">6. Επιλογές Μετάδοσης</span></div>
                                                 <div class="p-3 broadcact_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
                                                     <div class="form-group row">
-                                                        <label for="_broadcast" class="col-sm-3  col-form-label"><b>Μετάδοση*</b></label>
+                                                        <label for="_broadcast" class="col-sm-3  col-form-label emph-label">
+                                                            <img title="Επιλογές Μετάδοσης" src="/cc/public/images/icons/IconMetadosi.png">
+                                                            Μετάδοση*
+                                                        </label>
                                                         <div class="col-sm-4">
                                                             <select id="_broadcast" class="custom-select" th:field="*{broadcast}"  style="width: 100%">
                                                                 <option th:value="1"> Μετάδοση</option>
@@ -345,7 +356,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mt-3">
-                                                        <label for="_access" class="col-sm-3  col-form-label"><b>Πρόσβαση*</b></label>
+                                                        <label for="_access" class="col-sm-3  col-form-label emph-label">
+                                                            <img title="Επιλογές Πρόσβασης" src="/cc/public/images/icons/IconMetadosiStatus.png">
+                                                            Πρόσβαση*</label>
                                                         <div class="col-sm-4">
                                                             <select id="_access" class="custom-select" th:field="*{access}"  style="width: 100%">
                                                                 <option value="open"> Ανοιχτή</option>
@@ -355,13 +368,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mt-3">
-                                                        <label for="_password" class="col-sm-3  col-form-label"><b>Κωδικός Μετάδοσης*</b></label>
+                                                        <label for="_password" class="col-sm-3  col-form-label emph-label">Κωδικός Μετάδοσης*</label>
                                                         <div class="col-sm-4 form-inline">
                                                             <input id="_password" class="form-control" type="text" th:field="*{broadcastCode}"/>
-
                                                         </div>
                                                         <div class="col-auto">
-                                                            <button id="reveal_passfield" class="btn btn-sm btn-secondary" title="εμφάνιση κωδικού"><i class="far fa-eye"></i></button>
+                                                            <button id="reveal_passfield" class="btn btn-light" title="εμφάνιση/απόκρυψη κωδικού"><i class="far fa-eye"></i></button>
                                                         </div>
 
                                                     </div>
@@ -374,7 +386,9 @@
                                                 <div class="p-2 record_panel"><span class="text-muted">7. Επιλογές Καταγραφής</span></div>
                                                 <div class="p-3 record_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
                                                     <div class="form-group row">
-                                                        <label for="_record" class="col-sm-3  col-form-label"><b>Καταγραφή*</b></label>
+                                                        <label for="_record" class="col-sm-3  col-form-label emph-label">
+                                                            <img title="Επιλογές Καταγραφής" src="/cc/public/images/icons/IconRec.png">
+                                                            Καταγραφή*</label>
                                                         <div class="col-sm-4">
                                                             <select id="_record" class="custom-select" th:field="*{recording}"  style="width: 100%">
                                                                 <option th:value="1"> Καταγραφή</option>
@@ -383,7 +397,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mt-3">
-                                                        <label for="_publish" class="col-sm-3  col-form-label"><b>Δημοσίευση*</b></label>
+                                                        <label for="_publish" class="col-sm-3  col-form-label emph-label">
+                                                            <img title="Επιλογές Δημοσιοποίησης" src="/cc/public/images/icons/IconRecStatus.png">
+                                                            Δημοσίευση*</label>
                                                         <div class="col-sm-4">
                                                             <select id="_publish" class="custom-select" th:field="*{publication}"  style="width: 100%">
                                                                 <option value="private"> Ιδιωτικό (απαιτείται έγκριση)</option>
@@ -459,12 +475,17 @@
                                             </div>
                                         </div>
                                 </div>
+                                    <div class="card-footer" th:unless="${ScheduleDTO.id != null && ScheduleDTO.id != ''}" >
+                                        <div class="py-2" style="font-weight: 500">
+                                            Με την επιτυχή αποθήκευση των παραμέτρων της μετάδοσης, θα εμφανιστεί εδώ, το αναλυτικό πρόγραμμα των μεταδόσεων
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
-                        <div class="card my-3 py-3 px-2" style="font-weight: 500">
-                            Ελέγξτε στον παρακάτω πίνακα το Πρόγραμμα των Μεταδόσεων, το οποίο δημιουργήθηκε σύμφωνα με τις επιλογές που κάνατε παραπάνω. Αποθηκεύστε τυχόν τροποποιήσεις για τον υπολογισμό του νέου προγράμματος μεταδόσεων
+                        <div th:if="${ScheduleDTO.id != null && ScheduleDTO.id != ''}" class="card my-3 py-3 px-2" style="font-weight: 500">
+                            Ελέγξτε στον παρακάτω πίνακα το Πρόγραμμα των Μεταδόσεων, το οποίο δημιουργήθηκε σύμφωνα με τις παραπάνω επιλογές. Αποθηκεύστε τυχόν τροποποιήσεις για τον υπολογισμό του νέου προγράμματος μεταδόσεων
                         </div>
 
                         <!-- ΠΡΟΓΡΑΜΜΑ ΜΕΤΑΔΟΣΕΩΝ -->

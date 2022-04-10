@@ -100,7 +100,6 @@
             $("#resource_hour").val(moment(resource_datetime).hours()).trigger("change");
             $("#resource_minutes").val(moment(resource_datetime).minutes()).trigger("change");
             $("#_date_part").val(moment(resource_datetime).format('YYYY-MM-DD'));
-
         }
         else {
             //use UTC here because time comes with fixed time zone from db
@@ -110,9 +109,9 @@
         }
         let hour = $("#resource_hour").val();
         let minute = $("#resource_minutes").val();
-        let datetime_selected = moment(resource_datetime).hour(hour).minute(minute).format('YYYY-MM-DDTHH:mm:ss[Z]');
+        let datetime_selected = moment(resource_datetime).hour(hour).minute(minute).format('YYYY-MM-DD'); //moment(resource_datetime).hour(hour).minute(minute).format('YYYY-MM-DDTHH:mm:ss[Z]');
 
-        $("#_date").val(datetime_selected);
+        $("#_date_part").datepicker('setDate',datetime_selected);
 
         //partNumber
         $("input[type='number']").inputSpinner();

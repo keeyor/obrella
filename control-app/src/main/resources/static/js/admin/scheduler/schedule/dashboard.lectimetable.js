@@ -336,6 +336,7 @@
     };
 
     function _dateIsInThePast(row_data) {
+        // returns true if row broadcast is in the PAST
         let isInThePast = false;
         let row_date = row_data.date;
         //DateTime of scheduled
@@ -373,11 +374,10 @@
             if (json.data.message_overlaps !== "") {
                 _message_overlaps_html += json.data.message_overlaps;
             }
+            $("#timetable_msg_pauses").html( _message_pauses_html);
+            $("#timetable_msg_cancellations").html( _message_cancellations_html);
+            $("#timetable_msg_overlaps").html( _message_overlaps_html);
         }
-        $("#timetable_msg_pauses").html( _message_pauses_html);
-        $("#timetable_msg_cancellations").html( _message_cancellations_html);
-        $("#timetable_msg_overlaps").html( _message_overlaps_html);
-
 
         //Set Period (Effective) Dates
         let row_0_data = ScheduleTable_DT.row(0).data();
@@ -388,7 +388,8 @@
         }
         //Check and Mark Live.. ( if Live => disable edit )
         if ( json !== undefined) {
-            json.data.results.forEach(function (row_data, index) {
+            let all_in_the_past = true;
+            json.data.results.forEach(function (row_data) {
                 let date = row_data["date"];
                 let startTime = row_data["startTime"];
                 let hour = parseInt(startTime.substring(0, 2));
@@ -401,16 +402,37 @@
 
                 let enabled = row_data["enabled"];
                 if (moment().isBetween(startDateTime, endDateTime, '[]') && enabled !== false) {
-                    $(".cancel-scheduled").hide();
-                    $("#save-button").attr('disabled', true);
-                    $("._fixed_error_msg").html("Είναι σε εξέλιξη ζωντανή μετάδοση για τον επιλεγμένο προγραμματισμό. Η επεξεργασία έχει προσωρινά απενεργοποιηθεί!");
-                    $("#deleteSchedule").prop("disabled",true);
-                    $("#enable-co-button").prop("disabled",true);
-                    $("#disable-co-button").prop("disabled",true);
+                    let msg = "Είναι σε εξέλιξη ζωντανή μετάδοση για τον επιλεγμένο προγραμματισμό. Η επεξεργασία έχει προσωρινά απενεργοποιηθεί!";
+                    let allow_delete = false;
+                    disableEditing(msg,allow_delete);
                 }
-            })
+                if (all_in_the_past === true) {
+                    if (!(_dateIsInThePast(row_data))) {
+                        all_in_the_past = false;
+                    }
+                }
+            });
+            if (all_in_the_past) {
+                let msg = "Προγραμματισμός αφορά ημερομηνίες παρελθόντος χρόνου. Η επεξεργασία έχει απενεργοποιηθεί!";
+                let allow_delete = true;
+                disableEditing(msg,allow_delete);
+            }
         }
         loader.hideLoader();
+    }
+
+    function disableEditing(msg, allow_delete) {
+        $(".cancel-scheduled").hide();
+        $("#save-button").attr('disabled', true);
+        $("._fixed_error_msg").html(msg);
+        if (allow_delete) {
+            $("#deleteSchedule").prop("disabled", false);
+        }
+        else {
+            $("#deleteSchedule").prop("disabled", true);
+        }
+        $("#enable-co-button").prop("disabled",true);
+        $("#disable-co-button").prop("disabled",true);
     }
 
     function LecturePDFHeader() {

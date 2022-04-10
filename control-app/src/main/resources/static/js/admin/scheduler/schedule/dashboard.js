@@ -60,6 +60,13 @@
             let $reveal_passfield   = $("#reveal_passfield");
 
 
+            $("#supervisor_s2").select2({
+                placeholder: "Επιλέξτε Διδάσκων (-ουσα) - προηγείται η επιλογή Μαθήματος"
+            });
+
+            $("#classrooms_s2").select2({
+                placeholder: "Επιλέξτε Χώρο | Αίθουσα - προηγείται η επιλογή Μαθήματος & Διδάσκοντα"
+            });
 
             $("#events_s2").select2({
                 placeholder: "Επιλέξτε Εκδήλωση"
@@ -90,17 +97,13 @@
                 placeholder: 'Επιλέξτε Ημέρα της Εβδομάδας',
                 minimumResultsForSearch: -1
             });
-            $("#_timeOfDay").timepicker({
-                hourStep: 1,
-                minStep: 1,
-                minTime: "05:00",
-                maxTime: "23:00",
-                selectSize: 5,
-                timeFormat: "%H:%i",
-                ampmText: { am:"πμ", pm:"μμ", AM:"ΠΜ", PM:"ΜΜ" },
-                hourHeaderText: "ώρα",
-                minHeaderText: "λεπτά"
+            $("#resource_hour").select2({
+                minimumResultsForSearch: -1
             });
+            $("#resource_minutes").select2({
+                minimumResultsForSearch: -1
+            });
+
             //duration spinners init
             $("input[type='number']").inputSpinner();
 
@@ -139,6 +142,17 @@
                 $("#schedule_panel").hide();
             }
             else {
+                // fix startTime
+
+                let startTime = $("#_timeOfDay").val();
+                let resource_hour = startTime.split(":")[0];
+                if (resource_hour.startsWith("0")) { resource_hour = resource_hour.charAt(1); }
+                let resource_minutes = startTime.split(":")[1];
+                if (resource_minutes.startsWith("0")) { resource_minutes = resource_minutes.charAt(1);}
+
+                $("#resource_hour").val(resource_hour).trigger("change");
+                $("#resource_minutes").val(resource_minutes).trigger("change");
+
                 loader.showLoader();
                 $("#schedule_panel").show();
                 if (schedule_type  == null || schedule_type  === "lecture") {
@@ -209,6 +223,23 @@
         }
 
         function InitEvents() {
+
+            $("#resource_hour").on('select2:select', function (e) {
+                let data = e.params.data;
+                let resource_hour = data.id;
+                if (resource_hour < 10) { resource_hour = "0" + resource_hour;}
+                let resource_minutes = $("#resource_minutes").val();
+                if (resource_minutes < 10) { resource_minutes = "0" + resource_minutes;}
+                $("#_timeOfDay").val(resource_hour + ":" + resource_minutes);
+            });
+            $("#resource_minutes").on('select2:select', function (e) {
+                let data = e.params.data;
+                let resource_minutes = data.id;
+                if (resource_minutes < 10) { resource_minutes = "0" + resource_minutes;}
+                let resource_hour = $("#resource_hour").val();
+                if (resource_hour < 10) { resource_hour = "0" + resource_hour;}
+                $("#_timeOfDay").val(resource_hour + ":" + resource_minutes);
+            });
 
             $("#save-button").on('click',function (e){
 
@@ -426,7 +457,7 @@
                 let semester     = $("#resource_pd").select2('data')[0].text;
                 let dayOfWeek    = $("#_dayOfWeek").select2('data')[0].text;
                 let classroom    = $("#classrooms_s2").select2('data')[0].text;
-                let startTime    = $("#_timeOfDay").val();
+                let startTime    = $("#resource_hour").val() + ":" + $("#resource_minutes").val(); //$("#_timeOfDay").val();
 
                 let msg =   '<div>Όλες οι <b>μελλοντικές</b> μεταδόσεις του Μαθήματος <b>"' + course_title +
                             '</b>" για την περίοδο "' + semester + '", που είναι προγραμματισμένες για κάθε <b>' + dayOfWeek +
@@ -447,7 +478,7 @@
                 let semester     = $("#resource_pd").select2('data')[0].text;
                 let dayOfWeek    = $("#_dayOfWeek").select2('data')[0].text;
                 let classroom    = $("#classrooms_s2").select2('data')[0].text;
-                let startTime    = $("#_timeOfDay").val();
+                let startTime    = $("#resource_hour").val() + ":" + $("#resource_minutes").val(); //$("#_timeOfDay").val();
 
                 let msg =   '<div>Όλες οι <b>μελλοντικές</b> μεταδόσεις του Μαθήματος <b>"' + course_title +
                             '</b>" για την περίοδο "' + semester + '", που είναι προγραμματισμένες για κάθε <b>' + dayOfWeek +
@@ -471,7 +502,7 @@
                 else {
                     let data_type = $("#_type").val();
                     let classroom = $("#classrooms_s2").select2('data')[0].text;
-                    let startTime = $("#_timeOfDay").val();
+                    let startTime = $("#resource_hour").val() + ":" + $("#resource_minutes").val(); //$("#_timeOfDay").val();
                     let title, _date, semester, repeat;
                     if (data_type === "lecture") {
                         title = $("#courses_s2").select2('data')[0].text;

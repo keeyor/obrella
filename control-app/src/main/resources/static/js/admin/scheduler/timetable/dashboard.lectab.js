@@ -17,60 +17,18 @@
     	dashboard.lectab.getAvailableYearList(current_academic_year);
     };
 
-
-
     function RegisterListeners() {
-
-        let $repeat_s2      =  $("#repeat_select2");
-        let $dayOfWeek_s2   = $("#dayOfWeek_select2");
-
         $select_year.on('change', function () {
             dashboard.selected_year = $select_year.val();	 //cannot be null
             let message = {msg: "Year selected!", year: dashboard.selected_year};
             dashboard.broker.trigger('afterSelect.year', [message]);
         });
-
-        $repeat_s2.on("change",function(){
-            let val  = $repeat_s2.val();
-            if (val === "onetime") {
-                $dayOfWeek_s2.attr("disabled",true);
-            }
-            else {
-                $dayOfWeek_s2.attr("disabled",false);
-            }
-            dashboard.repeat = val;
-            let message = {msg: "Repeat Changed!", value: dashboard.repeat};
-            dashboard.broker.trigger('afterSelect.repeat', [message]);
-        });
-
-        $dayOfWeek_s2.on("change",function(){
-            let val  = $dayOfWeek_s2.val();
-            if (val !== "") {
-                $repeat_s2.val("regular").trigger("change");
-                $repeat_s2.attr("disabled",true);
-            }
-            else {
-                $repeat_s2.attr("disabled",false);
-            }
-            dashboard.dayOfWeek = val;
-            let message = {msg: "DayOfWeek Changed!", value: dashboard.dayOfWeek};
-            dashboard.broker.trigger('afterSelect.dayOfWeek', [message]);
-        })
     }
 
     function InitControls() {
         $select_year.select2({
             placeholder: 'Επιλέξτε Ακαδημαϊκό Έτος'
         });
-        $("#dayOfWeek_select2").select2({
-            placeholder: 'Επιλέξτε Ημέρα',
-            allowClear: true
-        });
-        $("#repeat_select2").select2({
-            placeholder: 'Επιλέξτε Τύπο Επανάληψης',
-            allowClear: true
-        });
-
     }
 
     dashboard.lectab.getAvailableYearList = function (selectAcademicYear) {
@@ -146,7 +104,7 @@
             fixedHeader: true,
             order: [[5, 'asc']],
             pagingType: "full_numbers",
-            pageLength : 25,
+            pageLength : 10,
             //"dom": '<"top"flBp>rti<"bottom">p<"clear">',
             "dom" : "<'row mb-3'<'col-3'lB><'col-6 d-flex justify-content-center'p><'col-3'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -245,7 +203,7 @@
                             if (cancellations != null && cancellations.length >0) {
                                 cancellation_mark = '<i class="fas fa-exclamation font-weight-bolder ml-1" style="color: red" title="Υπάρχουν Ακυρώσεις"></i>';
                             }
-                            let ret = '';
+                            let ret;
                             ret =   '<span style="display:none">' + dashboard.broker.selectNumberedDayOfWeek(data) + row.startTime + '</span>';
                             return ret + '<b>' + dashboard.broker.selectDayOfWeek(data) + '</b>' + cancellation_mark;
                         }

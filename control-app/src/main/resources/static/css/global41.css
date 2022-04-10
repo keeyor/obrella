@@ -116,3 +116,6 @@ html:not([dir=rtl]) .wrapper {
     position: relative;
 
 }
+.emph-label {
+    font-weight: 500;
+}

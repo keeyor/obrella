@@ -27,6 +27,7 @@
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row mt-2'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             pagingType: "full_numbers",
+            pageLength : 10,
             "columns": [
                 {"data": "id"},
                 {"data": "enabled"},

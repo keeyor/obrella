@@ -99,12 +99,10 @@
                         <div th:replace="~{admin/scheduler/timetable_offsets/ontop-event-filters :: ontop-event-filters}">Applied Filters</div>
                         <div class="card">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
                                         <!-- TABS -->
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link  active" id="lectures-tab" data-coreui-toggle="tab" href="#t-lectures" role="tab" aria-controls="t-lectures" aria-selected="true">Διαλέξεις</a>
+                                                <a class="nav-link  active" id="lectures-tab" data-coreui-toggle="tab" href="#t-lectures" role="tab" aria-controls="t-lectures" aria-selected="true">Διαλέξεις 1</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="events-tab" data-coreui-toggle="tab" href="#t-events" role="tab" aria-controls="t-events" aria-selected="false">Εκδηλώσεις</a>
@@ -118,8 +116,7 @@
                                                 <div th:replace="~{admin/scheduler/timetables_tabs/events_tab :: events_tab}"></div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+
                             </div>
                             <div class="card-footer">
                                 <div class="row pt-2">
