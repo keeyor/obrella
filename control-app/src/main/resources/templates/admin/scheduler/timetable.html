@@ -45,6 +45,12 @@
             padding-left: 0.2rem!important;
             font-size: 0.95em;
         }
+         .my-nav{
+             color: #006A9B!important;
+         }
+        .my-nav.active {
+            color: grey!important;
+        }
     </style>
 </head>
 <body style="font-size: 0.89em">
@@ -64,6 +70,11 @@
 <input type="hidden" id="staff_filter"/><input type="hidden" id="staff_filter_name" value=""/>
 <input type="hidden" id="course_filter"/><input type="hidden" id="course_filter_name" value=""/>
 
+<input id="search_filters" type="hidden" th:value="${timetable_search_history}" size="200"/>
+<!-- Scheduled Events Filters-->
+<input type="hidden" id="etype_filter"/><input type="hidden" id="etype_filter_name" value=""/>
+<input type="hidden" id="estatus_filter"/><input type="hidden" id="estatus_filter_name" value=""/>
+<input id="search_event_filters" type="hidden" th:value="${timetable_events_search_history}" size="200"/>
 
 <div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
@@ -103,10 +114,10 @@
                                         <!-- TABS -->
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link  active" id="lectures-tab" data-coreui-toggle="tab" href="#t-lectures" role="tab" aria-controls="t-lectures" aria-selected="true">Διαλέξεις</a>
+                                                <a class="nav-link my-nav active" id="lectures-tab" data-coreui-toggle="tab" href="#t-lectures" role="tab" aria-controls="t-lectures" aria-selected="true">Διαλέξεις</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" id="events-tab" data-coreui-toggle="tab" href="#t-events" role="tab" aria-controls="t-events" aria-selected="false">Εκδηλώσεις</a>
+                                                <a class="nav-link my-nav" id="events-tab" data-coreui-toggle="tab" href="#t-events" role="tab" aria-controls="t-events" aria-selected="false">Εκδηλώσεις</a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="myTabContent">
@@ -154,14 +165,7 @@
 
             </div>
     </div>
-    <footer class="c-footer">
-        <input id="search_filters" type="hidden" th:value="${timetable_search_history}" size="200"/>
-        <!-- Scheduled Events Filters-->
-        <input type="hidden" id="etype_filter"/><input type="hidden" id="etype_filter_name" value=""/>
-        <input type="hidden" id="estatus_filter"/><input type="hidden" id="estatus_filter_name" value=""/>
-        <input id="search_event_filters" type="hidden" th:value="${timetable_events_search_history}" size="200"/>
-        <i class="far fa-copyright mr-1"></i> <span th:text="#{default.institution.title}"></span>
-    </footer>
+
 </div>
 
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
