@@ -115,6 +115,7 @@ public class ScheduledEventOoRepositoryImpl implements ScheduledEventOoRepositor
 
 		query.fields().include("type");
 		query.fields().include("area");
+		query.fields().include("categories");
 		query.fields().include("responsibleUnit");
 		query.fields().include("responsiblePerson");
 		query.fields().include("isActive");
@@ -327,6 +328,11 @@ public class ScheduledEventOoRepositoryImpl implements ScheduledEventOoRepositor
 		if (resourceQuery.getEventType()!= null && !resourceQuery.getEventType().isEmpty()) {
 			Criteria expression = new Criteria();
 			expression.and("type").is(resourceQuery.getEventType());
+			andExpression.add(expression);
+		}
+		if (resourceQuery.getCategoryCode()!= null && !resourceQuery.getCategoryCode().isEmpty()) {
+			Criteria expression = new Criteria();
+			expression.and("categories").is(resourceQuery.getCategoryCode());
 			andExpression.add(expression);
 		}
 		if (resourceQuery.getStaffMemberId() != null && !resourceQuery.getStaffMemberId().isEmpty()) {

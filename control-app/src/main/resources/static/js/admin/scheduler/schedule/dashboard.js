@@ -39,7 +39,7 @@
         if (authorize === "false") {
             $(".cancel-scheduled").hide();
             $("#save-button").attr('disabled', true);
-            $("._fixed_error_msg").html("ΠΡΟΣΟΧΗ: Δεν έχεται δικαίωμα Τροποποίησης της Καταχώρησης. Η αποθήκευση έχει απενεργοποιηθεί!");
+            $("._fixed_error_msg").html("ΠΡΟΣΟΧΗ: Δεν έχετε δικαίωμα Τροποποίησης της Καταχώρησης. Η αποθήκευση έχει απενεργοποιηθεί!");
         }
         else {
             InitEvents();
@@ -209,7 +209,7 @@
                 else {
                     $("#disable-co-button").hide();
                     $("#enable-co-button").show();
-                    $("._fixed_warn_msg").html("ΠΡΟΣΟΧΗ: Τό πρόγραμμα μεταδόσεων είναι απενεργοποιημένο!");
+                    $("._fixed_warn_msg").html("ΠΡΟΣΟΧΗ: Το επιλεγμένο Πρόγραμμα Μεταδόσεων είναι απενεργοποιημένο!");
                 }
             }
             else {
@@ -223,6 +223,8 @@
         }
 
         function InitEvents() {
+
+
 
             $("#resource_hour").on('select2:select', function (e) {
                 let data = e.params.data;
@@ -422,7 +424,7 @@
                 let data_title =  $(this).data("title");
                 let data_type = $(this).data("type");
                 let display_date = moment(data_date).format('ll');
-                let msg = '<div>Η ημερομηνία μετάδοσης <b>' + display_date + '</b> του Μαθήματος/Εκδήλωσης <b>"' + data_title + '"</b> θα ακυρωθεί. Είστε σίγουρος?' +
+                let msg = '<div>Η Προγραμματισμένη Μετάδοση για τις <b>' + display_date + '</b> του Μαθήματος/Εκδήλωσης <b>"' + data_title + '"</b> θα ακυρωθεί. Είστε σίγουρος?' +
                           '<br/><br/> (προαιρετικά) Πληκτρολογήστε την αιτία της ακύρωσης' +
                           '</div>';
                           alertify.prompt('Προειδοποίηση', msg,'',
@@ -457,7 +459,7 @@
                 let semester     = $("#resource_pd").select2('data')[0].text;
                 let dayOfWeek    = $("#_dayOfWeek").select2('data')[0].text;
                 let classroom    = $("#classrooms_s2").select2('data')[0].text;
-                let startTime    = $("#resource_hour").val() + ":" + $("#resource_minutes").val(); //$("#_timeOfDay").val();
+                let startTime    = $("#_timeOfDay").val();
 
                 let msg =   '<div>Όλες οι <b>μελλοντικές</b> μεταδόσεις του Μαθήματος <b>"' + course_title +
                             '</b>" για την περίοδο "' + semester + '", που είναι προγραμματισμένες για κάθε <b>' + dayOfWeek +
@@ -478,7 +480,7 @@
                 let semester     = $("#resource_pd").select2('data')[0].text;
                 let dayOfWeek    = $("#_dayOfWeek").select2('data')[0].text;
                 let classroom    = $("#classrooms_s2").select2('data')[0].text;
-                let startTime    = $("#resource_hour").val() + ":" + $("#resource_minutes").val(); //$("#_timeOfDay").val();
+                let startTime    = $("#_timeOfDay").val();
 
                 let msg =   '<div>Όλες οι <b>μελλοντικές</b> μεταδόσεις του Μαθήματος <b>"' + course_title +
                             '</b>" για την περίοδο "' + semester + '", που είναι προγραμματισμένες για κάθε <b>' + dayOfWeek +
@@ -502,7 +504,7 @@
                 else {
                     let data_type = $("#_type").val();
                     let classroom = $("#classrooms_s2").select2('data')[0].text;
-                    let startTime = $("#resource_hour").val() + ":" + $("#resource_minutes").val(); //$("#_timeOfDay").val();
+                    let startTime = $("#_timeOfDay").val();
                     let title, _date, semester, repeat;
                     if (data_type === "lecture") {
                         title = $("#courses_s2").select2('data')[0].text;
@@ -660,7 +662,7 @@
                 async: true,
                 success: function() {
                     alertify.notify("Η απενεργοποίηση καταχωρήθηκε" , "success");
-                    $("._fixed_warn_msg").html("ΠΡΟΣΟΧΗ: Τό πρόγραμμα μεταδόσεων είναι απενεργοποιημένο!");
+                    $("._fixed_warn_msg").html("ΠΡΟΣΟΧΗ: Τό επιλεγμένο Πρόγραμμα Μεταδόσεων είναι απενεργοποιημένο!");
                     dashboard.lectimetable.rebuildScheduleTable();
                     $("#disable-co-button").hide();
                     $("#enable-co-button").show();

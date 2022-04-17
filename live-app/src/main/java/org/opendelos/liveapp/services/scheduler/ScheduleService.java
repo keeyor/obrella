@@ -509,6 +509,151 @@ public class ScheduleService {
         return timeTableResults;
     }
 
+    public TimeTableResults calculateExactDaysOfRegularScheduleWithinRange(Schedule schedule, boolean cancelLive, LocalDate _start_range_date, LocalDate _end_range_date) {
+
+        String institution_id = defaultInstitution.getId();
+
+        TimeTableResults timeTableResults = new TimeTableResults();
+        StringBuilder message_pauses = new StringBuilder();
+        StringBuilder message_cancellations = new StringBuilder();
+        StringBuilder message_overlaps = new StringBuilder();
+
+        List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
+
+        //NOte: Allow 'onetime' to be off Period.. just check if it's in _start_range_date and _end_range_data and NOT cancelled
+        if (schedule.getRepeat().equals("onetime")) {
+            ScheduleDTO scheduleDTO = this.getScheduleDTO(schedule);
+            if (scheduleDTO != null) {
+                DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate validateDate = LocalDate.parse(scheduleDTO.getDate(), f);
+
+                Cancellation isCanceled = this.DateIsCanceled(validateDate, schedule.getCancellations());
+                //if not cancelled -> validate date
+                if (isCanceled == null) {
+                    if (
+                            (validateDate.equals(_start_range_date) || validateDate.isAfter(_start_range_date))  &&
+                                    (validateDate.equals(_end_range_date) || validateDate.isBefore(_end_range_date))
+                    ) {
+                        scheduleDTOS.add(scheduleDTO);
+                    }
+                }
+            }
+        }
+        else { //* REGULAR: Compute DAyS in Period
+            String academicYear = schedule.getAcademicYear();
+            String departmentId = schedule.getDepartment();
+            Course course = courseService.findById(schedule.getCourse());
+            if (course != null) {
+                //Find effective Period
+                Period schedulePeriod;
+                if (course.getStudyProgramId() != null && !course.getStudyProgramId()
+                        .equals("") && !course.getStudyProgramId().equals("program_default")) {
+                    schedulePeriod = studyProgramService
+                            .getStudyPeriod(course.getStudyProgramId(), departmentId, institution_id, academicYear, schedule
+                                    .getPeriod());
+                }
+                else {
+                    schedulePeriod = departmentService
+                            .getDepartmentPeriod(departmentId, institution_id, academicYear, schedule.getPeriod());
+                }
+                if (schedulePeriod != null) {
+                    /* Get Argies aka Pauses */
+                    List<CustomPause> departmentPauses = departmentService
+                            .getDepartmentPauses(departmentId, institution_id);
+
+                    DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate _start_period_date = LocalDate.parse(schedulePeriod.getStartDate(), f);
+                    LocalDate _end_period_date = LocalDate.parse(schedulePeriod.getEndDate(), f);
+
+                    LocalDate PS = _start_period_date;LocalDate PE = _end_period_date;
+                    LocalDate RS = _start_range_date; LocalDate RE = _end_range_date;
+
+                    boolean range_out_of_period = false;
+                    if (RS.isBefore(PS) || RS.isEqual(PS)) { RS = PS;}
+                    //else { RS = RS;}  // for clarity
+                    if (RE.isAfter(PE) || RE.isEqual(PE)) { RE = PE;}
+                    //else { RE = RE;}  // for clarity
+                    if (RS.isAfter(RE)) {
+                        range_out_of_period = true;
+                        //logger.info("out of range... Period Start: " + _start_period_date + " and period end: " + _end_period_date + " when range start:" + _start_range_date + " and range end: " + _end_range_date);
+                    }
+
+                    if (!range_out_of_period) {
+                        LocalDate _start_date = RS;
+                        LocalDate _end_date = RE;
+                        logger.info("Calculate Regular Within range:" + _start_date + " to: " + _end_date + " . WHEN period start is: " + _start_period_date + " and period end: " +  _end_period_date);
+
+                        DayOfWeek rDayOfWeek = schedule.getDayOfWeek();
+                        while (!_start_date.getDayOfWeek().equals(rDayOfWeek)) {
+                            _start_date = _start_date.plusDays(1);
+                        }
+                        LocalDate validateDate = _start_date;
+
+                        while (validateDate.isBefore(_end_date.plus(1, ChronoUnit.DAYS))) {
+                            Argia isArgia = this.DateInPauses(validateDate, departmentPauses);
+                            ScheduleDTO scheduleDTO = this.getScheduleDTO(schedule);
+                            if (scheduleDTO != null) {
+                                scheduleDTO.setRepeat("regular");
+                                scheduleDTO.setDate(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(validateDate));
+                                scheduleDTO.setFromDate(schedulePeriod.getStartDate());
+                                scheduleDTO.setToDate(schedulePeriod.getEndDate());
+                                if (isArgia != null) {
+                                    this.setPauseInfo(scheduleDTO, isArgia);
+                                    if (message_cancellations.length() == 0) {
+                                        message_cancellations.append("Υπάρχει τουλάχιστον μια αργία/παύση στις επιλεγμένες Ημερομηνίες");
+                                    }
+                                }
+                                else {
+                                    OverlapInfo overlapInfo = null;
+                                    Cancellation isCanceled = this.DateIsCanceled(validateDate, schedule.getCancellations());
+                                    if (isCanceled != null) {
+                                        this.setCancellationInfo(scheduleDTO, isCanceled);
+                                        if (message_pauses.length() == 0) {
+                                            message_pauses.append("Υπάρχει τουλάχιστον μια ακύρωση στις επιλεγμένες Ημερομηνίες");
+                                        }
+                                    }
+                                    else {
+                                        overlapInfo = this.checkScheduleDateOverlapAgainstOneTimeSchedules(schedule, validateDate);
+                                        if (overlapInfo != null) {
+                                            this.setOverlapInfo(scheduleDTO, overlapInfo);
+                                            if (message_overlaps.length() == 0) {
+                                                message_overlaps.append("Υπάρχει τουλάχιστον μια απενεργοποίηση λόγω αλληλοκάλυψης στις επιλεγμένες Ημερομηνίες");
+                                            }
+                                        }
+                                    }
+                                    if (isCanceled == null && overlapInfo == null && cancelLive) {
+                                        //check if this should be live right now! and set as cancelled
+                                        if (this.isScheduledForNow(scheduleDTO)) {
+                                            Cancellation cancellation_due_to_live = new Cancellation();
+                                            cancellation_due_to_live.setDate(validateDate);
+                                            cancellation_due_to_live.setTitle("...στο παρελθόν κατά τη δημιουργία");
+                                            this.setCancellationInfo(scheduleDTO, cancellation_due_to_live);
+                                            if (message_pauses.length() == 0) {
+                                                message_pauses.append("Υπάρχει τουλάχιστον μια ακύρωση στις επιλεγμένες Ημερομηνίες");
+                                            }
+                                        }
+                                    }
+                                }
+                                scheduleDTOS.add(scheduleDTO);
+                            }
+                            validateDate = validateDate.plus(7, ChronoUnit.DAYS);
+                        }
+                    }
+                }
+            }
+            else {
+                logger.warn("Course with id:" + schedule.getCourse() + " not found. Skipping");
+            }
+        }
+
+        timeTableResults.setResults(scheduleDTOS);
+        timeTableResults.setMessage_pauses(message_pauses.toString());
+        timeTableResults.setMessage_cancellations(message_cancellations.toString());
+        timeTableResults.setMessage_overlaps(message_overlaps.toString());
+
+        return timeTableResults;
+    }
+
     public OverlapInfo checkRegularScheduleOverlapsAgainstOtherRegularSchedules(Schedule schedule, boolean excludeDisabled) {
 
         ScheduleQuery scheduleQuery = new ScheduleQuery();
@@ -689,7 +834,7 @@ public class ScheduleService {
                  }
             }
             else {  //regular
-                TimeTableResults timeTableResults = this.calculateExactDaysOfRegularSchedule(schedule,cancelLive);
+                TimeTableResults timeTableResults = this.calculateExactDaysOfRegularScheduleWithinRange(schedule,cancelLive, fromDate,toDate);//this.calculateExactDaysOfRegularSchedule(schedule,cancelLive);
                 if (timeTableResults != null && timeTableResults.getResults() != null && timeTableResults.getResults().size()>0) {
                     List<ScheduleDTO> exactSchedules = timeTableResults.getResults();
                     for (ScheduleDTO scheduleDTO: exactSchedules) {

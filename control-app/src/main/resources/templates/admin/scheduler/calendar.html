@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OpenDelos Live</title>
+    <title>Ημερολόγιο Μεταδόσεων</title>
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
@@ -75,8 +75,6 @@
 <input id="scheduledEventFilterText"   type="hidden" th:value="${scheduledEventFilter.text}"/>
 <input id="classRoomFilterId"          type="hidden" th:value="${classRoomFilter.id}"/>
 <input id="classRoomFilterText"        type="hidden" th:value="${classRoomFilter.text}"/>
-<input id="start_date"                 type="hidden" th:value="${sd}"/>
-<input id="end_date"                   type="hidden"  th:value="${ed}"/>
 
 <div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
@@ -126,7 +124,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" style="margin-bottom: 200px">
                                             <div class="col-12">
                                                 <div id='calendar' style="height: 100%!important;"></div>
                                             </div>
@@ -139,7 +137,7 @@
             </div>
 
     </div>
-    <div th:replace="~{fragments/footer :: footer}">Footer</div>
+
 </div>
 
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
@@ -157,14 +155,7 @@
 <script th:src="@{/lib/alertify/alertify.min.js}"></script>
 
 <script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.js}" type="application/javascript"></script>
-<!--<script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.system.js}" type="application/javascript"></script>-->
 <script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.calendar.js}" type="application/javascript"></script>
-<!--<script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.department.js}" type="application/javascript"></script>
-<script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.classroom.js}" type="application/javascript"></script>
-<script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.course.js}" type="application/javascript"></script>
-<script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.sevents.js}" type="application/javascript"></script>
-<script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.staffmembers.js}" type="application/javascript"></script>
-<script th:src="@{/js/admin/scheduler/fullcalendar/dashboard.editor.js}" type="application/javascript"></script>-->
 
 <script th:src="@{/js/admin/scheduler/lang/el.js}" type="application/javascript"></script>
 
@@ -181,22 +172,5 @@
 <script th:src="@{/lib/fullcalendar/main.js}"></script>
 <script th:src="@{/lib/fullcalendar/locales/el.js}"></script>
 
-<script>
-    function filterFunction() {
-        let input, filter, ul, li, a, i;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        let div = document.getElementById("classroom-filter");
-        a = div.getElementsByTagName("a");
-        for (i = 0; i < a.length; i++) {
-            let txtValue = a[i].textContent || a[i].innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                a[i].style.display = "";
-            } else {
-                a[i].style.display = "none";
-            }
-        }
-    }
-</script>
 </body>
 </html>

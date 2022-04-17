@@ -21,12 +21,12 @@
     <input type="hidden" id="media_folder"      th:value="${media_folder}"/>
     <input type="hidden" id="video_folder"      th:value="${video_folder}"/>
     <input type="hidden" id="type"              th:value="${Resource.type}"/>
-    <input type="hidden" id="accessPolicy"      th:value="${Resource.accessPolicy}"/>
 
     <input id="nocs" type="hidden"/>
     <!--@thymesVar id="pageSelect" type="java.lang.String"-->
     <!--@thymesVar id="Resource" type="org.opendelos.model.resources.Resource"-->
     <form id="lecture-form" th:object="${Resource}" th:action="@{ ${pageSelect} + '-editor'}" method="post">
+        <input type="hidden" id="accessPolicy"      th:field="*{accessPolicy}" />
         <!-- Resource Form -->
         <div class="card mt-2">
             <div class="card-header">
@@ -36,32 +36,33 @@
                                      <span th:unless="${Resource.type == 'COURSE'}"> Πολυμέσου Εκδήλωσης</span>
                                  </span>
                                 <span class="float-end">
-                                    <a role="button" title="Επιστροφή στα αποτελέσματα αναζήτησης" class="btn btn-secondary" th:href="${user_search_history}">
+                                    <a role="button" data-toggle="tooltip" title="Επιστροφή στα αποτελέσματα αναζήτησης" class="btn btn-secondary" th:href="${user_search_history}">
                                         <i class="fas fa-undo"></i> Επιστροφή
                                     </a>
-                                    <button type="submit" title="Save Resource" class="btn btn-primary submit_form blue-btn-wcag-bgnd-color" id="save-button">
+                                    <button type="submit" data-toggle="tooltip" title="Αποθήκευση Καταχώρησης" class="btn btn-primary submit_form blue-btn-wcag-bgnd-color" id="save-button">
                                         <i class="fas fa-save"></i> Αποθήκευση
                                     </button>
                                      <span th:if="${Resource.id != null}">
-                                                   <button type="submit" title="Δημιουργία νέας Καταχώρησης με αντιγραφή στοιχείων" class="btn btn-pill btn-warning submit_form" id="copy-button">
+                                        <button type="submit" data-toggle="tooltip" title="Δημιουργία νέας Καταχώρησης με αντιγραφή στοιχείων" class="btn btn-pill btn-warning" id="copy-button">
                                                         <i class="far fa-clone"></i>
-                                                    </button>
+                                        </button>
                                      </span>
+
                                       <span th:if="${Resource.status != null && Resource.status.inclMultimedia == 1}">
-                                                   <a target="_blank" role="button" th:href="@{'/player?id=' + ${Resource.id}}" class="btn btn-light">
+                                                   <a target="_blank" data-toggle="tooltip"  role="button" th:href="@{'/player?id=' + ${Resource.id}}" class="btn btn-light"
+                                                   title="Αναπαραγωγή σε νέο παράθυρο περιηγητή">
                                                         <i class="fas fa-play"></i><span> Αναπαραγωγή</span>
                                                    </a>
                                     </span>
-                                    <span th:unless="${Resource.status.inclMultimedia == 1}">
-                                                   <a target="_blank" id="play-d" role="button" th:href="@{'/player?id=' + ${Resource.id}}"
-                                                      class="btn btn-light" aria-disabled="true">
-                                                        <i class="fas fa-play"></i><span> Αναπαραγωγή</span>
-                                                   </a>
+                                    <span th:unless="${Resource.status.inclMultimedia == 1}" data-toggle="tooltip" title="απενεργοποιημένo: δεν βρέθηκαν πολυμέσα">
+                                        <button id="play-d" class="btn btn-light" disabled>
+                                            <i class="fas fa-play"></i><span> Αναπαραγωγή</span>
+                                        </button>
                                     </span>
                                     <span class="ml-1">
-                                                   <button title="Διαγραφή Καταχώρησης" id="delete-button" class="btn btn-danger submit_form" disabled>
-                                                        <i class="fas fa-trash"></i>
-                                                   </button>
+                                         <button  data-toggle="tooltip"  title="Διαγραφή Καταχώρησης" id="delete-button" class="btn btn-danger" disabled>
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                      </span>
 
                                  </span>
@@ -105,8 +106,10 @@
 
                 <div class="form-group row">
                     <div class="col-12 text-end">
+                        <span data-toggle="tooltip" title="Κατάσταση καταχώρησης: Δημοσιοποίηση ή Απόσυρση καταχώρησης">
                         <label for="publication_toggle" class="col-form-label text-end" style="font-weight: 600">Κατάσταση</label>
                         <input id="publication_toggle" type="checkbox"/>
+                        </span>
                     </div>
                 </div>
                 <!-- Content : TABS -->
@@ -166,8 +169,8 @@
                                                 </div>
                                                 <div class="col-sm-2 ps-0">
                                                     <button type="button" class="btn btn-sm blue-btn-wcag-bgnd-color text-white"
-                                                            title="εμφάνιση περισσότερων στοιχείων για το επιλεγμένο Μάθημα" data-toggle="modal"
-                                                            data-target="#CourseInfoModal"><i class="far fa-window-restore"></i>
+                                                            data-toggle="tooltip" title="εμφάνιση περισσότερων στοιχείων για το επιλεγμένο Μάθημα" data-coreui-toggle="modal"
+                                                            data-coreui-target="#CourseInfoModal"><i class="far fa-window-restore"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -209,6 +212,13 @@
                                             <div class="col-sm-2 form-in">
                                                <input type="number" id="resource_partNumber" value="0" min="0" max="50" step="1" th:field="*{partNumber}"/>
                                             </div>
+                                            <div class="col-sm-2">
+                                               <span th:if="${Resource.id != null && Resource.parts == true}">
+                                                    <button type="submit" data-toggle="tooltip" title="Δημιουργία ΝΕΑΣ καταχώρησης στην ΙΔΙΑ σειρά διαλέξεων (Μέρος max+1) με αντιγραφή στοιχείων" class="btn btn-pill btn-warning" id="clone-button">
+                                                    <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
                                         </div>
                                         <!-- DATE - TIME -->
                                         <div class="form-group row mt-2">
@@ -218,9 +228,8 @@
                                                         <span class="input-group-addon input-group-text">
                                                             <i class="fas fa-calendar-alt"></i>
                                                         </span>
-                                                        <input type="text" class="form-control" name="date" value="" id="_date_part" />
+                                                        <input type="text" class="form-control" value="" id="_date_part" />
                                                 </div>
-                                                <div class="form-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
                                             </div>
                                         </div>
                                         <div class="form-group row mt-2">
@@ -234,6 +243,7 @@
                                                                 <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
                                                             </th:block>
                                                         </select>
+                                                        <span class="input-group-text"><i class="fas fa-ellipsis-v"></i></span>
                                                         <select id="resource_minutes" style="width: 75px">
                                                             <th:block th:each="i: ${#numbers.sequence(0, 59)}">"
                                                                 <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
@@ -241,11 +251,40 @@
                                                             </th:block>
                                                         </select>
                                                     </div>
-                                                    <input type="hidden" class="form-control" value="" aria-label="" id="_date" th:field="*{date}"/>
-                                                    <div class="form-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
+                                                    <input type="hidden" class="form-control" aria-label="" id="_date" th:field="*{date}"/>
+
                                                 </div>
                                         </div>
                                         <th:block th:unless="${Resource.type == 'EVENT'}">
+                                            <!--@thymesVar id="catList" type="java.util.HashMap<String, List<String>"-->
+                                            <div class="form-group row mt-2">
+                                                <label for="event_cats" class="col-sm-3 col-form-label emph-label">Θεματικές Περιοχές*</label>
+                                                <div class="col-sm-7">
+                                                    <select id="event_cats" style="width: 100%" class="form-control js-category-tags" multiple="multiple" th:field="*{categories}">
+                                                        <optgroup th:each="cheader:${catList}" th:label="${#strings.listSplit(cheader.key,'::')[1]}" label="">
+                                                            <option th:each="cat:${cheader.value}" th:value="${#strings.listSplit(cat,'::')[0]}" th:text="${#strings.listSplit(cat,'::')[1]}">
+                                                            </option>
+                                                        </optgroup>
+                                                    </select>
+                                                    <div class="form-error" th:if="${#fields.hasErrors('categories')}" th:errors="*{categories}">Incorrect Categories</div>
+                                                </div>
+                                                <div class="col-sm-2 ps-0">
+                                                    <button  data-toggle="tooltip" type="button" id="categories_sync" class="btn btn-sm blue-btn-wcag-bgnd-color text-white" style="color: #006A9B" title="Συγχρονισμός με τις Θεματικές Περιοχές του Μαθήματος (σημ: εφόσον έχουν δηλωθεί)">
+                                                        <i class="fas fa-sync"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:unless="${Resource.type == 'EVENT'}">
+                                            <div class="form-group row mt-4">
+                                                <label class="col-sm-3  col-form-label emph-label"></label>
+                                                <div class="col-sm-7">
+                                                     <span class="text-high-emphasis">
+                                                         Η Περίοδος και το Ακαδημαϊκό Έτος, υπολογίζονται αυτόματα από την τρέχουσα ημερομηνία και το Τμήμα του επιλεγμένου Μαθήματος.<br/>
+                                                         Τροποποιήστε μόνο αν προγραμματίζετε μετάδοση για άλλη περίοδο
+                                                     </span>
+                                                </div>
+                                            </div>
                                             <!-- PERIOD -->
                                             <!--@thymesVar id="pdList" type="java.util.HashMap<String,String>"-->
                                             <div class="form-group row mt-2">
@@ -270,26 +309,6 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <th:block th:unless="${Resource.type == 'EVENT'}">
-                                            <!--@thymesVar id="catList" type="java.util.HashMap<String, List<String>"-->
-                                            <div class="form-group row mb-2 mt-0">
-                                                <label for="event_cats" class="col-sm-3 col-form-label emph-label">Θεματικές Περιοχές*</label>
-                                                <div class="col-sm-7">
-                                                    <select id="event_cats" style="width: 100%" class="form-control js-category-tags" multiple="multiple" th:field="*{categories}">
-                                                        <optgroup th:each="cheader:${catList}" th:label="${#strings.listSplit(cheader.key,'::')[1]}" label="">
-                                                            <option th:each="cat:${cheader.value}" th:value="${#strings.listSplit(cat,'::')[0]}" th:text="${#strings.listSplit(cat,'::')[1]}">
-                                                            </option>
-                                                        </optgroup>
-                                                    </select>
-                                                    <div class="form-error" th:if="${#fields.hasErrors('categories')}" th:errors="*{categories}">Incorrect Categories</div>
-                                                </div>
-                                                <div class="col-sm-2 ps-0">
-                                                    <button type="button" id="categories_sync" class="btn btn-sm blue-btn-wcag-bgnd-color text-white" style="color: #006A9B" title="αντιγραφή από τις Θεματικές περιοχές του Μαθήματος (αν έχουν δηλωθεί)">
-                                                        <i class="fas fa-sync"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </th:block>
                                     </div>
                                 </div>
                                 <!-- VIDEO TAB -->
@@ -347,12 +366,23 @@
                                         <div id="player_container" style="display: none">
                                             <div class="form-group row">
                                                 <div class="col-12 mt-2 text-end">
-                                                    <a target="_blank" download id="download_video_link" title="κατεβάστε το βίντεο σε  αρχείο στον υπολογιστή σας" role="button" class="btn btn-sm btn-light" href="#">
+                                                    <a target="_blank" download id="download_video_link" title="κατεβάστε το βίντεο σε  αρχείο στον υπολογιστή σας" role="button"
+                                                       class="btn btn-sm btn-light" href="#">
                                                         <i class="fas fa-download"></i><span> Εξαγωγή αρχείου</span>
                                                     </a>
-                                                    <a role="button" id="edit_video_link" title="επεξεργασία βίντεο" th:href="@{/admin/video-editor(id=${Resource.id})}" class="btn btn-sm btn-light">
-                                                                   <i class="far fa-edit"></i><span> Επεξεργασία βίντεο</span>
-                                                    </a>
+                                                    <th:block th:if="${Resource.rteStatus != null && Resource.rteStatus.status == 'DARE'}">
+                                                        <a role="button"  title="εκκρεμεί αποδοχή/απόρριψη κοπής" th:href="@{/admin/video-editor(id=${Resource.id})}"
+                                                             class="btn btn-sm btn-warning edit_video_link">
+                                                             <i class="far fa-edit"></i><span> Επεξεργασία βίντεο</span>
+                                                        </a>
+                                                    </th:block>
+                                                    <th:block th:unless="${Resource.rteStatus != null && Resource.rteStatus.status == 'DARE'}">
+                                                        <a role="button" title="επεξεργασία" th:href="@{/admin/video-editor(id=${Resource.id})}"
+                                                           class="btn btn-sm btn-light edit_video_link">
+                                                            <i class="far fa-edit"></i><span> Επεξεργασία βίντεο</span>
+                                                        </a>
+                                                    </th:block>
+
                                                     <th:block th:if="${Resource.accessPolicy == 'private'}">
                                                         <button class="btn btn-sm btn-light" title="διαγράψτε το βίντεο" id="mm_delete">
                                                             <i class="fas fa-trash" style="color: red"></i><span> Διαγραφή αρχείου</span>

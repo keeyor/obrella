@@ -221,6 +221,20 @@
                             </th:block>
                     </div>
                 </div>
+                <!-- Trim Start -->
+                <th:block th:if="${resource.presentation.cuts != null && resource.presentation.cuts.trims.start != null}">
+                    <input type="hidden" id="trim_start" th:attr="data-trim=${resource.presentation.cuts.trims.start.begin + '#' + resource.presentation.cuts.trims.start.end}"/>
+                </th:block>
+                <!-- Trim End -->
+                <th:block  th:if="${resource.presentation.cuts != null &&  resource.presentation.cuts.trims.finish != null}">
+                    <input type="hidden" id="trim_end" th:attr="data-trim=${resource.presentation.cuts.trims.finish.begin + '#' + resource.presentation.cuts.trims.finish.end}"/>
+                </th:block>
+                <!-- Cuts -->
+                <th:block th:if="${resource.presentation.cuts != null && resource.presentation.cuts.clips != null && resource.presentation.cuts.clips.cuts != null}">
+                    <th:block class="cut_space" th:each="cut, iStat: ${resource.presentation.cuts.clips.cuts}">
+                        <input type="hidden" th:attr="data-cut=${cut.begin + '-' + cut.end}"/>
+                    </th:block>
+                </th:block>
             </div>
         </main>
     </div>

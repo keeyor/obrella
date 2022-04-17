@@ -28,6 +28,11 @@
                                 <span id="department-dd-header"></span>
                             </a>
                         </button>
+                        <button id="period-filter-applied" style="display: none"  class="my-2 mx-1 btn blue-btn-wcag-bgnd-color btn-sm clear-filter">
+                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" data-target="period">
+                                <span id="period-dd-header"></span>
+                            </a>
+                        </button>
                         <button  id="course-filter" style="display: none"  class="my-2 mx-1 btn   blue-btn-wcag-bgnd-color  btn-sm">
                             <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-co-filter">
                                 <span id="course-dd-header"></span>
@@ -44,7 +49,7 @@
                             </a>
                         </button>
                         <button id="class-filter"  style="display: none"  class="my-2 mx-1  btn   blue-btn-wcag-bgnd-color  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-cl-filter">
+                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-cr-filter">
                                 <span id="class-dd-header"></span>
                             </a>
                         </button>
@@ -83,6 +88,9 @@
                                     <a  id="tagCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasTags" role="button" aria-controls="offcanvasAccess"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε εκδήλωση">
                                         <i class="fas fa-plus-circle"></i> | Ετικέτες Διαχειριστή
                                     </a>
+                                    <a id="periodCanvasLink" style="display: none"  class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasPeriod" role="button" aria-controls="offcanvasPeriod" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε περίοδο">
+                                        <i class="fas fa-plus-circle"></i> | Περίοδο
+                                    </a>
                                     <div class="text-muted" id="no_dyna_filters"></div>
                                 </div>
                             </div>
@@ -103,9 +111,26 @@
                         Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Τμήμα**
                     </p>
                 </div>
+                <div class="mt-2 mb-3">
+                    <input type="text" class="form-control short-list" data-target="dpFilters" placeholder="αναζήτηση"/>
+                </div>
                 <ul class="mt-3 list-group" id="dpFilters"></ul>
 
                 <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
+            </div>
+        </div>
+
+        <!-- OffCanvas Period -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasPeriod" aria-labelledby="offcanvasPeriodLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasPeriodLabel">Περίοδος</h5>
+                <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>
+                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Περίοδο</b> από την παρακάτω λίστα.
+                </div>
+                <ul class="mt-3 list-group" id="periodFilters"></ul>
             </div>
         </div>
 
@@ -121,6 +146,9 @@
                     <p class="text-muted">
                         Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Διδάσκοντα**
                     </p>
+                </div>
+                <div class="mt-2 mb-3">
+                    <input type="text" class="form-control short-list" data-target="stFilters" placeholder="αναζήτηση"/>
                 </div>
                 <ul  class="mt-3 list-group"  id="stFilters"></ul>
 
@@ -141,6 +169,9 @@
                         Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Μάθημα**
                     </p>
                 </div>
+                <div class="mt-2 mb-3">
+                    <input type="text" class="form-control short-list" data-target="coFilters" placeholder="αναζήτηση"/>
+                </div>
                 <ul class="mt-3 list-group" id="coFilters"></ul>
 
                 <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
@@ -159,6 +190,9 @@
                     <p class="text-muted">
                         Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Εκδήλωση**
                     </p>
+                </div>
+                <div class="mt-2 mb-3">
+                    <input type="text" class="form-control short-list" data-target="evFilters" placeholder="αναζήτηση"/>
                 </div>
                 <ul class="mt-3 list-group" id="evFilters"></ul>
 
@@ -179,7 +213,10 @@
                         Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Εκδήλωση**
                     </p>
                 </div>
-                <ul class="mt-3 list-group" id="clFilters"></ul>
+                <div class="mt-2 mb-3">
+                    <input type="text" class="form-control short-list" data-target="clFilters" placeholder="αναζήτηση"/>
+                </div>
+                <ul class="mt-3 list-group" id="crFilters"></ul>
 
                 <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
             </div>

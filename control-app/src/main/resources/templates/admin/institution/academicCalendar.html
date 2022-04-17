@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
-    <title>OpenDelos Live</title>
+    <title>Ακαδημαϊκό Ημερολόγιο</title>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
@@ -24,6 +24,14 @@
     <link rel="stylesheet" th:href="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.css}"/>
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+    <style>
+        .my-nav{
+            color: #006A9B!important;
+        }
+        .my-nav.active {
+            color: grey!important;
+        }
+    </style>
 </head>
 <body style="font-size: 0.89em">
 <input type="hidden" id="institutionIdentity" th:value="${mInstitution.identity}" />
@@ -70,7 +78,7 @@
                                 </div>
                                 <span class="float-end">
                                         <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white" id="newCalendarBt" role="button">
-                                            <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέo Ακαδημαϊκό Έτος
+                                            <i class="fas fa-plus me-1 font-weight-bolder"></i> Νέo Ακαδημαϊκό Έτος
                                         </a>
                                 </span>
                             </div>
@@ -79,7 +87,7 @@
                                     <div class="col-12">
                                         <div class="d-flex justify-content-start pb-2 pt-2" >
                                             <div class="btn-toolbar d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                                                <label for="year_select2" class="mr-2"><i class="fas fa-calendar-alt mr-2"></i></label>
+                                                <label for="year_select2" class="me-2"><i class="fas fa-calendar-alt me-1"></i></label>
                                                 <select id="year_select2" class="form-control" aria-label="" style="width: 300px">
                                                     <option></option>
                                                 </select>
@@ -89,10 +97,10 @@
                                             <!-- TABS -->
                                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link  active" id="periods-tab" data-coreui-toggle="tab" href="#t-periods" role="tab" aria-controls="t-periods" aria-selected="true">Περίοδοι Διδασκαλίας</a>
+                                                    <a class="nav-link  active my-nav" id="periods-tab" data-coreui-toggle="tab" href="#t-periods" role="tab" aria-controls="t-periods" aria-selected="true">Περίοδοι Διδασκαλίας</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" id="argies-tab" data-coreui-toggle="tab" href="#t-argies" role="tab" aria-controls="t-argies" aria-selected="false">Επίσημες Αργίες & Παύσεις</a>
+                                                    <a class="nav-link my-nav" id="argies-tab" data-coreui-toggle="tab" href="#t-argies" role="tab" aria-controls="t-argies" aria-selected="false">Επίσημες Αργίες & Παύσεις</a>
                                                 </li>
                                             </ul>
                                             <!-- TAB CONTENT -->
@@ -112,7 +120,7 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-md-12">
-                                                                    <table id="table_system" style="width: 100%" class="row-border table-striped">
+                                                                    <table id="table_system" style="width: 100%" class="row-border stripe">
                                                                         <thead>
                                                                         <tr style="font-weight: 700">
                                                                             <td>#</td>
@@ -143,7 +151,7 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-md-12">
-                                                                    <table id="table_system_a" style="width: 100%" class="row-border table-striped">
+                                                                    <table id="table_system_a" style="width: 100%" class="row-border stripe">
                                                                         <thead>
                                                                         <tr style="font-weight: 700">
                                                                             <td>#</td>

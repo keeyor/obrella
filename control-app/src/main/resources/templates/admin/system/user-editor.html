@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>OpenDelos Live</title>
+    <title>Επεξεργασία Διαχειριστή</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
-    <title>OpenDelos Live</title>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
     <!-- font awesome 5 -->
@@ -36,22 +35,22 @@
             padding-left: 0.2rem!important;
             font-size: 0.95em;
         }
-        .select2-container .select2-selection--multiple {
-            height: 38px;
-            padding-top: 0.175rem!important;
-            padding-bottom: 0.75rem!important;
-            padding-left: 0.2rem!important;
-            font-size: 0.95em;
+        .my-nav{
+            color: #006A9B!important;
         }
+        .my-nav.active {
+            color: grey!important;
+        }
+        .modal-open .select2-container--open { z-index: 999999 !important; width:100% !important; }
     </style>
 </head>
 <body style="font-size: 0.89em">
 <input type="hidden" id="signInUserid" th:value="${user.id}"/>
 <input type="hidden" id="staff_role" th:value="${role}"/>
 <input type="hidden" id="staff_authorities" th:value="${authorities}"/>
-<!--@thymesVar id="institution_identity" type="java.lang.String" -->
-<input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
-<input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
+<!--@thymesVar id="defaultInstitution" type="org.opendelos.model.structure.Institution" -->
+<input type="hidden" id="institutionIdentity" th:value="${defaultInstitution.id}"/>
+<input type="hidden" id="institutionTitle" th:value="#{${defaultInstitution.title}}"/>
 
 
 <div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
@@ -124,14 +123,15 @@
                                         <!-- TABS -->
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="info-tab" data-coreui-toggle="tab" href="#t-info" role="tab" aria-controls="t-info" aria-selected="false">Ταυτότητα</a>
+                                                <a class="nav-link active my-nav" id="info-tab" data-coreui-toggle="tab" href="#t-info" role="tab" aria-controls="t-info" aria-selected="false">
+                                                    Ταυτότητα</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" id="rights-tab" data-coreui-toggle="tab" href="#t-rights" role="tab" aria-controls="t-rights" aria-selected="false">Δικαιώματα</a>
+                                                <a class="nav-link my-nav" id="rights-tab" data-coreui-toggle="tab" href="#t-rights" role="tab" aria-controls="t-rights" aria-selected="false">Δικαιώματα</a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="myTabContent">
-                                            <div class="tab-pane fade show active" id="t-info" role="tabpanel" aria-labelledby="info-tab">
+                                            <div class="tab-pane fade show active " id="t-info" role="tabpanel" aria-labelledby="info-tab">
                                                 <form id="staff_form" th:object="${OpUser}" th:action="user-editor" method="post" autocomplete="off">
                                                     <input type="hidden" id="staff_id" th:value="${OpUser.id}" />
                                                     <input type="hidden" id="staff_name" th:value="${OpUser.name}" />
@@ -145,17 +145,9 @@
                                                     </th:block>
                                                     <th:block th:unless="${isStaffMember}">
                                                         <div class="card pt-2">
-                                                            <div class="card-header px-0" style="border: none">
-                                                                <div class="row mt-2">
-                                                                    <div class="col-12">
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body" style="background-color: #f7f7f9;border: none">
-                                                                <div class="mb-2"><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
+                                                            <div class="card-body" >
                                                                     <div class="form-group row pt-2">
-                                                                        <label for="staff_name" class="col-sm-2 col-form-label"><b>Όνομα*</b></label>
+                                                                        <label for="staff_name" class="col-sm-2 col-form-label emph-label">Όνομα*</label>
                                                                         <div class="col-sm-4">
                                                                             <input type="text" id="staff_name_" th:field="*{name}" name="staff_name" class="form-control"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect name</div>
@@ -168,57 +160,55 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
-                                                                        <label for="staff_aff" class="col-sm-2 col-form-label"><b>Ιδιότητα*</b></label>
+                                                                        <label for="staff_aff" class="col-sm-2 col-form-label emph-label">Ιδιότητα*</label>
                                                                         <div class="col-sm-4">
                                                                             <input type="text" id="staff_aff"  name="staff_aff" th:field="*{affiliation}" class="form-control" autocomplete="on"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('affiliation')}" th:errors="*{affiliation}">Incorrect name</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
-                                                                        <label for="staff_department" class="col-sm-2 col-form-label"><b>Τμήμα*</b></label>
+                                                                        <label for="staff_department" class="col-sm-2 col-form-label emph-label">Τμήμα*</label>
                                                                         <div class="col-sm-4">
-                                                                            <select id="staff_department" style="width: 100%" class="staff_department">
+                                                                            <select id="staff_department" style="width: 100%" class="form-control  staff_department">
                                                                                 <option value=""></option>
                                                                             </select>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('department.id')}" th:errors="*{department.id}">Incorrect department</div>
                                                                         </div>
                                                                         <input th:field="*{department.id}" type="hidden" id="staff_department_id"/>
                                                                     </div>
-
-                                                                    <div class="form-group row mt-3 title_change_warning">
-                                                                        <label class="col-sm-2 col-form-label">&nbsp;</label>
-                                                                        <div class="col-sm-7">
-                                                                            <div style="font-size: 1em;color: red;font-weight: bold"><i style="color:red" class="fas fa-exclamation-triangle"></i> ΠΡΟΣΟΧΗ:
-                                                                                <p style="color:black;font-weight: normal">
-                                                                                    To Όνομα Χρήστη <b>(username)</b> είναι μοναδικό για κάθε χρήστη. Η εισαγωγή θα αποτύχει αν βρεθεί χρήστης με ίδιο όνομα χρήστη.                                                     </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
                                                                     <div class="form-group row mt-3">
-                                                                        <label for="staff_email" class="col-sm-2 col-form-label"><b>E-mail Χρήστη*</b></label>
+                                                                        <label for="staff_email" class="col-sm-2 col-form-label emph-label">E-mail*</label>
                                                                         <div class="col-sm-2">
                                                                             <input type="text" id="staff_email"  th:field="*{email}" name="staff_email" class="form-control"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect uid</div>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="form-group row mt-3 title_change_warning">
+                                                                        <label class="col-sm-2 col-form-label">&nbsp;</label>
+                                                                        <div class="col-sm-7">
+                                                                            <div style="font-size: 1em;color: red"><i style="color:red" class="fas fa-exclamation-triangle"></i> ΠΡΟΣΟΧΗ:
+                                                                                <p class="text-high-emphasis">
+                                                                                    To Όνομα Χρήστη <b>(username)</b> είναι μοναδικό για κάθε χρήστη. Η εισαγωγή θα αποτύχει αν βρεθεί χρήστης με ίδιο όνομα χρήστη.                                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="form-group row mt-3">
-                                                                        <label for="staff_uid" class="col-sm-2 col-form-label"><b>Όνομα Χρήστη (username)*</b></label>
+                                                                        <label for="staff_uid" class="col-sm-2 col-form-label emph-label">Όνομα Χρήστη (username)*</label>
                                                                         <div class="col-sm-2">
                                                                             <input type="text" id="staff_uid" th:field="*{uid}"  name="staff_email" class="form-control" autocomplete="new-username"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('uid')}" th:errors="*{uid}">Incorrect uid</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
-                                                                        <label for="staff_password_1" class="col-sm-2 col-form-label"><b>Κωδικός Εισόδου*</b></label>
+                                                                        <label for="staff_password_1" class="col-sm-2 col-form-label emph-label">Κωδικός Εισόδου*</label>
                                                                         <div class="col-sm-6 form-inline">
                                                                             <input type="text" id="staff_password_1" data-val="" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
-                                                                        <label for="staff_password_2" class="col-sm-2 col-form-label"><b>Επανάληψη*</b></label>
+                                                                        <label for="staff_password_2" class="col-sm-2 col-form-label emph-label">Κωδικός Εισόδου* (Επαν.)</label>
                                                                         <div class="col-sm-3">
                                                                             <input type="text" id="staff_password_2" data-val="" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
-                                                                            <small>Εισάγετε τον επιθυμητό κωδικό εισόδου (επανάληψη)</small>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
@@ -233,15 +223,17 @@
                                                                         <label for="staff_enabled" class="col-sm-2 col-form-label"><b>Ενεργός Χρήστης</b></label>
                                                                         <div class="col-sm-5">
                                                                             <input id="staff_enabled" name="sevent_isactive_toggle" type="checkbox" th:field="*{active}" />
-                                                                            <small class="form-text text-muted">To σύστημα απαγορεύει την πρόσβαση σε Ανενεργούς χρήστες</small>
                                                                         </div>
                                                                     </div>
                                                             </div> <!-- card body -->
+                                                            <div class="card-footer">
+                                                                <div class="mb-2" style="font-weight: 500"><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
+                                                            </div>
                                                         </div>
                                                     </th:block>
                                                 </form>
                                             </div>
-                                            <div class="tab-pane fade show" id="t-rights" role="tabpanel" aria-labelledby="rights-tab">
+                                            <div class="tab-pane fade show " id="t-rights" role="tabpanel" aria-labelledby="rights-tab">
                                                 <!-- Ανάθεση Δικαιωμάτων -->
                                                 <div class="form-group row rights_assign_warning mt-3" style="display: none">
                                                     <div class="col-12" style="font-size: 1em;color:orangered">
@@ -250,56 +242,60 @@
                                                     </div>
                                                 </div>
                                                 <div class="card pt-2" id="staff_rights_card"  style="display: none">
-                                                    <div class="card-header px-0" style="border: none">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <span class="font-weight-bold pt-2 float-end pe-2" style="color:red">ΠΡΟΣΟΧΗ:
-                                                                    <span style="color: black">Η τροποποίηση 'ρόλου' του χρήστη θα <b>διαγράψει άμεσα</b> όλα τα εκχωρημένα δικαιώματα</span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body" style="background-color: #f7f7f9;border: none">
+                                                    <div class="card-body">
                                                         <form id="r_staff_form">
                                                             <input type="hidden" id="r_staff_edit_mode" value=""/>
                                                             <input type="hidden" id="r_manager_type" />
                                                             <input type="hidden" id="r_isStaffMember" />
-                                                            <div class="form-group row" style="border-bottom: silver 1px solid">
-                                                                <label class="col-2 col-form-label"><b>Ρόλος*</b></label>
-                                                                <div class="col-10 pt-2">
+                                                            <div class="card-header">
+                                                                Διαχειριστικός Ρόλος
+                                                            </div>
+                                                            <div class="form-group row mb-3 pb-2">
+                                                                <label class="col-2 col-form-label emph-label"></label>
+                                                                <div class="col-10 pt-2 text-medium-emphasis">
+                                                                    <div>Υπενθύμιση</div>
+                                                                    <ul>
+                                                                        <li>Διαχειριστής Συστήματος: αποκτά απεριόριστη πρόσβαση σε όλα τα υποσυστήματα</li>
+                                                                        <li>Διαχειριστής Μονάδων: αποκτά πρόσβαση στο Ίδρυμα ή σε επιλεγμένες Σχολές/Τμήματα και σε επιλεγμένα υποσυστήματα</li>
+                                                                        <li>Προσωπικό Υποστήριξης: αποκτά πρόσβαση επιλεγμένα Μαθήματα και Εκδηλώσεις Καθηγητών σε επιλεγμένα υποσυστήματα</li>
+                                                                    </ul>
                                                                     <form id="manager_type_radiobox">
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="managerOptions" id="saRadio" value="SA">
-                                                                            <label class="form-check-label" for="saRadio">Διαχειριστής Συστήματος</label>
+                                                                            <input class="btn-check" type="radio" name="managerOptions" id="saRadio" value="SA">
+                                                                            <label class="btn btn-outline-primary" for="saRadio">Διαχειριστής Συστήματος</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="managerOptions" id="managerRadio" value="MANAGER">
-                                                                            <label class="form-check-label" for="managerRadio">Διαχειριστής Μονάδων</label>
+                                                                            <input class="btn-check" type="radio" name="managerOptions" id="managerRadio" value="MANAGER">
+                                                                            <label class="btn btn-outline-primary" for="managerRadio">Διαχειριστής Μονάδων</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="managerOptions" id="supportRadio" value="SUPPORT">
-                                                                            <label class="form-check-label" for="supportRadio">Προσωπικό Υποστήριξης</label>
+                                                                            <input class="btn-check" type="radio" name="managerOptions" id="supportRadio" value="SUPPORT">
+                                                                            <label class="btn btn-outline-primary" for="supportRadio">Προσωπικό Υποστήριξης</label>
                                                                         </div>
                                                                     </form>
                                                                 </div>
                                                             </div>
-
+                                                            <div class="card-header">
+                                                                Ανάθεση Δικαιωμάτων
+                                                            </div>
                                                             <!-- Ανάθεση Tμημάτων -->
                                                             <div class="form-group row unit_panel">
-                                                                <label class="col-2 col-form-label"><b>Διαχειριστικές Μονάδες</b></label>
-                                                                <div class="col-10 text-muted">
-                                                                    <i class="fas fa-info-circle"></i>
-                                                                    Στη λίστα που ακολουθεί, εμφανίζονται οι μονάδες που διαχειρίζεται το επιλεγμένο μέλος του προσωπικού. Μπορείτε να αφαιρέσετε μονάδες
-                                                                    κάνοντας κλίκ στο αντίστοιχο κουμπί αφαίρεσης <i class="fas fa-minus"></i>. Κάντε κλικ πάνω στο εικονίδιο του δικαιώματος κάθε μονάδας, για το αφαιρέσετε/προσθέσετε. Για να προσθέσετε μονάδες, κάντε κλίκ στο κουμπί
-                                                                    'Νέα Μονάδα'΄.
-                                                                    <b>Οι τροποποιήσεις εφαρμόζονται άμεσα.</b>
+                                                                <label class="col-2 col-form-label emph-label"></label>
+                                                                <div class="col-10 pt-2 text-medium-emphasis">
+                                                                    <div>Στον πίνακα που ακολουθεί, εμφανίζονται οι μονάδες στις οποίες έχει πρόσβαση ο επιλεγμένος χρήστης</div>
+                                                                    <ul>
+                                                                        <li>Προσθέστε μονάδα, πατώντας 'Προσθήκη Μονάδας'</li>
+                                                                        <li>Αφαιρέστε μονάδα πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
+                                                                        <li>Για κάθε μονάδα, ορίζονται 3 δικαιώματα στα υποσυστήματα: Περιεχόμενο, Στοιχεία Μονάδας και Προγραμματισμός<br/>
+                                                                         Ενεργοποιήστε/Απενεργοποιήστε κάθε δικαίωμα πατώντας τα αντίστοιχα κουμπιά</li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row unit_panel">
                                                                 <label for="unitRightsDataTable" class="col-2 col-form-label"></label>
                                                                 <div class="col-10">
                                                                     <div class="table-responsive">
-                                                                        <table id="unitRightsDataTable"  style="width:100%" class="row-border table-striped">
+                                                                        <table id="unitRightsDataTable"  style="width:100%" class="row-border stripe">
                                                                             <thead>
                                                                             <tr style="font-weight: 700">
                                                                                 <td>#</td>
@@ -319,20 +315,22 @@
 
                                                             <!-- Ανάθεση Καθηγητών+Μαθημάτων -->
                                                             <div class="form-group row course_panel">
-                                                                <label class="col-2 col-form-label"><b>Καθηγητές + Μαθήματα</b></label>
-                                                                <div class="col-10 text-muted">
-                                                                    <i class="fas fa-info-circle"></i>
-                                                                    Στον πίνακα που ακολουθεί, εμφανίζονται τα ζεύγη Καθηγητής-Μάθημα που διαχειρίζεται το επιλεγμένο μέλος του προσωπικού. Μπορείτε να αφαιρέσετε μαθήματα
-                                                                    κάνοντας κλίκ στο αντίστοιχο κουμπί αφαίρεσης <i class="fas fa-minus"></i>. Για να προσθέσετε μαθήματα, κάντε κλίκ στο κουμπί
-                                                                    'Νέο Δικαίωμα σε Μάθημα'΄.
-                                                                    <b>Οι τροποποιήσεις εφαρμόζονται άμεσα και ανεξάρτητα από την αποθήκευση της εγγραφής</b>
+                                                                <label class="col-2 col-form-label emph-label"></label>
+                                                                <div class="col-10 pt-2 text-medium-emphasis">
+                                                                    <div>Στον πίνακα που ακολουθεί, εμφανίζονται τα ζεύγη Καθηγητής-Μάθημα που διαχειρίζεται ο επιλεγμένος χρήστης</div>
+                                                                    <ul>
+                                                                        <li>Προσθέστε Καθηγητή+Μάθημα, πατώντας 'Προσθήκη Μαθήματος'</li>
+                                                                        <li>Αφαιρέστε μάθημα πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
+                                                                        <li>Για κάθε ζεύγος, ορίζονται 2 δικαιώματα στα υποσυστήματα: Περιεχόμενο και Προγραμματισμός<br/>
+                                                                            Ενεργοποιήστε/Απενεργοποιήστε κάθε δικαίωμα πατώντας τα αντίστοιχα κουμπιά</li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row course_panel">
                                                                 <label for="staffRightsDataTable" class="col-2 col-form-label"></label>
                                                                 <div class="col-10">
                                                                     <div class="table-responsive">
-                                                                        <table id="staffRightsDataTable" style="width:100%" class="row-border table-striped">
+                                                                        <table id="staffRightsDataTable" style="width:100%" class="row-border stripe">
                                                                             <thead>
                                                                             <tr style="font-weight: 700">
                                                                                 <td>#</td>
@@ -349,24 +347,24 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-
                                                             <!-- Ανάθεση Καθηγητών+Εκδηλώσεων -->
                                                             <div class="form-group row event_panel">
-                                                                <label class="col-2 col-form-label"><b>Καθηγητές + Εκδηλώσεις</b></label>
-                                                                <div class="col-10 text-muted">
-                                                                    <i class="fas fa-info-circle"></i>
-                                                                    Στον πίνακα που ακολουθεί, εμφανίζονται τα ζεύγη Καθηγητής-Εκδήλωση που διαχειρίζεται το επιλεγμένο μέλος του προσωπικού. Μπορείτε να αφαιρέσετε εκδηλώσεις
-                                                                    κάνοντας κλίκ στο αντίστοιχο κουμπί αφαίρεσης <i class="fas fa-minus"></i>. Για να προσθέσετε εκδηλώσεις, κάντε κλίκ στο κουμπί
-                                                                    'Νέο Δικαίωμα σε Εκδήλωση'΄.
-                                                                    <b>Οι τροποποιήσεις εφαρμόζονται άμεσα και ανεξάρτητα από την αποθήκευση της εγγραφής</b>
+                                                                <label class="col-2 col-form-label emph-label"></label>
+                                                                <div class="col-10 pt-2 text-medium-emphasis">
+                                                                    <div>Στον πίνακα που ακολουθεί, εμφανίζονται τα ζεύγη Καθηγητής+Εκδήλωση που διαχειρίζεται ο επιλεγμένος χρήστης</div>
+                                                                    <ul>
+                                                                        <li>Προσθέστε Καθηγητή+Εκδήλωση, πατώντας 'Προσθήκη Εκδήλωσης'</li>
+                                                                        <li>Αφαιρέστε Εκδήλωση πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
+                                                                        <li>Για κάθε ζεύγος, ορίζονται 2 δικαιώματα στα υποσυστήματα: Περιεχόμενο και Προγραμματισμός<br/>
+                                                                            Ενεργοποιήστε/Απενεργοποιήστε κάθε δικαίωμα πατώντας τα αντίστοιχα κουμπιά</li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
-
                                                             <div class="form-group row  event_panel">
                                                                 <label for="staffEventRightsDataTable" class="col-2 col-form-label"></label>
                                                                 <div class="col-10">
                                                                     <div class="table-responsive">
-                                                                        <table id="staffEventRightsDataTable" style="width:100%" class="row-border table-striped">
+                                                                        <table id="staffEventRightsDataTable" style="width:100%" class="row-border stripe">
                                                                             <thead>
                                                                             <tr style="font-weight: 700">
                                                                                 <td>#</td>
@@ -385,7 +383,7 @@
                                                             </div>
 
                                                             <div class="form-group row admin_panel">
-                                                                <div class="col-10 offset-2 text-muted">
+                                                                <div class="col-10 pt-2 offset-2 text-medium-emphasis">
                                                                     <i class="fas fa-info-circle"></i>
                                                                     Όλα τα διαθέσιμα δικαιώματα έχουν εκχωρηθεί!
                                                                 </div>

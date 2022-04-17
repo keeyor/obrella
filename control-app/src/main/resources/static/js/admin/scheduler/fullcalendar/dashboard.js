@@ -73,6 +73,33 @@
            dashboard.broker.showInstantMessage(message.type ,message.val);
       });
 
+      $(".fc-listMonth-button").on('click',function() {
+          $("#view").val("listMonth");
+      });
+      $(".fc-listWeek-button").on('click',function() {
+            $("#view").val("listWeek");
+      });
+      $(".fc-listDay-button").on('click',function() {
+            $("#view").val("listDay");
+      });
+
+      $(".short-list").on("keyup",function() {
+
+            let what = $(this).data("target");
+            let value = $(this).val();
+            value = value.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
+            if (value.length < 2) {
+                $('#' + what +' > li').show();
+            }
+            else {
+                $('#' + what + '>li').slideUp().filter( function() {
+                    return $(this).text().toLowerCase().indexOf(value) > -1
+                }).stop(true).fadeIn();
+            }
+        });
+
     }); //document ready end
 
     dashboard.broker.getCurrentAcademicPeriod = function () {
@@ -224,7 +251,7 @@
             queryParams.delete("ca");
             queryParams.delete("rp");
             queryParams.delete("ap");
-            queryParams.delete("cl");
+            queryParams.delete("cr");
             queryParams.delete("skip");
             $("#clear-all-filters").attr('href','calendar?' + queryParams);
 
@@ -303,7 +330,7 @@
             queryParams.delete("cr");
             queryParams.delete("skip");
             removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
-            $("#clear-cl-filter").attr('href','calendar?' + queryParams);
+            $("#clear-cr-filter").attr('href','calendar?' + queryParams);
             $("#class-filter").show();
         }
         let categoryFilterText = $("#categoryTitle").val();

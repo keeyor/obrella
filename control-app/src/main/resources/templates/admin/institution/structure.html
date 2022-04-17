@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
-    <title>OpenDelos Live</title>
+    <title>Σχολές και Τμήματα</title>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/datatables-dp.css}"/>
@@ -82,7 +82,7 @@
                                             </div>
                                             <div class="card-body">
                                                         <div class="table-responsive">
-                                                            <table id="schoolsDataTable" style="width:100%" class="row-border table-striped">
+                                                            <table id="schoolsDataTable" style="width:100%" class="row-border stripe">
                                                                 <thead>
                                                                 <tr style="font-weight: 600">
                                                                     <td style="height: 12px;width: 10px"><i class="fas fa-check"></i></td>
@@ -100,13 +100,13 @@
                                         <!-- ΤΜΗΜΑΤΑ -->
                                         <div class="card">
                                             <div class="card-header">
-                                                <span class="text-high-emphasis">Tμήματα</span>
+                                                <span class="text-high-emphasis">Τμήματα</span>
                                                 <br>
                                                 <strong th:text="#{default.institution.title}"></strong>
                                             </div>
                                             <div class="card-body">
                                                         <div class="table-responsive">
-                                                            <table id="departmentsDataTable" style="width:100%" class="row-border table-striped">
+                                                            <table id="departmentsDataTable" style="width:100%" class="row-border stripe">
                                                                 <thead>
                                                                 <tr style="font-weight: 700">
                                                                     <td style="height: 12px;width: 10px"><i class="fas fa-check"></i></td>

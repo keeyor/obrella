@@ -48,7 +48,7 @@ public class MultimediaPropertiesConfig {
 		multimediaProperties.setPort(port);
 		multimediaProperties.setWebDir(webDir);
 		multimediaProperties.setAbsDir(absDir);
-		multimediaProperties.setEventAbsDir(eventAbsDir);
+		multimediaProperties.setEventWebDir(eventWebDir);
 		multimediaProperties.setEventAbsDir(eventAbsDir);
 		multimediaProperties.setFfmpeg(ffmpeg);
 		multimediaProperties.setSlideWidth(slideWidth);

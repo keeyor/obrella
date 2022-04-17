@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OpenDelos Live</title>
+    <title>Διαχείριση Εκδηλώσεων</title>
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
@@ -32,7 +32,6 @@
 <input type="hidden" id="isManager" th:value="${user_isManager}"/>
 <input type="hidden" id="user_access" th:value="${user_access}"/>
 <input type="hidden" id="cpage"            th:value="${cpage}" />
-<input type="hidden" id="upload_base_path" value="/delosrc/resources/ml/"/> <!-- TODO  :: PUT TO MODEL -->
 
 <input type="hidden" id="department_filter" th:value="${departmentFilter.id}"/>
 <input type="hidden" id="department_filter_name" th:value="${departmentFilter.text}"/>
@@ -44,6 +43,9 @@
 
 <input type="hidden" id="etype_filter" th:value="${etypeFilter}"/>
 <input type="hidden" id="etype_filter_name" th:value="${etypeFilterName}"/>
+
+<input type="hidden" id="ecat_filter" th:value="${ecatFilter}"/>
+<input type="hidden" id="ecat_filter_name" th:value="${ecatFilterName}"/>
 
 <div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
@@ -68,7 +70,7 @@
         </div>
     </header>
 
-    <div class="body flex-grow-1 px-3" style="background-color: white">
+    <div class="body flex-grow-1 px-3" >
        <div class="container-fluid">
            <div class="row">
                <div class="offset-lg-1 col-lg-10 col-md-12">
@@ -105,7 +107,7 @@
                                            Δεν επιτρέπεται η εξυπηρέτηση περισσότερων από 1000 αποτελεσμάτων τη φορά. Περιορίστε τον αριθμό των αποτελεσμάτων προσθέτοντας νέα κριτήρια αναζήτησης
                                            (Ζητήσατε αποτελέσματα μετά τα <span th:text="${QR.skip}"></span>)
                                        </div>
-                                       <!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
+                                       <!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryScheduledEventsResults"-->
                                        <div th:unless="${QR.skip > 1000}">
                                            <!-- highlighted -->
                                            <div class="row px-1 py-1">
@@ -127,15 +129,28 @@
                                            </div>
                                            <!--@thymesVar id="scheduledEvent" type="org.opendelos.model.resources.ScheduledEvent"-->
                                            <div class="mb-2" th:each="scheduledEvent, iStat: ${QR.searchResultList}" th:style="${iStat.odd}? ''">
-                                               <div class="card" style="border:none;">
-                                                   <div class="card-body event_hover">
+                                               <div class="card event_hover">
+                                                   <div class="card-header">
+                                                       <span th:text="${iStat.count + '.'}"></span>
+                                                       <span style="font-size: 1.1em;font-weight: 600"><span th:text="${scheduledEvent.title}"></span></span>
+                                                   </div>
+                                                   <div class="card-body">
                                                        <div class="row">
                                                            <div class="col" style="align-items: center">
-                                                               <div style=" border-bottom: orange 1px solid;background-color: #efefef" class="py-2">
-                                                               <span th:text="${iStat.count + '.'}"></span>
-                                                                   <span style="font-size: 1.1em;font-weight: 600"><span th:text="${scheduledEvent.title}"></span></span>
-                                                               </div>
-                                                               <div class="row row-cols-auto mt-2" style="font-size: 0.9em;font-weight: 600; color: darkslategray">
+                                                               <div class="row row-cols-auto mt-2" style="font-weight: 600; color: darkslategray">
+                                                                   <div class="col">
+                                                                       <i class="far fa-calendar-alt"></i>
+                                                                       <span  th:text="${#temporals.format(scheduledEvent.startDate, 'dd')}"></span>
+                                                                       <span  th:text="${#temporals.format(scheduledEvent.startDate, 'MMMM')}"></span>
+                                                                       <span  th:text="${#temporals.format(scheduledEvent.startDate, 'YYYY')}"></span>
+                                                                       <th:block th:if="${scheduledEvent.endDate != null && scheduledEvent.endDate != '' &&
+                                                                                             scheduledEvent.startDate != scheduledEvent.endDate }">
+                                                                           <span  class="mx-1"> - </span>
+                                                                           <span  th:text="${#temporals.format(scheduledEvent.endDate, 'dd')}"></span>
+                                                                           <span  th:text="${#temporals.format(scheduledEvent.endDate, 'MMMM')}"></span>
+                                                                           <span  th:text="${#temporals.format(scheduledEvent.endDate, 'YYYY')}"></span>
+                                                                       </th:block>
+                                                                   </div>
                                                                    <div class="col">
                                                                                 <span th:if="${scheduledEvent.isActive}" title="Ενεργό Ημερολόγιο">
                                                                                     <i class="fas fa-power-off" style="color: green"></i> ΕΝΕΡΓΟ ΗΜΕΡΟΛΟΓΙΟ
@@ -144,39 +159,8 @@
                                                                                     <i class="fas fa-power-off" style="color:red"></i> ΑΝΕΝΕΡΓΟ ΗΜΕΡΟΛΟΓΙΟ
                                                                                 </span>
                                                                    </div>
-                                                                   <div class="col" th:if="${scheduledEvent.isFeatured}">
-                                                                                   <span  title="Προβεβλημένη Εκδήλωση">
-                                                                                    <i class="fas fa-exclamation" style="color: red"></i> ΠΡΟΒΕΒΛΗΜΕΝΗ ΕΚΔΗΛΩΣΗ
-                                                                                   </span>
-                                                                   </div>
-                                                                   <div class="col" th:if="${scheduledEvent.area}">
-                                                                       <i class="fas fa-quote-right ml-3"></i>
-                                                                       <span th:text="#{${scheduledEvent.area}}"></span>
-                                                                   </div>
-                                                                   <div class="col" th:if="${scheduledEvent.type}">
-                                                                       <i class="fas fa-quote-right ml-3"></i>
-                                                                       <span  th:text="#{${scheduledEvent.type}}"></span>
-                                                                   </div>
-                                                                   <div class="col" th:if="${scheduledEvent.categories}">
-                                                                       <i  class="fas fa-quote-right ml-3"></i>
-                                                                       <span th:each="thema: ${scheduledEvent.categories}">
-                                                                                            <span class="mx-1" th:text="#{${thema}}"></span>
-                                                                                </span>
-                                                                   </div>
                                                                </div>
-                                                               <div class="pt-3" style="font-weight: 600">
-                                                                   <i class="far fa-calendar-alt"></i>
-                                                                   <span  class="me-1" th:text="${#temporals.format(scheduledEvent.startDate, 'dd')}"></span>
-                                                                   <span  class="me-1" th:text="${#temporals.format(scheduledEvent.startDate, 'MMMM')}"></span>
-                                                                   <span  class="me-1" th:text="${#temporals.format(scheduledEvent.startDate, 'YYYY')}"></span>
-                                                                   <th:block th:if="${scheduledEvent.endDate != null && scheduledEvent.endDate != '' &&
-                                                                                             scheduledEvent.startDate != scheduledEvent.endDate }">
-                                                                       <span  class="mx-1"> - </span>
-                                                                       <span  class="me-1" th:text="${#temporals.format(scheduledEvent.endDate, 'dd')}"></span>
-                                                                       <span  class="me-1" th:text="${#temporals.format(scheduledEvent.endDate, 'MMMM')}"></span>
-                                                                       <span  class="me-1" th:text="${#temporals.format(scheduledEvent.endDate, 'YYYY')}"></span>
-                                                                   </th:block>
-                                                               </div>
+
                                                                <div class="pt-2">
                                                                    <div th:if="${scheduledEvent.responsibleUnit != null}" style="color:black;font-style: italic" class="text-high-emphasis ml-1">
                                                                                     <span th:each="unit,iStat: ${scheduledEvent.responsibleUnit}">
@@ -191,6 +175,28 @@
                                                                        <span th:text="${scheduledEvent.responsiblePerson.name + ', ' + scheduledEvent.responsiblePerson.affiliation }"></span>
                                                                    </div>
                                                                </div>
+                                                               <div class="row  row-cols-auto mt-2 pt-2" style="border-top: #efefef 1px solid">
+                                                                   <div class="col" th:if="${scheduledEvent.isFeatured}">
+                                                                                   <span  title="Προβεβλημένη Εκδήλωση">
+                                                                                    <i class="fas fa-exclamation" style="color: red"></i> ΠΡΟΒΕΒΛΗΜΕΝΗ ΕΚΔΗΛΩΣΗ
+                                                                                   </span>
+                                                                   </div>
+                                                                   <div class="col" th:if="${scheduledEvent.area}">
+                                                                       <i class="fas fa-quote-right ml-3"></i>
+                                                                       <span th:text="#{${scheduledEvent.area}}"></span>
+                                                                   </div>
+                                                                   <div class="col" th:if="${scheduledEvent.type}">
+                                                                       <i class="fas fa-quote-right ml-3"></i>
+                                                                       <span  th:text="#{${scheduledEvent.type}}"></span>
+                                                                   </div>
+                                                                   <div class="col" th:if="${scheduledEvent.categories}">
+                                                                       <span th:each="thema: ${scheduledEvent.categories}">
+                                                                            <i  class="fas fa-quote-right ml-3"></i>
+                                                                            <span class="mx-1" th:text="#{${thema}}"></span>
+                                                                       </span>
+                                                                   </div>
+                                                               </div>
+
 
                                                            </div>
                                                            <div class="vr"></div>
@@ -212,9 +218,6 @@
                                                        </div>
                                                    </div>
                                                </div>
-
-
-
                                            </div>
                                        </div>
                                        <!-- Pager -->
@@ -255,7 +258,7 @@
 <script th:src="@{/lib/datatables-listnav/jquery.dtListNav.dt1.10.js}" type="application/javascript"></script>
 <!-- Select2 -->
 <script th:src="@{/css/select2/js/select2.full.js}" type="application/javascript"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>-->
 <!-- alertify -->
 <script th:src="@{/lib/alertify/alertify.min.js}"></script>
 
@@ -263,7 +266,6 @@
 <script th:src="@{/js/admin/content/sevents/dashboard.sevents.js}" type="application/javascript"></script>
 <script th:src="@{/js/admin/content/sevents/dashboard.departments.js}" type="application/javascript"></script>
 <script th:src="@{/js/admin/content/sevents/dashboard.staffmembers.js}" type="application/javascript"></script>
-<script th:src="@{/js/admin/content/sevents/dashboard.areas.js}" type="application/javascript"></script>
 
 <script th:src="@{/js/search/el.js}" type="application/javascript"></script>
 <script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>

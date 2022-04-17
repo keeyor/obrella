@@ -43,7 +43,7 @@
                 {
                     "aTargets": [1],
                     "mRender": function (data) {
-                        return '<div class="pb-0 mb-0 font-weight-bolder" style="color: #003476">' + data + '</div>';
+                        return '<span class="pb-0 mb-0" style="color: #003476;font-weight: 500">' + data + '</span>';
                     }
                 },
                 {

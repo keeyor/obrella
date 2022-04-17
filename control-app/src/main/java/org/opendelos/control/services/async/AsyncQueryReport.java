@@ -34,5 +34,6 @@ public class AsyncQueryReport {
 	private	Map<String, AccessPolicy>   AccessPolicyFilterResults;
 	private	Map<String, AreaDto>   		AreaFilterResults;
 	private	Map<String, TypeDto>   		TypeFilterResults;
-	private AdminFilterResults adminFilterResults = new AdminFilterResults();
+	private Map<String, TypeDto>  		EventCategoryFilterResults;
+	private	Map<String, Long>   		ResourceTypeCounter;
 }

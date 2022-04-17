@@ -15,7 +15,7 @@
                 {"data": "structureType"},
                 {"data": "title"},
             ],
-            "language":  dashboard.dtLanguageGr,
+            "language":  dtLanguageGr,
             select: {
                 style: 'multi'
             },

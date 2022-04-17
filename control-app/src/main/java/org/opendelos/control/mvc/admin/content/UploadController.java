@@ -4,6 +4,7 @@
 */
 package org.opendelos.control.mvc.admin.content;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,9 +12,13 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Locale;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.opendelos.control.services.scheduledEvent.ScheduledEventService;
 import org.opendelos.model.properties.MultimediaProperties;
 import org.opendelos.model.properties.StreamingProperties;
 import org.slf4j.Logger;
@@ -35,53 +40,18 @@ public class UploadController {
 
     private final MultimediaProperties multimediaProperties;
     private final StreamingProperties streamingProperties;
+    private final ScheduledEventService scheduledEventService;
 
     private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
     @Autowired
-    public UploadController(MultimediaProperties multimediaProperties, StreamingProperties streamingProperties) {
+    public UploadController(MultimediaProperties multimediaProperties, StreamingProperties streamingProperties, ScheduledEventService scheduledEventService) {
         this.multimediaProperties = multimediaProperties;
         this.streamingProperties = streamingProperties;
+        this.scheduledEventService = scheduledEventService;
     }
 
-
-/*
-
-    @RequestMapping(value = "/api/v1/resource/slide", method = RequestMethod.POST)
-    public ResponseEntity<String> formUploadResource(
-            @RequestBody MultipartFile data,
-            @RequestParam String name,
-            @RequestParam String resourceId,
-            @RequestParam String slideIndex,
-            @RequestParam String timestamp) throws Exception {
-
-        //TODO: Not Used for now! Use it to record slide and timestamp for synchronization!!!
-        logger.info("Just came in:" + slideIndex + " with timestamp:" + timestamp);
-
-
-        String uploadDir = applicationPropertiesConfig.getSlidesFolder() + resourceId + File.separator;
-        String playedSlidesDir = uploadDir + File.separator + "played" + File.separator;
-        createFolder(playedSlidesDir);
-
-        logSlideTime(applicationPropertiesConfig.getSlidesFolder() + resourceId + File.separator + "timestamps.log", "slide:" + slideIndex + " time:" + timestamp);
-
-
-        File currentSlideFile = new File(uploadDir + "currentSlide.jpg");
-        if (currentSlideFile.isFile()) {
-            FileUtils.moveFile(currentSlideFile, new File(playedSlidesDir + RandomStringUtils.randomAlphanumeric(32) + ".jpg"));
-        }
-        Path uploadFilePath = new File(uploadDir + "currentSlide.jpg").toPath();
-        try {
-            Files.write(uploadFilePath, data.getBytes(), StandardOpenOption.CREATE);
-        } catch (IOException e) {
-            throw new Exception();
-        }
-
-        return new ResponseEntity<>("Saved", HttpStatus.OK);
-    }
-*/
-
-    @RequestMapping(value = "admin/multimediaUpload", method = RequestMethod.POST)
+  @RequestMapping(value = "admin/multimediaUpload", method = RequestMethod.POST)
     public String formUploadResource(
             @RequestBody MultipartFile file,
             @RequestParam String name,
@@ -166,6 +136,118 @@ public class UploadController {
             return result;
         }
 
+    }
+
+    @RequestMapping(value = "admin/imageUpload" , method = RequestMethod.POST)
+    public String formUploadResource(
+            @RequestBody MultipartFile file,
+            @RequestParam String name,
+            @RequestParam(value = "target") String target,
+            @RequestParam(value = "id") String id,
+            @RequestParam(required=false, defaultValue="-1") int chunks,
+            @RequestParam(required=false, defaultValue="-1") int chunk, Locale locale)  {
+
+        String result;
+
+        String uploadPath = multimediaProperties.getEventAbsDir();
+        logger.trace("Uploading Image to:" + uploadPath);
+
+        if (!new File(uploadPath).isDirectory()) {
+            logger.error("IMAGE_UPLOAD_ERROR: Unknown Upload Path" + uploadPath);
+            return "IMAGE_UPLOAD_ERROR: Unknown Upload Path";
+        }
+
+        // Check upload file extension
+        String _ext = FilenameUtils.getExtension(name).toLowerCase();
+        if (!_ext.equals("jpg") && !_ext.equals("jpeg")) {
+            logger.error("IMAGE_UPLOAD_ERROR: Unknown extension");
+            return "IMAGE_UPLOAD_ERROR: Unknown extension";
+        }
+        //HANDLE UPLOADED DATA
+        logger.trace("Uploading Image Path to:" + uploadPath + "/" + name);
+
+        Path uploadFilePath = new File(uploadPath + "/" + name).toPath();
+        if (chunks > 0 && chunk > 0)	// Write or append uploaded chunk to uploaded file
+        {
+            //Need to append the bytes in this chunk
+            try {
+                Files.write(uploadFilePath, file.getBytes(), StandardOpenOption.APPEND);
+            } catch (IOException e) {
+                FileUtils.deleteQuietly(new File(uploadPath + "/" + name));
+                result = e.getMessage();
+                logger.error("IMAGE_UPLOAD_ERROR: Uploading APPEND:" + e.getMessage());
+                return result;
+            }
+        }
+        else {
+            //First chunk: Need to write the bytes in this chunk
+            try {
+                Files.write(uploadFilePath, file.getBytes(), StandardOpenOption.CREATE);
+            } catch (IOException e) {
+                FileUtils.deleteQuietly(new File(uploadPath + "/" + name));
+                result = e.getMessage();
+                logger.error("IMAGE_UPLOAD_ERROR: Uploading CREATE:" + e.getMessage());
+                return result;
+            }
+        }
+
+        if (target.equals("SCHEDULED_EVENT")) {
+            //check upload image against width, height constrains
+            int maxWidth = multimediaProperties.getImageMaxWidth();
+            int maxHeight = multimediaProperties.getImageMaxHeight();
+            String eventsWebDir = multimediaProperties.getEventWebDir();
+
+            boolean isImageValidSize;
+            try {
+                isImageValidSize = isImageValidSize(uploadPath + "/" + name, maxWidth, maxHeight);
+                if (isImageValidSize) {
+                    moveImageFile2Destination(uploadPath, name, id);
+                    scheduledEventService.updatePhotoUrl(id, id + ".jpg");
+                    return null;
+                }
+                else {
+                    return "IMAGE_UPLOAD_ERROR: Invalid Dimensions";
+                }
+            }
+            catch (IOException e) {
+                FileUtils.deleteQuietly(new File(uploadPath + "/" + name));
+                logger.error("IMAGE_UPLOAD_ERROR:" + e.getMessage());
+                return e.getMessage();
+            }
+        }
+        else {
+            return "IMAGE_UPLOAD_ERROR: Unknown TARGET";
+        }
+    }
+
+    private void moveImageFile2Destination(String uploadPath, String filename, String targetBaseName) throws IOException {
+
+        try {
+                File srcFile = new File(uploadPath + "/" + filename);
+                if (srcFile.renameTo(new File(uploadPath + "/" + targetBaseName + ".jpg"))) {
+                    srcFile = new File(uploadPath + "/" + targetBaseName + ".jpg");
+                    File dstDir = new File(uploadPath + targetBaseName + "/");
+                    try {
+                        FileUtils.cleanDirectory(dstDir);
+                    }
+                    catch (Exception ignored) {}
+                    FileUtils.moveFileToDirectory(srcFile, dstDir, true);
+                }
+        }
+        catch (IOException ioe) {
+            throw new IOException("IMAGE_UPLOAD_ERROR: MoveImageFile2Destination");
+        }
+    }
+
+    private static boolean isImageValidSize(String srcPath, int maxWidth, int maxHeight) throws IOException {
+
+        try {
+            BufferedImage source_image = ImageIO.read(new File(srcPath));
+            return (source_image.getWidth() <= maxWidth) && (source_image.getHeight() <= maxHeight);
+        }
+        catch (IOException ioe) {
+            throw  new IOException("IMAGE_UPLOAD_ERROR: isImageValidSize");
+        }
     }
 
     private boolean createFolder(String folderName) {

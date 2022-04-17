@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OpenDelos Live</title>
+    <title>Τμήμα - Προγράμματα Σπουδών</title>
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
     <link rel="stylesheet" th:href="@{/css/datatables-dp.css}"/>
     <!-- CoreUI CSS -->
@@ -28,6 +28,25 @@
 
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+    <style>
+        .select2-container .select2-selection--single {
+            height: 36px;
+            padding-top: 0.175rem!important;
+            padding-bottom: 0.75rem!important;
+            padding-left: 0.2rem!important;
+            font-size: 0.95em;
+        }
+        .select2-container .select2-selection--multiple {
+            height: 38px;
+            padding-top: 0.175rem!important;
+            padding-bottom: 0.75rem!important;
+            padding-left: 0.2rem!important;
+            font-size: 0.95em;
+        }
+        .select2-selection__arrow {
+            padding-top: 2rem!important;
+        }
+    </style>
 </head>
 <body style="font-size: 0.89em">
 <input type="hidden" id="signInUserid" th:value="${user.id}"/>
@@ -76,14 +95,14 @@
                 <div class="row">
                     <div class="offset-1 col-lg-10" id="content">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-start" >
                                             <div th:replace="~{admin/fragments/search/a-department-select :: a-deparment-select}"></div>
                                         </div>
-                                        <div class="text-muted font-italic">
-                                            Διαχείριση στοιχείων τμήματος: προγράμματα σπουδών
+                                        <div class="text-high-emphasis font-italic">
+                                            Προγράμματα Σπουδών
                                         </div>
                                     </div>
                                 </div>
@@ -95,12 +114,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body" id="programs_card" style="display: none">
-                                    <h4>Προγράμματα Σπουδών</h4>
-                                    <div class="text-muted">Βρέθηκαν <span id="count_programs_results"></span> προγράμματα σπουδών</div>
-                                    <div style="border-top: #efefef 2px solid">
+                        </div>
 
+                            <div class="card mt-3" id="programs_card" style="display: none">
+                                <div class="card-header">
+                                    <div class="text-high-emphasis">Βρέθηκαν <span id="count_programs_results"></span> προγράμματα σπουδών</div>
+                                </div>
 
+                                <div class="card-body">
                                                 <div class="d-flex justify-content-start pb-2 pt-2" >
                                                     <div class="btn-toolbar d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                                                         <label for="program_study_filter"><i class="fas fa-microscope me-2"></i>σπουδές</label>
@@ -114,7 +135,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="table-responsive" style="margin-top: 40px">
-                                                    <table id="programsDataTable"  style="width:100%" class="row-border table-striped">
+                                                    <table id="programsDataTable"  style="width:100%" class="row-border stripe">
                                                 <thead>
                                                 <tr style="font-weight: 700">
                                                     <td style="width: 20px">#</td>
@@ -131,24 +152,23 @@
                                             </table>
                                                 </div>
 
-                                    </div>
                                 </div>
-                            <div class="card-body" id="programs_edit_card" style="display: none">
+                           </div>
 
-                                <div class="card">
+                           <div class="card mt-3" id="programs_edit_card" style="display: none">
+
                                     <div class="card-header">
                                         <span>
                                             <h6 class="modal-title" id="programModalLabel"></h6>
                                             <input type="hidden" id="pr_rowIdx_edited" value=""/>
                                         </span>
                                         <span class="float-end">
-                                                            <button type="button" class="btn btn-secondary" id="closeUpdateProgram"><i class="fas fa-undo"></i> Επιστροφή</button>
-                                                            <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateProgram"><i class="far fa-save"></i>  Αποθήκευση</button>
+                                            <button type="button" class="btn btn-secondary" id="closeUpdateProgram"><i class="fas fa-undo"></i> Επιστροφή</button>
+                                            <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateProgram"><i class="far fa-save"></i>  Αποθήκευση</button>
+                                             <button type="button" class="btn btn-danger"  id="deleteStudyProgram"><i class="fas fa-trash"></i></button>
                                         </span>
                                     </div>
                                     <div class="card-body">
-                                        <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
-                                        <div class="card card-body" style="background-color: #f7f7f9;border: none">
                                             <form id="programs_form" name="programs_form">
                                                 <input type="hidden" id="program_edit_mode" value=""/>
                                                 <input type="hidden" id="program_id" value=""/>
@@ -180,14 +200,12 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                        </div> <!-- card body -->
                                     </div>
-                                    <div class="card-footer">
-                                        <button type="button" class="btn btn-danger"  id="deleteStudyProgram"><i class="fas fa-ban"></i>  Διαγραφή</button>
+                                    <div class="card-footer" style="font-weight: 500">
+                                        <i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                           </div>
+
                     </div>
                 </div>
             </div>

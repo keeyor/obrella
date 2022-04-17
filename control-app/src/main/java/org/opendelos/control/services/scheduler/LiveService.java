@@ -89,14 +89,12 @@ public class LiveService {
     }
 
     @Scheduled(cron = "0 0 6 * * *", zone = "Europe/Athens") // Every day at 6 a.m. [Run's on appStart too: See StartUpApplicationListener]
-    public void updateLiveEntries() throws Exception {
-        logger.info("*** UPDATE TODAY'S SCHEDULE *** ");
+    public void updateTodaysProgramme() throws Exception {
+        logger.info("*** UPDATE TODAY'S SCHEDULE ***");
         this.UpdateTodaysSchedule();
     }
 
     public void UpdateTodaysSchedule() {
-
-        logger.info("INITIATE SCHEDULE UPDATE: TODAY's PROGRAMME");
 
         Calendar time_start = Calendar.getInstance();
         Date startTime = time_start.getTime();
@@ -104,7 +102,7 @@ public class LiveService {
         logger.trace("Academic Year:" + currentAcademicYear);
          Map<String, Integer> ssUtilizationMap = this.initStreamingServersUtilization();
          if (ssUtilizationMap.size() > 0) {
-          //> Calculate Today's Schedule (from scratch)
+            //> Calculate Today's Schedule (from scratch)
             ScheduleQuery scheduleQuery = new ScheduleQuery();
             scheduleQuery.setYear(currentAcademicYear);
             scheduleQuery.setEnabled("true");
@@ -181,6 +179,7 @@ public class LiveService {
                 }
             }
             //Update today list: save to db
+            //MG Assume!!! That is not needed. Live has that authority!!!!
             resourceRepository.clearCollection("Scheduler.Live");
             if (existingTodaySchedule.size() > 0) {
                 for (Resource resource: existingTodaySchedule) {
@@ -190,7 +189,7 @@ public class LiveService {
          }
          else {
                  logger.warn("LiveService: No Streaming Servers defined or enabled");
-                resourceRepository.clearCollection("Scheduler.Live");
+                //  resourceRepository.clearCollection("Scheduler.Live");
          }
 
         Calendar time_now = Calendar.getInstance();

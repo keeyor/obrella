@@ -23,10 +23,11 @@
             locale: 'el',
             initialDate: param_start_date,
             initialView: dashboard.calendar.view,
+            height: "auto",
             headerToolbar: {
                 start: 'today prev next',
                 center: 'title',
-                end: 'listMonth,listWeek,listDay'
+                end: 'listMonth ,listWeek ,listDay'
             },
             views: {
                 dayGrid: {
@@ -51,7 +52,7 @@
                     buttonText: 'Μήνας',
                 }
             },
-            lazyFetching: false,
+            lazyFetching: false, //always get data again! >> otherwise does not refresh filters
             events: {
                 url: dashboard.siteurl + '/api/v1/timetable_daterange/users/cal',
                 method: 'GET',
@@ -86,6 +87,18 @@
                     $("#start_date").val(moment(calendar.view.activeStart).format("YYYY-MM-DD"));
                     $("#end_date").val(moment(calendar.view.activeEnd).format("YYYY-MM-DD"));
 
+                    $("#view").val(calendar.view.type);
+                    // Enable - Disable Month Range (disable if none of the major filter are selected
+/*                    let departmentId = $("#departmentFilterId").val();
+                    let courseId = $("#courseFilterId").val();
+                    let staffId =  $("#staffMemberFilterId").val();
+                    let classId = $("#classRoomFilterId").val();
+                    if (courseId === '' && staffId === '' && departmentId === '' && classId === '') {
+                        $(".fc-listMonth-button").attr("disabled",true);
+                    }
+                    else {
+                        $(".fc-listMonth-button").attr("disabled",false);
+                    }*/
                 },
                 color: 'yellow',   // a non-ajax option
                 textColor: 'black' // a non-ajax option
@@ -116,7 +129,7 @@
             },
             eventContent: function(arg) {
                 dashboard.calendar.view = calendar.view.type;
-                appendReport(arg);
+                appendReport(arg); // create filters report
                 // if you need to customize event appearance
                 //let arrayOfDomNodes = createEventDom(arg);
                 // return { domNodes: arrayOfDomNodes }
@@ -134,46 +147,11 @@
         calendar.render();
     }
 
-    function createEventDom(arg) {
-        let mainEL = document.createElement('div');
-        mainEL.classList.add("row");
-
-        let col1 = document.createElement('div');
-        col1.classList.add("col-3");
-        col1.innerHTML = arg.event._def.title;
-
-        let col2 = document.createElement('div');
-        col2.classList.add("col-9");
-        col2.classList.add("smaller");
-
-        let det1 = document.createElement("span");
-        det1.classList.add("font-weight-bolder");
-        det1.classList.add("mr-2");
-        det1.innerHTML = arg.event._def.extendedProps.supervisor;
 
 
-/*      Add font-awesome example
-        let i_element = document.createElement('i');
-        i_element.classList.add("fas");
-        i_element.classList.add("fa-map-marked-alt");
-        i_element.classList.add("ml-5");
-        i_element.classList.add("mr-1");
-        i_element.classList.add("text-muted");*/
-
-        let span_element = document.createElement('span');
-        span_element.classList.add("text-muted");
-        span_element.innerHTML = arg.event._def.extendedProps.classroomName;
-
-        col2.appendChild(det1);
-        col2.appendChild(span_element);
-
-        mainEL.appendChild(col1);
-        mainEL.appendChild(col2);
-        let arrayOfDomNodes = [ mainEL ];
-
-        return arrayOfDomNodes;
-    }
     function appendReport(calEvent) {
+
+        let current_view = $("#view").val();
 
         $("#no_dyna_filters").show();
         $("#no_dyna_filters").html("Δημιουργία δυναμικών φίλτρων σε εξέλιξη. Παρακαλώ περιμένετε...");
@@ -197,6 +175,10 @@
                     $('#department-dd-header').html("<span class='fas fa-minus-circle'></span> | Τμήμα " + department_title);
                     let queryParams = new URLSearchParams(window.location.search);
                     queryParams.set("d", new_department.id);
+
+                    if (current_view !== undefined && current_view !== '') {
+                        queryParams.set("view", current_view);
+                    }
                     queryParams.delete("skip");
                     let html = '<li class="list-group-item">' +
                         '<a class="text-dark text-decoration-none" href="calendar?' + queryParams + '">' + new_department.title + '</a>' +
@@ -222,14 +204,18 @@
 
                     $('#class-dd-header').html("<span class='fas fa-minus-circle'></span> | Μάθημα " + new_classroom.title);
                     let queryParams = new URLSearchParams(window.location.search);
-                    queryParams.set("cl", new_classroom.id);
+                    queryParams.set("cr", new_classroom.id);
                     queryParams.delete("skip");
+                    if (current_view !== undefined && current_view !== '') {
+                        queryParams.set("view", current_view);
+                    }
                     let html = '<li class="list-group-item">' +
                         '<a class="text-dark text-decoration-none" href="calendar?' + queryParams + '">' + new_classroom.title + '</a>' +
                         '</li>';
-                    $("#clFilters").append(html);
+                    $("#crFilters").append(html);
                 }
             $("#classCanvasLink").show();
+            $("#crFilters").show();
             $("#no_dyna_filters").hide();
         }
 
@@ -254,6 +240,9 @@
                     let queryParams = new URLSearchParams(window.location.search);
                     queryParams.set("c", new_course.id);
                     queryParams.delete("skip");
+                    if (current_view !== undefined && current_view !== '') {
+                        queryParams.set("view", current_view);
+                    }
                     let html = '<li class="list-group-item">' +
                         '<a class="text-dark text-decoration-none" href="calendar?' + queryParams + '">' + new_course.title + '</a>' +
                         '</li>';
@@ -280,6 +269,9 @@
                     let queryParams = new URLSearchParams(window.location.search);
                     queryParams.set("e", new_event.id);
                     queryParams.delete("skip");
+                    if (current_view !== undefined && current_view !== '') {
+                        queryParams.set("view", current_view);
+                    }
                     let html = '<li class="list-group-item">' +
                         '<a class="text-dark text-decoration-none" href="calendar?' + queryParams + '">' + new_event.title + '</a>' +
                         '</li>';
@@ -309,6 +301,9 @@
                 let queryParams = new URLSearchParams(window.location.search);
                 queryParams.set("s",  new_staff.id);
                 queryParams.delete("skip");
+                if (current_view !== undefined && current_view !== '') {
+                    queryParams.set("view", current_view);
+                }
                 let html = '<li class="list-group-item">' +
                     '<a class="text-dark text-decoration-none" href="calendar?' + queryParams + '">' + new_staff.name + '</a>' +
                     '</li>';
@@ -428,6 +423,46 @@
         html += "Πρόγραμμα Μεταδόσεων/Καταγραφών\n" +
              $("#date_range_header").text();
         return html;
+    }
+
+    function createEventDom(arg) {
+        let mainEL = document.createElement('div');
+        mainEL.classList.add("row");
+
+        let col1 = document.createElement('div');
+        col1.classList.add("col-3");
+        col1.innerHTML = arg.event._def.title;
+
+        let col2 = document.createElement('div');
+        col2.classList.add("col-9");
+        col2.classList.add("smaller");
+
+        let det1 = document.createElement("span");
+        det1.classList.add("font-weight-bolder");
+        det1.classList.add("mr-2");
+        det1.innerHTML = arg.event._def.extendedProps.supervisor;
+
+
+        /*      Add font-awesome example
+                let i_element = document.createElement('i');
+                i_element.classList.add("fas");
+                i_element.classList.add("fa-map-marked-alt");
+                i_element.classList.add("ml-5");
+                i_element.classList.add("mr-1");
+                i_element.classList.add("text-muted");*/
+
+        let span_element = document.createElement('span');
+        span_element.classList.add("text-muted");
+        span_element.innerHTML = arg.event._def.extendedProps.classroomName;
+
+        col2.appendChild(det1);
+        col2.appendChild(span_element);
+
+        mainEL.appendChild(col1);
+        mainEL.appendChild(col2);
+        let arrayOfDomNodes = [ mainEL ];
+
+        return arrayOfDomNodes;
     }
 
 })();

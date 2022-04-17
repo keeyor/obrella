@@ -1,9 +1,11 @@
 package org.opendelos.control.services.scheduledEvent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.io.FileUtils;
 import org.opendelos.control.services.opUser.OpUserService;
 import org.opendelos.control.repository.resource.ResourceRepository;
 import org.opendelos.control.repository.scheduler.ScheduleRepository;
@@ -96,6 +98,36 @@ public class ScheduledEventService {
             logger.error("error: ScheduledEvent.update:" + e.getMessage());
         }
     }
+    @CacheEvict(key = "#id")
+    public void updatePhotoUrl(String id, String photoUrl) {
+        logger.trace(String.format("ScheduledEvent.updatePhotoUrl: %s", id));
+        ScheduledEvent scheduledEvent = scheduledEventRepository.findById(id).orElse(null);
+        if (scheduledEvent!= null) {
+            try {
+                scheduledEvent.setPhotoRelativeUrl(photoUrl);
+                scheduledEventRepository.save(scheduledEvent);
+            }
+            catch (Exception e) {
+                logger.error("error: ScheduledEvent.update:" + e.getMessage());
+            }
+        }
+    }
+    @CacheEvict(key = "#id")
+    public void removePhotoUrl(String id, String fullAbsPath) {
+        logger.trace(String.format("ScheduledEvent.removePhotoUrl: %s", id));
+        ScheduledEvent scheduledEvent = scheduledEventRepository.findById(id).orElse(null);
+        if (scheduledEvent!= null) {
+            try {
+                scheduledEvent.setPhotoRelativeUrl(null);
+                FileUtils.deleteQuietly(new File(fullAbsPath));
+                scheduledEventRepository.save(scheduledEvent);
+            }
+            catch (Exception e) {
+                logger.error("error: ScheduledEvent.update:" + e.getMessage());
+            }
+        }
+    }
+
     @CacheEvict(key = "#scheduledEvent.id")
     public long findAndUpdate(ScheduledEvent scheduledEvent) {
 

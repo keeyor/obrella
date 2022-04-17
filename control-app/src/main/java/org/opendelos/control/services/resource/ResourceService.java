@@ -331,10 +331,9 @@ public class ResourceService {
         }
     }
 
-    public void removeResourceRealEditingPresentation(String id) {
-        logger.trace(String.format("Resource.removeResourceRealEditingPresentation: %s", id));
+    public void removeResourceRealEditingPresentation(Resource resource) {
+        logger.trace(String.format("Resource.removeResourceRealEditingPresentation: %s", resource.getId()));
         try {
-            Resource resource = this.findById(id);
             resource.setRealEditingPresentation(null);
             update(resource);
         }
@@ -343,23 +342,24 @@ public class ResourceService {
         }
     }
 
-    public void acceptResourceRealEditingPresentation(String id) {
-        logger.trace(String.format("Resource.removeResourceRealEditingPresentation: %s", id));
+    public void acceptResourceRealEditingPresentation(Resource resource) {
+        logger.trace(String.format("Resource.removeResourceRealEditingPresentation: %s", resource.getId()));
         try {
-            Resource resource = this.findById(id);
             Presentation realEditingPresentation = resource.getRealEditingPresentation();
             Presentation presentation = resource.getPresentation();
 
-            String actual_duration = realEditingPresentation.getRealDuration();
+            String actual_duration = realEditingPresentation.getDuration(); //has the actual cutted duration
 
-            presentation.setSlides(realEditingPresentation.getSlides());
+            if (realEditingPresentation.getSlides() != null) {
+                presentation.setSlides(realEditingPresentation.getSlides());
+            }
+            //# 16-04-22: just note :: clear cuts -> video has been edited!
             presentation.setCuts(null);
             presentation.setDuration(actual_duration);
             presentation.setRealDuration(actual_duration);
 
             resource.setRealDuration(actual_duration);
             resource.setRealEditingPresentation(null);
-
 
             update(resource);
         }
@@ -563,8 +563,10 @@ public class ResourceService {
 
     private void removeResourcePresentation(Resource resource) throws Exception {
         try {
+            Presentation presentation = resource.getPresentation();
             String folder = resource.getPresentation().getFolder(); //!important: save before deletion
-            Presentation presentation = new Presentation();
+            presentation.setSlides(null);
+            presentation.setFolder(null);
             resource.setPresentation(presentation);
             resource.getStatus().setInclPresentation(-1);
             update(resource);
@@ -588,6 +590,12 @@ public class ResourceService {
             String filename = resource.getResourceAccess().getFileName(); //!important: save before deletion
             ResourceAccess resourceAccess = new ResourceAccess();
             resource.setResourceAccess(resourceAccess);
+            //## add 16-04-22 -> delete cuts
+            if (resource.getPresentation() != null) {
+                resource.getPresentation().setDuration(null);
+                resource.getPresentation().setRealDuration(null);
+                resource.getPresentation().setCuts(null);
+            }
             resource.getStatus().setInclMultimedia(-1);
             update(resource);
             if (folder != null) {   //!Important: be very careful or might delete entire vl dir

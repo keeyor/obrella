@@ -32,9 +32,9 @@ public class StartupApplicationListener implements ApplicationListener<ContextRe
 
 		String event_id = event.getApplicationContext().getId();
 		//MG: 12-20-2020: make the distinction for event_id otherwise this is called twice on startup
-		if (event_id.contains("application")) {
+		if (event_id.contains("opendelos-dashboard")) {
 				try {
-					//liveService.updateLiveEntries();
+					 liveService.updateTodaysProgramme();
 				}
 				catch (Exception e) {
 					logger.error("Couldn't update Today's Schedule. The error is:" + e.getMessage());

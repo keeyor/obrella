@@ -6,7 +6,7 @@
         <div class="card mb-2  mt-2">
             <div class="card-header" style="vertical-align: center;line-height: 30px">
                 <i class="fas fa-sliders-h"></i> Κριτήρια Αναζήτησης
-                <a role="button" id="clear-all-filters" title="αφαίρεση όλων των κριτηρίων και εκκίνηση νέας αναζήτησης" style="display: none"  class="btn btn-pill btn-light btn-sm ms-2" >
+                <a role="button" id="clear-all-filters"  data-toggle="tooltip"  title="αφαίρεση όλων των κριτηρίων αναζήτησης" style="display: none"  class="btn btn-pill btn-light btn-sm ms-2" >
                     <span class="fas fa-ban"></span> καθαρισμός
                 </a>
                 <span class="float-end">
@@ -20,42 +20,47 @@
                 <div class="mb-2">
                         <div class="text-muted" id="none_filter">κανένα επιλεγμένο κριτήριο</div>
                         <button id="ft-filter" style="display: none"  class="my-2 mx-1 btn   btn-info btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ft-filter">
+                            <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ft-filter">
                                 <span id="ft-dd-header"></span>
                             </a>
                         </button>
                         <button id="category-filter" style="display: none"  class="my-2 mx-1 btn   btn-info  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ca-filter">
+                            <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ca-filter">
                                 <span id="category-dd-header"></span>
                             </a>
                         </button>
-                        <button id="department-filter" style="display: none"  class="my-2 mx-1 btn blue-btn-wcag-bgnd-color btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-dt-filter">
-                                <span id="department-dd-header"></span>
-                            </a>
+                        <button  id="department-filter" style="display: none" class="my-2 mx-1 btn blue-btn-wcag-bgnd-color btn-sm">
+                                <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-dt-filter">
+                                    <span id="department-dd-header"></span>
+                                </a>
                         </button>
                         <button  id="course-filter" style="display: none"  class="my-2 mx-1 btn   blue-btn-wcag-bgnd-color  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-co-filter">
+                            <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-co-filter">
                                 <span id="course-dd-header"></span>
                             </a>
                         </button>
                         <button id="event-filter"  style="display: none"  class="my-2 mx-1  btn   blue-btn-wcag-bgnd-color  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ev-filter">
+                            <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ev-filter">
                                 <span id="event-dd-header"></span>
                             </a>
                         </button>
                         <button id="staff-filter"  style="display: none"  class="my-2 mx-1  btn   blue-btn-wcag-bgnd-color  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-sm-filter">
+                            <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-sm-filter">
                                 <span id="staff-dd-header"></span>
                             </a>
                         </button>
+                        <button  id="rt-filter" style="display: none"  class="my-2 mx-1 btn   blue-btn-wcag-bgnd-color  btn-sm">
+                            <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-rt-filter">
+                                <span id="rt-dd-header"></span>
+                            </a>
+                        </button>
                         <button id="ap-filter"  style="display: none"  class="my-2 mx-1  btn   blue-btn-wcag-bgnd-color  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ap-filter">
+                            <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ap-filter">
                                 <span id="ap-dd-header"></span>
                             </a>
                         </button>
                         <button  id="tags-filter"  style="display: none" class="my-2 mx-1  btn   blue-btn-wcag-bgnd-color  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση φίλτρου" style="color: #ffffff;text-decoration: none" id="clear-tag-filter">
+                            <a href="#" role="button"  data-toggle="tooltip" title="αφαίρεση φίλτρου" style="color: #ffffff;text-decoration: none" id="clear-tag-filter">
                                 <span id="ap-tag-header"  class="mb-2" style="font-weight: 500;white-space: break-spaces"></span>
                             </a>
                         </button>
@@ -63,22 +68,25 @@
                 <div id="AllFilters">
                     <div class="row pt-3" style="border-top: #006A9B solid 3px">
                                 <div class="col-12">
-                                    <a id="depCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasDep" role="button" aria-controls="offcanvasDep" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε τμήμα">
+                                    <a id="depCanvasLink" style="display: none" data-toggle="tooltip" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasDep" role="button" aria-controls="offcanvasDep" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Τμήμα">
                                         <i class="fas fa-plus-circle"></i> | Τμήμα
                                     </a>
-                                    <a id="staffCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasStaff" role="button" aria-controls="offcanvasStaff" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε διδάσκοντα">
+                                    <a id="staffCanvasLink" style="display: none"  data-toggle="tooltip" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasStaff" role="button" aria-controls="offcanvasStaff" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Διδάσκοντα (-ουσα) ή Υπ. Καθηγητή">
                                         <i class="fas fa-plus-circle"></i> | Διδάσκων ή Υπ. Καθηγητής
                                     </a>
-                                    <a  id="courseCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasCourse" role="button" aria-controls="offcanvasCourse"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε μάθημα">
+                                    <a  id="courseCanvasLink" style="display: none"  data-toggle="tooltip" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasCourse" role="button" aria-controls="offcanvasCourse" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Μάθημα">
                                         <i class="fas fa-plus-circle"></i> | Μάθημα
                                     </a>
-                                    <a  id="eventCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasEvent" role="button" aria-controls="offcanvasEvent"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε εκδήλωση">
+                                    <a  id="eventCanvasLink" style="display: none"  data-toggle="tooltip" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasEvent" role="button" aria-controls="offcanvasEvent"  title="Περιορίστε τα αποτελέσματα επιλέγοντας: Εκδήλωση">
                                         <i class="fas fa-plus-circle"></i> | Εκδήλωση
                                     </a>
-                                    <a  id="apCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasAccess" role="button" aria-controls="offcanvasAccess"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε εκδήλωση">
+                                    <a  id="rtCanvasLink" style="display: none"  data-toggle="tooltip" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasResourceType" role="button" aria-controls="offcanvasResourceType"  title="Περιορίστε τα αποτελέσματα επιλέγοντας: Τύπο (Διάλεξη ή Πολυμέσο Εκδήλωσης)">
+                                        <i class="fas fa-plus-circle"></i> | Τύπος
+                                    </a>
+                                    <a  id="apCanvasLink" style="display: none"  data-toggle="tooltip" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasAccess" role="button" aria-controls="offcanvasAccess"  title="Περιορίστε τα αποτελέσματα επιλέγοντας: Κατάσταση (Δημόσιο ή Ιδιωτικό)">
                                         <i class="fas fa-plus-circle"></i> | Κατάσταση
                                     </a>
-                                    <a  id="tagCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasTags" role="button" aria-controls="offcanvasAccess"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε εκδήλωση">
+                                    <a  id="tagCanvasLink" style="display: none"  data-toggle="tooltip" class="btn btn-sm btn-secondary text-white" data-coreui-toggle="offcanvas" href="#offcanvasTags" role="button" aria-controls="offcanvasAccess"  title="Περιορίστε τα αποτελέσματα επιλέγοντας: Ετικέτα Διαχειριστή">
                                         <i class="fas fa-plus-circle"></i> | Ετικέτες Διαχειριστή
                                     </a>
                                     <div class="text-muted" id="no_dyna_filters"></div>
@@ -96,14 +104,18 @@
             </div>
             <div class="offcanvas-body">
                 <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Τμήμα</b> από την παρακάτω λίστα.
-                    <p class="text-muted">
-                        Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Τμήμα**
+                    Επιλέξτε <b>Τμήμα</b> από την παρακάτω λίστα.
+                    <p class="text-medium-emphasis italic-wcag">
+                       Περιορίστε τη λίστα των επιλογών πληκτρολογώντας μέρος του τίτλου του τμήματος που αναζητείτε στο παρακάτω πεδίο
                     </p>
                 </div>
-                <ul class="mt-3 list-group" id="dpFilters"></ul>
-
-                <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
+                <div class="mt-2 mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control short-list" data-target="dpFilters" placeholder="αναζήτηση στη λίστα"/>
+                    </div>
+                </div>
+                <div class="mt-3 list-group" id="dpFilters"></div>
             </div>
         </div>
 
@@ -115,14 +127,32 @@
             </div>
             <div class="offcanvas-body">
                 <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Διδάσκοντα</b> από την παρακάτω λίστα
-                    <p class="text-muted">
-                        Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Διδάσκοντα**
+                    Επιλέξτε <b>Διδάσκοντα (-ουσα)</b> ή <b>Υπ. Καθηγητή</b> από την παρακάτω λίστα.
+                    <p class="text-medium-emphasis italic-wcag">
+                        Περιορίστε τη λίστα των επιλογών πληκτρολογώντας μέρος του ονόματος που αναζητείτε στο παρακάτω πεδίο
                     </p>
                 </div>
+                <div class="mt-2 mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control short-list" data-target="stFilters" placeholder="αναζήτηση"/>
+                    </div>
+                </div>
                 <ul  class="mt-3 list-group"  id="stFilters"></ul>
+            </div>
+        </div>
 
-                <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
+        <!-- OffCanvas Dep -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasResourceType" aria-labelledby="offcanvasResourceTypeLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasResourceTypeLabel">Τύπος</h5>
+                <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>
+                    Επιλέξτε <b>Τύπο Καταχώρησης</b> από την παρακάτω λίστα.
+                </div>
+                <ul class="mt-3 list-group" id="rtFilters"></ul>
             </div>
         </div>
 
@@ -134,14 +164,18 @@
             </div>
             <div class="offcanvas-body">
                 <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Μάθημα</b> από την παρακάτω λίστα
-                    <p class="text-muted">
-                        Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Μάθημα**
+                    Επιλέξτε <b>Μάθημα</b> από την παρακάτω λίστα
+                    <p class="text-medium-emphasis italic-wcag">
+                        Περιορίστε τη λίστα των επιλογών πληκτρολογώντας μέρος του τίτλου που αναζητείτε στο παρακάτω πεδίο
                     </p>
                 </div>
+                <div class="mt-2 mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control short-list" data-target="coFilters" placeholder="αναζήτηση"/>
+                    </div>
+                </div>
                 <ul class="mt-3 list-group" id="coFilters"></ul>
-
-                <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
             </div>
         </div>
 
@@ -153,14 +187,18 @@
             </div>
             <div class="offcanvas-body">
                 <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Εκδήλωση</b> από την παρακάτω λίστα
-                    <p class="text-muted">
-                        Σε παρένθεση παρατίθενται ο αριθμός των καταχωρήσεων που βρέθηκαν για κάθε Εκδήλωση**
+                    Επιλέξτε <b>Εκδήλωση</b> από την παρακάτω λίστα
+                    <p class="text-medium-emphasis italic-wcag">
+                        Περιορίστε τη λίστα των επιλογών πληκτρολογώντας μέρος του τίτλου που αναζητείτε στο παρακάτω πεδίο
                     </p>
                 </div>
+                <div class="mt-2 mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control short-list" data-target="evFilters" placeholder="αναζήτηση"/>
+                    </div>
+                </div>
                 <ul class="mt-3 list-group" id="evFilters"></ul>
-
-                <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
             </div>
         </div>
 
@@ -172,13 +210,9 @@
             </div>
             <div class="offcanvas-body">
                 <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Διαχειριστικό Φίλτρο</b> από την παρακάτω λίστα
+                    Επιλέξτε <b>Κατάσταση</b> καταχώρησης από την παρακάτω λίστα
                 </div>
-                <ul class="mt-3 list-group" id="apFilters">
-
-                </ul>
-
-                <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
+                <ul class="mt-3 list-group" id="apFilters"></ul>
             </div>
         </div>
 
@@ -190,11 +224,9 @@
             </div>
             <div class="offcanvas-body">
                 <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Διαχειριστικό Φίλτρο</b> από την παρακάτω λίστα
+                    Επιλέξτε <b>Ετικέτα Διαχειριστή</b> από την παρακάτω λίστα
                 </div>
-                <ul class="mt-3 list-group" id="tagFilters">
-                </ul>
-                <div class="mt-4" style="font-size: 0.8em">** Ο αριθμός των καταχωρήσεων υπολογίζεται από τις 1000 πιο πρόσφατες καταχωρήσεις. Ο πραγματικός αριθμός ενδέχεται να είναι μεγαλύτερος</div>
+                <ul class="mt-3 list-group" id="tagFilters"></ul>
             </div>
         </div>
 

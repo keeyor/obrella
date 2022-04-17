@@ -180,3 +180,20 @@ html {
 #player {
     z-index: 1;
 }
+
+@media (min-width: 769px) {
+    #right-box {
+        border-left: #006A9B 2px solid
+    }
+    #right-box-s {
+        border-left: #006A9B 2px solid
+    }
+}
+@media (max-width: 768px) {
+    #right-box {
+        border-left: none
+    }
+    #right-box-s {
+        border-left: none
+    }
+}

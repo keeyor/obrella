@@ -16,9 +16,11 @@ import org.opendelos.control.services.async.QueryFilter;
 import org.opendelos.control.services.i18n.MultilingualServices;
 import org.opendelos.control.services.opUser.OpUserService;
 import org.opendelos.control.services.scheduledEvent.ScheduledEventService;
+import org.opendelos.control.services.scheduler.ScheduleUtils;
 import org.opendelos.control.services.structure.ClassroomService;
 import org.opendelos.control.services.structure.CourseService;
 import org.opendelos.control.services.structure.DepartmentService;
+import org.opendelos.model.calendar.Period;
 import org.opendelos.model.delos.OpUser;
 import org.opendelos.model.resources.ScheduledEvent;
 import org.opendelos.model.structure.Classroom;
@@ -59,30 +61,22 @@ public class SchedulerCalendarController {
 		return  defaultInstitution;
 	}
 
-/*	private final SchoolService schoolService;
-	private final MultilingualServices multilingualServices;
-	private final ClassroomService classroomService;*/
-
-	/*	public SchedulerCalendarController(SchoolService schoolService, MultilingualServices multilingualServices, ClassroomService classroomService) {
-		this.schoolService = schoolService;
-		this.multilingualServices = multilingualServices;
-		this.classroomService = classroomService;
-	}*/
-
 	private final ClassroomService classroomService;
 	private final MultilingualServices multilingualServices;
 	private final DepartmentService departmentService;
 	private final CourseService courseService;
 	private final OpUserService opUserService;
 	private final ScheduledEventService scheduledEventService;
+	private final ScheduleUtils scheduleUtils;
 
-	public SchedulerCalendarController(ClassroomService classroomService, MultilingualServices multilingualServices, DepartmentService departmentService, CourseService courseService, OpUserService opUserService, ScheduledEventService scheduledEventService) {
+	public SchedulerCalendarController(ClassroomService classroomService, MultilingualServices multilingualServices, DepartmentService departmentService, CourseService courseService, OpUserService opUserService, ScheduledEventService scheduledEventService, ScheduleUtils scheduleUtils) {
 		this.classroomService = classroomService;
 		this.multilingualServices = multilingualServices;
 		this.departmentService = departmentService;
 		this.courseService = courseService;
 		this.opUserService = opUserService;
 		this.scheduledEventService = scheduledEventService;
+		this.scheduleUtils = scheduleUtils;
 	}
 
 	@GetMapping(value = {"admin/scheduler/calendar", "admin/scheduler/celandar/"})
@@ -95,7 +89,7 @@ public class SchedulerCalendarController {
 			@RequestParam(value = "s", required = false) String s,     // Staff Member
 			@RequestParam(value = "p", required = false) String p,     // Period  (semester)
 			@RequestParam(value = "y", required = false) String y,    // Academic Year
-			@RequestParam(value = "cv", required = false) String cv,   // View
+			@RequestParam(value = "view", required = false) String view,   // View
 			@RequestParam(value = "sd", required = false) String sd,   // View
 			@RequestParam(value = "ed", required = false) String ed   // View
 	) throws ExecutionException, InterruptedException, UnsupportedEncodingException {
@@ -145,19 +139,7 @@ public class SchedulerCalendarController {
 		model.addAttribute("scheduledEventFilter", scheduledEventFilter);
 		model.addAttribute("classRoomFilter", classroomFilter);
 
-		model.addAttribute("currentAcademicYear", currentAcademicYear);
-
-		model.addAttribute("landing_page", "calendar-admin");
-		model.addAttribute("color", "dark-blue");
-
-		LocalDate today = LocalDate.now();
-		LocalDate _30days = today.plus(30, ChronoUnit.DAYS);
-		model.addAttribute("today", today);
-		model.addAttribute("_30days", _30days);
-
-		model.addAttribute("view", cv);
-		model.addAttribute("sd", sd);
-		model.addAttribute("ed", ed);
+		model.addAttribute("view", view);
 
 		boolean isStaffMember = false;
 		if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER"))) {

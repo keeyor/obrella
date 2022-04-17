@@ -17,6 +17,13 @@
 
     dashboard.init = function () {
 
+        $('select:not(.normal)').each(function () {
+            $(this).select2({
+                dropdownParent: $(this).parent()
+            });
+        });
+
+
         dashboard.siteurl = dashboard.broker.getRootSitePath();
 
         dashboard.institutionName = $("#institutionTitle").val();
@@ -28,8 +35,6 @@
         alertify.defaults.theme.input = "form-control";
         alertify.set('notifier','position', 'top-center');
 
-        // Do this before you initialize any of your modals
-        $.fn.modal.Constructor.prototype._enforceFocus = function() {};
 
         let   msg_val   = $("#msg_val").val();
         let   msg_type  =$("#msg_type").val();
@@ -83,7 +88,7 @@
             let dataManager = row_data.dataManager;
             let scheduleManager = row_data.scheduleManager;
             if (contentManager === false && dataManager === false && scheduleManager === false) {
-                alertify.alert("Δεν μπορείτε να αφαιρέσετε όλα δικαιώματα. Εναλλακτικά διαγράψτε το δικαίωμα");
+                alertify.alert("ΣΦΑΛΜΑ", "Δεν μπορείτε να απενεργοποιήσετε όλα δικαιώματα. Εναλλακτικά, αφαιρέστε τη Μονάδα");
                 el.bootstrapToggle('on');
             }
             else  {
@@ -99,7 +104,7 @@
             let contentManager = row_data.contentManager;
             let scheduleManager = row_data.scheduleManager;
             if (contentManager === false && dataManager === false && scheduleManager === false) {
-                alertify.alert("Δεν μπορείτε να αφαιρέσετε όλα δικαιώματα. Εναλλακτικά διαγράψτε το δικαίωμα");
+                alertify.alert("ΣΦΑΛΜΑ", "Δεν μπορείτε να απενεργοποιήσετε όλα δικαιώματα. Εναλλακτικά, αφαιρέστε τη Μονάδα");
                 el.bootstrapToggle('on');
             }
             else  {
@@ -114,7 +119,7 @@
             let contentManager = row_data.contentManager;
             let dataManager = row_data.dataManager;
             if (contentManager === false && dataManager === false && scheduleManager === false) {
-                alertify.alert("Δεν μπορείτε να αφαιρέσετε όλα δικαιώματα. Εναλλακτικά διαγράψτε το δικαίωμα");
+                alertify.alert("ΣΦΑΛΜΑ", "Δεν μπορείτε να απενεργοποιήσετε όλα δικαιώματα. Εναλλακτικά, αφαιρέστε τη Μονάδα");
                 el.bootstrapToggle('on');
             }
             else  {
@@ -134,7 +139,7 @@
             let row_data = dashboard.users.getStaffCoursesDTRowData(table_cell);
             let scheduleManager = row_data.scheduleManager;
             if (contentManager === false && scheduleManager === false) {
-                alertify.alert("Δεν μπορείτε να αφαιρέσετε και τα δύο δικαιώματα. Εναλλακτικά διαγράψτε το δικαίωμα");
+                alertify.alert("ΣΦΑΛΜΑ","Δεν μπορείτε να απενεργοποιήσετε και τα δύο δικαιώματα. Εναλλακτικά, διαγράψτε το Μάθημα");
                 el.bootstrapToggle('on');
             }
             else  {
@@ -148,7 +153,7 @@
             let contentManager = row_data.contentManager;
             let scheduleManager = el.prop('checked');
             if (contentManager === false && scheduleManager === false) {
-                alertify.alert("Δεν μπορείτε να αφαιρέσετε και τα δύο δικαιώματα. Εναλλακτικά διαγράψτε το δικαίωμα");
+                alertify.alert("ΣΦΑΛΜΑ","Δεν μπορείτε να απενεργοποιήσετε και τα δύο δικαιώματα. Εναλλακτικά, διαγράψτε το Μάθημα");
                 el.bootstrapToggle('on');
             }
             else  {

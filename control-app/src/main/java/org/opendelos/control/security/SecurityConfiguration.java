@@ -111,7 +111,7 @@ public class SecurityConfiguration  {
 					.anyRequest().authenticated()
 					.and().exceptionHandling()
 					.and().csrf()
-					.ignoringAntMatchers("/admin/user_profile", "/search" ,"/admin/multimediaUpload", "/admin/startMultimediaProcessing", "/admin/startSlidesProcessing", "/api/v1/**",
+					.ignoringAntMatchers("/admin/user_profile", "/search" ,"/admin/multimediaUpload", "/admin/imageUpload","/admin/startMultimediaProcessing", "/admin/startSlidesProcessing", "/api/v1/**",
 							"/secure/image_upload","/admin/sevent-editor","/api/youtube/setBroadcast","/api/youtube/unsetBroadcast/**", "/protected_player", "/api/youtube/store")
 					.and()
 					.logout()//.deleteCookies("JSESSIONID")

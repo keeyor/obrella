@@ -359,10 +359,10 @@ function define_actions() {
             $play_cut_section.html('<div class="b-close">Close<\/div>');
             $play_cut_section.bPopup({
                 content: 'iframe',
-                iframeAttr: 'width="616px" height="390px"',
+                iframeAttr: 'width="640px" height="480px"',
                 contentContainer: '.play_cut_section',
                 loadUrl: webRoot + '/admin/video-editor/editor_play_cut?id=' + video_url + '&duration=' + global_vid_duration + '&start=' + begin_sec + '&end=' + end_sec + '&provider=' + provider_type,
-                closeClass: '.b-close'
+                //closeClass: '.b-close'
             });
         },
         go_to_time: function() {

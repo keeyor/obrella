@@ -22,10 +22,7 @@
             order: [[5, 'desc']],
             language: dtLanguageGr,
             fixedHeader: true,
-            //"dom": '<"top"flB><p>rti<"bottom">p<"clear">',
-            "dom" : "<'row mb-3'<'col-3'lB><'col-6 d-flex justify-content-center'p><'col-3'f>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row mt-2'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+             "dom": '<"top"flB><p>rti<"bottom">p<"clear">',
             pagingType: "full_numbers",
             pageLength : 10,
             "columns": [
@@ -276,6 +273,12 @@
         } );
     }
     function  set_display_results() {
+
+        //Enable Tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new coreui.Tooltip(tooltipTriggerEl)
+        });
 
         let filters = ["estatus"];
 

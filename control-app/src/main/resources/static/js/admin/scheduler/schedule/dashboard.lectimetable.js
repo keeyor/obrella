@@ -255,6 +255,7 @@
                     "aTargets": [20],
                     "mData": "id",
                     "sortable": false,
+                    "className" : "dt-center",
                     "mRender": function (data,type,row) {
                         let add_class = "";
                         if (_dateIsInThePast(row)) {
@@ -271,10 +272,15 @@
                             return 'άκυρη';
                         }
                         if ( row["argia"] == null && row["cancellation"] == null && row["overlapInfo"] == null) {
-                            return  '<a role="button" title="ακύρωση ημέρας" class="btn btn-secondary btn-sm cancel-scheduled ' + add_class + '" href="#" ' +
-                                'data-id="' + data + '" data-date="' + row["date"] + '" data-title="' + row["course"].title + '" data-type="lecture">' +
-                                '<i style="color:orangered" class="fas fa-ban" style="color:orangered"></i>' +
-                                '</a>';
+                            if (_dateIsLive(row)) {
+                                return '<span class="icon-live-lecture" style="color: red;font-size: 1.3em"></span> Live!';
+                            }
+                            else {
+                                return '<a role="button" title="ακύρωση ημέρας" class="btn btn-secondary btn-sm cancel-scheduled ' + add_class + '" href="#" ' +
+                                    'data-id="' + data + '" data-date="' + row["date"] + '" data-title="' + row["course"].title + '" data-type="lecture">' +
+                                    '<i style="color:orangered" class="fas fa-ban" style="color:orangered"></i>' +
+                                    '</a>';
+                            }
                         }
                         else if ( row["cancellation"] != null) {
                             return  '<a role="button" title="ενεργοποίηση ημέρας" class="btn btn-secondary btn-sm un-cancel-scheduled ' + add_class + '" href="#" ' +
@@ -310,7 +316,7 @@
                         doc.defaultStyle.alignment = 'center';
                         doc.styles.tableHeader.alignment = 'center';
                     },
-                    text:'<span title="Εξαγωγή σε PDF"><i class="fas fa-download"></i> PDF</span>',
+                    text:'<span title="Εξαγωγή σε PDF" ><i class="fas fa-download"></i> PDF</span>',
                     className: 'ms-2 blue-btn-wcag-bgnd-color text-white mb-4',
                     orientation: 'portrait'
                 }
@@ -355,6 +361,24 @@
             isInThePast = true;
         }
         return isInThePast;
+    }
+    function _dateIsLive(row_data) {
+        let isLive = false;
+        let date = row_data["date"];
+        let startTime = row_data["startTime"];
+        let hour = parseInt(startTime.substring(0, 2));
+        let minute = parseInt(startTime.substring(3, 5));
+        let startDateTime = moment(date).add(hour, 'hours').add(minute, 'minutes');
+
+        let durationHours = parseInt(row_data["durationHours"]);
+        let durationMinutes = parseInt(row_data["durationMinutes"]);
+        let endDateTime = moment(date).add(hour, 'hours').add(minute, 'minutes').add(durationHours, 'hours').add(durationMinutes, 'minutes');
+
+        let enabled = row_data["enabled"];
+        if (moment().isBetween(startDateTime, endDateTime, '[]') && enabled !== false) {
+            isLive = true;
+        }
+        return isLive;
     }
 
     function  set_display_results(json) {
@@ -413,7 +437,7 @@
                 }
             });
             if (all_in_the_past) {
-                let msg = "Προγραμματισμός αφορά ημερομηνίες παρελθόντος χρόνου. Η επεξεργασία έχει απενεργοποιηθεί!";
+                let msg = "Ο επιλεγμένος Προγραμματισμός Μετάδοσης αφορά ημερομηνίες παρελθόντος χρόνου. Η επεξεργασία έχει απενεργοποιηθεί!";
                 let allow_delete = true;
                 disableEditing(msg,allow_delete);
             }

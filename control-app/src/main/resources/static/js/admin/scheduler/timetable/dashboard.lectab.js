@@ -105,10 +105,7 @@
             order: [[5, 'asc']],
             pagingType: "full_numbers",
             pageLength : 10,
-            //"dom": '<"top"flBp>rti<"bottom">p<"clear">',
-            "dom" : "<'row mb-3'<'col-3'lB><'col-6 d-flex justify-content-center'p><'col-3'f>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row mt-2'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+             "dom": '<"top"flBp>rti<"bottom">p<"clear">',
             "columns": [
                 {"data": null},
                 {"data": "enabled"},
@@ -157,12 +154,12 @@
                             let repeat = row["repeat"];
                             let cancellations = row["cancellations"];
                             if (repeat === "onetime" && cancellations != null && cancellations.length >0) {
-                                return '<i class="fas fa-circle" style="color:orangered"  title="Ανενεργό Πρόγραμμα"></i>';
+                                return '<i class="fas fa-circle" style="color:orangered"  data-toggle="tooltip" title="Ανενεργό Πρόγραμμα"></i>';
                             }
-                            return '<i class="fas fa-circle" style="color:greenyellow"  title="Ενεργό Πρόγραμμα"></i>';
+                            return '<i class="fas fa-circle" style="color:greenyellow" data-toggle="tooltip"   title="Ενεργό Πρόγραμμα"></i>';
                         }
                         else {
-                            return '<i class="fas fa-circle" style="color:orangered"  title="Ανενεργό Πρόγραμμα"></i>';
+                            return '<i class="fas fa-circle" style="color:orangered" data-toggle="tooltip"   title="Ανενεργό Πρόγραμμα"></i>';
                         }
                     }
                 },
@@ -174,10 +171,10 @@
                     "mRender": function (data) {
                         let hiddenDataForSorting = '<span style="display:none">' + data + '</span>';
                         if (data === "regular") {
-                            return hiddenDataForSorting + '<img title="τακτική" src="' + dashboard.siteurl +   '/public/images/icons/IconEidosTaktiki.png" width="15px " alt="τακτική"  />';
+                            return hiddenDataForSorting + '<img  data-toggle="tooltip" title="Τακτική διάλεξη" src="' + dashboard.siteurl +   '/public/images/icons/IconEidosTaktiki.png" width="15px " alt="τακτική"  />';
                         }
                         else {
-                            return hiddenDataForSorting + '<img title="έκτακτη"  src="' + dashboard.siteurl +   '/public/images/icons/IconEidosEktakti.png" width="15px " alt="έκτακτη"  />';
+                            return hiddenDataForSorting + '<img  data-toggle="tooltip" title="Έκτακτη διάλεξη"  src="' + dashboard.siteurl +   '/public/images/icons/IconEidosEktakti.png" width="15px " alt="έκτακτη"  />';
                         }
                     }
                 },
@@ -360,7 +357,7 @@
                     "className" : "dt-center",
                     "mRender": function (data) {
                         let editor_name = data.name.split(" ");
-                        let badge = '<span title="' + editor_name + '" class="badge rounded-pill bg-warning">' + editor_name[0].charAt(0);
+                        let badge = '<span title="Τελευταία Ανάρτηση/Τροποποίηση: ' + editor_name + '" data-toggle="tooltip" class="badge rounded-pill bg-warning">' + editor_name[0].charAt(0);
                         if (editor_name.length>1) {
                             badge += editor_name[1].charAt(0)
                         }
@@ -374,7 +371,7 @@
                     "mData": "id",
                     "sortable": false,
                     "mRender": function (data) {
-                        return '<a role="button" class="btn blue-btn-wcag-bgnd-color btn-pill btn-sm edit-schedule" title="επεξεργασία μετάδοσης" href="schedule?id=' + data + '"><i class="fas fa-edit text-white"></i></a>';
+                        return '<a role="button" class="btn blue-btn-wcag-bgnd-color btn-pill btn-sm edit-schedule" data-toggle="tooltip" title="Επεξεργασία παραμέτρων μετάδοσης" href="schedule?id=' + data + '"><i class="fas fa-edit text-white"></i></a>';
                     }
                 },
                 {
@@ -383,7 +380,8 @@
                     "mData": "id",
                     "sortable": false,
                     "mRender": function (data) {
-                        return ' <a role="button" class="btn btn-sm btn-warning btn-pill edit-schedule"  title="αντιγραφή μετάδοσης σε νέα" href="schedule?cloneId=' + data + '"><i class="far fa-clone"></i></a>';
+                        return ' <a role="button" class="btn btn-sm btn-warning btn-pill edit-schedule" data-toggle="tooltip" title="Δημιουργία ΝΕΑΣ μετάδοσης με αντιγραφή" href="schedule?cloneId=' + data + '">' +
+                            '<i class="far fa-clone"></i></a>';
                     }
                 },
                 {
@@ -409,7 +407,7 @@
                         columns: [ 4,23,6,7,8,11,12,13,14],
                         stripHtml: true,
                     },
-                    text:'<span title="Εξαγωγή σε PDF"><i class="fas fa-download"></i> PDF</span>',
+                    text:'<span data-toggle="tooltip" title="Εξαγωγή του προγράμματος μεταδόσεων σε αρχείο PDF"><i class="fas fa-download"></i> PDF</span>',
                     className: 'ms-2 blue-btn-wcag-bgnd-color text-white'
                 }
             ],
@@ -427,7 +425,11 @@
 
     function  set_display_results() {
 
-      //  $("#offcanvasDep").hide();
+        //Enable Tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new coreui.Tooltip(tooltipTriggerEl)
+        });
 
         let $clear_filters = $(".clear-filters");
         // disable clear filters button
@@ -654,14 +656,8 @@
         $("#no_dyna_filters").show();
         $("#no_dyna_filters").html("Δημιουργία δυναμικών φίλτρων σε εξέλιξη. Παρακαλώ περιμένετε...");
 
-        let department_filter_val = $("#department_filter").val();
-        if (department_filter_val === "_all" || department_filter_val === "" ) {
-            dashboard.department.loadDepartmentsByReport();
-            some_filters = 1;
-        }
-        else {
-            $("#depCanvasLink").hide();
-        }
+
+
 
         let period_filter_val = $("#period_filter").val();
         if (period_filter_val === "_all" || period_filter_val === "" ) {
@@ -674,8 +670,9 @@
 
         let course_filter_val = $("#course_filter").val();
         let staff_filter_val = $("#staff_filter").val();
+        let department_filter_val = $("#department_filter").val();
 
-        if ((staff_filter_val === "_all" || staff_filter_val === "") && course_filter_val === '') {
+        if ((staff_filter_val === "_all" || staff_filter_val === "") && course_filter_val === '' && department_filter_val === '') {
             dashboard.staffmembers.loadStaffByReport(department_filter_val);
             some_filters = 1;
         }
@@ -683,12 +680,20 @@
             $("#staffCanvasLink").hide();
         }
 
-        if ((course_filter_val === "_all" || course_filter_val === "") && staff_filter_val ==='') {
+        if ((course_filter_val === "_all" || course_filter_val === "") && staff_filter_val ==='' && department_filter_val === '') {
             dashboard.course.loadCourseByReport(department_filter_val);
             some_filters = 1;
         }
         else {
             $("#courseCanvasLink").hide();
+        }
+
+        if ((department_filter_val === "_all" || department_filter_val === "" ) && staff_filter_val === '' && course_filter_val === '') {
+            dashboard.department.loadDepartmentsByReport();
+            some_filters = 1;
+        }
+        else {
+            $("#depCanvasLink").hide();
         }
 
         let dow_filter_val = $("#dow_filter").val();

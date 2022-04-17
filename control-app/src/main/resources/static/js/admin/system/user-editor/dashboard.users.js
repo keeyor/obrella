@@ -339,13 +339,9 @@
     function showTypeChangeWarning(name ,previous_value, selected_value) {
 
         let staff_id = $("#staff_id").val();
-        let msg = '<div class="font-weight-bold">ΠΡΟΣΟΧΗ: Τροποποιείτε το Διαχειριστικό Ρόλο του χρήστη: "' + name + '" ' +
-            '<span style="font-size: 1.1em"><br/>Όλα τα εκχωρημένα δικαιώματα του χρήστη Θα ΔΙΑΓΡΑΦΟΥΝ!<br/><br/>Είστε σίγουρος;</span></div>';
-        msg += '<div class="text-muted">Πατήστε "Ακύρωση" για ανάκληση της ενέργειας</div>';
-        msg += '<div class="mb-2" style="font-size: 1em"><br/><i class="fas fa-info-circle"></i>'
-        msg += '<br/><b>Ο Διαχειριστής Συστήματος</b> αποκτά απεριόριστα δικαιώματα σε όλα τα υποσυστήματα!'
-        msg += '<br/><b>Ο Διαχειριστής Μονάδων</b> αποκτά δικαιώματα στο Ίδρυμα ή σε επιλεγμένες Σχολές/Τμήματα σε επιλεγμένα υποσυστήματα!'
-        msg += '<br/><b>Το Προσωπικό Υποστήριξης</b> αποκτά δικαιώματα σε επιλεγμένα Μαθήματα και Εκδηλώσεις Καθηγητών σε επιλεγμένα υποσυστήματα!</div>'
+        let msg = '<div class="font-weight-bold;font-size: 1.2em">ΠΡΟΣΟΧΗ<br/>Ο Διαχειριστικός Ρόλος του/της: "' + name + '" Θα αλλάξει' +
+            '<br/>Όλα τα ήδη εκχωρημένα δικαιώματα του χρήστη Θα ΔΙΑΓΡΑΦΟΥΝ!<br/><br/>Είστε σίγουρος;</span></div>';
+        msg += '<div class="text-high-emphasis">Πατήστε "Ακύρωση" για ανάκληση της ενέργειας</div>';
 
         alertify.confirm('<i style="color: red" class="fas fa-user-shield"></i> Τροποποίηση Διαχειριστικού Ρόλου', msg,
             function () {
@@ -460,7 +456,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Νέο Δικαίωμα σε Μονάδα', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openUnitsSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Μονάδας', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openUnitsSelectModal'},
                         action: function () {
                             openUnitsSelectModal();
                         }
@@ -654,7 +650,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Νέο Δικαίωμα σε Μάθημα', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openStaffCourseSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Μαθήματος', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openStaffCourseSelectModal'},
                         action: function () {
                             openStaffCourseSelectModal();
                         }
@@ -662,7 +658,7 @@
                 ],
                 dom: {
                     button: {
-                        className: 'btn btn-sm openStaffCourseSelectModal'
+                        className: 'btn openStaffCourseSelectModal'
                     }
                 }
             },
@@ -681,10 +677,10 @@
                     "mRender": function (data,type,row) {
                         let hiddenDataForSorting = '<span style="display:none">' + data + '</span>';
                         if (data === true) {
-                            return hiddenDataForSorting + "<input type=\"checkbox\" checked class=\"course_content_toggle _toggle \" data-id=\"" + row.id + "\">";
+                            return hiddenDataForSorting + "<input type=\"checkbox\" placeholder='Ενεργοποίηση/Απενεργοποίηση δικαιώματος' checked class=\"course_content_toggle _toggle \" data-id=\"" + row.id + "\">";
                         }
                         else {
-                            return hiddenDataForSorting + "<input type=\"checkbox\"  class=\"course_content_toggle _toggle \">";
+                            return hiddenDataForSorting + "<input type=\"checkbox\" title='Ενεργοποίηση/Απενεργοποίηση δικαιώματος' class=\"course_content_toggle _toggle \">";
                         }
                     }
                 },
@@ -694,10 +690,10 @@
                     "mRender": function (data,type,row) {
                         let hiddenDataForSorting = '<span style="display:none">' + data + '</span>';
                         if (data === true) {
-                            return hiddenDataForSorting + "<input type=\"checkbox\" checked class=\"course_schedule_toggle _toggle  \" data-id=\"" + row.id + "\">";
+                            return hiddenDataForSorting + "<input type=\"checkbox\" title='Ενεργοποίηση/Απενεργοποίηση δικαιώματος' checked class=\"course_schedule_toggle _toggle  \" data-id=\"" + row.id + "\">";
                         }
                         else {
-                            return hiddenDataForSorting + "<input type=\"checkbox\"  class=\"course_schedule_toggle _toggle \">";
+                            return hiddenDataForSorting + "<input type=\"checkbox\" title='Ενεργοποίηση/Απενεργοποίηση δικαιώματος' class=\"course_schedule_toggle _toggle \">";
                         }
                     }
                 },
@@ -797,7 +793,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Νέο Δικαίωμα σε Εκδήλωση', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openStaffEventSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Εκδήλωσης', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openStaffEventSelectModal'},
                         action: function () {
                             openStaffEventSelectModal();
                         }
@@ -805,7 +801,7 @@
                 ],
                 dom: {
                     button: {
-                        className: 'btn btn-sm openStaffEventSelectModal'
+                        className: 'btn openStaffEventSelectModal'
                     }
                 }
             },
@@ -824,10 +820,10 @@
                     "mRender": function (data,type,row) {
                         let hiddenDataForSorting = '<span style="display:none">' + data + '<br/></span>';
                         if (data === true) {
-                            return hiddenDataForSorting + "<input type=\"checkbox\" checked class=\"event_content_toggle _toggle \" data-id=\"" + row.id + "\">";
+                            return hiddenDataForSorting + "<input type=\"checkbox\" title='Ενεργοποίηση/Απενεργοποίηση δικαιώματος' checked class=\"event_content_toggle _toggle \" data-id=\"" + row.id + "\">";
                         }
                         else {
-                            return hiddenDataForSorting + "<input type=\"checkbox\"  class=\"event_content_toggle _toggle\">";
+                            return hiddenDataForSorting + "<input type=\"checkbox\"  title='Ενεργοποίηση/Απενεργοποίηση δικαιώματος' class=\"event_content_toggle _toggle\">";
                         }
                     }
                 },
@@ -837,10 +833,10 @@
                     "mRender": function (data,type,row) {
                         let hiddenDataForSorting = '<span style="display:none">' + data + '<br/></span>';
                         if (data === true) {
-                            return hiddenDataForSorting + "<input type=\"checkbox\" checked class=\"event_schedule_toggle _toggle\" data-id=\"" + row.id + "\">";
+                            return hiddenDataForSorting + "<input type=\"checkbox\" title='Ενεργοποίηση/Απενεργοποίηση δικαιώματος' checked class=\"event_schedule_toggle _toggle\" data-id=\"" + row.id + "\">";
                         }
                         else {
-                            return hiddenDataForSorting + "<input type=\"checkbox\"  class=\"event_schedule_toggle _toggle\">";
+                            return hiddenDataForSorting + "<input type=\"checkbox\" title='Ενεργοποίηση/Απενεργοποίηση δικαιώματος' class=\"event_schedule_toggle _toggle\">";
                         }
                     }
                 },
@@ -952,7 +948,6 @@
         });
     };
     dashboard.users.reloadAssignedUnitsTable = function(staffId, msg) {
-        //unitRightsDT.ajax.url = dashboard.siteurl + '/api/v1/dt/managers/assigned_units/' + staffId;
         unitRightsDT.ajax.reload( function () {
             dashboard.users.refreshTableResults();
             if (msg != null) {

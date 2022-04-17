@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
-    <title>ΕΚΠΑ :: Διαλέξεις</title>
+    <title>Διαχείριση Περιεχομένου</title>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
@@ -46,6 +46,7 @@
                      <input id="scheduledEventFilterText"   type="hidden" th:value="${scheduledEventFilter.text}"/>
                      <input id="accessPolicy"               type="hidden" th:value="${resourceQuery.accessPolicy}"/>
                      <input id="tag"                        type="hidden" th:value="${tag}"/>
+                     <input id="resource_type"              type="hidden" th:value="${resource_type}"/>
                      <input id="academicYear"               type="hidden" th:value="${academicYear}"/>
 
 <span th:if="${resourceQuery.categoryCode != null && resourceQuery.categoryCode != ''}">
@@ -74,6 +75,7 @@
             </nav>
         </div>
     </header>
+
     <div class="body flex-grow-1 px-3">
 
         <div class="container-fluid">
@@ -202,7 +204,6 @@
 
 <script th:src="@{/js/admin/content/search/dashboard.js}" type="application/javascript"></script>
 <script th:src="@{/js/admin/content/search/dashboard.departments.js}" type="application/javascript"></script>
-<script th:src="@{/js/admin/content/search/dashboard.categories.js}" type="application/javascript"></script>
 <script th:src="@{/js/admin/content/search/dashboard.course.js}" type="application/javascript"></script>
 <script th:src="@{/js/admin/content/search/dashboard.staffmembers.js}" type="application/javascript"></script>
 <script th:src="@{/js/admin/content/search/dashboard.sevents.js}" type="application/javascript"></script>

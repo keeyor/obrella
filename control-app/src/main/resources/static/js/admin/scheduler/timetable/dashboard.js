@@ -38,6 +38,28 @@
    	
        dashboard.init();
 
+       //init short-list field
+        $(".offcanvas").on('show.coreui.offcanvas',function() {
+            $(".short-list").val("");
+        });
+
+        $(".short-list").on("keyup",function() {
+
+            let what = $(this).data("target");
+            let value = $(this).val();
+            if (value.length < 2) {
+                $('#' + what +' > li').show();
+            }
+            else {
+                value = value.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                    return letter.toUpperCase();
+                });
+                $('#' + what + '>li').slideUp().filter( function() {
+                    return $(this).text().toLowerCase().indexOf(value) > -1
+                }).stop(true).fadeIn();
+            }
+        });
+
         //load specific tab when returning from edit
         let url = document.location.toString();
         if (url.match('#')) {
@@ -61,17 +83,16 @@
             }
         });
 
-        $(".offcanvas").on('click',function(e){
-            $(this).offcanvas('hide');
-        });
 
-        $("#lecture-filters").on( "click", ".filter-item", function(event) {
-
+       $("#lecture-filters").on( "click", ".filter-item", function(event) {
             let filter = $(this).data("filter");
             let itemId = $(this).data("target");
             let itemName = $(this).text();
             let message = {msg: "Filter:" + filter + " Selected!", filter: filter, id: itemId, value: itemName};
             dashboard.broker.trigger('filter.select', [message]);
+
+            let canvas_element = $(this).parents(".offcanvas");
+            canvas_element.offcanvas('hide');
         });
 
         $("#event-filters").on( "click", ".filter-item", function(event) {
@@ -80,6 +101,9 @@
             let itemName = $(this).text();
             let message = {msg: "Filter:" + filter + " Selected!", filter: filter, id: itemId, value: itemName};
             dashboard.broker.trigger('filter.select', [message]);
+
+            let canvas_element = $(this).parents(".offcanvas");
+            canvas_element.offcanvas('hide');
         });
 
         $(".clear-filter").on("click", "a", function(event) {
@@ -119,6 +143,7 @@
                    dashboard.evtab.reloadTimeTableLectureEDT();
                }
            }
+
       });
        dashboard.broker.on('afterSelect.department afterSelect.repeat afterSelect.dayOfWeek', function (event, message) {
     	  //console.log("Filter Changed:" + message.msg + " to: " + message.value);

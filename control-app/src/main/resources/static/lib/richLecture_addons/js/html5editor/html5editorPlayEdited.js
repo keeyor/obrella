@@ -100,7 +100,7 @@ function post_accept_realediting(rid) {
 
     $.ajax({
         type: "POST",
-        url: siteRoot + "/api/v1/realediting/accept/" + rid,
+        url: siteRoot + "/api/v1/realediting/approve/" + rid,
         contentType: "application/json; charset=utf-8",
         dataType: "html",
         cache: false,
@@ -159,7 +159,8 @@ $("#real_approve_bt").on('click',function(){
     let msg = '<p>Το βίντεο που παρήχθηκε από την διαδικασία της πραγματικής κοπής θα αντικαταστήσει το υπάρχον. <b>Είστε σίγουρος;</b></p>';
     alertify.confirm('Αποδοχή Κοπής', msg,
         function () {
-
+            post_accept_realediting(rid);
+            $("#accept_reject_button").hide();
         },
         function () {
         });

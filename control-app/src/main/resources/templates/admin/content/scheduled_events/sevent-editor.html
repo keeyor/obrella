@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
-    <title>OpenDelos Live</title>
+    <title>Επεξεργασία Εκδήλωσης</title>
 
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
@@ -51,7 +51,7 @@
         .modal-open .select2-container--open { z-index: 999999 !important; width:100% !important; }
     </style>
 </head>
-<body style="font-size: 0.9em">
+<body style="font-size: 0.89em">
 <input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
 <input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
 <input type="hidden" id="user_id" th:value="${user.id}"/>
@@ -272,14 +272,14 @@
                                             <div class="card ps-2 mb-1" style="background-color: #f7f7f9" >
                                                 <!-- Description -->
                                                 <div class="form-group row mt-3">
-                                                    <label for="event_description" class="col-3 col-form-label"><b>Περιγραφή</b></label>
+                                                    <label for="event_description" class="col-3 col-form-label">Περιγραφή</label>
                                                     <div class="col-7">
                                                         <textarea  id="event_description" class="form-control" th:field="*{description}" rows="3" col="30"></textarea>
                                                     </div>
                                                 </div>
                                                 <!-- Place -->
                                                 <div class="form-group row mt-3">
-                                                    <label for="event_url" class="col-3 col-form-label" id="enroll_label"><b>Ηλεκτρονική Σελίδα Εκδήλωσης</b></label>
+                                                    <label for="event_url" class="col-3 col-form-label" id="enroll_label">Ηλεκτρονική Σελίδα Εκδήλωσης</label>
                                                     <div class="col-7">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
@@ -291,29 +291,32 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row my-3" >
-                                                    <label for="sevent_place" class="col-3 col-form-label"><b>Χώρος Διεξαγωγής | Τοποθεσία</b></label>
+                                                    <label for="sevent_place" class="col-3 col-form-label">Χώρος Διεξαγωγής | Τοποθεσία</label>
                                                     <div class="col-7">
-                                                        <input type="text" id="sevent_place" name="sevent_place" class="form-control" placeholder="πληκτρολογήστε το χώρο της Εκδήλωσης" th:field="*{place}"/>
+                                                        <input type="text" id="sevent_place" name="sevent_place" class="form-control" placeholder="περιγράψτε το χώρο της Εκδήλωσης" th:field="*{place}"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="multi" role="tabpanel" aria-labelledby="multi-tab">
-                                                        <p class="my-2 py-2" style="font-weight: 400;background-color: lightgoldenrodyellow">
-                                                            <i class="far fa-comment-dots"></i> (Προαιρετικά) Μπορείτε να "ανεβάσετε" μια Φωτογραφία | Αφίσα | Εικόνα της Εκδήλωσης...
-                                                            <span id="photoUploadHelp_1" class="my-2" style="display:none">
-                                                                Μέγιστο μέγεθος εικόνας: 1024px - 768px
-                                                            </span>
-                                                            <span id="photoUploadHelp_2" class="my-2" style="display:none">
-                                                               Αποθηκεύστε την Εκδήλωση για να ενεργοποιηθεί η επιλογή
-                                                            </span>
-                                                        </p>
-
-                                                        <div class="card" style="background-color: #f7f7f9;border: none">
+                                                         <div class="card" style="background-color: #f7f7f9;border: none">
                                                             <div class="card-body">
                                                                 <div class="row">
+                                                                    <div class="row">
+                                                                        <div class="col-9 offset-3">
+                                                                                <div>
+                                                                                <i class="far fa-comment-dots"></i> (Προαιρετικά) "Ανεβάστε" μια Φωτογραφία (Αφίσα ή Εικόνα) της Εκδήλωσης...
+                                                                                <span id="photoUploadHelp_1" class="my-2" style="display:none">
+                                                                                    Μέγιστο μέγεθος εικόνας: 1024px - 768px
+                                                                                </span>
+                                                                                </div>
+                                                                                <div id="photoUploadHelp_2" class="my-2" style="display:none;color:orangered">
+                                                                                   Αποθηκεύστε την Εκδήλωση για να ενεργοποιηθεί η επιλογή
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="col-3">
-                                                                        <label for="pickfiles" class="col-12 col-form-label"><b>Φωτογραφία | Εικόνα**</b></label>
+                                                                        <label for="pickfiles" class="col-12 col-form-label   emph-label">Φωτογραφία</label>
                                                                     </div>
                                                                     <div class="col-8 pl-1">
                                                                         <div id="file_select_label" class="mb-2 font-italic"></div>

@@ -9,19 +9,17 @@
                 <h6 class="modal-title ml-2" id="runitSelectModalLabel" style="font-size: 1em">
 
                 </h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
                 <input type="hidden" id="ru_rowIdx_edited" value=""/>
                 <input type="hidden" id="default_dp_id" value=""/>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="text-muted"><i class="far fa-question-circle"></i> Επιλέξτε μονάδα και πατήστε "Εισαγωγή"
+                    <div class="text-high-emphasis"> Επιλέξτε μονάδα και πατήστε "Εισαγωγή"
                     </div>
-                    <div class="card card-body" style="background-color: #f7f7f9;border: none">
+                    <div class="card mt-3" style="border: none">
                         <div class="table-responsive">
-                            <table id="runitSelectDataTable" style="width:100%" class="display compact">
+                            <table id="runitSelectDataTable" style="width:100%" class="display stripe compact">
                                 <thead>
                                 <tr>
                                     <th scope="row" style="height: 12px;width: 20px">[id]</th>
@@ -37,7 +35,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary"  id="addAssignedUnits">Εισαγωγή</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Ακύρωση</button>
             </div>
     </div>
 </div>

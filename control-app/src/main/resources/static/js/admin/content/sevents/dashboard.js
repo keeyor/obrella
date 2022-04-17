@@ -18,6 +18,7 @@
     let departmentId    = $("#department_filter").val();
     let event_area      = $("#area_filter").val();
     let event_type      = $("#etype_filter").val();
+    let event_cat       = $("#ecat_filter").val();
 
     $(document).ready(function () {
         dashboard.init();
@@ -34,12 +35,7 @@
             event.preventDefault();
         });
         cpage = $("#cpage").val();
-        let user_access_type   = $("#user_access").val();
-        if (cpage === "sevents" && (user_access_type === "SA" || user_access_type === "MANAGER")) {
-            dashboard.departments.init();
-        }
-        dashboard.staffmembers.init();
-        dashboard.areas.init();
+
         define_events();
         init_controls();
 
@@ -82,14 +78,21 @@
                 else {
                     $("#areaFilters").hide();
                 }
-                if (event_type === '') {
+                if (event_cat === '' && event_area === "ea_uas") {
+                    dashboard.sevents.loadCategoriesByReport();
+                    $("#catFilters").show();
+                }
+                else {
+                    $("#catFilters").hide();
+                }
+                if (event_type === '' && event_area !== '') {
                     dashboard.sevents.loadTypesByReport();
                     $("#typeFilters").show();
                 }
                 else {
                     $("#typeFilters").hide();
                 }
-                if (staffId !== '' && departmentId !== '' && event_type !== '' && event_area !== '') {
+                if (staffId !== '' && departmentId !== '' && event_type !== '' && event_area !== '' && event_cat !== '') {
                     $("#no_dyna_filters").html("δεν βρέθηκαν επιπλέον κριτήρια.");
                 }
 
@@ -127,6 +130,7 @@
         let departmentFilterId = $("#department_filter").val();
         let areaFilterId = $("#area_filter").val();
         let etypeFilterId = $("#etype_filter").val();
+        let catFilterId   = $("#ecat_filter").val();
 
         let hasOtherParam = false;
         let queryParams = new URLSearchParams(window.location.search);
@@ -180,9 +184,20 @@
             $("#area-filter").show();
         }
 
-        let etypeFilterText = $("#type_filter_name").val();
+        let catFilterText = $("#ecat_filter_name").val();
+        if ( catFilterId !== undefined && catFilterId != null && catFilterId !== '') {
+            $('#cat-dd-header').html("<span class='fas fa-minus-circle'></span> | Θεματική Περιοχή  " + catFilterText);
+            let queryParams = new URLSearchParams(window.location.search);
+            queryParams.delete("ec");
+            queryParams.delete("skip");
+            //  removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
+            $("#clear-cat-filter").attr('href','?' + queryParams);
+            $("#cat-filter").show();
+        }
+
+        let etypeFilterText = $("#etype_filter_name").val();
         if (etypeFilterId !== undefined && etypeFilterId != null && etypeFilterId !== '') {
-            $('#type-dd-header').html("<span class='fas fa-minus-circle'></span> | Θεματική Περιοχή " + etypeFilterText);
+            $('#type-dd-header').html("<span class='fas fa-minus-circle'></span> | Τύπος " + etypeFilterText);
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("et");
             queryParams.delete("skip");
@@ -268,6 +283,23 @@
     }
 
     function define_events() {
+
+        $(".short-list").on("keyup",function() {
+
+            let what = $(this).data("target");
+            let value = $(this).val();
+            value = value.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
+            if (value.length < 2) {
+                $('#' + what +' > a').show();
+            }
+            else {
+                $('#' + what + '> a').slideUp().filter( function() {
+                    return $(this).text().toLowerCase().indexOf(value) > -1
+                }).stop(true).fadeIn();
+            }
+        });
 
         $(".mark-resource").on('click',function(e1){
 
@@ -374,13 +406,12 @@
 
     function init_controls() {
 
-        let areaFilterId = $("#area_filter").val();
-        if (areaFilterId !== "") {
-            dashboard.areas.loadEventTypesOnSearchBar(areaFilterId);
-        }
-        else {
-            $("#etype_dropdown").addClass("disabled text-muted");
-        }
+        //Enable Tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new coreui.Tooltip(tooltipTriggerEl)
+        });
+
 
         let sortby = $("#sortField").val();
         if (sortby === 'rel') {

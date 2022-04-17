@@ -71,7 +71,7 @@
                                                </button>
                                         </span>
                                     </div>
-                                    <div class="colp-3 colp-s-12" style="border-left: #006A9B 2px solid" id="right-box">
+                                    <div class="colp-3 colp-s-12" id="right-box">
                                         <div class="aside" id="video_wrapper">
                                             <div th:replace="~{fragments/player/u-videoplayer :: u-videoplayer}">Video Player</div>
                                             <div id="overlay_1" style="visibility:hidden" th:if="${resource.course != null}" th:text="${resource.supervisor.name}"></div>
@@ -132,11 +132,16 @@
                                                 </h5>
                                                 <div class="font-weight-bolder">
                                                     <th:block th:if="${resource.course != null}">
-                                                        <div class="mb-2">
+                                                        <div>
                                                             <strong>Μάθημα:</strong> <span th:text="${resource.course.title + ' - '}"></span>
                                                             <strong>Τμήμα </strong> <span th:text="${resource.course.department.title}"></span>
                                                         </div>
                                                         <div><strong>Διδάσκων:</strong> <span th:text="${resource.supervisor.name + ', ' + resource.supervisor.affiliation}"></span></div>
+                                                        <div><strong>Ημερημηνία:</strong>
+                                                            <span   th:text="${#temporals.format(resource.date, 'dd')}"></span>
+                                                            <span   th:text="${#temporals.format(resource.date, 'MMMM')}"></span>
+                                                            <span   th:text="${#temporals.format(resource.date, 'YYYY')}"></span>
+                                                        </div>
                                                     </th:block>
                                                     <th:block th:if="${resource.getEvent != null}">
                                                         <div class="mb-2"><strong>Εκδήλωση:</strong> <span th:text="${resource.getEvent.title}"></span></div>
@@ -154,16 +159,17 @@
                                             </div>
                                         </div>
                                         <th:block th:if="${resource.parts && related_parts.size > 1}">
-                                                <div class="colp-4 mt-0 pt-0" style="border-left: #006A9B 2px solid">
-                                                    <b>Από την ίδια <span th:if="${resource.type == 'COURSE'}" th:text="Διάλεξη"></span>
-                                                        <span th:if="${resource.type == 'EVENT'}" th:text="Εκδήλωση"></span>
+                                                <div class="colp-4 mt-0 pt-0" id="right-box-s">
+                                                    <b>ΑΠΟ ΤΗΝ ΙΔΙΑ <span th:if="${resource.type == 'COURSE'}" th:text="ΔΙΑΛΕΞΗ"></span>
+                                                        <span th:if="${resource.type == 'EVENT'}" th:text="ΕΚΔΗΛΩΣΗ"></span>
                                                     </b>
 
                                                     <div th:each="item,iStat: ${related_parts}">
                                                         <th:block th:unless="${item.id == resource.id}">
                                                             <div class="my-2 py-2 ps-1">
+                                                                <span th:text="${(iStat.index+1) + '. '}"></span>
                                                                 <a style="color: #006A9B !important;font-weight: 500" th:href="${'player?id=' + item.id}" title="αναπαραγωγή">
-                                                                    <span th:text="${(iStat.index+1) + '. ' + item.title + ' / Μέρος ' + item.partNumber}"></span>
+                                                                    <span th:text="${item.title + ' / Μέρος ' + item.partNumber}"></span>
                                                                 </a>
                                                                 <div class="ps-3 pt-1">
                                                                     Αίθουσα/Χώρος:

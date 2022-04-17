@@ -125,7 +125,7 @@
                 	{
                 		"aTargets": [2],
 	                    "render": function (data) {
-	                        return '<h6 class="pb-0 mb-0" style="color: #003476">' + dashboard.broker.selectPeriod(data) + '</h6>';
+	                        return '<span class="pb-0 mb-0" style="color: #003476;font-weight: 500">' + dashboard.broker.selectPeriod(data) + '</span>';
 	                    }
                 	},
                 	{

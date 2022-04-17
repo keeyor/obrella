@@ -282,6 +282,8 @@ public class AdminSearchController {
 		model.addAttribute("staffMemberFilter", staffMemberFilter.get());
 		model.addAttribute("scheduledEventFilter", scheduledEventFilter.get());
 		model.addAttribute("tag",resourceQuery.getTag());
+		model.addAttribute("resource_type", resourceQuery.getResourceType());
+
 		String selected_academic_year = "";
 		if (resourceQuery.getAcademicYear() != null && !resourceQuery.getAcademicYear().equals("")) {
 			selected_academic_year = resourceQuery.getAcademicYear();

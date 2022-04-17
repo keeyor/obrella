@@ -107,14 +107,14 @@ public class AsyncQueryComponent{
 		HttpSession httpSession= request.getSession(true);
 		if (!recalc) {
 			status = "Finished";
-			logger.info("get Lectures report from session");
+			logger.trace("get Lectures report from session");
 			asyncQueryReport = (AsyncQueryReport) httpSession.getAttribute("asyncLecturesQueryReport");
 			Calendar time_now = Calendar.getInstance();
 			Date endTime = time_now.getTime();
 			time_elapsed = endTime.getTime() - startTime.getTime();
 		}
 		else {
-			logger.info("re-calculate Lectures report from scratch");
+			logger.trace("re-calculate Lectures report from scratch");
 			status = "Running";
 			Future<AsyncQueryReport> asyncQueryReportFuture = this.SearchAsyncLectures(resourceQuery);
 
@@ -208,6 +208,7 @@ public class AsyncQueryComponent{
 		Map<String, Unit> 		DepartmentFilterResults		= new HashMap<>();
 		Map<String, AreaDto> 	AreaFilterResults 			= new HashMap<>();
 		Map<String, TypeDto> 	TypeFilterResults 			= new HashMap<>();
+		Map<String, TypeDto> 	CategoryFilterResults 	    = new HashMap<>();
 		Map<String, Person> 	RespPersonFilterResults 	= new HashMap<>();
 
 		logger.trace("Evaluate:" + resourceQuery.getLimit() + " resources");
@@ -225,13 +226,16 @@ public class AsyncQueryComponent{
 			if (resourceQuery.getEventType() == null) {
 				this.AddTypeFromEvent2AreaFilter(scheduledEvent, TypeFilterResults);
 			}
+			if (resourceQuery.getCategoryCode() == null) {
+				this.addCategoryFromEvent2CategoryFilter(scheduledEvent,CategoryFilterResults);
+			}
 		} //FOR
 
 		asyncQueryReport.setStaffMemberFilterResults(RespPersonFilterResults);
 		asyncQueryReport.setDepartmentFilterResults(DepartmentFilterResults);
 		asyncQueryReport.setAreaFilterResults(AreaFilterResults);
 		asyncQueryReport.setTypeFilterResults(TypeFilterResults);
-
+		asyncQueryReport.setEventCategoryFilterResults(CategoryFilterResults);
 
 		return new AsyncResult<>(asyncQueryReport);
 	}
@@ -248,10 +252,11 @@ public class AsyncQueryComponent{
 		Map<String, Course> 	CourseFilterResults 			= new HashMap<>();
 		Map<String, Person> 	StaffMemberFilterResults 		= new HashMap<>();
 		Map<String, ScheduledEvent> ScheduledEventFilterResults	= new HashMap<>();
-
-		AdminFilterResults adminFilterResults = new AdminFilterResults();
 		Map<String, AccessPolicy> AccessPolicyFilterResults		= new HashMap<>();
-		Map<String, Tag> TagsFilterResults						= new HashMap<>();
+
+		Map<String, Long> ResourceTypeCounter = new HashMap<>();
+		ResourceTypeCounter.put("lecture", 0L);
+		ResourceTypeCounter.put("scheduledEvent", 0L);
 
 
 		logger.trace("Evaluate:" + resourceQuery.getLimit() + " resources");
@@ -265,12 +270,16 @@ public class AsyncQueryComponent{
 			if (resourceQuery.getEventId() == null) {
 				if (resource.getEvent() != null) {
 					this.AddEvent2ScheduledEventsFilter(resource, ScheduledEventFilterResults);
+					Long counter = ResourceTypeCounter.get("scheduledEvent");
+					ResourceTypeCounter.replace("scheduledEvent",counter+1);
 				}
 			}
 			// COURSE FILTER
 			if (resourceQuery.getCourseId() == null) {
 				if (resource.getCourse() != null) {
 					this.AddCourse2CoursesFilter(resource, CourseFilterResults);
+					Long counter = ResourceTypeCounter.get("lecture");
+					ResourceTypeCounter.replace("lecture",counter+1);
 				}
 			}
 			//DEPARTMENT FILTER
@@ -298,6 +307,7 @@ public class AsyncQueryComponent{
 		asyncQueryReport.setStaffMemberFilterResults(StaffMemberFilterResults);
 		asyncQueryReport.setDepartmentFilterResults(DepartmentFilterResults);
 		asyncQueryReport.setAccessPolicyFilterResults(AccessPolicyFilterResults);
+		asyncQueryReport.setResourceTypeCounter(ResourceTypeCounter);
 
 		return new AsyncResult<>(asyncQueryReport);
 	}
@@ -315,11 +325,7 @@ public class AsyncQueryComponent{
 		Map<String, Course> 	CourseFilterResults 			= new HashMap<>();
 		Map<String, Person> 	StaffMemberFilterResults 		= new HashMap<>();
 		Map<String, ScheduledEvent> ScheduledEventFilterResults	= new HashMap<>();
-
-		AdminFilterResults adminFilterResults = new AdminFilterResults();
 		Map<String, AccessPolicy> AccessPolicyFilterResults		= new HashMap<>();
-		Map<String, Tag> TagsFilterResults						= new HashMap<>();
-
 
 		logger.trace("Evaluate:" + resourceQuery.getLimit() + " resources");
 		for (Resource resource: resourceList) {
@@ -332,12 +338,14 @@ public class AsyncQueryComponent{
 			if (resourceQuery.getEventId() == null) {
 				if (resource.getEvent() != null) {
 					this.AddEvent2ScheduledEventsFilter(resource, ScheduledEventFilterResults);
+
 				}
 			}
 			// COURSE FILTER
 			if (resourceQuery.getCourseId() == null) {
 				if (resource.getCourse() != null) {
 					this.AddCourse2CoursesFilter(resource, CourseFilterResults);
+
 				}
 			}
 			//DEPARTMENT FILTER
@@ -467,7 +475,7 @@ public class AsyncQueryComponent{
 			String event_area = scheduledEvent.getArea();
 			AreaDto areaDto = new AreaDto();
 			areaDto.setId(event_area);
-			areaDto.setText(multilingualServices.getValue(event_area, Locale.getDefault()));
+			areaDto.setText(multilingualServices.getValue(event_area, Locale.forLanguageTag(language_tag)));
 			if (!AreaFilterResults.containsKey(event_area)) {
 				areaDto.setCounter(1);
 				AreaFilterResults.put(event_area,areaDto);
@@ -485,7 +493,7 @@ public class AsyncQueryComponent{
 			String event_type = scheduledEvent.getType();
 			TypeDto typeDto = new TypeDto();
 			typeDto.setId(event_type);
-			typeDto.setText(multilingualServices.getValue(event_type, Locale.getDefault()));
+			typeDto.setText(multilingualServices.getValue(event_type, Locale.forLanguageTag(language_tag)));
 			if (!TypeFilterResults.containsKey(event_type)) {
 				typeDto.setCounter(1);
 				TypeFilterResults.put(event_type,typeDto);
@@ -495,6 +503,27 @@ public class AsyncQueryComponent{
 				int counter = typeDto1.getCounter() + 1;
 				typeDto1.setCounter(counter);
 				TypeFilterResults.replace(typeDto1.getId(), typeDto1);
+			}
+		}
+	}
+	private void addCategoryFromEvent2CategoryFilter(ScheduledEvent scheduledEvent, Map<String, TypeDto> CategoryFilterResults) {
+		if (scheduledEvent.getCategories()!= null && scheduledEvent.getCategories().length > 0) {
+
+			for (String element: scheduledEvent.getCategories()) {
+				TypeDto typeDto = new TypeDto();
+				typeDto.setId(element);
+				typeDto.setText(multilingualServices.getValue(element, Locale.forLanguageTag(language_tag)));
+
+				if (!CategoryFilterResults.containsKey(element)) {
+					typeDto.setCounter(1);
+					CategoryFilterResults.put(element,typeDto);
+				}
+				else {
+					TypeDto typeDto1 = CategoryFilterResults.get(element);
+					int counter = typeDto1.getCounter() + 1;
+					typeDto1.setCounter(counter);
+					CategoryFilterResults.replace(typeDto1.getId(), typeDto1);
+				}
 			}
 		}
 	}

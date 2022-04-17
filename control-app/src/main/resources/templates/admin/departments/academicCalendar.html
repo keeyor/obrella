@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OpenDelos Live</title>
+    <title>Τμήμα - Ακαδημαϊκό Ημερολόγιο</title>
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
     <link rel="stylesheet" th:href="@{/css/datatables-dp.css}"/>
     <!-- CoreUI CSS -->
@@ -27,6 +27,14 @@
     <link rel="stylesheet" th:href="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.css}"/>
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+    <style>
+        .my-nav{
+            color: #006A9B!important;
+        }
+        .my-nav.active {
+            color: grey!important;
+        }
+    </style>
 </head>
 <body style="font-size: 0.89em">
 
@@ -46,7 +54,7 @@
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
     <div class="loading-overlay"></div>
     <div class="loading-overlay-image-container">
-        <img th:src="@{/public/images/icons/512px-Loader.gif}" class="loading-overlay-img" alt=""/>
+        <img th:src="@{/public/images/icons/512px-Loader.gif}" class="loading-overlay-img" alt="" src=""/>
     </div>
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
@@ -82,21 +90,16 @@
                                         <div class="d-flex justify-content-start" >
                                             <div th:replace="~{admin/fragments/search/a-department-select :: a-deparment-select}"></div>
                                         </div>
-                                        <div class="text-muted font-italic">
-                                            Διαχείριση στοιχείων τμήματος: περίοδοι διδασκαλίας και αργιών/παύσεων
+                                        <div class="text-high-emphasis font-italic">
+                                            Περίοδοι Διδασκαλίας, επίσημες Αργίες και  προγραμματισμένες Παύσεις
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12 text-end">
-                                        <br/>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
+                        <div class="card mt-3">
                             <div class="card-body">
-                                <h4>Ακαδημαϊκό Ημερολόγιο Τμήματος</h4>
-                                <div class="card-body pb-0 px-0 pt-2" style="border-top: #efefef 2px solid">
-                                    <div class="row">
+                                <div class="row">
                                         <div class="col-12">
                                             <div class="d-flex justify-content-start pb-2 pt-2" >
                                                 <div class="btn-toolbar d-md-block" role="toolbar" aria-label="Toolbar with buttons">
@@ -110,44 +113,21 @@
                                                 <!-- TABS -->
                                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                                     <li class="nav-item">
-                                                        <a class="nav-link  active" id="periods-tab" data-coreui-toggle="tab" href="#t-periods" role="tab" aria-controls="t-periods" aria-selected="true">Περίοδοι Διδασκαλίας</a>
+                                                        <a class="nav-link  active my-nav" id="periods-tab" data-coreui-toggle="tab" href="#t-periods" role="tab" aria-controls="t-periods" aria-selected="true">Περίοδοι Διδασκαλίας</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" id="argies-tab" data-coreui-toggle="tab" href="#t-argies" role="tab" aria-controls="t-argies" aria-selected="false">Επίσημες Αργίες & Παύσεις</a>
+                                                        <a class="nav-link my-nav" id="argies-tab" data-coreui-toggle="tab" href="#t-argies" role="tab" aria-controls="t-argies" aria-selected="false">Επίσημες Αργίες & Παύσεις</a>
                                                     </li>
                                                 </ul>
                                                 <!-- TAB CONTENT -->
                                                 <div class="tab-content" id="myTabContent">
                                                     <div class="tab-pane fade show active" id="t-periods" role="tabpanel" aria-labelledby="periods-tab">
-                                                        <div class="card-body" id="institution_card">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <h6 class="float-left" th:text="#{default.institution.title}"></h6>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <table id="table_system" style="width: 100%" class="row-border">
-                                                                            <thead>
-                                                                            <tr style="font-weight: 700">
-                                                                                <td style="width: 20px">#</td>
-                                                                                <td></td>
-                                                                                <td>Όνομα Περιόδου</td>
-                                                                                <td>Ημερομηνία Έναρξης</td>
-                                                                                <td>Ημερομηνία Λήξης</td>
-                                                                            </tr>
-                                                                            </thead>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                        </div>
-                                                        <div class="card" id="department-pane" style="display: none;border:none">
+
+                                                        <div class="card" id="department-pane" style="display: none">
+                                                            <div class="card-header mt-2">
+                                                                Περίοδοι Διδασκαλίας: <span style="font-weight: 600" class="selected_department_name">(Επιλέξτε Τμήμα)</span>
+                                                            </div>
                                                             <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <h6 class="selected_department_name">(Επιλέξτε Τμήμα)</h6>
-                                                                    </div>
-                                                                </div>
                                                                 <div class="row mb-2 mt-2">
                                                                     <div class="col-md-12">
                                                                         <span>
@@ -165,7 +145,7 @@
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <table id="table_department" style="width: 100%" class="row-border table-striped">
+                                                                        <table id="table_department" style="width: 100%" class="row-border stripe">
                                                                             <thead>
                                                                             <tr style="font-weight: 700">
                                                                                 <td style="width: 20px">#</td>
@@ -180,15 +160,15 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="card" id="study-pane" style="display: none;border:none">
+
+                                                        <div class="card mt-2" id="study-pane" style="display: none">
+                                                            <div class="card-header">
+                                                                Περίοδοι Διδασκαλίας: <span style="font-weight: 600">Προγράμματα Σπουδών</span>
+                                                            </div>
                                                             <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-4 my-3">
-                                                                        <h6>
-                                                                            Προγράμματα Σπουδών
-                                                                        </h6>
-                                                                    </div>
-                                                                    <div class="col-md-3">
+                                                                <div class="form-group row mt-3">
+                                                                    <label for="study_select2" class="col-sm-2 col-form-label emph-label">Επιλέξτε Πρόγραμμα</label>
+                                                                    <div class="col-sm-4">
                                                                         <select style="width:100%" id="study_select2" aria-label="">
                                                                             <option value=""></option>
                                                                         </select>
@@ -211,7 +191,7 @@
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-12">
-                                                                        <table id="table_study" style="width: 100%" class="row-border table-striped">
+                                                                        <table id="table_study" style="width: 100%" class="row-border stripe">
                                                                             <thead>
                                                                             <tr style="font-weight: 700">
                                                                                 <td style="width: 20px">#</td>
@@ -226,13 +206,72 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <div class="card" id="institution_card" style="margin-top: 50px">
+                                                            <div class="card-body">
+
+                                                                <div class="text-left" style="font-weight: 600">Ακαδημαϊκό Hμερολόγιο Αναφοράς - Ιδρύματος</div>
+
+                                                                <table id="table_system" style="width: 100%" class="table-condensed">
+                                                                    <thead>
+                                                                    <tr style="font-weight: 700">
+                                                                        <td style="width: 20px">#</td>
+                                                                        <td></td>
+                                                                        <td>Όνομα Περιόδου</td>
+                                                                        <td>Ημερομηνία Έναρξης</td>
+                                                                        <td>Ημερομηνία Λήξης</td>
+                                                                    </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                     <div class="tab-pane fade" id="t-argies" role="tabpanel" aria-labelledby="argies-tab">
-                                                        <div class="card" id="argies_card">
+
+                                                        <div class="card" id="department-argies-pane">
                                                             <div class="card-body">
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <h5 class="float-left" th:text="#{default.institution.title}"></h5>
+                                                                        <h6 class="selected_department_name">(Επιλέξτε Τμήμα)</h6>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row mb-1">
+                                                                    <div class="col-md-10 text-high-emphasis" style="font-size: 0.9em">
+                                                                        <i class="far fa-question-circle"></i> Οι επίσημες Αργίες του Ιδρύματος <b> ισχύουν και για τα Τμήματα </b>. Οι Αργίες και οι Παύσεις των Τμημάτων
+                                                                        που προστίθονται στη παρακάτω λίστα είναι <b> πλέον </b> αυτών του Ιδρύματος. Τα Προγράμματα Σπουδών ακολουθούν τις αργίες και τις παύσεις του Τμήματος
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                    <span class="float-end">
+                                                                       <button id="department-argies-edit"   type="button" class="btn btn-sm blue-btn-wcag-bgnd-color text-white btn-pill" title="Επεξεργασία Αργιών και Παύσεων">
+                                                                                <i class="far fa-edit"></i>
+                                                                       </button>
+                                                                    </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <table id="table_department_a" style="padding:0;border-spacing: 0;border:0;margin-top:10px;width: 100%" class="table table-hover stripe compact">
+                                                                            <thead>
+                                                                            <tr style="font-weight: 700">
+                                                                                <th>#</th>
+                                                                                <th></th>
+                                                                                <th style="width:160px">Όνομα Αργίας</th>
+                                                                                <th>Ημερομηνία Έναρξης</th>
+                                                                                <th>Ημερομηνία Λήξης</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card mt-2" id="argies_card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <h6 class="float-left">Επίσημες Αργίες Ιδρύματος</h6>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
@@ -252,49 +291,11 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="card" id="department-argies-pane">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <h5 class="selected_department_name">(Επιλέξτε Τμήμα)</h5>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-1">
-                                                                    <div class="col-md-10 text-muted" style="font-size: 0.9em">
-                                                                        <i class="far fa-question-circle"></i> Οι επίσημες Αργίες του Ιδρύματος <b> ισχύουν και για τα Τμήματα </b>. Οι Αργίες και οι Παύσεις των Τμημάτων
-                                                                        που προστίθονται στη παρακάτω λίστα είναι <b> πλέον </b> αυτών του Ιδρύματος. Τα Προγράμματα Σπουδών ακολουθούν τις αργίες και τις παύσεις του Τμήματος
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                    <span class="float-end">
-                                                                       <button id="department-argies-edit"   type="button" class="btn btn-sm blue-btn-wcag-bgnd-color text-white btn-pill" title="Επεξεργασία Αργιών και Παύσεων">
-                                                                                <i class="far fa-edit"></i>
-                                                                       </button>
-                                                                    </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <table id="table_department_a" style="padding:0;border-spacing: 0;border:0;margin-top:10px;width: 100%" class="table table-hover table-striped compact">
-                                                                            <thead>
-                                                                            <tr style="font-weight: 700">
-                                                                                <th>#</th>
-                                                                                <th></th>
-                                                                                <th style="width:160px">Όνομα Αργίας</th>
-                                                                                <th>Ημερομηνία Έναρξης</th>
-                                                                                <th>Ημερομηνία Λήξης</th>
-                                                                            </tr>
-                                                                            </thead>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                     </div>

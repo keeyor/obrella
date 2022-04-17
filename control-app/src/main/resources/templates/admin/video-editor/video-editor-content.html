@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 
 <header th:fragment="video-editor-content">
-        <!--@thymesVar id="Resource" type="org.opendelos.dashboard.model.resources.Resource"-->
+        <!--@thymesVar id="Resource" type="org.opendelos.model.resources.Resource"-->
         <div class="card mx-3">
             <div class="card-header">
 
@@ -15,8 +15,10 @@
                         <span class="small text-muted" th:include="fragments/format-resource-date.html:: formatDateTime(field=${Resource.dateModified})"></span>
                     </h5>
                     <span class="float-right">
-                        <a th:if="${Resource.type == 'COURSE'}" th:href="@{/admin/lecture-editor(id=${Resource.id},t='video')}" role="button" class="btn btn-secondary cancel_button" id="cancelResource_top"> <i class="fas fa-undo"></i> Επιστροφή</a>
-                          <a th:if="${Resource.type == 'EVENT'}" th:href="@{/admin/event-editor(id=${Resource.id},t='video')}" role="button" class="btn btn-secondary cancel_button" id="cancelResource_top">  <i class="fas fa-undo"></i> Επιστροφή</a>
+                        <a th:if="${Resource.type == 'COURSE'}" th:href="@{/admin/lecture-editor(id=${Resource.id},t='video')}" role="button" class="btn btn-secondary cancel_button" id="cancelResource_top"> <i class="fas fa-undo"></i> Επιστροφή
+                        </a>
+                          <a th:if="${Resource.type == 'EVENT'}" th:href="@{/admin/event-editor(id=${Resource.id},t='video')}" role="button" class="btn btn-secondary cancel_button" id="cancelResource_top">  <i class="fas fa-undo"></i> Επιστροφή
+                          </a>
                           <span id="accept_reject_button" th:if="${Resource.rteStatus != null && Resource.rteStatus.status == 'DARE'}">
                                    <a id="play_edited_video" th:attr="data-info=${Resource.id + '::' + Resource.title}" title="απαιτείται έγκριση ή απόρριψη κοπής"
                                       class="btn btn-warning" style="margin-bottom:2px;color:white" href="#">
@@ -60,16 +62,16 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="trimmingInputs" style="width: 160px;margin-left: 15px;margin-top: 10px">
-                                <div class="mr-1" id="trimInputHeader" th:text="#{richlecture.trim_inputs}"></div>
+                            <div id="trimmingInputs" style="width: 165px;margin-left: 15px;margin-top: 10px">
+                                <div class="mr-0 pl-0" id="trimInputHeader" th:text="#{richlecture.trim_inputs}"></div>
                                 <div>
                                     <button type="button" class="btn btn-small set_start_button" th:title="#{richlecture.set_start_time}" onclick="actions.set_start_video()"></button>
                                     <button type="button" class="btn btn-small set_end_button" th:title="#{richlecture.set_end_time}" onclick="actions.set_end_video()"></button>
                                 </div>
                             </div>
 
-                            <div id ="clippingInputs" style="width: 160px;margin-left: 20px;margin-top: 10px">
-                                <div class="mr-1" id="clipInputHeader" th:text="#{richlecture.cut_inputs}"></div>
+                            <div id ="clippingInputs" style="width: 165px;margin-left: 10px;margin-top: 10px">
+                                <div class="mr-0 pl-0" id="clipInputHeader" th:text="#{richlecture.cut_inputs}"></div>
                                 <div>
                                     <button type="button" class="custom low small begin_cut_button" th:title="#{richlecture.begin_cut}" onclick="actions.begin_cut()"></button>
                                     <button type="button" disabled class="custom low small end_cut_button" th:title="#{richlecture.end_cut}" onclick="actions.end_cut()"></button>
@@ -120,5 +122,14 @@
 
 
   </div>
-
+    <div class="play_cut_section"></div>
+    <div class="play_edited_section"></div>
+    <div id="edit_selected_period" th:title="#{richlecture.edit_selected_period}">
+        <form>
+            <label for="edit_start_time" th:text="#{richlecture.edit_start}"></label><br/>
+            <input type="text" placeholder="HH:MM:SS" name="edit_start_time" id="edit_start_time" class=""><br/><br/>
+            <label for="edit_end_time" th:text="#{richlecture.edit_end}"></label><br/>
+            <input type="text" placeholder="HH:MM:SS" name="edit_end_time" id="edit_end_time" class=""><br/>
+        </form>
+    </div>
 </header>

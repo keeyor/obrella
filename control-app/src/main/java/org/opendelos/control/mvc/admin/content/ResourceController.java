@@ -361,7 +361,6 @@ public class ResourceController {
 			Person editor = resourceEditorUtils.getPersonFromOpUser(opUser);
 			resource.setEditor(editor);
 		}
-		//Classroom >> form as is
 		//License>>
 		if (resource.getLicense() == null || resource.getLicense().equals("")) { // set default value
 			resource.setLicense(default_license);
@@ -385,6 +384,13 @@ public class ResourceController {
 			}
 			//parentId
 			resource.setParentId(resource_o.getParentId());
+			//Real Editing
+			if (resource_o.getRteStatus() != null) {
+				resource.setRteStatus(resource_o.getRteStatus());
+			}
+			if (resource_o.getRealEditingPresentation() != null) {
+				resource.setRealEditingPresentation(resource_o.getRealEditingPresentation());
+			}
 		}
 
 		if (bindingResult.hasErrors()) {

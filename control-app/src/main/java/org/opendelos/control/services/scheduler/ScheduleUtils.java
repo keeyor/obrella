@@ -83,6 +83,24 @@ public class ScheduleUtils {
 		return null;
 	}
 
+	public Period getInstitutionPeriodByDate(String academicYear, LocalDate localDate) {
+
+		CustomPeriod institution_periods;
+ 
+		Institution institution  = institutionService.findByIdentity(institution_identity);
+		institution_periods = institutionService.getCustomPeriod(institution.getId(),academicYear);
+
+		for (Period period: institution_periods.getPeriods().getPeriod()) {
+			//default, ISO_LOCAL_DATE
+			LocalDate period_startDate = LocalDate.parse(period.getStartDate());
+			LocalDate period_endDate = LocalDate.parse(period.getEndDate());
+			if ( (localDate.isAfter(period_startDate) || localDate.isEqual(period_startDate)) && (localDate.isBefore(period_endDate) || localDate.isEqual(period_endDate))) {
+				return period;
+			}
+		}
+		return null;
+	}
+
 	public String getStudyPeriodNameByDate(String studyId, String academicYear, LocalDate localDate) {
 
 		CustomPeriod study_periods = studyProgramService.getCustomPeriod(studyId,academicYear);

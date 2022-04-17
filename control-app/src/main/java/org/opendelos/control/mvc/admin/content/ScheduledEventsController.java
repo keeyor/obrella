@@ -120,6 +120,7 @@ public class ScheduledEventsController {
 			@RequestParam(value = "y", required = false) String y,     // Academic Year
 			@RequestParam(value = "ea", required = false) String ea,     // Event Area
 			@RequestParam(value = "et", required = false) String et,     // Event Type
+			@RequestParam(value = "ec", required = false) String ec,     // Event Category
 			@RequestParam(value = "limit", required = false, defaultValue = "50") int limit,
 			@RequestParam(value = "skip", required = false, defaultValue = "0") int skip,
 			@RequestParam(value = "sort", required = false) String sort,
@@ -146,6 +147,7 @@ public class ScheduledEventsController {
 		resourceQuery.setAcademicYear(y);
 		resourceQuery.setEventArea(ea);
 		resourceQuery.setEventType(et);
+		resourceQuery.setCategoryCode(ec);
 		resourceQuery.setLimit(limit);
 
 		if (skip < 0) { skip = 0; }
@@ -206,6 +208,7 @@ public class ScheduledEventsController {
 		//Locale
 		model.addAttribute("localeData", locale.getDisplayName());
 		model.addAttribute("localeCode", locale.getLanguage());
+		model.addAttribute("mediaBaseUrl", resourceEditorUtils.getMediaBaseUrl());
 
 		addUserAccessAttributes(model,editor);
 		model.addAttribute("institution_identity",institution_identity);
@@ -379,6 +382,26 @@ public class ScheduledEventsController {
 				}
 			}
 		}
+		else if (action != null && (action.equals("deletePhoto")) ) {
+			try {
+				String upload_abs_path = multimediaProperties.getEventAbsDir();
+				String photoAbsPath = upload_abs_path + event_id + "/" + event_id + ".jpg";
+				scheduledEventService.removePhotoUrl(event_id,photoAbsPath);
+
+				String[] attr = {"msg_type","msg_val"};
+				String[] values = {"alert-success", "Η φωτογραφία διαγράφηκε!"};
+				setFlashAttributes(request, response, attr, values);
+			}
+			catch (Exception e) {
+				String[] attr = {"msg_type","msg_val"};
+				String[] values = {"alert-danger", "Πρόβλημα στη διαγραφή της φωτογραφίας!"};
+				setFlashAttributes(request, response, attr, values);
+			}
+			view = "redirect:" + ServletUriComponentsBuilder.fromCurrentRequestUri().replacePath(request.getContextPath()
+					+  request.getServletPath()).path("?id=" + event_id + "#multi").build().toUriString();
+
+			return view;
+		}
 		if (bindingResult.hasErrors()) {
 			// create a flashmap
 			FlashMap flashMap = new FlashMap();
@@ -411,13 +434,13 @@ public class ScheduledEventsController {
 				Person editor = resourceEditorUtils.getPersonFromOpUser(opUser);
 				scheduledEventDto.setEditor(editor);
 			}
-			/* delete photo file if null */
-			String photo_rUrl = scheduledEventDto.getPhotoRelativeUrl();
+			/* delete photo file if null :: NOT NEEDED. HANDLED ABOVE */
+/*			String photo_rUrl = scheduledEventDto.getPhotoRelativeUrl();
 			if (event_id != null && !event_id.trim().equals("") && photo_rUrl == null || photo_rUrl.equals("")) {
 				String upload_base_path = multimediaProperties.getEventAbsDir();
 				String photo_path = upload_base_path + event_id + "/" + event_id + ".jpg";
 				FileUtils.deleteQuietly(new File(photo_path));
-			}
+			}*/
 			/* Save or Update Resource */
 			ScheduledEvent scheduledEvent = new ScheduledEvent();
 			BeanUtils.copyProperties(scheduledEventDto,scheduledEvent);
@@ -504,6 +527,12 @@ public class ScheduledEventsController {
 		if (resourceQuery.getEventType() != null && !resourceQuery.getEventType().equals("")) {
 			model.addAttribute("etypeFilter", resourceQuery.getEventType());
 			model.addAttribute("etypeFilterName", multilingualServices.getValue(resourceQuery.getEventType(),locale));
+		}
+		model.addAttribute("ecatFilter", "");
+		model.addAttribute("ecatFilterName", "");
+		if (resourceQuery.getCategoryCode() != null && !resourceQuery.getCategoryCode().equals("")) {
+			model.addAttribute("ecatFilter", resourceQuery.getCategoryCode());
+			model.addAttribute("ecatFilterName", multilingualServices.getValue(resourceQuery.getCategoryCode(),locale));
 		}
 
 

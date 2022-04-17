@@ -52,8 +52,7 @@
                 {
                     "aTargets": [4],
                     "mRender": function (data,type,row) {
-                        return '<h6 class="pb-0 mb-0" style="color: #003476">' + data + '</h6>' +
-                                row["affiliation"];
+                        return '<span class="pb-0 mb-0 me-1" style="color: #003476;font-weight: 500">' + data + '</span>' + row["affiliation"];
                     }
                 },
                 {

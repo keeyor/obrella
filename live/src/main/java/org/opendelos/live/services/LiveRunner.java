@@ -279,6 +279,7 @@ public class LiveRunner {
 		}
 		else {
 			log.info("SCHEDULER REPORT AT '{}'. No Live Streams for today!", localDateTime);
+			//TODO: MAybe you should clean Scheduler.Live Collection
 		}
 	}
 

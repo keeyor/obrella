@@ -275,10 +275,15 @@
                 let msg = '<div class="font-weight-bold">Η Φωτογραφία θα διαγραφεί! Είστε σίγουρος?</div>';
                 alertify.confirm('Προειδοποίηση', msg,
                     function () {
-                        $("#event_photo_rurl").val("");
+/*                        $("#event_photo_rurl").val("");
                         $event_photo_url.attr("src", "");
                         $("#_image_panel").hide();
                         $("#default_photo").show();
+                        document.getElementById('file_select_label').innerHTML = "Η διαγραφή της φωτογραφίας, ολοκληρώθηκε";
+                        document.getElementById('filelist').innerHTML = '';*/
+                        let $event_form = $("#sevent_form");
+                        $event_form.attr("action", "sevent-editor?action=deletePhoto");
+                        $event_form.submit();
                     },
                     function () {
                         e.preventDefault();

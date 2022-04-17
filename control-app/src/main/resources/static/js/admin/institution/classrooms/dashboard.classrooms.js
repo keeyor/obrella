@@ -26,7 +26,7 @@
             ],
             "language": dtLanguageGr,
             order: [[2, 'asc']],
-            "dom": '<"top"fl>rt<"bottom">p<"clear">',
+            "dom": '<"top"fl><p>rt<"bottom">p<"clear">',
             "pageLength": 25,
             "saveState": true,
             "pagingType": "full_numbers",
@@ -38,7 +38,7 @@
                 {
                     "aTargets": [2],
                     "mRender": function (data,type, row) {
-                        let ret = '<h6 class="pb-0 mb-0" style="color: #003476">' + data + '</h6>';
+                        let ret = '<div class="pb-0 mb-0" style="color: #003476;font-weight: 500">' + data + '</div>';
                         ret += row["description"];
                         return ret;
                     }

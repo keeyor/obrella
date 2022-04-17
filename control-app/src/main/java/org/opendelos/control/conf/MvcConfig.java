@@ -44,6 +44,8 @@ public class MvcConfig implements WebMvcConfigurer {
 
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/admin/video-editor/editor_play_edited").setViewName("admin/video-editor/editor_play_edited");
+		registry.addViewController("/admin/video-editor/editor_play_cut").setViewName("admin/video-editor/editor_play_cut");
+		registry.addViewController("/admin/video-editor/editor_help").setViewName("admin/video-editor/editor_help");
 		registry.addViewController("/admin/synchronizer").setViewName("admin/html5synchronizer/synchronizer");
 		registry.addViewController("/admin/html5synchronizer/synchronizer_help").setViewName("admin/html5synchronizer/synchronizer_help");
 		registry.addViewController("/login").setViewName("login");

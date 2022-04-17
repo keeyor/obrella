@@ -419,11 +419,15 @@ public class RealEditingToolkit {
 			int update_vl;
 			int delation_dir = -1;
 
-			//TODO: ERROR: NOt UPDATED CORRECTLY: PRESENTATION AND FILE BY ME> SEE AGAiN
-			resourceService.acceptResourceRealEditingPresentation(id);
+			Resource resource = resourceService.findById(id);
+			String _video_folder = resource.getResourceAccess().getFolder();
+
+			resourceService.acceptResourceRealEditingPresentation(resource);
 			update_vl = updateVideolecture(id);
-			replacement = replaceVideoWithRealEdited(id);
-			FileUtils.deleteQuietly(new File(streamingProperties.getAbsDir() + id + "/" + "ffmpeg"));
+			replacement = replaceVideoWithRealEdited(resource);
+
+			//$ Clean-up
+			FileUtils.deleteQuietly(new File(streamingProperties.getAbsDir() + _video_folder + "/ffmpeg/"));
 			
 			logger.debug("Real Editing: Approval - Update presentation:" + save);
 			logger.debug("Real Editing: Approval - Delete temp presentation:" + delation_pres);
@@ -447,8 +451,10 @@ public class RealEditingToolkit {
 	 */
 	public int rejectNewMedia (String rid) {
 		try {
-			resourceService.removeResourceRealEditingPresentation(rid);
-			FileUtils.deleteQuietly(new File(streamingProperties.getAbsDir() + rid + "/" + "ffmpeg"));
+			Resource resource = resourceService.findById(rid);
+			String _video_folder = resource.getResourceAccess().getFolder();
+			resourceService.removeResourceRealEditingPresentation(resource);
+			FileUtils.deleteQuietly(new File(streamingProperties.getAbsDir() + _video_folder + "/ffmpeg/"));
 			return 1;
 		} catch (Exception e) {
 			logger.error("Real Editing (rejectNewMedia): " + e.getMessage() );
@@ -685,28 +691,28 @@ public class RealEditingToolkit {
 		return 0;
 	}
 
-	private int replaceVideoWithRealEdited (String id) {
+	private int replaceVideoWithRealEdited (Resource resource) {
 
-		String str_absdir = streamingProperties.getAbsDir();
-		String final_video = str_absdir + id + "/ffmpeg/" + id + "_final_cutted.mp4";
-		String folder = str_absdir + id + "/";
+		String id = resource.getId();
+		String _video_folder = resource.getResourceAccess().getFolder();
+		String origFileName  = resource.getResourceAccess().getFileName();
+
+		String str_absDir = streamingProperties.getAbsDir();
+		String final_video_full_path = str_absDir + _video_folder + "/ffmpeg/" + id + "_final_cutted.mp4";
+		String start_video_full_path = str_absDir + _video_folder + "/" + origFileName;
+
+		File final_videoFile = new File(final_video_full_path);
+		File start_videoFile = new File(start_video_full_path);
 		
-		String origFileName  = this.getVideoFileFromFolder(str_absdir + id + "/");
-		
-		String original_video =  folder + origFileName;
-		
-		File final_videofile = new File(final_video);
-		File original_videofile = new File(original_video);
-		
-		if ( final_videofile.exists() &&  original_videofile.exists() ) {
+		if ( final_videoFile.exists() &&  start_videoFile.exists() ) {
 			
 		    boolean delation;
 		    boolean replacement;
 
 		    try {
 		        
-		    	delation = original_videofile.delete();
-		    	replacement = final_videofile.renameTo(original_videofile);
+		    	delation = start_videoFile.delete();
+		    	replacement = final_videoFile.renameTo(start_videoFile);
 		    } 
 		    catch ( SecurityException se ) {
 		    	logger.error("Real Editing: " + se.getMessage());
@@ -745,11 +751,11 @@ public class RealEditingToolkit {
 		
 		try {
 			resource = resourceService.findById(id);
+			String _video_folder = resource.getResourceAccess().getFolder();
 
-			String redited_media_path = streamingProperties.getAbsDir() + id + "/ffmpeg/";
+			String redited_media_path = streamingProperties.getAbsDir() + _video_folder + "/ffmpeg/";
 			String redited_media_filename = id + "_final_cutted.mp4";
-			
- 
+
 			FfmpegUtils utils = new FfmpegUtils(multimediaProperties.getFfmpeg());
 			utils.executeInquiry(redited_media_filename,redited_media_path);
 			String redited_duration = utils.getDuration();

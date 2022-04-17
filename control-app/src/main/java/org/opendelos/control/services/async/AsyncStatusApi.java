@@ -13,11 +13,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.opendelos.control.api.common.ApiUtils;
+import org.opendelos.model.common.Select2GenChild;
 import org.opendelos.model.resources.AccessPolicy;
 import org.opendelos.model.resources.Person;
 import org.opendelos.model.resources.ScheduledEvent;
 import org.opendelos.model.resources.Unit;
 import org.opendelos.model.resources.dtos.AreaDto;
+import org.opendelos.model.resources.dtos.ResourceTypeDto;
 import org.opendelos.model.resources.dtos.TypeDto;
 import org.opendelos.model.structure.Course;
 
@@ -93,11 +95,43 @@ public class AsyncStatusApi {
 
 		List<AreaDto> areaList = new ArrayList<>();
 		Map<String, AreaDto> ScheduledEventsFilter = asyncQueryComponent.getAsyncQueryReport().getAreaFilterResults();
-		for (Map.Entry<String, AreaDto> pair : ScheduledEventsFilter.entrySet()) {
-			areaList.add(pair.getValue());
+		if (ScheduledEventsFilter != null) {
+			for (Map.Entry<String, AreaDto> pair : ScheduledEventsFilter.entrySet()) {
+				areaList.add(pair.getValue());
+			}
+			Comparator<AreaDto> titleSorter = Comparator.comparing(AreaDto::getText);
+			areaList.sort(titleSorter);
 		}
-
 		return ApiUtils.TransformResultsForDataTable(areaList);
+	}
+
+	@RequestMapping(value= "/api/v1/getEventCategoriesOfReport", method = RequestMethod.GET, produces =  "application/json")
+	public byte[] getEventCategoriesQueryReport(HttpServletRequest request) {
+
+		List<TypeDto> catList = new ArrayList<>();
+		Map<String, TypeDto> ScheduledEventsCatFilter = asyncQueryComponent.getAsyncQueryReport().getEventCategoryFilterResults();
+		if (ScheduledEventsCatFilter != null) {
+			for (Map.Entry<String, TypeDto> pair : ScheduledEventsCatFilter.entrySet()) {
+				catList.add(pair.getValue());
+			}
+			Comparator<TypeDto> titleSorter = Comparator.comparing(TypeDto::getText);
+			catList.sort(titleSorter);
+		}
+		return ApiUtils.TransformResultsForDataTable(catList);
+	}
+
+	@RequestMapping(value= "/api/v1/getResourceTypeCounterOfReport", method = RequestMethod.GET, produces =  "application/json")
+	public byte[] getResourceTypeCounterQueryReport(HttpServletRequest request) {
+
+		List<ResourceTypeDto> resourceTypeList = new ArrayList<>();
+		Map<String, Long> ResourceTypeCounter = asyncQueryComponent.getAsyncQueryReport().getResourceTypeCounter();
+		for (Map.Entry<String, Long> pair : ResourceTypeCounter.entrySet()) {
+			ResourceTypeDto resourceTypeDto = new ResourceTypeDto();
+			resourceTypeDto.setType(pair.getKey());
+			resourceTypeDto.setCounter(pair.getValue());
+			resourceTypeList.add(resourceTypeDto);
+		}
+		return ApiUtils.TransformResultsForDataTable(resourceTypeList);
 	}
 
 	@RequestMapping(value= "/api/v1/getTypesOfReport", method = RequestMethod.GET, produces =  "application/json")
@@ -108,6 +142,8 @@ public class AsyncStatusApi {
 		for (Map.Entry<String, TypeDto> pair : ScheduledEventsFilter.entrySet()) {
 			typeList.add(pair.getValue());
 		}
+		Comparator<TypeDto> titleSorter  = Comparator.comparing(TypeDto::getText);
+		typeList.sort(titleSorter);
 		return ApiUtils.TransformResultsForDataTable(typeList);
 	}
 

@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -219,6 +221,7 @@ public class TimeTableApi {
 		if (scheduleQuery.getFromDate() != null && scheduleQuery.getToDate() != null) {
 			scheduleDTOList.addAll(scheduleService.computeScheduleInDateRange(scheduleQuery));
 		}
+
 		List<SchedulerFullCalendarObject> schedulerFullCalendarResults = new ArrayList<>();
 		for (ScheduleDTO scheduleDTO: scheduleDTOList) {
 			SchedulerFullCalendarObject schedulerFullCalendarObject = new SchedulerFullCalendarObject();
@@ -261,7 +264,6 @@ public class TimeTableApi {
 			extendedProps.setAccess(scheduleDTO.getAccess());
 			extendedProps.setPublication(scheduleDTO.getPublication());
 
-
 			schedulerFullCalendarObject.setExtendedProps(extendedProps);
 
 
@@ -276,6 +278,7 @@ public class TimeTableApi {
 			schedulerFullCalendarObject.setEnd(endDateTime.toString());
 			schedulerFullCalendarResults.add(schedulerFullCalendarObject);
 		}
+
 		byte[] b;
 		b = ApiUtils.TransformResultsForCalendar(schedulerFullCalendarResults);
 		return b;

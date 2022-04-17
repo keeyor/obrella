@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OpenDelos Live</title>
+    <title>Τμήμα - Μαθήματα</title>
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
     <link rel="stylesheet" th:href="@{/css/datatables-dp.css}"/>
-    <title>OpenDelos Live</title>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
 
@@ -28,6 +27,25 @@
     <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+    <style>
+        .select2-container .select2-selection--single {
+            height: 36px;
+            padding-top: 0.175rem!important;
+            padding-bottom: 0.75rem!important;
+            padding-left: 0.2rem!important;
+            font-size: 0.95em;
+        }
+        .select2-container .select2-selection--multiple {
+            height: 38px;
+            padding-top: 0.175rem!important;
+            padding-bottom: 0.75rem!important;
+            padding-left: 0.2rem!important;
+            font-size: 0.95em;
+        }
+        .select2-selection__arrow {
+            padding-top: 2rem!important;
+        }
+    </style>
 </head>
 <body style="font-size: 0.89em">
 <input type="hidden" id="signInUserid" th:value="${user.id}"/>
@@ -75,14 +93,14 @@
                 <div class="row">
                     <div class="offset-1 col-lg-10" id="content">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-start" >
                                             <div th:replace="~{admin/fragments/search/a-department-select :: a-deparment-select}"></div>
                                         </div>
-                                        <div class="text-muted font-italic">
-                                            Διαχείριση στοιχείων τμήματος: μαθήματα
+                                        <div class="text-high-emphasis font-italic">
+                                            Διαχείριση Μαθημάτων
                                         </div>
                                     </div>
                                 </div>
@@ -94,81 +112,81 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="card-body" id="courses_card" style="display: none">
-                                       <h4>Μαθήματα</h4>
-                                       <div class="text-muted">Βρέθηκαν <span id="count_results"></span> μαθήματα</div>
-                                       <!-- FILTERS -->
-                                                   <div class="d-flex justify-content-start" >
-                                                       <div class="btn-toolbar d-md-block mt-2" role="toolbar" aria-label="Toolbar with buttons">
-                                                           <label for="course_study_filter"><i class="fas fa-microscope me-2"></i>σπουδές</label>
-                                                           <select id="course_study_filter" class="form-control" aria-label="" style="width: 300px">
-                                                               <option value="_all"> -- όλες --</option>
-                                                               <option value="under">Προπτυχιακές Σπουδές</option>
-                                                               <option value="post">Μεταπτυχιακές Σπουδές</option>
-                                                               <option value="master">Ξενόγλωσσα Προγράμματα</option>
-                                                               <option value="cont">Επιμόρφωση & Δια Βίου Μάθηση</option>
-                                                           </select>
+                        <div class="card mt-3" id="courses_card" style="display: none">
+                                <div class="card-header">
+                                    <div class="text-high-emphasis">Βρέθηκαν <span id="count_results"></span> μαθήματα</div>
+                                </div>
+                                    <div class="card-body">
+
+                                           <!-- FILTERS -->
+                                                       <div class="d-flex justify-content-start" >
+                                                           <div class="btn-toolbar d-md-block mt-2" role="toolbar" aria-label="Toolbar with buttons">
+                                                               <label for="course_study_filter"><i class="fas fa-microscope me-2"></i>σπουδές</label>
+                                                               <select id="course_study_filter" class="form-control" aria-label="" style="width: 300px">
+                                                                   <option value="_all"> -- όλες --</option>
+                                                                   <option value="under">Προπτυχιακές Σπουδές</option>
+                                                                   <option value="post">Μεταπτυχιακές Σπουδές</option>
+                                                                   <option value="master">Ξενόγλωσσα Προγράμματα</option>
+                                                                   <option value="cont">Επιμόρφωση & Δια Βίου Μάθηση</option>
+                                                               </select>
+                                                           </div>
                                                        </div>
-                                                   </div>
-                                                   <!-- TABLE -->
-                                                   <div class="table-responsive" style="margin-top: 40px">
-                                                                            <table id="coursesDataTable"  style="width:100%" class="row-border table-striped">
-                                                                                <thead>
-                                                                                <tr style="font-weight: 700">
-                                                                                    <td style="height: 12px;max-width: 20px"></td>
-                                                                                    <td style="width: 20px">#</td>
-                                                                                    <td></td>
-                                                                                    <td>Τίτλος</td>
-                                                                                    <td># Διδάκοντες</td>
-                                                                                    <td>Τμήμα</td>
-                                                                                    <td>Κωδ. Γραμματείας</td>
-                                                                                    <td>Κωδ. LMS</td>
-                                                                                    <td>[σπουδές Id]</td>
-                                                                                    <td>Σπουδές</td>
-                                                                                    <td>[πρόγραμμα Id]</td>
-                                                                                    <td>Πρόγραμμα</td>
-                                                                                    <td>[departmentId]</td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td>[departmentsRelative]</td>
-                                                                                </tr>
-                                                                                </thead>
-                                                                            </table>
-                                                    </div>
+                                                       <!-- TABLE -->
+                                                       <div class="table-responsive" style="margin-top: 40px">
+                                                                                <table id="coursesDataTable"  style="width:100%" class="row-border stripe">
+                                                                                    <thead>
+                                                                                    <tr style="font-weight: 700">
+                                                                                        <td style="height: 12px;max-width: 20px"></td>
+                                                                                        <td style="width: 20px">#</td>
+                                                                                        <td></td>
+                                                                                        <td>Τίτλος</td>
+                                                                                        <td># Διδάκοντες</td>
+                                                                                        <td>Τμήμα</td>
+                                                                                        <td>Κωδ. Γραμματείας</td>
+                                                                                        <td>Κωδ. LMS</td>
+                                                                                        <td>[σπουδές Id]</td>
+                                                                                        <td>Σπουδές</td>
+                                                                                        <td>[πρόγραμμα Id]</td>
+                                                                                        <td>Πρόγραμμα</td>
+                                                                                        <td>[departmentId]</td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td>[departmentsRelative]</td>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                </table>
+                                                        </div>
 
-                            </div>
+                                 </div>
+                       </div>
                                 <!-- EDIT FORM -->
-                            <div class="card-body" id="courses_edit_card" style="display: none">
 
-                                  <div class="card">
+                       <div class="card mt-3" id="courses_edit_card" style="display: none" >
                                       <div class="card-header">
-                                          <span>
                                               <h6 class="modal-title" id="courseModalLabel"></h6>
                                               <input type="hidden" id="cs_rowIdx_edited" value=""/>
-                                          </span>
-                                          <span class="float-end">
-                                          <button type="button" class="btn btn-secondary" id="closeUpdateCourse"><i class="fas fa-undo"></i> Επιστροφή</button>
+                                                <span class="float-end">
+                                                            <button type="button" class="btn btn-secondary" id="closeUpdateCourse"><i class="fas fa-undo"></i> Επιστροφή</button>
                                                            <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color" id="addOrUpdateCourse"><i class="far fa-save"></i> Αποθήκευση</button>
                                                            <button type="button" class="btn btn-danger" title="Διαγραφή Μαθήματος" id="deleteCourse"><i class="fas fa-trash"></i></button>
-                                      </span>
+                                                </span>
                                       </div>
-                                      <div class="card-body  pb-0 px-0 pt-2">
-                                          <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
-                                          <div class="card card-body" style="background-color: #f7f7f9;border: none">
+                                      <div class="card-body">
                                               <form id="course_form" name="course_form">
                                                   <input type="hidden" id="course_edit_mode" value=""/>
                                                   <input type="hidden" id="course_id" value=""/>
                                                   <!-- DEPARTMENT -->
                                                   <div class="form-group row mt-3">
-                                                      <label for="course_department" class="col-sm-2 col-form-label"><b>Τμήμα*</b></label>
+                                                      <label for="course_department" class="col-sm-2 col-form-label emph-label">Τμήμα*</label>
                                                       <div class="col-sm-7">
                                                           <input type="hidden" id="course_department" disabled class="form-control"/>
                                                           <input type="text" id="course_department_title" disabled class="form-control"/>
                                                       </div>
                                                   </div>
                                                   <div class="form-group row mt-3">
-                                                      <label for="course_programId" class="col-sm-2 col-form-label"><b>Πρόγραμμα Σπουδών*</b></label>
+                                                      <label for="course_programId" class="col-sm-2 col-form-label emph-label">Πρόγραμμα Σπουδών*</label>
                                                       <div class="col-sm-7">
                                                           <select id="course_programId" name="course_programId" style="width: 100%" class="form-control">
                                                           </select>
@@ -180,19 +198,19 @@
                                                       <div class="col-sm-7">
                                                           <div style="font-size: 0.9em;color: red;font-weight: bold"><i style="color:red" class="fas fa-exclamation-triangle"></i> ΠΡΟΣΟΧΗ:<br/>
                                                               <span style="color:black;font-weight: normal">
-                                                                                        Τυχόν τροποποίηση του τίτλου ενός Μαθήματος θα ενημερώσει τον τίτλο σε όλα τα σημεία που αναφέρεται το επιλεγμένο Μάθημα (Προσωπικό,                                                  Διαλέξεις κλπ). Η τροποποίηση του τίτλου ενός Μαθήματος προτείνεται <b>ΜΟΝΟ</b> για διορθώσεις τυπογραφικών λαθών. Αν το επιλεγμένο μάθημα άλλαξε την επίσημη ονομασία του τότε,  αντί της μετονομασίας, <b>ΔΗΜΙΟΥΡΓΉΣΤΕ ΕΝΑ ΝΕΟ ΜΑΘΗΜΑ ΜΕ ΤΟΝ ΝΕΟ ΤΙΤΛΟ</b>. Οι υπάρχουσες διαλέξεις θα κρατήσουν τον παλιό τίτλο και οι νέες θα καταχωρούν τον νέο.
-                                                                                    </span></div>
+                                                              Τυχόν τροποποίηση του τίτλου ενός Μαθήματος θα ενημερώσει τον τίτλο σε όλα τα σημεία που αναφέρεται το επιλεγμένο Μάθημα (Προσωπικό,                                                  Διαλέξεις κλπ). Η τροποποίηση του τίτλου ενός Μαθήματος προτείνεται <b>ΜΟΝΟ</b> για διορθώσεις τυπογραφικών λαθών. Αν το επιλεγμένο μάθημα άλλαξε την επίσημη ονομασία του τότε,  αντί της μετονομασίας, <b>ΔΗΜΙΟΥΡΓΉΣΤΕ ΕΝΑ ΝΕΟ ΜΑΘΗΜΑ ΜΕ ΤΟΝ ΝΕΟ ΤΙΤΛΟ</b>. Οι υπάρχουσες διαλέξεις θα κρατήσουν τον παλιό τίτλο και οι νέες θα καταχωρούν τον νέο.
+                                                              </span></div>
                                                       </div>
                                                   </div>
                                                   <div class="form-group row  mt-3">
-                                                      <label for="course_title" class="col-sm-2 col-form-label"><b>Τίτλος*</b></label>
+                                                      <label for="course_title" class="col-sm-2 col-form-label emph-label">Τίτλος*</label>
                                                       <div class="col-sm-7">
                                                           <input type="text" name="course_title" id="course_title" class="form-control"/>
                                                       </div>
                                                   </div>
                                                   <!-- RELATED DEPARTMENTS (ΔΙΑΤΜΗΜΑΤΙΚΟ) -->
                                                   <div class="form-group row mt-3">
-                                                      <label for="course_department" class="col-sm-2 col-form-label"><b>Διατμηματικό Μάθημα</b></label>
+                                                      <label for="course_department" class="col-sm-2 col-form-label emph-label"><b>Διατμηματικό Μάθημα</b></label>
                                                       <div class="col-sm-7" style="font-size: 0.9em">
                                                           Για Διατμηματικό Μάθημα, επιλέξτε τα συμμετέχοντα τμήματα, αλλιώς αφήστε το πεδίο κενό
                                                       </div>
@@ -206,32 +224,32 @@
                                                   </div>
                                                   <!--@thymesVar id="catList" type="java.util.HashMap<String, List<String>"-->
                                                   <div class="form-group row  mt-3">
-                                                      <label for="course_categories" class="col-sm-2 col-form-label">Θεματικές Περιοχές</label>
+                                                      <label for="course_categories" class="col-sm-2 col-form-label emph-label">Θεματικές Περιοχές</label>
                                                       <div class="col-sm-7">
                                                           <select id="course_categories" name="course_categories" style="width: 100%" class="form-control js-category-tags" multiple="multiple">
                                                               <optgroup th:each="cheader:${catList}" th:label="${#strings.listSplit(cheader.key,'::')[1]}" label="">
                                                                   <option th:each="cat:${cheader.value}" th:value="${#strings.listSplit(cat,'::')[0]}" th:text="${#strings.listSplit(cat,'::')[1]}"></option>
                                                               </optgroup>
                                                           </select>
-                                                          <small class="form-text text-muted">Επιλέξτε μέχρι 3 θεματικές περιοχές</small>
+                                                          <small class="form-text text-medium-emphasis">Επιλέξτε μέχρι 3 θεματικές περιοχές</small>
                                                       </div>
                                                   </div>
                                                   <div class="form-group row mt-3">
-                                                      <label for="course_scopeId" class="col-sm-2 col-form-label">Κωδικοί Γραμματείας</label>
+                                                      <label for="course_scopeId" class="col-sm-2 col-form-label emph-label">Κωδικοί Γραμματείας</label>
                                                       <div class="col-sm-3">
                                                           <input type="text" name="course_scopeId"  id="course_scopeId" class="form-control"/>
-                                                          <small class="form-text text-muted">διαχωρίστε τυχόν πολλαπλούς κωδικούς με κόμμα ή κενό</small>
+                                                          <small class="form-text text-medium-emphasis">διαχωρίστε τυχόν πολλαπλούς κωδικούς με κόμμα ή κενό</small>
                                                       </div>
                                                   </div>
                                                   <!-- Κωδικός LMS -->
                                                   <div class="form-group row  mt-3" style="">
-                                                      <label class="col-sm-2 col-form-label">Κωδικοί LMS</label>
+                                                      <label class="col-sm-2 col-form-label emph-label">Κωδικοί LMS</label>
                                                       <div class="col-sm-7 text-muted" style="font-size: 0.8em">
                                                       </div>
                                                   </div>
                                                   <div class="form-group row mt-3">
                                                       <label class="col-sm-2 col-form-label"></label>
-                                                      <div class="col-sm-7 text-muted" style="font-size: 0.9em">
+                                                      <div class="col-sm-7 text-high-emphasis" style="font-size: 0.9em">
                                                           <i class="far fa-question-circle"></i>
                                                           Μπορείτε να <b>εισάγεται</b> (προαιρετικά) έναν ή περισσότερους κωδικούς για κάθε LMS. Κάντε κλικ πάνω στο αντίστοιχο πεδίο και
                                                           πληκτρολογήστε τον κωδικό. <b>Για να καταχωρηθεί η επιλογή σας, πατήστε 'ENTER' μετά από κάθε κωδικό</b>.
@@ -250,17 +268,19 @@
                                                                   <select th:name="${'lms.entry[' + i + ']'}" th:id="${'lms.entry[' + i + ']'}" th:attr="data-target=${lms.url[i]}" class="form-control js-lms-tags"
                                                                           style="width: 100%;" multiple="multiple">
                                                                   </select>
-                                                                  <small class="form-text text-muted">πληκτρολογήστε μέχρι 5 κωδικούς</small>
+                                                                  <small class="form-text text-medium-emphasis">πληκτρολογήστε μέχρι 5 κωδικούς</small>
                                                               </div>
                                                           </div>
                                                       </div>
                                                   </div>
                                               </form>
-                                          </div>
+                                      </div>
+                                      <div class="card-footer">
+                                          <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
                                       </div>
                                   </div>
-                               </div>
-                        </div>
+                              </div>
+
                     </div>
                 </div>
             </div>

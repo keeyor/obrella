@@ -63,8 +63,6 @@ public class UserEditController {
 	String default_license;
 	@Value("${app.zone}")
 	String app_zone;
-	@Value("${default.institution.identity}")
-	String institution_identity;
 
 	@Autowired
 	Institution defaultInstitution;
@@ -74,29 +72,20 @@ public class UserEditController {
 	private static final String ATTRIBUTE_NAME = "OpUser";
 	private static final String BINDING_RESULT_NAME = "org.springframework.validation.BindingResult." + ATTRIBUTE_NAME;
 
-	private final ResourceService resourceService;
 	private final InstitutionService institutionService;
 	private final OpUserService opUserService;
 	private final DepartmentService departmentService;
-	private final CourseService courseService;
-	private final ScheduledEventService scheduledEventService;
 
 	private final MultilingualServices multilingualServices;
 	private final OptionServices optionServices;
 	private final ResourceEditorUtils resourceEditorUtils;
-
 	private final OpUserRegistrationValidator opUserRegistrationValidator;
 
-	private final Logger logger = LoggerFactory.getLogger(UserEditController.class);
-
 	@Autowired
-	public UserEditController(ResourceService resourceService, InstitutionService institutionService, OpUserService opUserService, DepartmentService departmentService, CourseService courseService, ScheduledEventService scheduledEventService, MultilingualServices multilingualServices, OptionServices optionServices, ResourceEditorUtils resourceEditorUtils, OpUserRegistrationValidator opUserRegistrationValidator) {
-		this.resourceService = resourceService;
+	public UserEditController(InstitutionService institutionService, OpUserService opUserService, DepartmentService departmentService, MultilingualServices multilingualServices, OptionServices optionServices, ResourceEditorUtils resourceEditorUtils, OpUserRegistrationValidator opUserRegistrationValidator) {
 		this.institutionService = institutionService;
 		this.opUserService = opUserService;
 		this.departmentService = departmentService;
-		this.courseService = courseService;
-		this.scheduledEventService = scheduledEventService;
 		this.multilingualServices = multilingualServices;
 		this.optionServices = optionServices;
 		this.resourceEditorUtils = resourceEditorUtils;
@@ -157,6 +146,7 @@ public class UserEditController {
 		model.addAttribute("authorities",authorities.toString());
 		model.addAttribute("isStaffMember",isStaffMember);
 		model.addAttribute("id", id);
+		model.addAttribute("defaultInstitution", defaultInstitution);
 
 		return "admin/system/user-editor";
 	}

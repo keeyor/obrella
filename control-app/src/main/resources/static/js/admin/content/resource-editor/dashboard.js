@@ -71,6 +71,11 @@
     }
     function init_controls() {
 
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new coreui.Tooltip(tooltipTriggerEl)
+        });
+
         alertify.defaults.transition = "slide";
         alertify.defaults.theme.ok = "btn btn-primary";
         alertify.defaults.theme.cancel = "btn btn-danger";
@@ -198,7 +203,7 @@
             $("#publication_toggle").bootstrapToggle('enable');
             //Access Policy
             let access_policy = $("#accessPolicy").val();
-            if (access_policy === "private" && dashboard.rid !== "") {
+            if ((access_policy === "private" || access_policy === "") && dashboard.rid !== "") {
                 $("#delete-button").attr("disabled", false);
                 $("#publication_toggle").bootstrapToggle('off')
             } else {
@@ -209,6 +214,7 @@
         else {
             $("#publication_toggle").bootstrapToggle('off');
             $("#publication_toggle").bootstrapToggle('disable');
+            $("#delete-button").attr("disabled", false);
         }
     }
 
@@ -268,6 +274,7 @@
                     alertify.confirm('Δημοσιοποίηση', msg,
                         function () {
                             $lecture_form.attr("action", page_select + "?action=publish");
+                            $("#publication_toggle").bootstrapToggle('enable');
                             $lecture_form.submit();
                         },
                         function () {
@@ -278,6 +285,7 @@
                     alertify.confirm('Δημοσιοποίηση', msg,
                         function () {
                             $lecture_form.attr("action", page_select + "?action=unpublish");
+                            $("#publication_toggle").bootstrapToggle('enable');
                             $lecture_form.submit();
                         },
                         function () {
@@ -287,32 +295,6 @@
             }
             e.preventDefault();
         });
-
-/*      $("#access_select").on('select2:select', function (e) {
-            let $lecture_form = $("#lecture-form");
-            let data = e.params.data;
-            if (data.id === "public") {
-                let msg = '<p>Η καταχώρηση θα δημοσιοποιηθεί. <b>Είστε σίγουρος;</b></p>';
-                alertify.confirm('Δημοσιοποίηση', msg,
-                    function () {
-                        $lecture_form.attr("action", page_select + "?action=publish");
-                        $lecture_form.submit();
-                    },
-                    function () {
-                    }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
-            }
-            else if (data.id === "private") {
-                let msg = '<p>Η καταχώρηση θα αφαιρεθεί από τη δημόσια πρόσβαση. <b>Είστε σίγουρος;</b></p>';
-                alertify.confirm('Δημοσιοποίηση', msg,
-                    function () {
-                        $lecture_form.attr("action", page_select + "?action=unpublish");
-                        $lecture_form.submit();
-                    },
-                    function () {
-                    }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
-            }
-            e.preventDefault();
-        });*/
 
         $("#delete-button").on('click',function(e){
             e.preventDefault();
@@ -340,11 +322,13 @@
                 alertify.confirm('Δημιουργία Καταχώρησης με Αντιγραφή', msg,
                     function () {
                         $lecture_form.attr("action", page_select + "?action=copy");
+                        $("#publication_toggle").bootstrapToggle('enable');
                         $lecture_form.submit();
                     },
                     function () {
                     }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
             }
+
         });
         $("#clone-button").on('click',function(e){
             e.preventDefault();
@@ -357,13 +341,15 @@
                 alertify.confirm('Δημιουργία Καταχώρησης στη Σειρά', msg,
                     function () {
                         $lecture_form.attr("action", page_select + "?action=clone");
+                        $("#publication_toggle").bootstrapToggle('enable');
                         $lecture_form.submit();
                     },
                     function () {
                     }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
             }
         });
-        $("#edit_video_link").on('click',function(e){
+
+        $(".edit_video_link").on('click',function(e){
             if (checkSave() === false) {
                 alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα", "Η φόρμα έχει τροποποιηθεί. Αποθηκεύστε τις αλλαγές και δοκιμάστε πάλι");
                 e.preventDefault();
@@ -565,7 +551,6 @@
         let _$period_el     = $("#resource_pd");
         if (resource_date !== "" && course_id !== "" && course_id != null && academic_year !== "" && _$period_el != null) {
             let _date_moment = moment(resource_date).unix();
-               // console.log("epochSecond: " + _date_moment + " courseId: " + course_id, " year: " + academic_year);
                 dashboard.courses.getAndSetPeriodNameByCourseAndDate(course_id,_date_moment,academic_year,_$period_el);
         }
     }

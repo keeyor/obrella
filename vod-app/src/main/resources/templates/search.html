@@ -4,32 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ΕΚΠΑ :: Διαλέξεις</title>
-    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="stylesheet" th:href="@{/css/global41.css}"/>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+    <!-- font awesome 5 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fa5/css/all.css}"/>
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
    <!-- <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>-->
 
-
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
     <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
-    <style>
-        .table td {
-            padding: 0.1rem;
-        }
-        @media (max-width: 768px) {
-            .hide-md {
-                display: none;
-            }
-        }
-
-    </style>
 </head>
 <body style="font-size: 0.89em">
     <!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
@@ -99,17 +88,15 @@
                 <!-- Content -->
                 <div class="row">
                     <div class="col-12">
-                        <div class="card mb-0" style="border: none">
-                            <div class="container mt-3" style="display: none">
+
+                        <th:block th:if="${QR != null && QR.totalResults > 0}">
+                            <span th:replace="~{fragments/search-common/ontop-applied-filters :: ontop-applied-filters}"></span>
+                        </th:block>
+                        <div class="card">
+                            <div style="display: none">
                                 <div th:insert="~{fragments/search/r-search-bar :: r-search-bar}">Search Bar</div>
                             </div>
-                            <div class="card-body pb-0 px-0">
-                                <div th:if="${QR != null && QR.totalResults > 0}">
-                                    <span th:replace="~{fragments/search-common/ontop-dyna-filters :: ontop-dyna-filters}"></span>
-                                </div>
-                                <th:block th:if="${QR != null}">
-                                    <div th:replace="~{fragments/search-common/ontop-applied-filters :: ontop-applied-filters}">Applied Filters</div>
-                                </th:block>
+                            <div class="card-body mt-2">
                                 <th:block th:if="${QR != null && QR.totalResults >0}">
                                     <div class="row">
                                         <div class="col-7">

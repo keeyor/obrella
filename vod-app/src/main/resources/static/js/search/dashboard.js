@@ -12,12 +12,9 @@
     let queryString;
 
     let courseId        = $("#courseId").val();
-    let eventId         = $("#eventId").val();
     let staffId         = $("#staffId").val();
     let departmentId    = $("#departmentId").val();
-    let accessPolicy    = $("#accessPolicy").val();
-    let searchText      = $("#search-box").val();
-    let tag             = $("#tag").val();
+    let categoryCode    = $("#categoryCode").val();
 
     let ajaxRefreshInterval;
 
@@ -25,24 +22,23 @@
 
         dashboard.siteUrl = dashboard.broker.getRootSitePath();
 
-         dashboard.categories.init();
-         dashboard.departments.init();
-         dashboard.sevents.init();
-
         queryString = $("#queryString").val();
         $("#clear-all-filters").hide();
 
         if ( queryString !== undefined && queryString !== '') {
 
             $("#stFilters").hide();
-            $("#no_dyna_filters").html("παρακαλώ περιμένετε...").show();
+            $("#no_dyna_filters").html("Δημιουργία δυναμικών φίλτρων σε εξέλιξη. Παρακαλώ περιμένετε...").show();
             $("#search-panel").hide();
             $("#results-panel").show();
             setFilterRemoveLinks();
 
+            if (staffId !== '' || departmentId !== '' || courseId !== '' || categoryCode !== '') {
+                $("#none_filter").hide();
+            }
+
             ajaxRefreshInterval = setInterval( function () {
                     getReportQueryStatus();
-                    //console.log(status);
                     if (status === 'Finished') {
                         getReportQueryTime();
                         clearInterval(ajaxRefreshInterval);
@@ -72,7 +68,6 @@
                         }
                         if (staffId !== '' && departmentId !== '' && courseId !== '') {
                             $("#no_dyna_filters").html("δεν βρέθηκαν επιπλέον κριτήρια.");
-                            $("#AllFilters").hide();
                         }
                     }
             }, 1000 );
@@ -108,24 +103,8 @@
             let departmentFilterId = $("#departmentFilterId").val();
             let categoryCode = $("#categoryCode").val();
 
-            $("#clear-all-filters").attr('href','search').show();
-
-            if (
-                (departmentFilterId !== '' && courseFilterId !== '' && staffFilterId !=='') ||
-                (departmentFilterId !== '' && staffFilterId !=='') ||
-                (categoryCode !== '' && departmentFilterId !== '' && staffFilterId !=='') ||
-                (categoryCode !== '' && departmentFilterId !== '' && courseFilterId !== '' && staffFilterId !=='')
-            ) {
-            }
-
-            if (searchText!== null && searchText !== '') {
-                $('#ft-dd-header').html("<span class='fas fa-ban'></span> Κείμενο:" + searchText);
-                let queryParams = new URLSearchParams(window.location.search);
-                queryParams.delete("ft");
-                queryParams.delete("skip");
-                removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
-                $("#clear-ft-filter").attr('href','search?' + queryParams);
-                $("#ft-filter").show();
+            if (courseId !== '' || staffId !== '' || departmentId !== '') {
+                $("#clear-all-filters").attr('href', 'search').show();
             }
 
             let courseFilterText = $("#courseFilterText").val();
@@ -201,18 +180,28 @@
 
     function define_events() {
 
+        $(".short-list").on("keyup",function() {
+
+            let what = $(this).data("target");
+            let value = $(this).val();
+            value = value.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
+            if (value.length < 2) {
+                $('#' + what +' > a').show();
+            }
+            else {
+                $('#' + what + '> a').slideUp().filter( function() {
+                    return $(this).text().toLowerCase().indexOf(value) > -1
+                }).stop(true).fadeIn();
+            }
+        });
+
         $(".academic-year").each(function(){
             let academic_year = $(this).text();
             let  parsed = parseInt(academic_year);
             let set_text = academic_year + " - " + (parsed+1);
             $(this).text(set_text);
-        });
-
-        $( ".player_tab" ).mouseenter(function(e) {
-            $(this).find(".btn").show();
-        });
-        $( ".player_tab" ).mouseleave(function(e) {
-            $(this).find(".btn").hide();
         });
 
         $("#staff_list").on('click',function(e){
@@ -326,15 +315,6 @@
             return false;
         });
 
-        $("#play_edited_video").on('click',function(e) {
-            let info = $(this).data("info").split("::");
-            let id = info[0];
-            let title = info[1];
-            $("#playEditedModalTitle").text(title);
-            load_edited_video(id);
-            e.preventDefault();
-        })
-
         let $collapseAdminFilters = $('#collapseAdminFilters');
         let $collapseIcon         = $("#collapse-icon");
 
@@ -349,6 +329,13 @@
     }
 
     function init_controls() {
+
+        //Enable Tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new coreui.Tooltip(tooltipTriggerEl)
+        });
+
         $("#aFilterAccessPolicy").select2({
             minimumResultsForSearch: -1 //hides the searchbox
         });

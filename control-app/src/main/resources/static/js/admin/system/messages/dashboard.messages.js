@@ -36,16 +36,16 @@
                     "aTargets": [2],
                     "mRender": function (data) {
                         if (data === "info") {
-                            return "<h5><span class=\"badge bg-info\">Πληροφορία</span></h5>";
+                            return "<h6><span class=\"badge bg-info\">Πληροφορία</span></h6>";
                         }
                         else if (data === "warning") {
-                            return "<h5><span class=\"badge bg-warning\">Προειδοποίηση</span></h5>";
+                            return "<h6><span class=\"badge bg-warning\">Προειδοποίηση</span></h6>";
                         }
                         else if (data === "success") {
-                            return "<h5><span class=\"badge bg-success\">Επιτυχία</span></h5>";
+                            return "<h6><span class=\"badge bg-success\">Επιτυχία</span></h6>";
                         }
                         else if (data === "danger") {
-                            return "<h5><span class=\"badge bg-danger\">Κίνδυνος</span></h5>";
+                            return "<h6><span class=\"badge bg-danger\">Κίνδυνος</span></h6>";
                         }
                     }
                 },

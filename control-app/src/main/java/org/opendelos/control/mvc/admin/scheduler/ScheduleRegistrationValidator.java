@@ -65,5 +65,10 @@ public class ScheduleRegistrationValidator implements Validator {
                 errors.rejectValue("durationHours", "Resource.duration.zero");
             }
         }
+
+        if (!scheduleDTO.isBroadcast() && !scheduleDTO.isRecording()) {
+            errors.rejectValue("broadcast", "Resource.atleast.one");
+            errors.rejectValue("recording", "Resource.atleast.one");
+        }
     }
 }

@@ -138,17 +138,17 @@
                         if (broadcast) {
                             let id = row["id"];
                             if (row["access"] === 'open') {
-                                ret += '<a  role="button" title="Μετάβαση στη ζωντανή μετάδοση" class="btn text-white btn-danger play_live" ' +
+                                ret += '<a  role="button" title="Μετάβαση στη ζωντανή μετάδοση" class="btn btn-sm text-white btn-danger play_live" ' +
                                     ' target="_blank"  href="' + dashboard.siteUrl + '/live_player?id=' + id + '"> ' +
                                     ' <i class="fas fa-play mr-1"></i> ' + data +
                                     '</a>'
                             } else if (row["access"] === 'sso') {
-                                ret += '<a  role="button" title="Μετάβαση στη ζωντανή μετάδοση" class="btn text-white btn-danger play_live" ' +
+                                ret += '<a  role="button" title="Μετάβαση στη ζωντανή μετάδοση" class="btn btn-sm text-white btn-danger play_live" ' +
                                     ' target="_blank"  href="' + dashboard.siteUrl + '/cas/live_player?id=' + id + '"> ' +
                                     ' <i class="fas fa-play"></i> ' + data +
                                     '</a>'
                             } else if (row["access"] === 'password') {
-                                ret += '<a  role="button" title="Μετάβαση στη μετάδοση"  class="btn text-white btn-danger play_live" ' +
+                                ret += '<a  role="button" title="Μετάβαση στη μετάδοση"  class="btn btn-sm text-white btn-danger play_live" ' +
                                     ' target="_blank" data-target="' + id + '" href="' + dashboard.siteUrl + '/live_player?id=' + id + '"> ' +
                                     ' <i class="fas fa-play mr-1"></i> ' + data +
                                     '</a>'
@@ -198,13 +198,15 @@
                     responsivePriority: 1,
                     "className" : "dt-center",
                     "mRender": function (data) {
-                        if (data !== "closed") {
-                            if (data === 'open') {
-                                return '<i class="fas fa-lock-open"></i>';
-                            } else if (data === 'sso') {
-                                return '<img src="' + dashboard.siteUrl + '/public/images/icons/IconMetadosiStatusUserName.png" width="20px" alt="">';
-                            } else if (data === 'password') {
-                                return '<i class="fas fa-lock"></i>';
+                        if (data != null) {
+                            if (data !== "closed") {
+                                if (data === 'open') {
+                                    return '<i class="fas fa-lock-open"></i>';
+                                } else if (data === 'sso') {
+                                    return '<img src="' + dashboard.siteUrl + '/public/images/icons/IconMetadosiStatusUserName.png" width="20px" alt="">';
+                                } else if (data === 'password') {
+                                    return '<i class="fas fa-lock"></i>';
+                                }
                             }
                         }
                         else return 'NA';
@@ -445,17 +447,17 @@
                         if (broadcast) {
                             let id = row["id"];
                             if (row["access"] === 'open') {
-                                ret += '<a  role="button" title="Μετάβαση στη ζωντανή μετάδοση" class="btn  text-white btn-danger play_live" ' +
+                                ret += '<a  role="button" title="Μετάβαση στη ζωντανή μετάδοση" class="btn btn-sm text-white btn-danger play_live" ' +
                                     ' target="_blank"  href="' + dashboard.siteUrl + '/live_player?id=' + id + '"> ' +
                                     ' <i class="fas fa-play"></i> ' + data +
                                     '</a>';
                             } else if (row["access"] === 'sso') {
-                                ret += '<a  role="button" title="Μετάβαση στη ζωντανή μετάδοση" class="btn  text-white btn-danger play_live" ' +
+                                ret += '<a  role="button" title="Μετάβαση στη ζωντανή μετάδοση" class="btn btn-sm text-white btn-danger play_live" ' +
                                     ' target="_blank"  href="' + dashboard.siteUrl + '/cas/live_player?id=' + id + '"> ' +
                                     ' <i class="fas fa-play"></i> ' + data +
                                     '</a>'
                             } else if (row["access"] === 'password') {
-                                ret += '<a  role="button" title="Μετάβαση στη μετάδοση" class="btn text-white btn-danger play_live" ' +
+                                ret += '<a  role="button" title="Μετάβαση στη μετάδοση" class="btn btn-sm text-white btn-danger play_live" ' +
                                     ' target="_blank"  href="' + dashboard.siteUrl + '/live_player?id=' + id + '"> ' +
                                     ' <i class="fas fa-play"></i> ' + data +
                                     '</a>';
@@ -818,13 +820,15 @@
                     responsivePriority: 1,
                     "className" : "dt-center",
                     "mRender": function (data) {
-                        if (data !== "closed") {
-                            if (data === 'open') {
-                                return '<i class="fas fa-lock-open"></i>';
-                            } else if (data === 'sso') {
-                                return '<img src="' + dashboard.siteUrl + '/public/images/icons/IconMetadosiStatusUserName.png" width="20px" alt="">';
-                            } else if (data === 'password') {
-                                return '<i class="fas fa-lock"></i>';
+                        if (data != null) {
+                            if (data !== "closed") {
+                                if (data === 'open') {
+                                    return '<i class="fas fa-lock-open"></i>';
+                                } else if (data === 'sso') {
+                                    return '<img src="' + dashboard.siteUrl + '/public/images/icons/IconMetadosiStatusUserName.png" width="20px" alt="">';
+                                } else if (data === 'password') {
+                                    return '<i class="fas fa-lock"></i>';
+                                }
                             }
                         }
                         else return 'NA';

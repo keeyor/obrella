@@ -4,6 +4,7 @@ html:not([dir=rtl]) .wrapper {
 
 .hover_button_warn {
     border-color: darkorange!important;
+    border-width: 3px!important;
 }
 .hover_button_warn:hover {
     background-color: darkorange!important;
@@ -118,4 +119,8 @@ html:not([dir=rtl]) .wrapper {
 }
 .emph-label {
     font-weight: 500;
+}
+.breadcrumb-item a {
+    text-decoration: none;
+    color: #006A9B !important;
 }

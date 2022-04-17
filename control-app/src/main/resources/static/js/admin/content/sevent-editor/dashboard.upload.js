@@ -27,7 +27,7 @@
             runtimes : 'html5,flash,silverlight,html4',
             browse_button : 'pickfiles',
             container: document.getElementById('container'),
-            url : dashboard.siteurl + '/secure/image_upload',
+            url : dashboard.siteurl + '/admin/imageUpload',
             flash_swf_url : dashboard.siteurl + '/res/plupload-2.3.6/js/Moxie.swf',
             silverlight_xap_url : dashboard.siteurl + '/res/plupload-2.3.6/js/Moxie.xap',
             chunk_size : '1mb',
@@ -61,6 +61,8 @@
                 },
                 Error: function(up, err) {
                     document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+                    $("#uploadfiles").hide();
+                    $("#uploadfiles_disabled").show();
                 },
                 FileUploaded: function(up, file, info) {
                     if (info.response === "OK" || info.response === "" || info.response == null) {
@@ -72,7 +74,9 @@
                         $("#_image_panel").show();
                         $("#event_photo").val(image_file_name);
                         $("#default_photo").hide();
-                        document.getElementById('file_select_label').innerHTML = 'Η μεταφόρτωση της φωτογραφίας, ολοκληρώθηκε';
+                        let upload_msg = '<span style="font-weight:500">Η μεταφόρτωση της φωτογραφίας, ολοκληρώθηκε</span>';
+                        setStatus("");
+                        document.getElementById('file_select_label').innerHTML = upload_msg;
                         document.getElementById('filelist').innerHTML = '';
                         $("#uploadfiles").hide();
                         $("#uploadfiles_disabled").show();

@@ -254,7 +254,7 @@
             		"aTargets": [2],
                     "render": function (data) {
             			if (data == null) return '';
-						else return '<h6 class="pb-0 mb-0" style="color: #003476">' + dashboard.broker.selectPeriod(data) + '</h6>';
+						else return '<span class="pb-0 mb-0" style="color: #003476;font-weight: 500">' + dashboard.broker.selectPeriod(data) + '</h6>';
                     } 
             	},
                 {

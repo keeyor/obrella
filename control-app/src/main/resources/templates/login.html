@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
 <head>
     <title>OpenDelos Live :: Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
@@ -34,12 +35,12 @@
 <body style="background-color: white">
 <div class="container-fluid">
     <div class="row row justify-content-center" style="margin-top:100px">
-        <div class="col-4 text-right" style="border-right: #ccc 1px solid" id="main-logo">
+        <div class="col-lg-4 col-md-6 text-right" style="border-right: #ccc 1px solid" id="main-logo">
             <div th:with="uid=#{institution.identity}">
                 <img th:alt="#{default.institution.title}" th:src="@{'/public/images/logos/' + ${uid} + '.png'}" alt="" src="">
             </div>
         </div>
-        <div class="col-4" id="main-title">
+        <div class="col-lg-4 col-md-6" id="main-title">
             <h1>διαχείριση
                 <br/>πολυμεσικού περιεχομένου & μεταδόσεων
             </h1>
@@ -104,12 +105,12 @@
         </div>
     </div>
     <div class="row justify-content-center align-items-center" style="margin-top:10px">
-        <div class="col-2 text-muted">
+        <div class="col-lg-6 col-md-12 text-muted text-center">
             <a th:href="@{/}"><i class="fas fa-undo"></i> Επιστροφή στην αρχική σελίδα χωρίς είσοδο</a>
         </div>
     </div>
     <div class="row justify-content-center align-items-center" style="margin-top:40px">
-        <div class="col-6 text-muted">
+        <div class="col-lg-6 col-md-12 text-muted">
             <i class="fas fa-info-circle"></i> Η είσοδος στην υπηρεσία <b>απαιτείται μόνο για ανάρτηση και διαχείριση υλικού</b>. Αν έχετε εγγραφεί στην υπηρεσία ως διαχειριστής και σας έχει δοθεί όνομα χρήστη και κωδικός πρόσβασης, χρησιμοποιήστε το αριστερό πλαίσιο για να εισέλθετε στην υπηρεσία. Σε κάθε άλλη περίπτωση (π.χ. διδακτικό προσωπικό), για την είσοδό σας, χρησιμοποιήστε την Κεντρική Υπηρεσία Πιστοποίησης του Ιδρύματος (δεξί πλαίσιο)
         </div>
     </div>
