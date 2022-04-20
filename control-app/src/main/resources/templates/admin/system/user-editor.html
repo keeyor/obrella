@@ -41,6 +41,7 @@
         .my-nav.active {
             color: grey!important;
         }
+        /*for select2 to work in modals*/
         .modal-open .select2-container--open { z-index: 999999 !important; width:100% !important; }
     </style>
 </head>
@@ -97,15 +98,17 @@
                                     <a role="button" title="Επιστροφή στα αποτελέσματα αναζήτησης" class="btn btn-secondary close_editor" th:href="${userlist_search_history}">
                                         <i class="fas fa-undo"></i> Επιστροφή
                                     </a>
-                                    <button class="btn btn-primary blue-btn-wcag-bgnd-color" id="submit_button" type="submit">
-                                    <i class="far fa-save"></i>  Αποθήκευση
+                                    <button class="btn btn-primary blue-btn-wcag-bgnd-color" id="submit_button">
+                                        <i class="far fa-save"></i>  Αποθήκευση
                                     </button>
-                                    <button th:if="${isStaffMember}" type="button" title="ανάκληση όλων των παραχωρημένων δικαιωμάτων" class="btn btn-danger" id="deleteStaffBt">
-                                                                    <i class="fas fa-ban"></i> Ανάκληση
-                                    </button>
-                                    <button th:unless="${isStaffMember}" type="button" title="οριστική διαγραφή χρήστη" class="btn btn-danger" id="deleteManagerBt">
-                                                                    <i class="fas fa-trash"></i>
-                                    </button>
+                                    <th:block th:if="${OpUser.id != null && OpUser.id != ''}">
+                                        <button th:if="${isStaffMember}" type="button" title="ανάκληση όλων των παραχωρημένων δικαιωμάτων" class="btn btn-danger" id="deleteStaffBt">
+                                             <i class="fas fa-ban"></i> Ανάκληση
+                                        </button>
+                                        <button th:unless="${isStaffMember}" type="button" title="οριστική διαγραφή χρήστη" class="btn btn-danger" id="deleteManagerBt">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </th:block>
                                 </span>
                             </div>
                             <div class="card-body">
@@ -149,7 +152,7 @@
                                                                     <div class="form-group row pt-2">
                                                                         <label for="staff_name" class="col-sm-2 col-form-label emph-label">Όνομα*</label>
                                                                         <div class="col-sm-4">
-                                                                            <input type="text" id="staff_name_" th:field="*{name}" name="staff_name" class="form-control"/>
+                                                                            <input type="text" tabindex="1" id="staff_name_" th:field="*{name}" name="staff_name" class="form-control"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect name</div>
                                                                         </div>
                                                                     </div>
@@ -162,14 +165,14 @@
                                                                     <div class="form-group row mt-3">
                                                                         <label for="staff_aff" class="col-sm-2 col-form-label emph-label">Ιδιότητα*</label>
                                                                         <div class="col-sm-4">
-                                                                            <input type="text" id="staff_aff"  name="staff_aff" th:field="*{affiliation}" class="form-control" autocomplete="on"/>
+                                                                            <input type="text" tabindex="2" id="staff_aff"  name="staff_aff" th:field="*{affiliation}" class="form-control" autocomplete="on"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('affiliation')}" th:errors="*{affiliation}">Incorrect name</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
                                                                         <label for="staff_department" class="col-sm-2 col-form-label emph-label">Τμήμα*</label>
                                                                         <div class="col-sm-4">
-                                                                            <select id="staff_department" style="width: 100%" class="form-control  staff_department">
+                                                                            <select tabindex="3" id="staff_department" style="width: 100%" class="form-control  staff_department">
                                                                                 <option value=""></option>
                                                                             </select>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('department.id')}" th:errors="*{department.id}">Incorrect department</div>
@@ -179,7 +182,7 @@
                                                                     <div class="form-group row mt-3">
                                                                         <label for="staff_email" class="col-sm-2 col-form-label emph-label">E-mail*</label>
                                                                         <div class="col-sm-2">
-                                                                            <input type="text" id="staff_email"  th:field="*{email}" name="staff_email" class="form-control"/>
+                                                                            <input type="text" tabindex="4" id="staff_email"  th:field="*{email}" name="staff_email" class="form-control"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect uid</div>
                                                                         </div>
                                                                     </div>
@@ -195,20 +198,20 @@
                                                                     <div class="form-group row mt-3">
                                                                         <label for="staff_uid" class="col-sm-2 col-form-label emph-label">Όνομα Χρήστη (username)*</label>
                                                                         <div class="col-sm-2">
-                                                                            <input type="text" id="staff_uid" th:field="*{uid}"  name="staff_email" class="form-control" autocomplete="new-username"/>
+                                                                            <input type="text" tabindex="5"  id="staff_uid" th:field="*{uid}"  name="staff_email" class="form-control" autocomplete="new-username"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('uid')}" th:errors="*{uid}">Incorrect uid</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
                                                                         <label for="staff_password_1" class="col-sm-2 col-form-label emph-label">Κωδικός Εισόδου*</label>
                                                                         <div class="col-sm-6 form-inline">
-                                                                            <input type="text" id="staff_password_1" data-val="" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
+                                                                            <input type="text" tabindex="6" id="staff_password_1" data-val="" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
                                                                         <label for="staff_password_2" class="col-sm-2 col-form-label emph-label">Κωδικός Εισόδου* (Επαν.)</label>
                                                                         <div class="col-sm-3">
-                                                                            <input type="text" id="staff_password_2" data-val="" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
+                                                                            <input type="text" tabindex="7" id="staff_password_2" data-val="" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mt-3">
@@ -222,7 +225,7 @@
                                                                     <div class="form-group row my-3">
                                                                         <label for="staff_enabled" class="col-sm-2 col-form-label"><b>Ενεργός Χρήστης</b></label>
                                                                         <div class="col-sm-5">
-                                                                            <input id="staff_enabled" name="sevent_isactive_toggle" type="checkbox" th:field="*{active}" />
+                                                                            <input id="staff_enabled" tabindex="8" name="sevent_isactive_toggle" type="checkbox" th:field="*{active}" />
                                                                         </div>
                                                                     </div>
                                                             </div> <!-- card body -->
@@ -287,7 +290,7 @@
                                                                         <li>Προσθέστε μονάδα, πατώντας 'Προσθήκη Μονάδας'</li>
                                                                         <li>Αφαιρέστε μονάδα πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
                                                                         <li>Για κάθε μονάδα, ορίζονται 3 δικαιώματα στα υποσυστήματα: Περιεχόμενο, Στοιχεία Μονάδας και Προγραμματισμός<br/>
-                                                                         Ενεργοποιήστε/Απενεργοποιήστε κάθε δικαίωμα πατώντας τα αντίστοιχα κουμπιά</li>
+                                                                         Ενεργοποιήστε/Απενεργοποιήστε ένα δικαίωμα πατώντας τα αντίστοιχα μεταβαλλόμενα κουμπιά</li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -322,7 +325,7 @@
                                                                         <li>Προσθέστε Καθηγητή+Μάθημα, πατώντας 'Προσθήκη Μαθήματος'</li>
                                                                         <li>Αφαιρέστε μάθημα πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
                                                                         <li>Για κάθε ζεύγος, ορίζονται 2 δικαιώματα στα υποσυστήματα: Περιεχόμενο και Προγραμματισμός<br/>
-                                                                            Ενεργοποιήστε/Απενεργοποιήστε κάθε δικαίωμα πατώντας τα αντίστοιχα κουμπιά</li>
+                                                                            Ενεργοποιήστε/Απενεργοποιήστε ένα δικαίωμα πατώντας τα αντίστοιχα μεταβαλλόμενα κουμπιά</li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -356,7 +359,7 @@
                                                                         <li>Προσθέστε Καθηγητή+Εκδήλωση, πατώντας 'Προσθήκη Εκδήλωσης'</li>
                                                                         <li>Αφαιρέστε Εκδήλωση πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
                                                                         <li>Για κάθε ζεύγος, ορίζονται 2 δικαιώματα στα υποσυστήματα: Περιεχόμενο και Προγραμματισμός<br/>
-                                                                            Ενεργοποιήστε/Απενεργοποιήστε κάθε δικαίωμα πατώντας τα αντίστοιχα κουμπιά</li>
+                                                                            Ενεργοποιήστε/Απενεργοποιήστε ένα δικαίωμα πατώντας τα αντίστοιχα μεταβαλλόμενα κουμπιά</li>
                                                                     </ul>
                                                                 </div>
                                                             </div>

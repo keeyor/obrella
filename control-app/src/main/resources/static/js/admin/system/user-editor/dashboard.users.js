@@ -111,6 +111,7 @@
             }
             else {
                 $("#user_password").val(staff_password1_val);
+                $("#staff_form").submit();
             }
         });
 
@@ -187,7 +188,7 @@
             let staff_id = $("#staff_id").val();
 
             let msg = '<div class="font-weight-bold">Το Διαχειριστικό Δικαίωμα του "' + staff_name + '" θα ανακληθεί!". Είστε σίγουρος;</div>';
-                msg += '<div class="mb-2" style="font-size: 0.9em"><br/><i class="fas fa-info-circle"></i> Υπενθύμιση:'
+                msg += '<div class="mb-2">Υπενθύμιση: '
                 msg += '<br/><span style="color:red;font-weight: bold">O "' + staff_name + '" ανήκει στο διδακτικό προσωπικό του Ιδρύματος. ' +
                     'Η ενέργεια αφορά την ανάκληση του Διαχειριστικού Δικαιώματος και ΔΕΝ ΑΦΑΙΡΕΙ την ιδιότητα του ΔΙΔΑΣΚΟΝΤΑ</span>';
                 msg += '</div>';
@@ -205,10 +206,10 @@
             let staff_id = $("#staff_id").val();
 
             let msg = '<div class="font-weight-bold">O χρήστης "' + staff_name + '" θα διαγραφεί!". Είστε σίγουρος;</div>';
-                msg += '<div class="mb-2" style="font-size: 0.9em"><br/><i class="fas fa-info-circle"></i> Προσοχή:'
-                msg += '<br/><span style="color:red;font-weight: bold">O χρήστης "' + staff_name + '" ΔΕΝ ΑΝΗΚΕΙ ΣΤΟ ΔΙΔΑΚΤΙΚΟ ΠΡΟΣΩΠΙΚΟ ΤΟΥ ΙΔΡΥΜΑΤΟΣ. ' +
+                msg += '<div class="mb-2">';
+                msg += '<br/><span style="color:red;font-weight: bold">O χρήστης ΔΕΝ ΑΝΗΚΕΙ ΣΤΟ ΔΙΔΑΚΤΙΚΟ ΠΡΟΣΩΠΙΚΟ ΤΟΥ ΙΔΡΥΜΑΤΟΣ. ' +
                     'H ενέργεια ΘΑ ΔΙΑΓΡΑΨΕΙ ΟΡΙΣΤΙΚΑ το χρήστη από το σύστημα</span>';
-                msg += '<br/>Προσοχή: Αν έχουν υπάρχουν διαλέξεις ή εκδηλώσεις που αναφέρονται στο χρήστη, η διαγραφή θα ακυρωθεί';
+                msg += '<br/>Αν έχουν υπάρχουν διαλέξεις ή εκδηλώσεις που αναφέρονται στο χρήστη, η διαγραφή θα ακυρωθεί';
                 msg += '</div>';
 
             alertify.confirm('<i style="color: red" class="fas fa-trash-alt"></i> Οριστική Διαγραφή Διαχειριστή', msg,
@@ -456,7 +457,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Μονάδας', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openUnitsSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Μονάδας', className: 'my-2', attr: {id: 'openUnitsSelectModal'},
                         action: function () {
                             openUnitsSelectModal();
                         }
@@ -464,7 +465,7 @@
                 ],
                 dom: {
                     button: {
-                        className: 'btn btn-sm openUnitsSelectModal'
+                        className: 'btn btn-sm btn-light openUnitsSelectModal'
                     }
                 }
             },
@@ -532,7 +533,7 @@
                     "sortable": false,
                     "className": "text-right",
                     "mRender": function () {
-                        return  '<button type="button" title="αφαίρεση δικαιώματος" class="btn remove_assigned_unit"><i class="fas fa-trash-alt" style="color:red;"></i> </button>';
+                        return  '<button type="button" title="αφαίρεση μονάδας" class="btn text-white btn-sm btn-danger remove_assigned_unit"><i class="fas fa-trash-alt"></i> </button>';
                     }
                 }
             ],
@@ -650,7 +651,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Μαθήματος', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openStaffCourseSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Μαθήματος', className: 'my-2', attr: {id: 'openStaffCourseSelectModal'},
                         action: function () {
                             openStaffCourseSelectModal();
                         }
@@ -658,7 +659,7 @@
                 ],
                 dom: {
                     button: {
-                        className: 'btn openStaffCourseSelectModal'
+                        className: 'btn btn-sm btn-light openStaffCourseSelectModal'
                     }
                 }
             },
@@ -703,7 +704,7 @@
                     "sortable": false,
                     "className": "text-right align-top",
                     "mRender": function () {
-                        return  '<button type="button" title="αφαίρεση δικαιώματος" class="btn _remove_right"><i class="fas fa-trash-alt" style="color:red;"></i> </button>';
+                        return  '<button type="button" title="αφαίρεση μαθήματος+καθηγητή" class="btn btn-sm text-white btn-danger _remove_right"><i class="fas fa-trash-alt"></i></button>';
                     }
                 }
             ],
@@ -793,7 +794,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Εκδήλωσης', className: 'blue-btn-wcag-bgnd-color text-white my-2', attr: {id: 'openStaffEventSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Εκδήλωσης', className: 'my-2', attr: {id: 'openStaffEventSelectModal'},
                         action: function () {
                             openStaffEventSelectModal();
                         }
@@ -801,7 +802,7 @@
                 ],
                 dom: {
                     button: {
-                        className: 'btn openStaffEventSelectModal'
+                        className: 'btn btn-sm btn-light  openStaffEventSelectModal'
                     }
                 }
             },
@@ -846,7 +847,7 @@
                     "sortable": false,
                     "className": "text-right",
                     "mRender": function () {
-                        return  '<button type="button" title="αφαίρεση δικαιώματος" class="btn _remove_right"><i class="fas fa-trash-alt" style="color:red;"></i> </button>';
+                        return  '<button type="button" title="αφαίρεση εκδήλωσης+καθηγητή" class="btn btn-sm btn-danger text-white _remove_right"><i class="fas fa-trash-alt"></i> </button>';
                     }
                 }
             ],
@@ -912,12 +913,13 @@
                 {"data": "structureType"},
                 {"data": "title"},
             ],
-            "language":  dashboard.dtLanguageGr,
+            "language":  dtLanguageGr,
             select: {
                 style: 'single'
             },
             order: [[1, 'asc']],
             "pageLength": 10,
+            "lengthChange"  : false,
             "aoColumnDefs": [
                 {
                     "aTargets": [0,1],
@@ -973,8 +975,10 @@
     }
     dashboard.users.refreshTableResults  = function() {
             $('._toggle').bootstrapToggle({
-                onstyle: 'success',
-                offstyle: 'danger',
+                on: '<i class="fas fa-power-off"></i>',
+                off: '<i class="fas fa-ban"></i>',
+                onstyle: "success",
+                offstyle: "danger",
                 size: "small"
             });
     }

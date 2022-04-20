@@ -15,6 +15,7 @@ import org.opendelos.control.repository.structure.CourseRepository;
 import org.opendelos.control.services.structure.DepartmentService;
 import org.opendelos.control.services.structure.SchoolService;
 import org.opendelos.model.delos.OpUser;
+import org.opendelos.model.resources.Person;
 import org.opendelos.model.resources.Resource;
 import org.opendelos.model.resources.ScheduledEvent;
 import org.opendelos.model.resources.StructureType;
@@ -843,5 +844,18 @@ public class OpUserService {
                 }
         }
         return authorized_person_ids;
+    }
+
+    public Person getPersonFromOpUser(OpUser opUser)  {
+        Person person = new Person();
+        person.setId(opUser.getId());
+        person.setAffiliation(opUser.getAffiliation());
+        person.setName(opUser.getName());
+
+        Department staff_department = departmentService.findById(opUser.getDepartment().getId());
+        Unit staff_u = new Unit(org.opendelos.model.resources.StructureType.DEPARTMENT, staff_department.getId(), staff_department.getTitle());
+        person.setDepartment(staff_u);
+
+        return person;
     }
 }

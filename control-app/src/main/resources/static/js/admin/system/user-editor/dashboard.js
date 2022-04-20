@@ -17,11 +17,6 @@
 
     dashboard.init = function () {
 
-        $('select:not(.normal)').each(function () {
-            $(this).select2({
-                dropdownParent: $(this).parent()
-            });
-        });
 
 
         dashboard.siteurl = dashboard.broker.getRootSitePath();

@@ -68,8 +68,7 @@ public class ResourceUtils {
 	public StringBuilder getStreamingBaseWebPath() {
 
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(streamingProperties.getProtocol()).append("://")
-				.append(streamingProperties.getHost());
+		stringBuilder.append(streamingProperties.getProtocol()).append("://").append(streamingProperties.getHost());
 				if (!streamingProperties.getPort().equals("443")) {
 					stringBuilder.append(":").append(streamingProperties.getPort());
 				}
@@ -81,8 +80,7 @@ public class ResourceUtils {
 	public StringBuilder getMultimediaBaseWebPath() {
 
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(multimediaProperties.getProtocol()).append("://")
-				.append(multimediaProperties.getHost());
+		stringBuilder.append(multimediaProperties.getProtocol()).append("://").append(multimediaProperties.getHost());
 		if (!multimediaProperties.getPort().equals("443")) {
 			stringBuilder.append(":").append(multimediaProperties.getPort());
 		}

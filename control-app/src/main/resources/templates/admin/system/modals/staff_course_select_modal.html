@@ -16,56 +16,71 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="text-high-emphasis mb-3">
+                        Επεξήγηση:
                         1. Επιλέξτε Τμήμα, Υπ. Καθηγητή και Μάθημα.
-                        2. Επιλέξτε ένα ή περισσότερα δικαιώματα που θέλετε να παραχωρήσετε στον επιλεγμένο διαχειριστή.
-                        3. Επιλέξτε 'Εισαγωγή Δικαιώματος'
+                        2. Σημειώστε <i class="fas fa-check"></i> τα δικαιώματα που θέλετε να παραχωρήσετε στον επιλεγμένο διαχειριστή.
+                        3. Πατήστε 'Εισαγωγή Δικαιώματος'
                     </div>
-                    <div class="form-group row mt-0 pt-0">
-                        <label for="departments_s2" class="col-sm-3 col-form-label emph-label">Τμήμα*</label>
-                        <div class="col-sm-7">
-                            <select id="departments_s2" style="width: 100%" class="form-control staff_department reset_control" >
-                                <option value=""></option>
-                            </select>
+                    <div class="card">
+                        <div class="card-header">
+                            Επιλογή
                         </div>
-                    </div>
-                    <div class="form-group row mt-3">
-                        <label for="supervisor_s2" class="col-sm-3 col-form-label emph-label">Υπεύθυνος Καθηγητής*</label>
-                        <div class="col-sm-7">
-                            <select id="supervisor_s2" style="width: 100%"  class="form-control js-staffMembers-tags reset_control">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-3">
-                        <label for="courses_s2" class="col-sm-3 col-form-label emph-label">Μάθημα*</label>
-                        <div class="col-sm-7">
-                            <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-3">
-                        <label for="staff_content_toggle" class="col-sm-3 col-form-label emph-label">Περιεχόμενο*</label>
-                        <div class="col-sm-7">
-                            <div class="form-check">
-                                <input class="form-check-input" id="staff_content_toggle" name="staff_content_toggle" type="checkbox" />
-                                <label class="form-check-label">Παραχώρηση δικαιώματος ανάρτησης και επεξεργασίας περιεχομένου</label>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="departments_s2" class="col-sm-3 col-form-label emph-label">Τμήμα*</label>
+                                <div class="col-sm-7">
+                                    <select id="departments_s2" style="width: 100%" class="form-control staff_department reset_control" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3">
+                                <label for="supervisor_s2" class="col-sm-3 col-form-label emph-label">Διδάσκων*</label>
+                                <div class="col-sm-7">
+                                    <select id="supervisor_s2" style="width: 100%"  class="form-control js-staffMembers-tags reset_control">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3">
+                                <label for="courses_s2" class="col-sm-3 col-form-label emph-label">Μάθημα*</label>
+                                <div class="col-sm-7">
+                                    <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row mt-3">
-                        <label for="staff_schedule_toggle" class="col-sm-3 col-form-label emph-label">Προγραμματισμός*</label>
-                        <div class="col-sm-7">
-                            <div class="form-check">
-                                <input class="form-check-input"  id="staff_schedule_toggle" name="staff_schedule_toggle" type="checkbox" />
-                                <label class="form-check-label">Παραχώρηση δικαιώματος προγραμματισμού μεταδόσεων</label>
+                    <div class="card">
+                        <div class="card-header">
+                            Δικαιώματα
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="staff_content_toggle" class="col-sm-3 col-form-label emph-label">Περιεχόμενο*</label>
+                                <div class="col-sm-7">
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="staff_content_toggle" name="staff_content_toggle" type="checkbox" />
+                                        <label class="form-check-label">Παραχώρηση δικαιώματος ανάρτησης και επεξεργασίας περιεχομένου</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3">
+                                <label for="staff_schedule_toggle" class="col-sm-3 col-form-label emph-label">Προγραμματισμός*</label>
+                                <div class="col-sm-7">
+                                    <div class="form-check">
+                                        <input class="form-check-input"  id="staff_schedule_toggle" name="staff_schedule_toggle" type="checkbox" />
+                                        <label class="form-check-label">Παραχώρηση δικαιώματος προγραμματισμού μεταδόσεων</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary"  id="addAssignedStaffCourses">Εισαγωγή Δικαιώματος</button>
+                <button type="button" class="btn blue-btn-wcag-bgnd-color text-white"  id="addAssignedStaffCourses">Εισαγωγή Δικαιώματος</button>
                 <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Ακύρωση</button>
             </div>
     </div>
