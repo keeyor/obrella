@@ -263,6 +263,19 @@ public class ResourceService {
         }
     }
 
+    public Resource updateViews(Resource resource) {
+        logger.trace(String.format("Resource.updateViews"));
+        try {
+            int views = resource.getStatistics();
+            resource.setStatistics(views+1);
+            return resourceRepository.save(resource);
+        }
+        catch (Exception e) {
+            logger.error("error: Resource.updateViews" + e.getMessage());
+            return null;
+        }
+    }
+
     public void updateResourceCuts(String id, Cuts cuts,String realDuration, String duration) throws Exception {
         logger.trace(String.format("Resource.updateResourceCuts: %s", id));
         try {
@@ -588,5 +601,12 @@ public class ResourceService {
     }
     public long CountScheduledByManagerAsEditor(String userId, String collectionName) {
         return resourceRepository.CountScheduledByManagerAsEditor(userId, collectionName);
+    }
+    public QueryResourceResults searchLMSLectures(ResourceQuery resourceQuery) {
+        logger.trace("Lectures.search");
+        if (resourceQuery != null) {
+            return resourceRepository.searchLMSLectures(resourceQuery);
+        }
+        else return null;
     }
 }

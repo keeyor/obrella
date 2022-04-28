@@ -157,4 +157,24 @@ public class CourseOoRepositoryImpl implements CourseOoRepository {
 
 		return result.getModifiedCount(); // document updated
 	}
+
+
+	@Override
+	public List<Course> findByLmsIdAndCode(String lmsId, String lmsCode) {
+		Criteria andCriteria = new Criteria();
+		List<Criteria> andExpression =  new ArrayList<>();
+
+		Criteria expression = new Criteria();
+		expression.and("lmsReferences.lmsId").is(lmsId);
+		andExpression.add(expression);
+
+		expression = new Criteria();
+		expression.and("lmsReferences.lmsCode").is(lmsCode);
+		andExpression.add(expression);
+
+		Query query = new Query();
+		query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
+
+		return mongoTemplate.find(query, Course.class);
+	}
 }

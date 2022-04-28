@@ -11,7 +11,9 @@ import java.util.Locale;
 
 import org.opendelos.model.resources.Resource;
 import org.opendelos.model.resources.Slide;
+import org.opendelos.model.security.TokenInfo;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.vodapp.security.token.TokenAuthService;
 import org.opendelos.vodapp.services.resource.ResourceService;
 import org.opendelos.vodapp.services.resource.ResourceUtils;
 
@@ -27,36 +29,49 @@ public class PlayerController {
 
 	private final ResourceService resourceService;
 	private final ResourceUtils resourceUtils;
+	private final TokenAuthService tokenAuthService;
 
 	@Autowired
-	public PlayerController(ResourceService resourceService, ResourceUtils resourceUtils) {
+	public PlayerController(ResourceService resourceService, ResourceUtils resourceUtils, TokenAuthService tokenAuthService) {
 		this.resourceService = resourceService;
 		this.resourceUtils = resourceUtils;
+		this.tokenAuthService = tokenAuthService;
 	}
 
 
 	@GetMapping(value = "/player")
 	public String playVideo(final Model model, Locale locale,
 			@RequestParam(value = "rid", required = false) String identity,
-			@RequestParam(value = "id", required = false) String id) {
+			@RequestParam(value = "id", required = false) String id,
+			@RequestParam(value = "token", required = false) String jwtToken) {
 
 
 		Resource resource = null;
 		if (id != null && !id.isEmpty()) {
-			resource = resourceService.updateViewsAndGetById(id); //resourceService.findById(id);
+			resource = resourceService.findById(id);
 		}
 		else if (identity != null && !identity.isEmpty()) {
-			resource = resourceService.updateViewsAndGetByIdentity(identity);
+			resource = resourceService.findByIdentity(identity);
 		}
-		if (resource == null) {
+		if (resource == null || resource.getAccessPolicy() == null) {
 			return "redirect:404";
 		}
+		String resourceAccessPolicy = resource.getAccessPolicy();
 
-		//Security Restrictions. Maybe Elaborate!
-		Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (!(user instanceof OoUserDetails) && !resource.getAccessPolicy().equals("public")) {
-			return "redirect:403";
+		//Require jwtToken to play "PRIVATE" videos
+		if (resourceAccessPolicy.equals("PRIVATE")) {
+			if (jwtToken == null) {
+				return "redirect:403";
+			}
+			TokenInfo tokenInfo = tokenAuthService.loadTokenDetails(jwtToken,"PUBLIC");
+			if (tokenInfo.getDomainName() == null) {
+				return "redirect:403";
+			}
+			if (!tokenInfo.getRId().equals(identity)) {
+				return "redirect:403";
+			}
 		}
+		resourceService.updateViews(resource);
 
 		this.setSlidesAttribute(model, resource);
 		this.setResourceIdentifier(model, resource);
@@ -69,13 +84,16 @@ public class PlayerController {
 
 		/* find related parts */
 		List<Resource> related_parts = new ArrayList<>();
-		if (resource.isParts()) {
+
+		//Do not search for related resources when PRIVATE video is requested (aka requires jwtToken)
+		if (resourceAccessPolicy.equals("PUBLIC") && resource.isParts()) {
 			if (resource.getType().equals("COURSE")) {
 				if (id != null) {
 					related_parts = resourceService.findRelatedCourseResources(resource, "public");
 				}
 			}
 		}
+
 		model.addAttribute("related_parts", related_parts);
 		//Locale
 		model.addAttribute("localeData", locale.getDisplayName());

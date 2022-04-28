@@ -14,6 +14,7 @@ public interface ResourceOoRepository {
 
      QueryResourceResults searchPageableLectures(ResourceQuery lectureQuery);
      List<Resource> searchLecturesOnFilters(ResourceQuery lectureQuery);
+     QueryResourceResults searchLMSLectures(ResourceQuery resourceQuery);
 
      void clearCollection(String collectionName);
 

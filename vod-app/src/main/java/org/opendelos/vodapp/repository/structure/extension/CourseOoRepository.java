@@ -19,4 +19,6 @@ public interface CourseOoRepository {
      List<Course> findExcludingIds(List<String> ids, String departmentId);
      void findAndUpdate(Course course);
      long updateResourcesCourse(Course course);
+
+     List<Course> findByLmsIdAndCode(String lmsId,String lmsCode);
 }

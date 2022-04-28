@@ -351,4 +351,9 @@ public class CourseService {
     public long CountPublicResourcesByCourseId(String courseId) {
         return resourceRepository.CountPublicResourcesByCourseId(courseId);
     }
+
+    public List<Course> findByLmsIdAndCode(String lmsId,String lmsCode) {
+
+        return courseRepository.findByLmsIdAndCode(lmsId,lmsCode);
+    }
 }

@@ -140,6 +140,87 @@ public class ResourceOoRepositoryImpl implements ResourceOoRepository {
 	}
 
 	@Override
+	public QueryResourceResults searchLMSLectures(ResourceQuery resourceQuery) {
+
+		List<Resource> videoLectureList;
+		Query query = new Query();
+
+		List<Criteria> andExpression =  setQueryCriteria(resourceQuery);
+
+		if (!andExpression.isEmpty()) {
+			Criteria andCriteria = new Criteria();
+			query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
+		}
+
+		String direction = resourceQuery.getDirection();
+		String field = null;
+		if (resourceQuery.getSort() != null) {
+			switch (resourceQuery.getSort()) {
+			case "title":
+				field = "title";
+				break;
+			case "date":
+				field = "date";
+				break;
+			case "dateModified":
+				field = "dateModified";
+				break;
+			case "views":
+				field = "statistics";
+				break;
+			case "rel":
+				field = "text-search";
+			}
+		}
+
+		int limit = resourceQuery.getLimit();
+		long skip = resourceQuery.getSkip();
+
+		query.fields().exclude("editor");
+		query.fields().exclude("status");
+		query.fields().exclude("rteStatus");
+		query.fields().exclude("tags");
+		query.fields().exclude("realEditingPresentation");
+
+		query.fields().exclude("broadcast");
+		query.fields().exclude("access");
+		query.fields().exclude("recording");
+		query.fields().exclude("publication");
+
+		query.fields().exclude("broadcastCode");
+		query.fields().exclude("scheduleId");
+		query.fields().exclude("streamingServerId");
+
+		query.fields().exclude("streamingServerInfo");
+		query.fields().exclude("streamId");
+		query.fields().exclude("streamName");
+		query.fields().exclude("broadcastToChannel");
+		query.fields().exclude("score");
+
+
+		long count;
+
+		if (resourceQuery.getCollectionName() != null) {
+			count = mongoTemplate.count(query, Resource.class,resourceQuery.getCollectionName());
+			videoLectureList = mongoTemplate.find(query.limit(limit).skip(skip), Resource.class, resourceQuery.getCollectionName());
+		}
+		else {
+			count = mongoTemplate.count(query, Resource.class);
+			videoLectureList = mongoTemplate.find(query.limit(limit).skip(skip), Resource.class);
+		}
+
+		QueryResourceResults queryResults = new QueryResourceResults();
+		queryResults.setLimit(limit);
+		queryResults.setSkip(skip);
+		queryResults.setSort(field);
+		queryResults.setDirection(direction);
+		queryResults.setSearchResultList(videoLectureList);
+		queryResults.setTotalResults(count);
+
+		return queryResults;
+	}
+
+	@Override
 	public void clearCollection(String collectionName) {
 		mongoTemplate.remove(new Query(), collectionName);
 	}
@@ -398,6 +479,11 @@ public class ResourceOoRepositoryImpl implements ResourceOoRepository {
 
 		List<Criteria> andExpression =  new ArrayList<>();
 
+		if (resourceQuery.getAcademicYear() != null) {
+			Criteria expression = new Criteria();
+			expression.and("academicYear").is(resourceQuery.getAcademicYear());
+			andExpression.add(expression);
+		}
 		if (resourceQuery.getAccessPolicy() != null) {
 			if (resourceQuery.getAccessPolicy().equals("private")) {
 				Criteria expression = new Criteria();

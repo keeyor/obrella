@@ -50,10 +50,10 @@ public class HomeController {
 		long no_lectures = resourceService.countPublicResourcesByType("COURSE");
 		model.addAttribute("no_lectures", no_lectures);
 
-		long no_courses = this.CountCoursesWithAtLeaseOneResource();
+		long no_courses = this.CountCoursesWithAtLeastOneResource();
 		model.addAttribute("no_courses",no_courses);
 
-		long no_staff = this.CountStaffMembersWithAtLeaseOneResource();
+		long no_staff = this.CountStaffMembersWithAtLeastOneResource();
 		model.addAttribute("no_staff",no_staff);
 
 		//Locale
@@ -136,9 +136,10 @@ public class HomeController {
 			if ((int) firstChar > 912 && (int) firstChar < 938 && firstChar != 930) {
 				if (listForEachLetter.containsKey(String.valueOf(firstChar).toUpperCase(locale))) {
 					List<OpUser> staffList = listForEachLetter.get(String.valueOf(firstChar));
-					  if (staff.getResourcePublicCounter() > 0) {
+					// Do not use PublicCounters for now! until you find a clever way to update the counters
+					 if (staff.getResourcePublicCounter() > 0) {
 						staffList.add(staff);
-					  }
+					 }
 				}
 				else {
 					System.out.println("Unknown Character " + firstChar + " -> This should not happen!");
@@ -148,9 +149,10 @@ public class HomeController {
 				if (listForEachLetter.containsKey("A-Z 0-9")) {
 					// DEBUG: System.out.println(" Unknown:" + firstChar + " of " + name);
 					List<OpUser> staffList = listForEachLetter.get("A-Z 0-9");
-					if (staff.getResourcePublicCounter() > 0) {
+					// Do not use PublicCounters for now! until you find a clever way to update the counters
+					 if (staff.getResourcePublicCounter() > 0) {
 						staffList.add(staff);
-					}
+					 }
 				}
 				else {
 					System.out.println("Unknown Character " + firstChar + " -> This should not happen!");
@@ -218,9 +220,10 @@ public class HomeController {
 			if ((int) firstChar > 912 && (int) firstChar < 938 && firstChar != 930) {
 				if (listForEachLetter.containsKey(String.valueOf(firstChar).toUpperCase(locale))) {
 					List<Course> courseList = listForEachLetter.get(String.valueOf(firstChar));
-					if (course.getResourcePublicCounter()> 0) {
+					// Do not use PublicCounters for now! until you find a clever way to update the counters
+					 if (course.getResourcePublicCounter()> 0) {
 						courseList.add(course);
-					}
+					 }
 				}
 				else {
 					System.out.println("Unknown Character " + firstChar + " -> This should not happen!");
@@ -229,9 +232,10 @@ public class HomeController {
 			else if ((int) firstChar > 64 && (int) firstChar < 91) {
 				if (listForEachLetter.containsKey(String.valueOf(firstChar).toUpperCase(locale))) {
 					List<Course> courseList = listForEachLetter.get(String.valueOf(firstChar));
-					if (course.getResourcePublicCounter()> 0) {
+					// Do not use PublicCounters for now! until you find a clever way to update the counters
+					 if (course.getResourcePublicCounter()> 0) {
 						courseList.add(course);
-					}
+					 }
 				}
 				else {
 					System.out.println("Unknown Character " + firstChar + " -> This should not happen!");
@@ -241,9 +245,10 @@ public class HomeController {
 				if (listForEachLetter.containsKey("0-9 ?")) {
 					// DEBUG: System.out.println(" Unknown:" + firstChar + " of " + name);
 					List<Course> courseList = listForEachLetter.get("0-9 ?");
-					if (course.getResourceCounter()> 0) {
+					// Do not use PublicCounters for now! until you find a clever way to update the counters
+					 if (course.getResourcePublicCounter()> 0) {
 						courseList.add(course);
-					}
+					 }
 				}
 				else {
 					System.out.println("Unknown Character " + firstChar + " -> This should not happen!");
@@ -268,7 +273,8 @@ public class HomeController {
 		return "courses";
 	}
 
-	private long CountCoursesWithAtLeaseOneResource() {
+	// Do not use PublicCounters for now! until you find a clever way to update the counters
+ 	private long CountCoursesWithAtLeastOneResource() {
 
 		List<Course> courses = courseService.findAll();
 		List<Course> removeList = new ArrayList<>();
@@ -281,7 +287,14 @@ public class HomeController {
 		return courses.size();
 	}
 
-	private long CountStaffMembersWithAtLeaseOneResource() {
+	private long CountAllCourses() {
+
+		List<Course> courses = courseService.findAll();
+		return courses.size();
+	}
+
+	// Do not use PublicCounters for now! until you find a clever way to update the counters
+ 	private long CountStaffMembersWithAtLeastOneResource() {
 
 		List<OpUser> staffMembers = opUserService.findAllStaffMembers();
 		List<OpUser> removeList = new ArrayList<>();
@@ -294,4 +307,10 @@ public class HomeController {
 		return staffMembers.size();
 	}
 
+
+	private long CountAllStaffMembers() {
+
+		List<OpUser> staffMembers = opUserService.findAllStaffMembers();
+		return staffMembers.size();
+	}
 }

@@ -417,4 +417,5 @@ public class CourseApi {
 		Instant instant = Instant.now(); //can be LocalDateTime
 		return zoneId.getRules().getOffset(instant);
 	}
+
 }
