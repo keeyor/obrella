@@ -30,8 +30,8 @@
         <!-- Resource Form -->
         <div class="card mt-2">
             <div class="card-header">
-                                 <span style="font-size: 1.3em;font-weight: 500">
-                                     Επεξεργασία
+                                 <span style="font-size: 1.2em;font-weight: 100">
+                                     <i class="fas fa-edit"></i> Επεξεργασία
                                      <span th:if="${Resource.type == 'COURSE'}"> Διάλεξης</span>
                                      <span th:unless="${Resource.type == 'COURSE'}"> Πολυμέσου Εκδήλωσης</span>
                                  </span>
@@ -199,8 +199,8 @@
                                                 </div>
                                                 <div class="col-sm-2 ps-0">
                                                     <button type="button" class="btn btn-sm blue-btn-wcag-bgnd-color text-white"
-                                                            title="εμφάνιση περισσότερων στοιχείων για την επιλεγμένη Εκδήλωση" data-toggle="modal"
-                                                            data-target="#ScheduledEventInfoModal"><i class="far fa-window-restore"></i>
+                                                            title="εμφάνιση περισσότερων στοιχείων για την επιλεγμένη Εκδήλωση" data-coreui-toggle="modal"
+                                                            data-coreui-target="#ScheduledEventInfoModal"><i class="far fa-window-restore"></i>
                                                     </button>
                                                 </div>
                                             </div>

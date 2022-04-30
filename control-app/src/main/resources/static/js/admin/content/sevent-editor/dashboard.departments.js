@@ -23,6 +23,7 @@
                     placeholder: 'Επιλέξτε Τμήμα',
                     width: 'style', // need to override the changed default
                     data : data.results,
+                    dropdownParent: $elem.parent(),
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                     templateResult: formatRepo,
                     templateSelection: formatRepoSelection

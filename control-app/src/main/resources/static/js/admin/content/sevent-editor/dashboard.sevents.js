@@ -498,7 +498,7 @@
                     let unit_line = "";
                     if (new_row.structureType === "SCHOOL") { unit_line += "Σχολή "}
                     else if (new_row.structureType === "DEPARTMENT") { unit_line += "Τμήμα "}
-                    html_units += "<div class=\"h6\">" + unit_line + new_row.title + "</div>";
+                    html_units += "<div class=\"bg-light border px-2\">" + unit_line + new_row.title + "</div>";
                 }
          }
          else {

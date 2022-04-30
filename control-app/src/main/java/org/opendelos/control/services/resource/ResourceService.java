@@ -440,6 +440,8 @@ public class ResourceService {
         else return null;
     }
 
+
+
     public ResourceQuery setAccessRestrictions(ResourceQuery resourceQuery, OoUserDetails editor) {
 
         List<ObjectId> authorizedUnitIds;
@@ -471,60 +473,7 @@ public class ResourceService {
         return resourceQuery;
     }
 
-   /* public ResourceQuery setAccessRestrictions(ResourceQuery resourceQuery, OoUserDetails editor) {
 
-        List<ObjectId> authorizedUnitIds = null;
-        List<ObjectId> authorizedSupervisorIds = null;
-        List<ObjectId> authorizedCourseIds = null;
-        List<ObjectId> authorizedScheduledEventIds = null;
-        List<ObjectId> authorizedScheduledEventResPersonIds = null;
-
-        if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SA"))) {
-            return resourceQuery;
-        }
-        if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
-            List<String> authorizedUnits = opUserService.getManagersAuthorizedDepartmentIdsByAccessType(editor.getId(),"content");
-            authorizedUnitIds = new ArrayList<>();
-            for (String unitId: authorizedUnits) {
-                authorizedUnitIds.add(new ObjectId(unitId));
-            }
-            //Add editor id in allowed supervisors if editor's department not in authorized list
-            if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER")) && !authorizedUnits.contains(editor.getDepartmentId())) {
-                authorizedSupervisorIds = new ArrayList<>();
-                authorizedSupervisorIds.add(new ObjectId(editor.getId()));
-            }
-        }
-        else if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SUPPORT"))) {
-            List<String> supportedStaffIds = opUserService.getSupporterAuthorizedPersonIdsByAccessType(editor.getId(), "content");
-            authorizedSupervisorIds = new ArrayList<>();
-            for (String staffId: supportedStaffIds) {
-                authorizedSupervisorIds.add(new ObjectId(staffId));
-            }
-            //Add editor id in allowed supervisors if editor's department not in authorized list
-            if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER")) && !supportedStaffIds.contains(editor.getId())) {
-                authorizedSupervisorIds.add(new ObjectId(editor.getId()));
-            }
-            List<Course> supportedCourseIds = courseService.getAuthorizedCoursesByEditor(editor,"content");
-            authorizedCourseIds = new ArrayList<>();
-            for (Course course: supportedCourseIds) {
-                authorizedCourseIds.add(new ObjectId(course.getId()));
-            }
-            List<ScheduledEvent> supportedScheduledEventIds = scheduledEventService.getAuthorizedScheduledEventsByEditor(editor,"content");
-            authorizedScheduledEventIds = new ArrayList<>();
-            authorizedScheduledEventResPersonIds = new ArrayList<>();
-            for (ScheduledEvent scheduledEvent: supportedScheduledEventIds) {
-                authorizedScheduledEventIds.add(new ObjectId(scheduledEvent.getId()));
-                authorizedScheduledEventResPersonIds.add(new ObjectId(scheduledEvent.getResponsiblePerson().getId()));
-            }
-        }
-        resourceQuery.setAuthorizedUnitIds(authorizedUnitIds);
-        resourceQuery.setAuthorizedSupervisorIds(authorizedSupervisorIds);
-        resourceQuery.setAuthorizedCourseIds(authorizedCourseIds);
-        resourceQuery.setAuthorizedEventIds(authorizedScheduledEventIds);
-        resourceQuery.setAuthorizedResPersonIds(authorizedScheduledEventResPersonIds);
-
-        return resourceQuery;
-    }*/
     public List<Resource> searchLecturesOnFilters(ResourceQuery resourceQuery) {
         logger.trace("Lectures.filters.search");
         if (resourceQuery != null) {

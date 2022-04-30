@@ -77,8 +77,8 @@
         });
 
         alertify.defaults.transition = "slide";
-        alertify.defaults.theme.ok = "btn btn-primary";
-        alertify.defaults.theme.cancel = "btn btn-danger";
+        alertify.defaults.theme.ok = "btn blue-btn-wcag-bgnd-color text-white";
+        alertify.defaults.theme.cancel = "btn red-btn-wcag-bgnd-color text-white";
         alertify.defaults.theme.input = "form-control";
 
 
@@ -300,7 +300,7 @@
             e.preventDefault();
             let $lecture_form = $("#lecture-form");
             let msg = '<p> Η Διάλεξη/Εκδήλωση θα διαγραφεί. <b>Είστε σίγουρος;</b></p>';
-            msg += '<div class="font-weight-bold text-center">ΠΡΟΣΟΧΗ<br/>Αν υπάρχουν Θα διαγραφούν τα αρχεία Βίντεο/Ήχου και Παρουσίασης<br/>';
+            msg += '<div class="font-weight-bold text-center">ΠΡΟΣΟΧΗ<br/>(Αν Υπάρχουν) Θα διαγραφούν τα αρχεία Βίντεο/Ήχου και Παρουσίασης<br/>';
             msg += 'Πριν σβήσετε την καταχώρηση, βεβαιωθείτε ότι δεν είναι δημοσιευμένη σε τρίτο ιστότοπο (opencourses, youtube κτλ)</div>';
 
             alertify.confirm('Διαγραφή Καταχώρησης', msg,
@@ -471,8 +471,8 @@
     dashboard.broker.on("remove.mmEdit", function (event) {
         let $lecture_form = $("#lecture-form");
         if (event.type === "remove") {
-            let msg = '<p>Το βίντεο θα διαγραφεί. <b>Είστε σίγουρος;</b></p>';
-            alertify.confirm('Διαγραφή', msg,
+            let msg = '<p>Το αρχείο βίντεο της καταχώρησης θα διαγραφεί (δεν υπάρχει τρόπος επαναφοράς). <b>Είστε σίγουρος;</b></p>';
+            alertify.confirm('Διαγραφή Αρχείου', msg,
                 function () {
                     $lecture_form.attr("action", page_select + "?action=mm_delete");
                     $lecture_form.submit();
@@ -503,8 +503,8 @@
     dashboard.broker.on("remove.ppEdit", function (event) {
         let $lecture_form = $("#lecture-form");
         if (event.type === "remove") {
-            let msg = '<p>Η παρουσίαση θα διαγραφεί. <b>Είστε σίγουρος;</b></p>';
-            alertify.confirm('Διαγραφή', msg,
+            let msg = '<p>Το αρχείο παρουσίασης της καταχώρησης θα διαγραφεί (δεν υπάρχει τρόπος επαναφοράς). <b>Είστε σίγουρος;</b></p>';
+            alertify.confirm('Διαγραφή Αρχείου', msg,
                 function () {
                     $lecture_form.attr("action", page_select + "?action=delete_pp");
                     $lecture_form.submit();

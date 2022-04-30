@@ -85,7 +85,7 @@
         }``
 
         function formatRepoSelection (repo) {
-                return "<b>" + repo.text + "</b>";
+                return "<span  style=\"font-weight: 500\">" + repo.text + "</span>";
         }
     }
 
@@ -133,7 +133,7 @@
         }
 
         function formatRepoSelection (repo) {
-            return "<b>" + repo.text + "</b>";
+            return "<span  style=\"font-weight: 500\">" + repo.text + "</span>";
         }
     }
 })();

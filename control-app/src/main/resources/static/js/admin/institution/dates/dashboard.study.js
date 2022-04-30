@@ -56,7 +56,7 @@
     	$study_datatable 	= $("#table_study");
     	
     	$StudyMessages		= $("#StudyMessages");
-    	$studyModal			= $("#studyModal");
+
     	
     	$newStudyButton 	= $("#newStudyButton");
     	$updateStudyButton  = $("#updateStudyButton");
@@ -108,8 +108,14 @@
    		 
    		 	$modal_scope.val("study");
    		    
-   		 	$editPeriodModal.modal('show');
+   		 	$("#study-edit-pane").show();
+   		 	$("#study-pane").hide();
        	});
+
+		$("#study-edit-close").on('click',function(e){
+			$("#study-pane").show();
+			$("#study-edit-pane").hide();
+		});
     	
     	$select_study.on('change', function () {
     	
@@ -144,68 +150,6 @@
             dashboard.broker.trigger('afterSelect.study', [message]);
 
         });
-    	
-    	$add_study_button.on('click', function() {
-    		createStudy(dashboard.institution,dashboard.department.schoolId, dashboard.department.departmentId);
-    		
-    	});
-    	
-    	$edit_study_button.on('click', function () {
-    		
-    		 let study_data = $select_study.select2('data');
-    		 let study_id = study_data[0].id;
-    		 let study_title = study_data[0].text;
-    		
-    		 modifyStudy("update", dashboard.institution,dashboard.department.schoolId, dashboard.department.departmentId, study_id, study_title);
-    	 });
-    	
-    	$trash_study_button.on('click', function () {
-    		
-   		 let study_data = $select_study.select2('data');
-   		 let study_id = study_data[0].id;
-   		 let study_title = study_data[0].text;
-   		
-   		 modifyStudy("delete", dashboard.institution,dashboard.department.schoolId, dashboard.department.departmentId, study_id, study_title);
-   	 });
-    	
-    	$newStudyButton.on('click', function () {
-    		
-    		CreateUpdateDeleteStudy ("new");
-    	 });
-    	
-    	$updateStudyButton.on('click', function () {
-    		
-    		CreateUpdateDeleteStudy ("update");
-    	 });
-    	
-    	$deleteStudyButton.on('click', function () {
-    		
-    		CreateUpdateDeleteStudy ("delete");
-    	 });
-    	
-    	$sure_for_delete_study.keyup ( function () {
- 
-    		var typed = $(this).val();
- 
-    			
-    			if( typed === '\u039D\u0391\u0399' || typed === "YES" ) {    // if type "NAI" in Greek
-    				
-    				$deleteStudyButton.removeAttr('disabled');  
-    		    } else {
-    		    	$deleteStudyButton.attr('disabled','disabled');
-    		    }
- 
-    		
-    	});	
-    	
-    	$studyModal.on('show.coreui.modal', function() {
-    		
-    		var dep_data = $("#department_select2").select2('data');
-   		 	var dep_title = dep_data[0].text;
-
-			$department_of_study.html("<b>" + dep_title +"</b>");
-			$department_of_study.css("color", "red");
-    	});
 
 		$study_button_reset.on('click', function() {
     		
@@ -237,6 +181,7 @@
     	
     	getStudyPeriodList(institutionId, departmentId);
     };
+
 	function getStudyPeriodList(institutionId, departmentId, programId) {
 
 		let select_study = "Επιλέξτε Πρόγραμμα Σπουδών";
@@ -392,202 +337,8 @@
      $select_study.val("");
      $select_study.trigger("change");
    }
-    function createStudy (institutionId, schoolId, departmentId) {
-    	
-    	initFieldsOfStudyModal("new");
-    	initMessagesOfStudyModal();
-    	
-    	$study_institution_id.val(institutionId);
-    	$study_school_id.val(schoolId);
-    	$study_department_id.val(departmentId);
 
-    	$studyModal.modal("show");
-    	
-    }
-    
-    function modifyStudy(action, institutionId, schoolId, departmentId, studyId, studyTitle) {
-    	
-    	initFieldsOfStudyModal("update");
-    	initMessagesOfStudyModal();
-    	
-    	$study_institution_id.val(institutionId);
-    	$study_school_id.val(schoolId);
-    	$study_department_id.val(departmentId);
-    	
-    	$study_title.val(studyTitle);
-    	$study_id.val(studyId);
-     
-    	$sure_for_delete_study.attr('class','form-control input-sm hidden');
-    	
-    	
-       if (action === 'update') {
-    	   //console.log('samon-->> update');
-    	   prepareForStudyEditingModal();
-       }
-       
-       if (action === 'delete') {
-    	   prepareForStudyDelationModal();
-       }
-       
-       $studyModal.modal("show");
-    	
-    }
-    function prepareForStudyEditingModal () {
-    	
-    	$newStudyButton.hide();
-    	$updateStudyButton.show();
-    	$deleteStudyButton.hide();
-    	
-    	$studyForm.attr('action', '/form/institution/study/update');
-    	
-    	$studyModalLabelNew.attr('class','modal-title hidden');
-    	$studyModalLabelUpdate.attr('class','modal-title show');
-    	$studyModalLabelDelete.attr('class','"modal-title hidden');
-    	
-    	$dataEntryFormBottomMessageStudy.attr('class','changeMaxMark pull-left hidden');
-    	$sure_for_delete_study.attr('class','form-control input-sm hidden');
-    	
-    }
-    function prepareForStudyDelationModal () {
-     
-    	$study_title.attr('disabled', 'disabled');
-    	
-    	$newStudyButton.hide();
-    	$updateStudyButton.hide();
-    	$deleteStudyButton.show();
-    	
-    	$studyForm.attr('action', '/form/institution/study/delete');
-    	
-    	$studyModalLabelNew.attr('class','modal-title hidden');
-    	$studyModalLabelUpdate.attr('class','modal-title hidden');
-    	$studyModalLabelDelete.attr('class','"modal-title show');
-    	
-    	$dataEntryFormBottomMessageStudy.attr('class','changeMaxMark pull-left show');
-    	$sure_for_delete_study.attr('class','form-control input-sm show');
-    	$deleteStudyButton.attr('disabled','disabled');
 
-    }
-    function initMessagesOfStudyModal () {
-    	
-    	$StudyMessages.attr('class','alert alert-danger alert-dismissable hidden');
-    	$error_study_title.attr('class','label label-danger hidden');
-    	$div_study_title.attr('class','form-group paddingFromModal');
-     
-    }
-    function initFieldsOfStudyModal () {
-    	
-
-    	$study_title.val("");
-    	$study_id.val("");
-
-    	$sure_for_delete_study.val("");
-    	
-    	$study_title.removeAttr('disabled');
-    	 
-    	 
-    	$newStudyButton.show();
-    	$updateStudyButton.hide();
-    	$deleteStudyButton.hide();
-    	
-    	$studyForm.attr('action', '/form/institution/study/new');
-    	
-
-    	$studyModalLabelNew.attr('class','"modal-title show');
-    	$studyModalLabelUpdate.attr('class','"modal-title hidden');
-    	$studyModalLabelDelete.attr('class','"modal-title hidden');
-    	
-    	$dataEntryFormBottomMessageStudy.attr('class','changeMaxMark pull-left hidden');
-    	$sure_for_delete_study.attr('class','form-control input-sm hidden');
-    	
-    }
-    function CreateUpdateDeleteStudy (act) {
-    	/*
-    	 * http://www.javacodegeeks.com/2012/02/spring-mvc-and-jquery-for-ajax-form.html
-    	 * http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/spring.tld.html#spring.tld.hasBindErrors
-    	 * http://www.springbyexample.org/examples/spring-web-flow-subflow-webapp-jsp-example.html
-    	 * 
-    	 * */
-    	
-    	var departmentId = $study_department_id.val();
- 
-    	
-    	initMessagesOfStudyModal();
- 
-    	 var action = $studyForm.attr("action");
-        
-        if (act === "delete") {
-        	$study_title.removeAttr('disabled');		// for time to get the value. 
-        	//action = action + "/" + departmentId;
-        }
-        
-        var url = dashboard.siteurl + action;	    
-            
-        
-        var data = $studyForm.serializeArray();
- 
-        
-        if (act === "delete") {
-        	$study_title.attr('disabled', 'disabled');
-        }
-        
-       
-        if (act !== "delete") {
-
-			data[3].value = data[3].value.replace(/&/g, "&amp;");
-        }
-        
-        $.post(url, data, function(results) {
-        	
-        	$StudyMessages.html(results.message);
-
-      		if (results.hasErrors) {   			
-      			$StudyMessages.attr('class','alert alert-danger alert-dismissable show');			
-      			for (i = 0; i < results.numOfErrors; i++) {
-      				var errorCode = results.errorList[i];
-      				switch (errorCode) {
-    	  			
-    		  		    case "study_title":
-    		  		    	$error_study_title.attr('class','label label-danger show');
-    		  		    	$div_study_title.attr('class','form-group paddingFromModal has-error');
-    		  		        break;
-    	  			}
-
-      			}
-
-      		} else { 
-      			
-      			$StudyMessages.attr('class','alert alert-success alert-dismissable show');
-      			setTimeout(function() {
-      				$studyModal.modal("hide");
-      		    }, 1000);
-      			
-      			//console.log("act-->>" + act);
-
-      			if (act === "delete") {
-      				getStudyPeriodList(dashboard.institution, departmentId);
-      		    }
-      			if (act === "update") {
-      				
-      				var	edited_study_id = $study_id.val();
-      				
-      				//console.log("Select value set to:" + edited_study_id);
-      				getStudyPeriodList(dashboard.institution, departmentId, edited_study_id);
-      		    }
-      			if (act === "new") {
-    	  				//console.log("mg results.returnedData -->> " + results.returnedData);
-    	  				
-    	  				var new_study_title = $study_title.val();
-    	  				var	new_study_id = results.returnedData;
-    	  				var newOption = new Option(new_study_title, new_study_id, true, true);
-	            		$select_study.append(newOption);
-	            		initDataTable(dashboard.selected_year, departmentId,  new_study_id);
-	            		$edit_study_button.attr("disabled",false);
-	            		$trash_study_button.attr("disabled",false);
-	            		getStudyPeriodList(dashboard.institution, departmentId, new_study_id);
-      		    }	  						
-      		} 
-        }); 
-    }
     function postResetStudyPeriods(postURL, year, departmentId, studyId) {
 
 		$.ajax({

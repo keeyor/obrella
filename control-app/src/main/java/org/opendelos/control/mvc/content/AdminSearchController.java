@@ -294,10 +294,10 @@ public class AdminSearchController {
 			int next_ay = Integer.parseInt(at) + 1;
 			Select2GenChild select2GenChild = new Select2GenChild();
 			select2GenChild.setId(at);
-			select2GenChild.setText("Ακαδημαϊκό Έτος " + at + " - " + next_ay);
+			select2GenChild.setText("Ακαδημαϊκό Έτος: " + at + " - " + next_ay);
 			aYearList.add(select2GenChild);
 		}
-		Comparator<Select2GenChild> idSorter  = Comparator.comparing(Select2GenChild::getId);
+		Comparator<Select2GenChild> idSorter  = Comparator.comparing(Select2GenChild::getId, Comparator.reverseOrder());
 		aYearList.sort(idSorter);
 		model.addAttribute("ayList", aYearList);
 	}

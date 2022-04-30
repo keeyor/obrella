@@ -24,16 +24,16 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
 
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
 </head>
-<body style="font-size: 0.89em">
+<body>
 <input type="hidden" id="institutionIdentity" th:value="${Institution.identity}"/>
 <input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
 
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div th:replace="~{admin/sidebar-system :: sidebar-system}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
 
     <div class="loading-overlay"></div>
@@ -67,8 +67,8 @@
 
     <div class="body flex-grow-1 px-3">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-1 col-lg-10" id="content">
+                <!--<div class="row">
+                    <div class="offset-1 col-lg-10" id="content">-->
                         <div class="card" id="messages_card">
                             <div class="card-header">
                                 <h5>Μηνύματα Χρηστών</h5>
@@ -85,11 +85,12 @@
                                 <div class="row">
                                 <div class="col-12">
                                     <div class="table-responsive" style="margin-top: 10px">
-                                            <table id="messagesDataTable" style="width:100%" class="row-border table-striped">
+                                            <table id="messagesDataTable" style="width:100%" class="row-border stripe">
                                                 <thead>
-                                                <tr style="font-weight: 700">
+                                                <tr style="font-weight: 600">
                                                     <td style="height: 12px;width: 20px">#</td>
                                                     <td style="height: 12px;width: 60px"></td>
+                                                    <td>Κοινό</td>
                                                     <td >Κατάσταση</td>
                                                     <td style="width: 60%">Κείμενο</td>
                                                     <td >Ενεργό/Ανενεργό</td>
@@ -107,8 +108,9 @@
                              <div class="card-header">
                                  <h5>Επεξεργασία Μηνύματος</h5>
                                  <span class="float-end">
-                                   <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateMessage"><i class="far fa-save"></i> Αποθήκευση</button>
-                                    <button type="button" class="btn btn-secondary" id="closeUpdateMessage"><i class="fas fa-undo"></i> Επιστροφή</button>
+                                     <button type="button" class="btn btn-secondary" id="closeUpdateMessage"><i class="fas fa-undo"></i> Επιστροφή</button>
+                                     <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateMessage"><i class="far fa-save"></i> Αποθήκευση</button>
+                                     <button type="button" class="btn btn-danger" id="deleteMessage" title="διαγραφή μηνύματος"><i class="fas fa-trash text-white"></i></button>
                                 </span>
                              </div>
                              <div class="card-body">
@@ -118,14 +120,24 @@
                                         <input type="hidden" id="st_rowIdx_edited" value=""/>
                                     </div>
                                 </div>
-                                 <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
-                                 <div style="background-color: #f7f7f9;border: none">
+                                 <div class="px-2" style="background-color: #f7f7f9;border: none">
                                         <form id="message_form" name="message_form">
                                             <input type="hidden" id="message_edit_mode" value=""/>
                                             <input type="hidden" id="message_id" value=""/>
-                                            <!-- Studies -->
-                                            <div class="form-group row pt-2">
-                                                <label for="message_type" class="col-sm-2 col-form-label">Τύπος*</label>
+
+                                            <div class="form-group row pt-3">
+                                                <label for="message_target" class="col-sm-2 col-form-label emph-label">Κοινό*</label>
+                                                <div class="col-sm-4">
+                                                    <select id="message_target" name="message_target" style="width: 100%" class="form-control">
+                                                        <option value="visitors"> Επισκέπτες</option>
+                                                        <option value="admins-all"> Διαχειριστές & Διδακτικό Προσωπικό</option>
+                                                        <option value="admins-users"> Διαχειριστές</option>
+                                                        <option value="admins-staff"> Διδακτικό Προσωπικό</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row pt-3">
+                                                <label for="message_type" class="col-sm-2 col-form-label emph-label">Τύπος*</label>
                                                 <div class="col-sm-4">
                                                     <select id="message_type" name="message_type" style="width: 100%" class="form-control">
                                                         <option value="success"> Επιτυχία</option>
@@ -136,27 +148,27 @@
                                                 </div>
                                             </div>
                                                 <!-- description -->
-                                                <div class="form-group row mt-3">
-                                                    <label for="message_descr" class="col-sm-2 col-form-label">Κείμενο*</label>
+                                            <div class="form-group row mt-3">
+                                                    <label for="message_descr" class="col-sm-2 col-form-label emph-label">Κείμενο*</label>
                                                     <div class="col-sm-4">
                                                         <textarea class="form-control reset_control" id="message_descr" placeholder=""></textarea>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row mt-3">
-                                                    <label for="message_toggle" class="col-sm-2 col-form-label">Εμφάνιση</label>
+                                            </div>
+                                            <div class="form-group row mt-3 pb-3">
+                                                    <label for="message_toggle" class="col-sm-2 col-form-label emph-label">Εμφάνιση</label>
                                                     <div class="col-sm-4">
                                                         <input id="message_toggle" name="message_toggle" type="checkbox" />
                                                     </div>
-                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                             </div>
                              <div class="card-footer">
-                                <button type="button" class="btn btn-danger" id="deleteMessage"><i class="fas fa-ban"></i> Διαγραφή</button>
+                                  <i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά
                             </div>
                         </div>
-                    </div>
-                </div>
+                 <!--   </div>
+                </div>-->
             </div>
     </div>
     <footer class="c-footer">

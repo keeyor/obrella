@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
+    <link rel="stylesheet" th:href="@{/css/front-page.css}"/>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
     <!-- font awesome 5 -->
@@ -18,31 +19,15 @@
         a {
             text-decoration: none;
         }
-        .nav-link {
-            color:white!important;
-        }
+
     </style>
 </head>
-<body style="font-size: 0.89em">
-
-    <div class="wrapper d-flex flex-column min-vh-100 ">
-
-        <header class="header header-sticky mb-4 bg-dark">
+<body>
+    <div class="wrapper d-flex flex-column min-vh-100 demo-wrap">
+        <header class="header header-sticky mb-1" style="border-bottom: none">
             <div class="container-fluid">
                 <ul class="header-nav d-none d-md-flex">
-                    <li class="nav-item"><a class="nav-link active" th:href="@{/admin/search}">Περιεχόμενο</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/timetable}">Προγραμματισμός</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/sevents}">Εκδηλώσεις</a></li>
 
-                    <th:block sec:authorize="hasAnyRole('ROLE_SA')">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/institution/structure}">Ίδρυμα</a></li>
-                    </th:block>
-                    <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_SA')">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/courses}">Τμήματα</a></li>
-                    </th:block>
-                    <th:block sec:authorize="hasAnyRole('ROLE_SA')">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/users}">Ιστότοπος</a></li>
-                    </th:block>
                 </ul>
                 <ul class="header-nav ms-auto">
                     <div class="nav-item dropdown">
@@ -67,31 +52,29 @@
 
         </header>
         <div class="container">
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                  <th:block th:if="${userIsStaffMember}">
-                      <div class="col">
-                        <div class="card">
-                                    <div class="card-header">
-                                        <h5><span class="fas fa-user me-2"></span><span th:text="${user.name}"></span></h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="col-12">
-                                            <div class="py-1" style="border: none">
-                                                        <a th:href="@{/admin/user_profile}" class="blue-link-wcag-color">Ο Λογαριασμός μου</a>
-                                                        <p class="text-muted py-1 mb-0">
-                                                            Πληροφορίες λογαριασμού και στατιστικά χρήσης
-                                                        </p>
-                                            </div>
-                                        </div>
-                                    </div>
+            <!-- Content -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <!-- Upper Logo -->
+                    <div class="row justify-content-center">
+                        <div class="col-4 text-right main-logo" style="border-right: #ccc 1px solid">
+                            <div th:with="uid=#{institution.identity}">
+                                <img th:alt="#{default.institution.title}" th:src="@{'/public/images/logos/' + ${uid} + '.png'}" alt="" src="" style="height: 120px">
+                            </div>
                         </div>
-                      </div>
-                  </th:block>
-
+                        <div class="col-6" id="main-title">
+                            <div>διαχείριση
+                                <br/>πολυμεσικού περιεχομένου & μεταδόσεων
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
                     <div class="col">
                             <!-- Content -->
                             <div class="card">
-                                <div class="card-header bg-dark text-white">
+                                <div class="card-header bg-light ">
                                     <span class="icon-on-demand"></span> Περιεχόμενο
                                 </div>
                                 <div class="card-body">
@@ -99,7 +82,7 @@
                                         <div class="py-1" style="border: none">
                                             <a th:unless="${userIsStaffMember}" th:href="@{/admin/search}" class="blue-link-wcag-color">Διαχείριση Περιεχομένου</a>
                                             <a th:if="${userIsStaffMember}" th:href="@{/admin/search}" class="blue-link-wcag-color">
-                                                Οι Αναρτήσεις μου - Διαλέξεις & Πολυμέσα Εκδηλώσεων
+                                                Διαχείριση Περιεχομένου
                                             </a>
                                             <p class="text-muted py-1 mb-0">Διαχείριση Διαλέξεων & Πολυμέσων Εκδηλώσεων</p>
                                         </div>
@@ -122,7 +105,7 @@
                     <div class="col">
                                 <!-- SCHEDULER -->
                             <div class="card">
-                                    <div class="card-header bg-dark text-white">
+                                    <div class="card-header bg-light">
                                        <span class="icon-scheduler-menu-calendar mr-1"></span> Προγραμματισμός
                                     </div>
                                     <div class="card-body">
@@ -134,22 +117,22 @@
                                                 <p class="text-muted py-1 mb-0">Προγραμματισμός Τακτικής ή Έκτακτης Μετάδοσης</p>
                                             </div>
                                         </div>
-                                        <div th:unless="${userIsStaffMember}" class="col-12">
+<!--                                        <div th:unless="${userIsStaffMember}" class="col-12">-->
                                             <div class="py-1" style="border: none">
                                                 <a th:href="@{admin/scheduler/timetable}" class="blue-link-wcag-color">
                                                     Πρόγραμμα
                                                 </a>
                                                 <p class="text-muted py-1 mb-0">Πρόγραμμα Μεταδόσεων & Καταγραφών</p>
                                             </div>
-                                        </div>
-                                        <div th:if="${userIsStaffMember}" class="col-12">
+<!--                                        </div>-->
+<!--                                        <div th:if="${userIsStaffMember}" class="col-12">
                                             <div class="py-1" style="border: none">
                                                 <a th:href="@{admin/scheduler/sm/timetable}" class="blue-link-wcag-color">
                                                     Οι Μεταδόσεις μου
                                                 </a>
                                                 <p class="text-muted py-1 mb-0">Διαχείριση Προγραμματισμένων Μεταδόσεων</p>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <div class="col-12">
                                             <div class="py-1" style="border: none">
                                                 <a th:href="@{/admin/scheduler/calendar}" class="blue-link-wcag-color">Ημερολόγιο</a>
@@ -168,7 +151,7 @@
                     <div class="col">
                         <!-- Scheduled Events -->
                         <div class="card">
-                            <div class="card-header bg-dark text-white">
+                            <div class="card-header bg-light">
                                  <span class="icon-lecture-event mr-2"></span> Εκδηλώσεις
                             </div>
                             <div class="card-body">
@@ -191,11 +174,30 @@
                             </div>
                         </div>
                     </div>
+                    <th:block th:if="${userIsStaffMember}">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><span class="fas fa-user me-2"></span><span th:text="${user.name}"></span></h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-12">
+                                        <div class="py-1" style="border: none">
+                                            <a th:href="@{/admin/user_profile}" class="blue-link-wcag-color">Προφίλ</a>
+                                            <p class="text-muted py-1 mb-0">
+                                                Πληροφορίες και στατιστικά
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
 
                     <th:block sec:authorize="hasAnyRole('ROLE_SA')">
                                 <div class="col">
                                 <div class="card">
-                                    <div class="card-header bg-dark text-white">
+                                    <div class="card-header bg-light">
                                        <i class="icon-main-menu-irm mr-2" style="font-size: 1.3em"></i>Ίδρυμα
                                     </div>
                                     <div class="card-body">
@@ -225,7 +227,7 @@
                     <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_SA')">
                                 <div class="col">
                                 <div class="card">
-                                    <div class="card-header bg-dark text-white">
+                                    <div class="card-header bg-light">
                                        <i class="icon-lecture-lesson mr-2" style="font-size: 1.3em"></i>Τμήματα
                                     </div>
                                     <div class="card-body">
@@ -262,7 +264,7 @@
                     <th:block sec:authorize="hasAnyRole('ROLE_SA')">
                                 <div class="col">
                                 <div class="card">
-                                    <div class="card-header bg-dark text-white">
+                                    <div class="card-header bg-light">
                                         <i class="icon-parameters mr-2" style="font-size: 1.3em"></i>Ιστότοπος
                                     </div>
                                     <div class="card-body">
@@ -298,11 +300,15 @@
                     </th:block>
 
                  </div>
-            </div>
-        </div>
+<!--            <div class="row">
+                <div class="col-12 text-sm-center">
+                    <img th:src="@{'/public/images/site-bg.jpg'}" alt="" src="" style="height: 120px">
+                </div>
+            </div>-->
+         </div>
+    </div>
 
-        </div>
-        <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+    <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
 
     <script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
     <script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>

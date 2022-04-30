@@ -15,34 +15,38 @@
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="text-muted font-italic" style="font-size: 0.9em"><i class="far fa-question-circle"></i> Επιλέξτε όλα τα μαθήματα που επιθυμείτε να προσθέσετε στη λίστα των μαθημάτων που διδάσκει το επιλεγμένο μέλος ΔΕΠ και πατήστε 'Προσθήκη Επιλεγμένων'. Επιλέξτε διαφορετικό Τμήμα από την λίστα των Τμημάτων, αν το μέλος ΔΕΠ διδάσκει μαθήματα σε Τμήματα διαφορετικά από αυτό που ανήκει. Τα Μαθήματα που υπάρχουν ήδη στη λίστα των διδασκόμενων, δεν εμφανίζονται.
+                    <div class="text-medium-emphasis font-italic">Επιλέξτε όλα τα μαθήματα που επιθυμείτε να προσθέσετε στη λίστα των μαθημάτων που διδάσκει το επιλεγμένο μέλος ΔΕΠ και πατήστε 'Προσθήκη Επιλεγμένων'. Τα Μαθήματα που υπάρχουν ήδη στη λίστα των διδασκόμενων, δεν εμφανίζονται.
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">&nbsp;</div>
-                        <label for="course_assign_department" class="col-sm-3 col-form-label justify-content-end">Επιλέξτε Τμήμα</label>
-                        <div class="col-sm-6">
-                            <select id="course_assign_department" style="width: 100%" class="form-control">
-                                   <option value=""></option>
-                             </select>
+                    <div class="card-header  my-2" style="border: none">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="input-group input-group-sm">
+                                <span class="input-group-addon input-group-text">
+                                    <i class="fas fa-filter me-1"></i>
+                                </span>
+                                    <select id="course_assign_department" style="width: 80%" class="form-control">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                        <div class="table-responsive">
-                            <table id="courseSelectDataTable" style="width:100%"  class="row-border table-hover compact">
+
+                    <table id="courseSelectDataTable" style="width:100%;font-size: 1em"  class="row-border table-hover compact">
                                 <thead>
-                                <tr class="text-muted" style="font-size: 0.9em">
+                                <tr class="text-muted">
                                     <td></td>
                                     <td>τίτλος</td>
                                     <td>τμήμα</td>
                                     <td></td>
                                 </tr>
                                 </thead>
-                            </table>
-                        </div>
+                   </table>
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary"  id="addAssignedCourses">Προσθήκη Επιλεγμένων</button>
+                <button type="button" class="btn blue-btn-wcag-bgnd-color text-white"  id="addAssignedCourses">Προσθήκη Επιλεγμένων</button>
                 <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Ακύρωση</button>
             </div>
     </div>

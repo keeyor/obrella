@@ -111,7 +111,7 @@ public class AdminController {
 
 		return "redirect:admin";
 	}
-	@RequestMapping(value = {"/cas/login"})
+	@RequestMapping(value = {"cas/login"})
 	public String casLoginIndex(final Model model,Locale locale) {
 
 		model.addAttribute("localeData", locale.getDisplayName());

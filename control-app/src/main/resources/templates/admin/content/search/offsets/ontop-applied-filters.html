@@ -10,10 +10,15 @@
                     <span class="fas fa-ban"></span> καθαρισμός
                 </a>
                 <span class="float-end">
-                    <label for="resource_ay"><i class="fas fa-calendar-alt me-2"></i> </label>
-                    <select id="resource_ay" class="custom-select" style="width: 16rem">
-                       <option th:each="i, iter : ${ayList}" th:value="${i.id}" th:text="${i.text}"></option>
-                    </select>
+                     <!--@thymesVar id="ayList" type="java.util.List"-->
+                     <div class="input-group">
+                             <span class="input-group-addon input-group-text">
+                                <i class="fas fa-calendar-alt"></i>
+                             </span>
+                             <select id="resource_ay" class="custom-select" style="width: 300px">
+                                <option th:each="i, iter : ${ayList}" th:value="${i.id}" th:text="${i.text}"></option>
+                             </select>
+                     </div>
                 </span>
             </div>
             <div class="card-body">

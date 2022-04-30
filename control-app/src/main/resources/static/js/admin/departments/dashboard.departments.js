@@ -266,6 +266,7 @@
 
                 $elem.select2({
                     placeholder: 'Επιλέξτε Τμήμα',
+                    dropdownParent: $elem.parent(),
                     width: 'style', // need to override the changed default
                     data : data.results,
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work

@@ -16,11 +16,11 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
 
 </head>
-<body style="font-size: 0.89em">
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<body>
+<div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
 <!-- field to keep MARKED RESOURCED -->
 <input type="hidden" id="marked-resources" value=""/>
 

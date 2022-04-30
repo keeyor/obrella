@@ -67,8 +67,8 @@
         dashboard.modala.init();
 
         alertify.defaults.transition = "slide";
-        alertify.defaults.theme.ok = "btn btn-primary";
-        alertify.defaults.theme.cancel = "btn btn-danger";
+        alertify.defaults.theme.ok = "btn blue-btn-wcag-bgnd-color text-white";
+        alertify.defaults.theme.cancel = "btn red-btn-wcag-bgnd-color text-white";
         alertify.defaults.theme.input = "form-control";
         alertify.set('notifier','position', 'top-center');
     };
@@ -84,7 +84,7 @@
         	   dashboard.system.getAvailableYearList(dashboard.selected_year);
            }
            else {
-                console.log("REFERSH PAGe ... with year:" + dashboard.selected_year);
+                //console.log("Refresh page ... for year:" + dashboard.selected_year);
         	   	let selected_department =  message.department;
         	   	let selected_study =  message.study;
 

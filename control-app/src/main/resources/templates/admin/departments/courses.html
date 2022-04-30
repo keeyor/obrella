@@ -24,7 +24,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
     <style>
@@ -40,14 +40,14 @@
             padding-top: 0.175rem!important;
             padding-bottom: 0.75rem!important;
             padding-left: 0.2rem!important;
-            font-size: 0.95em;
+            font-size: 1em;
         }
         .select2-selection__arrow {
             padding-top: 2rem!important;
         }
     </style>
 </head>
-<body style="font-size: 0.89em">
+<body>
 <input type="hidden" id="signInUserid" th:value="${user.id}"/>
 <!--@thymesVar id="department" type="org.opendelos.model.structure.Department" -->
 <!--@thymesVar id="school" type="org.opendelos.model.structure.School" -->
@@ -58,7 +58,8 @@
 <input th:if="${school != null}" type="hidden" id="school_id" th:value="${school.id}"/>
 <input th:if="${school != null}" type="hidden" id="school_name" th:value="${school.title}"/>
 
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div th:replace="~{admin/sidebar-system :: sidebar-system}"></div>
+
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
     <div class="loading-overlay"></div>
     <div class="loading-overlay-image-container">
@@ -88,22 +89,22 @@
     </header>
 
     <div class="body flex-grow-1 px-3">
-
             <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-1 col-lg-10" id="content">
+               <!-- <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">-->
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-header" style="border: none">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-start" >
-                                            <div th:replace="~{admin/fragments/search/a-department-select :: a-deparment-select}"></div>
+                                            <div th:replace="~{admin/departments/fragments/a-department-select :: a-deparment-select}"></div>
                                         </div>
-                                        <div class="text-high-emphasis font-italic">
+                                        <div class="text-medium-emphasis font-italic">
                                             Διαχείριση Μαθημάτων
                                         </div>
                                     </div>
                                 </div>
+                                <hr/>
                                 <div class="row">
                                     <div class="col-12 text-end">
                                         <a  class="btn-sm btn blue-btn-wcag-bgnd-color text-white"  id="newCourseBt" role="button">
@@ -113,39 +114,46 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="card mt-3" id="courses_card" style="display: none">
                                 <div class="card-header">
-                                    <div class="text-high-emphasis">Βρέθηκαν <span id="count_results"></span> μαθήματα</div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6>Κατάλογος Μαθημάτων
+                                                <small><span class="text-medium-emphasis"> (<span id="count_results"></span> μαθήματα)</span></small>
+                                            </h6>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="float-end">
+                                                <div class="input-group">
+                                                                         <span class="input-group-addon input-group-text">
+                                                                             <i class="fas fa-filter me-2"></i>
+                                                                         </span>
+                                                                        <select id="course_study_filter" class="form-control"  style="width: 300px">
+                                                                           <option value="_all"> -- όλες οι Σπουδές--</option>
+                                                                           <option value="under">Προπτυχιακές Σπουδές</option>
+                                                                           <option value="post">Μεταπτυχιακές Σπουδές</option>
+                                                                           <option value="master">Ξενόγλωσσα Προγράμματα</option>
+                                                                           <option value="cont">Επιμόρφωση & Δια Βίου Μάθηση</option>
+                                                                        </select>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
-                                    <div class="card-body">
-
-                                           <!-- FILTERS -->
-                                                       <div class="d-flex justify-content-start" >
-                                                           <div class="btn-toolbar d-md-block mt-2" role="toolbar" aria-label="Toolbar with buttons">
-                                                               <label for="course_study_filter"><i class="fas fa-microscope me-2"></i>σπουδές</label>
-                                                               <select id="course_study_filter" class="form-control" aria-label="" style="width: 300px">
-                                                                   <option value="_all"> -- όλες --</option>
-                                                                   <option value="under">Προπτυχιακές Σπουδές</option>
-                                                                   <option value="post">Μεταπτυχιακές Σπουδές</option>
-                                                                   <option value="master">Ξενόγλωσσα Προγράμματα</option>
-                                                                   <option value="cont">Επιμόρφωση & Δια Βίου Μάθηση</option>
-                                                               </select>
-                                                           </div>
-                                                       </div>
+                                 <div class="card-body">
                                                        <!-- TABLE -->
-                                                       <div class="table-responsive" style="margin-top: 40px">
+                                                       <div class="table-responsive">
                                                                                 <table id="coursesDataTable"  style="width:100%" class="row-border stripe">
                                                                                     <thead>
-                                                                                    <tr style="font-weight: 700">
+                                                                                    <tr style="font-weight: 600">
                                                                                         <td style="height: 12px;max-width: 20px"></td>
                                                                                         <td style="width: 20px">#</td>
                                                                                         <td></td>
                                                                                         <td>Τίτλος</td>
-                                                                                        <td># Διδάκοντες</td>
+                                                                                        <td>#Διδάσκοντες</td>
                                                                                         <td>Τμήμα</td>
-                                                                                        <td>Κωδ. Γραμματείας</td>
-                                                                                        <td>Κωδ. LMS</td>
+                                                                                        <td>Γραμματεία</td>
+                                                                                        <td>LMS</td>
                                                                                         <td>[σπουδές Id]</td>
                                                                                         <td>Σπουδές</td>
                                                                                         <td>[πρόγραμμα Id]</td>
@@ -162,8 +170,7 @@
                                  </div>
                        </div>
                                 <!-- EDIT FORM -->
-
-                       <div class="card mt-3" id="courses_edit_card" style="display: none" >
+                        <div class="card mt-3" id="courses_edit_card" style="display: none" >
                                       <div class="card-header">
                                               <h6 class="modal-title" id="courseModalLabel"></h6>
                                               <input type="hidden" id="cs_rowIdx_edited" value=""/>
@@ -279,12 +286,9 @@
                                           <div><i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
                                       </div>
                                   </div>
-                              </div>
-
-                    </div>
-                </div>
+                  <!--  </div>
+                </div>-->
             </div>
-
     </div>
 
 </div>

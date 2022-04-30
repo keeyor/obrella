@@ -16,18 +16,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
-    <style>
-        .select2-container .select2-selection--single {
-        height: 36px;
-        padding-top: 0.175rem!important;
-        padding-bottom: 0.75rem!important;
-        padding-left: 0.2rem!important;
-        font-size: 0.95em;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
 </head>
-<body style="font-size: 0.89em">
+<body>
 
 <!-- field to keep MARKED RESOURCED -->
 <input type="hidden" id="marked-resources" value=""/>
@@ -52,8 +43,8 @@
 <span th:if="${resourceQuery.categoryCode != null && resourceQuery.categoryCode != ''}">
          <input type="hidden" id="categoryTitle" th:value="#{${resourceQuery.categoryCode}}" />
 </span>
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
-<div class="wrapper d-flex flex-column min-vh-100 bg-light" >
+<div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
+<div class="wrapper d-flex flex-column min-vh-100 " >
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <ul class="header-nav d-none d-md-flex">
@@ -80,12 +71,12 @@
 
         <div class="container-fluid">
                 <div class="row">
-                    <div class="offset-lg-1 col-lg-10 col-md-12">
+                    <div class="col-lg-11 col-md-12">
                            <th:block th:if="${QR != null}">
                                <div th:replace="~{admin/content/search/offsets/ontop-applied-filters :: ontop-applied-filters}">Applied Filters</div>
                            </th:block>
-                           <div class="card">
-                               <div class="card-body">
+                           <div class="card" style="border: none">
+                               <div class="card-body px-0">
                                       <th:block th:if="${QR != null && QR.totalResults >0}">
                                                <div class="row">
                                                    <div class="col-6">

@@ -11,9 +11,9 @@
     
     dashboard.modal.init = function () {
     	
-		$PeriodErrorMessages  = $("#PeriodErrorMessages");
-		$PeriodStatusMessages = $("#PeriodMessages");
-    	$UpdatePeriodsButton  = $("#updatePeriodsButton");
+		$PeriodErrorMessages  = $(".PeriodErrorMessages");
+		$PeriodStatusMessages = $(".PeriodMessages");
+    	$UpdatePeriodsButton  = $(".updatePeriodsButton");
     	$periodsDataTable	  = $("#table_modal");
     	
     	
@@ -22,7 +22,7 @@
 
     		loader.showLoader();
     		let scope = $("#modal_scope").val();
-    		if (scope === "system") {
+    		if (scope === "system" || scope === "") {
     			   let refId = dashboard.institution;
     			   let inherit = "0";
     			   let dataJSON = getTableDataAsJSON($periodsDataTable, refId,inherit);
@@ -39,29 +39,37 @@
     		if (scope === "study") {
  			   		let refId = dashboard.study.studyId;
  			   		let inherit = "0";
+					$periodsDataTable	  = $("#table_study_modal");
     				let dataJSON = getTableDataAsJSON($periodsDataTable, refId,inherit);
 					let url = dashboard.siteurl + '/api/v1/programs/' + refId + '/calendar/update/' + dashboard.selected_year;
     				postCreateUpdatePeriods(url, dataJSON, scope, dashboard.selected_year, dashboard.department.selectedDepartmentId, dashboard.study.studyId);
     		}
     	});
+
     	dashboard.editPeriodModal.on('show.coreui.modal', function() {
     		setMessage($PeriodStatusMessages,'alert alert-success alert-dismissable invisible', ' ');
     	});
     };
 
     dashboard.modal.initDataTable = function (year,institutionId, departmentId, studyId) {
+
+    	let $table = $("#table_modal");
+
     	let  url;
     	if (departmentId === "") {
     		url = dashboard.siteurl + '/api/v1/dt/institution/' + institutionId + '/calendar/' + year;
     	}
     	else {
-    		if (studyId === "")
-    			url = dashboard.siteurl + '/api/v1/dt/institution/' +  institutionId + '/department/' + departmentId + '/calendar/' + year;
-    		else
-    			url = dashboard.siteurl + '/api/v1/dt/institution/' + institutionId + '/department/' + departmentId + '/program/' + studyId + '/calendar/' + year;
+    		if (studyId === "") {
+				url = dashboard.siteurl + '/api/v1/dt/institution/' + institutionId + '/department/' + departmentId + '/calendar/' + year;
+			}
+    		else {
+				url = dashboard.siteurl + '/api/v1/dt/institution/' + institutionId + '/department/' + departmentId + '/program/' + studyId + '/calendar/' + year;
+				$table = $("#table_study_modal");
+			}
     	}
 
-        table= $("#table_modal").DataTable({
+        table= $table.DataTable({
 	        "bProcessing": false,
 	        "bDestroy": true,
 	        "bFilter": false,
@@ -111,10 +119,11 @@
                 		"aTargets": [4],
                 		"name": "startDate",
                 		"render": function (data,type,row,meta) {
-							return '<div class="input-group input-group-sm date modal-start-date" data-row="' + meta.row + '" id="div-startDate-' + meta.row + '"  >' +
+							return '<div class="input-group date modal-start-date" data-row="' + meta.row + '" id="div-startDate-' + meta.row + '"  >' +
+								'<span class="input-group-addon input-group-text">' +
+								'<i class="fas fa-calendar-alt"></i>' +
+								'</span>' +
 								'<input class="form-control" value=""  />' +
-								'<span class="input-group-addon">' +
-								'<i class="glyphicon glyphicon-calendar "></i></span>' +
 								'</div>';
 	                    }
                 	},
@@ -122,10 +131,11 @@
                 		"aTargets": [5],
                 		"name": "endDate",
                 		"render": function (data,type,row, meta) {
-							return '<div class="input-group input-group-sm date modal-end-date" data-row="' + meta.row + '" id="div-endDate-' + meta.row + '"  >' +
+							return '<div class="input-group date modal-end-date" data-row="' + meta.row + '" id="div-endDate-' + meta.row + '"  >' +
+								'<span class="input-group-addon input-group-text">' +
+								'<i class="fas fa-calendar-alt"></i>' +
+								'</span>' +
 								'<input class="form-control" value=""  />' +
-								'<span class="input-group-addon">' +
-								'<i class="glyphicon glyphicon-calendar "></i></span>' +
 								'</div>';
 	                    }
                 	},
@@ -298,31 +308,51 @@
     	   
     	   return JSON.stringify(periods);
     }
-    
-    function postCreateUpdatePeriods(postURL, dataJSON, scope, year, departmentId, studyId) {
- 	   	   
-   	 	$.ajax({
-			url: postURL,		
-			type:"POST", 
+
+	function postCreateUpdatePeriods(postURL, dataJSON, scope, year, departmentId, studyId) {
+
+		$.ajax({
+			url: postURL,
+			type:"POST",
 			contentType: "application/json; charset=utf-8",
 			data: dataJSON,
 			async: true,
 			success: function() {
-					loader.hideLoader();
-					setMessage($PeriodStatusMessages,'alert alert-success alert-dismissable show',
-						'<b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Επιτυχής Ενημέρωση<b>');
-		  			setTimeout(function() {
-		  				dashboard.editPeriodModal.modal("hide");
-		  		    }, 1500);
-		  			let message = {msg: "Academic Calendar Updated!", year: dashboard.selected_year, department: departmentId, study: studyId};
-		            dashboard.broker.trigger('refresh.page', [message]);
-			},   		            	  
+				loader.hideLoader();
+				setMessage($PeriodStatusMessages,'alert alert-success alert-dismissable visible',
+					'<b><i class="fas fa-thumbs-up me-1"></i>Επιτυχής Ενημέρωση<b>');
+				setTimeout(function() {
+					setMessage($PeriodStatusMessages,'alert alert-success invisible', " ");
+					$UpdatePeriodsButton.attr("disabled", true);
+					if (scope === "department") {
+						$("#department_edit_card").hide();
+						$("#department_card").show();
+					}
+					else if (scope === "study") {
+						$("#study-edit-pane").hide();
+						$("#study-pane").show();
+					}
+				}, 1500);
+
+				let message = {msg: "Academic Calendar Updated!", year: dashboard.selected_year, department: departmentId, study: studyId};
+				dashboard.broker.trigger('refresh.page', [message]);
+			},
 			error : function(err_message) {
 				loader.hideLoader();
-				setMessage($PeriodStatusMessages,'alert alert-danger alert-dismissable show',
-					'<b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Πρόβλημα Συστήματος. Επικοινωνήστε με το διαχειριστή<b>');
-			 }
+				//## NEW WO MODAL
+				if (scope === "department") {
+					$("#department_edit_card").hide();
+					$("#department_card").show();
+				}
+				else if (scope === "study") {
+					$("#study-edit-pane").hide();
+					$("#study-pane").show();
+				}
+				//#
+				setMessage($PeriodStatusMessages,'alert alert-danger alert-dismissable visible',
+					'<b><i class="fas fa-exclamation-triangle me-1"></i>Πρόβλημα Συστήματος. Επικοινωνήστε με το διαχειριστή<b>');
+			}
 		});
-    }
+	}
 
 })();

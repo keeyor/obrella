@@ -25,17 +25,26 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+    <style>
+        .select2-container .select2-selection--single {
+            height: 36px;
+            padding-top: 0.175rem!important;
+            padding-bottom: 0.75rem!important;
+            padding-left: 0.2rem!important;
+            font-size: 1em;
+        }
+    </style>
 </head>
-<body style="font-size: 0.89em">
+<body>
 <input type="hidden" id="signInUserid" th:value="${user.id}"/>
 <input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
 <input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
 <input type="hidden" id="userType" th:value="${userType}"/>
 
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div th:replace="~{admin/sidebar-system :: sidebar-system}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
     <div class="loading-overlay"></div>
     <div class="loading-overlay-image-container">
@@ -68,41 +77,54 @@
     <div class="body flex-grow-1 px-3">
 
             <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-1 col-lg-10" id="content">
-                        <div class="card" id="staff_card">
+              <!--  <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">-->
+                        <div class="card">
                             <div class="card-header">
                                 <h5>Διαχειριστές</h5>
                                 <div class="text-medium-emphasis font-italic">
-                                    Διαχείριση χρηστών συστήματος
+                                    Διαχειριστές Περιεχομένου
                                 </div>
-                                <div class="text-high-emphasis">Βρέθηκαν <span id="count_staff_results"></span> χρήστες</div>
-                                <span class="float-end">
+                                <hr/>
+                                <div class="row">
+                                    <div class="col-12 text-end">
                                         <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white"  role="button" th:href="@{/admin/system/user-editor}">
                                             <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέος Διαχειριστής
                                         </a>
-                                </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="d-flex justify-content-start pb-2 pt-2" id="select_user_type_row">
-                                                <div class="btn-toolbar d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                                                    <label for="userType_select" class="me-2"
-                                                    title="περιορίστε τα αποτελέσματα επιλέγοντας ρόλο"><i class="fas fa-user-tag me-2"></i>Ρόλος</label>
-                                                    <select id="userType_select" class="form-control" aria-label="" style="width: 300px">
-                                                        <option value="all"> -- όλοι --</option>
+                        </div>
+                        <div class="card mt-3" id="staff_card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6>Κατάλογος Διαχειριστών
+                                            <small><span class="text-medium-emphasis"> (<span id="count_staff_results"></span> χρήστες)</span></small>
+                                        </h6>
+                                    </div>
+                                    <div class="col-6">
+                                            <span class="float-end">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon input-group-text">
+                                                        <i class="fas fa-filter me-2"></i>
+                                                    </span>
+                                                    <select id="userType_select" class="form-control"  style="width: 400px">
+                                                        <option value="all"> -- όλοι οι Ρόλοι --</option>
                                                         <option value="sa"> Διαχειριστές Συστήματος</option>
                                                         <option value="im"> Διαχειριστές Μονάδων - Ιδρύματος</option>
                                                         <option value="dm"> Διαχειριστές Μονάδων - Σχολών | Τμημάτων</option>
                                                         <option value="sp"> Προσωπικό Υποστήριξης</option>
                                                     </select>
                                                 </div>
-                                            </div>
-                                            <div class="table-responsive" style="margin-top: 40px">
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
                                                 <table id="staffDataTable" style="width:100%" class="row-border stripe">
                                                      <thead>
-                                                        <tr style="font-weight: 700">
+                                                        <tr style="font-weight: 600">
                                                             <td style="height: 12px;max-width: 20px" title="παραχωρημένα δικαιώματα"></td>
                                                             <td style="height: 12px;max-width: 20px">#</td>
                                                             <td style="height: 12px;width: 20px"></td>
@@ -121,13 +143,10 @@
                                                         </tr>
                                                      </thead>
                                                 </table>
-                                            </div>
-                                        </div>
-                                    </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                  <!--  </div>
+                </div>-->
             </div>
 
     </div>

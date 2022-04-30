@@ -12,8 +12,8 @@
         dashboard.siteurl = dashboard.broker.getRootSitePath();
 
         alertify.defaults.transition = "slide";
-        alertify.defaults.theme.ok = "btn btn-primary";
-        alertify.defaults.theme.cancel = "btn btn-danger";
+        alertify.defaults.theme.ok = "btn blue-btn-wcag-bgnd-color text-white";
+        alertify.defaults.theme.cancel = "btn red-btn-wcag-bgnd-color text-white";
         alertify.defaults.theme.input = "form-control";
         alertify.set('notifier','position', 'top-center');
 

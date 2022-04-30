@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <!-- bootstrap date-picker -->
     <link rel="stylesheet" th:href="@{/lib/bootstrap-datepicker/bootstrap-datepicker.min.css}"/>
     <!-- loader -->
@@ -31,13 +31,22 @@
         .my-nav.active {
             color: grey!important;
         }
+        .select2-container .select2-selection--single {
+            height: 36px;
+            padding-top: 0.175rem!important;
+            padding-bottom: 0.75rem!important;
+            padding-left: 0.2rem!important;
+            font-size: 0.95em;
+        }
     </style>
 </head>
-<body style="font-size: 0.89em">
+<body>
 <input type="hidden" id="institutionIdentity" th:value="${mInstitution.identity}" />
 <input type="hidden" id="institutionId" th:value="${mInstitution.id}" />
 <input type="hidden" id="institutionName" th:value="${institutionName}" />
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+
+<div th:replace="~{admin/sidebar-system :: sidebar-system}"></div>
+
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
     <div class="loading-overlay"></div>
     <div class="loading-overlay-image-container">
@@ -68,34 +77,48 @@
     <div class="body flex-grow-1 px-3">
 
         <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-1 col-lg-10" id="content">
-                        <div class="card">
+            <!--    <div class="row">
+                    <div class="offset-1 col-lg-10">-->
+
+                        <div class="card" id="calendar_view">
                             <div class="card-header">
-                                <h5>Ακαδημαϊκό Ημερολόγιο</h5>
-                                <div class="text-muted font-italic">
-                                    Διαχείριση περιόδων διδασκαλίας και αργιών/παύσεων
-                                </div>
-                                <span class="float-end">
-                                        <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white" id="newCalendarBt" role="button">
-                                            <i class="fas fa-plus me-1 font-weight-bolder"></i> Νέo Ακαδημαϊκό Έτος
-                                        </a>
-                                </span>
-                            </div>
-                            <div class="card-body">
                                 <div class="row">
-                                    <div class="col-12">
-                                        <div class="d-flex justify-content-start pb-2 pt-2" >
-                                            <div class="btn-toolbar d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                                                <label for="year_select2" class="me-2"><i class="fas fa-calendar-alt me-1"></i></label>
+                                    <div class="col-6">
+                                        <h5>Ακαδημαϊκό Ημερολόγιο</h5>
+                                        <div class="text-medium-emphasis font-italic">
+                                            Περίοδοι Διδασκαλίας, επίσημες Αργίες και  προγραμματισμένες Παύσεις
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="float-end">
+                                             <div class="input-group">
+                                                 <span class="input-group-addon input-group-text">
+                                                     <i class="fas fa-calendar-alt"></i>
+                                                 </span>
                                                 <select id="year_select2" class="form-control" aria-label="" style="width: 300px">
                                                     <option></option>
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="card" style="margin-top: 40px;border: none">
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <span class="float-end">
+                                    <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white ms-2" id="newCalendarBt" role="button">
+                                        <i class="fas fa-plus me-1 font-weight-bolder"></i> Νέo Ακαδημαϊκό Έτος
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                            <div class="text-medium-emphasis">
+                                                <i class="fas fa-info-circle"></i>
+                                                Τροποποιήστε τις ημερομηνίες έναρξης και λήξης των περιόδων διδασκαλίας του Ιδρύματος.
+                                                Δηλώστε τις επίσημες αργίες και τις προγραμματισμένες ημέρες παύσης, που θα ισχύουν καθολικά για όλες τις μονάδες και υπηρεσίες του Ιδρύματος
+                                            </div>
                                             <!-- TABS -->
-                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-top: 40px">
                                                 <li class="nav-item">
                                                     <a class="nav-link  active my-nav" id="periods-tab" data-coreui-toggle="tab" href="#t-periods" role="tab" aria-controls="t-periods" aria-selected="true">Περίοδοι Διδασκαλίας</a>
                                                 </li>
@@ -106,24 +129,23 @@
                                             <!-- TAB CONTENT -->
                                             <div class="tab-content" id="myTabContent">
                                                 <div class="tab-pane fade  show active" id="t-periods" role="tabpanel" aria-labelledby="periods-tab">
-                                                    <div class="card" id="streamers_card">
-                                                        <div class="card-body">
-                                                            <div class="row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h6 class="float-left" th:text="#{default.institution.title}"></h6>
-                                                                    <span class="float-end">
-                                                                                 <button id="system-button-edit" type="button" class="btn  btn-sm btn-pill blue-btn-wcag-bgnd-color text-white"  title="Επεξεργασία Περιόδων">
-                                                                                      <i class="far fa-edit"></i>
-                                                                                 </button>
-                                                                             </span>
+                                                    <div class="card" id="calendar_card" style="border: none" >
+                                                        <div class="card-body" style="border: none" >
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                   <span class="float-end">
+                                                                         <button id="calendar-edit" type="button" class="btn btn    -sm blue-btn-wcag-bgnd-color btn-pill text-white"  title="Τροποποίηση Περιόδων">
+                                                                             <i class="far fa-edit"></i>
+                                                                         </button>
+                                                                     </span>
                                                                 </div>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-md-12">
-                                                                    <table id="table_system" style="width: 100%" class="row-border stripe">
+                                                                    <table id="table_system" style="width: 100%" class="table table-hover stripe">
                                                                         <thead>
-                                                                        <tr style="font-weight: 700">
-                                                                            <td>#</td>
+                                                                        <tr style="font-weight: 600">
+                                                                            <td></td>
                                                                             <td style="width:0"></td>
                                                                             <td style="width:160px">Όνομα Περιόδου</td>
                                                                             <td>Ημερομηνία Έναρξης</td>
@@ -135,17 +157,68 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="tab-pane fade" id="t-argies" role="tabpanel" aria-labelledby="argies-tab">
-                                                    <div class="card" id="argies_card">
-                                                        <div class="card-body">
+                                                    <div class="card mt-2" id="calendar_edit_card" style="display: none;border: none">
+                                                        <div class="card-body" style="border: none">
                                                             <div class="row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h6 class="float-left" th:text="#{default.institution.title}"></h6>
+                                                                <div class="col-12">
+                                                                      <span class="float-end">
+                                                                          <button type="button" id="calendar-edit-close" class="btn btn-secondary">
+                                                                            <i class="fas fa-undo me-1"></i>Ακύρωση
+                                                                        </button>
+                                                                        <button type="button" title="Ενημέρωση Περιόδων" data-scope="system" id="updatePeriodsButton" class="btn btn-primary mr-1 blue-btn-wcag-bgnd-color">
+                                                                            <i class="far fa-save me-1"></i>Αποθήκευση
+                                                                        </button>
+                                                                      </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <table id="table_modal" style="width:100%" class="table table-hover stripe">
+                                                                        <thead style="font-weight: 500;background-color: #fdf59a">
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th></th>
+                                                                            <th></th>
+                                                                            <th>Όνομα Περιόδου</th>
+                                                                            <th>Ημερομηνία Έναρξης</th>
+                                                                            <th>Ημερομηνία Λήξης</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-2">
+                                                                <div class="col-12">
+                                                                    <div class="alert alert-danger invisible" id="PeriodErrorMessages" role="alert"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div id="PeriodMessages" class="alert alert-success alert-dismissible invisible"></div>
+                                                                    <input id="modal_scope" type="hidden" value="" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer" style="font-style: italic">
+                                                            Για να τροποποιήσετε μια ημερομηνία, πατήστε με το ποντίκι επάνω στην ημερομηνία αυτή.
+                                                            Προβείτε σε όσες αλλαγές επιθυμείτε και πατήστε 'Αποθήκευση'.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                                <div class="tab-pane fade" id="t-argies" role="tabpanel" aria-labelledby="argies-tab">
+                                                    <div class="card" id="argies_card" style="border: none" >
+                                                        <div class="card-body" style="border: none">
+                                                            <div class="row">
+                                                                <div class="col-12">
                                                                     <span class="float-end">
-                                                                         <button id="system-argies-edit"  type="button" class="btn  btn-sm btn-pill blue-btn-wcag-bgnd-color text-white"  title="Επεξεργασία Αργιών Ιδρύματος">
-                                                                              <i class="far fa-edit"></i>
-                                                                         </button>
+                                                                        <button id="argies-edit" type="button" class="btn btn-sm blue-btn-wcag-bgnd-color btn-pill text-white"
+                                                                                title="Τροποποίηση Αργιών">
+                                                                                 <i class="far fa-edit"></i>
+                                                                        </button>
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -153,10 +226,10 @@
                                                                 <div class="col-md-12">
                                                                     <table id="table_system_a" style="width: 100%" class="row-border stripe">
                                                                         <thead>
-                                                                        <tr style="font-weight: 700">
-                                                                            <td>#</td>
-                                                                            <td style="width:0"></td>
-                                                                            <td style="width:160px">Όνομα Αργίας</td>
+                                                                        <tr style="font-weight: 600">
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td>Τίτλος</td>
                                                                             <td>Ημερομηνία Έναρξης</td>
                                                                             <td>Ημερομηνία Λήξης</td>
                                                                         </tr>
@@ -166,15 +239,66 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="card mt-2" id="argies_card_edit" style="display: none;border: none;">
+                                                        <div class="card-body" style="border:none">
+                                                            <div class="row mb-2">
+                                                                <div class="col-12">
+                                                                    <button id="argia-button-new"  type="button" class="btn btn-light"  title="Νέα Αργία">
+                                                                        <i class="fas fa-plus-circle"></i> Νέα Αργία | Παύση
+                                                                    </button>
+                                                                    <span class="float-end">
+                                                                        <button type="button" id="argies-edit-close" class="btn btn-secondary"><i class="fas fa-undo me-1"></i>Ακύρωση</button>
+                                                                        <button type="button" title="ενημέρωση περιόδων" data-scope="system" id="updatePausesButton" class="btn btn-primary mr-1 blue-btn-wcag-bgnd-color">
+                                                                            <i class="far fa-save me-1"></i>Αποθήκευση
+                                                                        </button>
+                                                            </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <table id="table_p_modal" style="width:100%" class="table table-hover stripe">
+                                                                        <thead style="font-weight: 500;background-color: #fdf59a">
+                                                                        <tr>
+                                                                            <th>#</th>
+                                                                            <th></th>
+                                                                            <th></th>
+                                                                            <th style="width:160px">Τίτλος</th>
+                                                                            <th>Ημερομηνία Έναρξης</th>
+                                                                            <th>Ημερομηνία Λήξης</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-2">
+                                                                <div class="col-12">
+                                                                    <div class="alert alert-danger invisible" id="PauseErrorMessages" role="alert"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div id="PauseMessages" class="alert alert-success alert-dismissible invisible"></div>
+                                                                    <input id="modal_p_scope" type="hidden" value="" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer" style="font-style: italic">
+                                                            Για να τροποποιήσετε μια ημερομηνία, πατήστε με το ποντίκι επάνω στην ημερομηνία αυτή.
+                                                            Για την τροποποίηση του τίτλου της αργίας, πατήστε με το ποντίκι επάνω στον τίτλο.
+                                                            Για  διαγραφή αργίας, πατήστε το εικονίδιο του κάδου στην ίδια γραμμή. Ο αργία θα σημαδευτεί για διαγραφή. Όσες αργίες έχουν σημαδευτεί για διαγραφή, θα σβηστούν με την επόμενη 'Αποθήκευση'.
+                                                            Προβείτε σε όσες αλλαγές επιθυμείτε και στο τέλος, πατήστε 'Αποθήκευση'.
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+
+
+                  <!--  </div>
+                </div>-->
             </div>
 
     </div>
@@ -182,13 +306,18 @@
 </div>
 
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+<!--
+
 <div th:replace="~{admin/calendar-modals/edit_period_modal :: edit_period_modal}"></div>
+-->
+
 <div th:replace="~{admin/calendar-modals/edit_pause_modal :: edit_pause_modal}"></div>
 <!-- Optional JavaScript -->
 <script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
 <script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
 <!-- bootstrap-toggle -->
 <script th:src="@{/lib/bootstrap-toggle/bootstrap-toggle.min.js}"></script>
+<script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
 <script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
 <!-- select2 -->
 <script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>

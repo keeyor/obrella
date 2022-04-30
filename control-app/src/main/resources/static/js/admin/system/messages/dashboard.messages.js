@@ -17,14 +17,15 @@
             "columns": [
                 {"data": null},
                 {"data": "id"},
-                {"data": "status"},
+                {"data": "target"},
+                {"data": "status"}, //3
                 {"data": "text"},
                 {"data": "visible"},
                 {"data": "id"}
             ],
             "language": dtLanguageGr,
             "dom": '<"top"fl><p>rt<"bottom">p<"clear">',
-            order: [[4, 'desc']],
+            order: [[2, 'desc']],
             "pagingType": "full_numbers",
             "pageLength": 25,
             "aoColumnDefs": [
@@ -34,6 +35,23 @@
                 },
                 {
                     "aTargets": [2],
+                    "mRender": function (data) {
+                        if (data === null || data === "visitors") {
+                            return '<span style="color: #003476;font-weight: 500">Επισκέπτες</span>';
+                        }
+                        else if (data === "admins-all") {
+                            return '<span style="color: #003476;font-weight: 500">Διαχειριστές & Διδακτικό Προσωπικό</span>';
+                        }
+                        else if (data === "admins-users") {
+                            return '<span style="color: #003476;font-weight: 500">Διαχειριστές</span>';
+                        }
+                        else if (data === "admins-staff") {
+                            return '<span style="color: #003476;font-weight: 500">Διδακτικό Προσωπικό</span>';
+                        }
+                    }
+                },
+                {
+                    "aTargets": [3],
                     "mRender": function (data) {
                         if (data === "info") {
                             return "<h6><span class=\"badge bg-info\">Πληροφορία</span></h6>";
@@ -50,13 +68,13 @@
                     }
                 },
                 {
-                    "aTargets": [3],
+                    "aTargets": [4],
                     "mRender": function (data) {
                         return data
                     }
                 },
                 {
-                    "aTargets": [4],
+                    "aTargets": [5],
                     "mRender": function (data,type,row) {
                         let hiddenDataForSorting = '<span style="display:none">' + data + '<br/></span>';
                        if (data === true) {
@@ -68,7 +86,7 @@
                     }
                 },
                 {
-                    "aTargets": [5],
+                    "aTargets": [6],
                     "className": "border_left",
                     "mRender": function (data) {
                         return '<button type="button" class="btn blue-btn-wcag-bgnd-color btn-pill btn-sm text-white"><i class="fas fa-edit"></i> </button>';
@@ -87,6 +105,7 @@
 
         function InitControls() {
             $("#message_type").select2({});
+            $("#message_target").select2({});
             $("#message_toggle").bootstrapToggle({
                 on: '<i class="fas fa-power-off"></i>',
                 off: '<i class="fas fa-ban"></i>',
@@ -104,12 +123,14 @@
                 let row_data = messagesDT.row( rowIdx ).data();
                 let id = row_data.id;
                 let value = $(this).prop('checked');
-                let message_type   = row_data.status;
+                let message_type    = row_data.status;
+                let message_target  = row_data.target;
                 let message_descr  = row_data.text;
 
                 let messageData = {
                         "id": id,
                         "status": message_type,
+                        "target": message_target,
                         "text": message_descr,
                         "visible" : value
                  };
@@ -137,16 +158,18 @@
                 loader.showLoader();
                 let messageId      = $("#message_id").val();
                 let message_type   = $("#message_type").val();
-                let message_descr  = $("#message_descr").val();
-                let message_visible= $("#message_toggle").prop('checked');
+                let message_target   = $("#message_target").val();
+                let message_descr    = $("#message_descr").val();
+                let message_visible  = $("#message_toggle").prop('checked');
 
-                if (message_type == null || message_type === "" || message_descr == null || message_descr === "") {
+                if (message_target == null || message_target === "" || message_type == null || message_type === "" || message_descr == null || message_descr === "") {
                     alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα","Υπάρχουν παραλείψεις στη φόρμα. Διορθώστε τα κενά και προσπαθήστε πάλι")
                 }
                 else {
                     let messageData = {
                         "id": messageId,
                         "status": message_type,
+                        "target": message_target,
                         "text": message_descr,
                         "visible" : message_visible
                     };
@@ -193,6 +216,7 @@
                 let row_data = messagesDT.row( rowIdx ).data();
                 $("#message_id").val(row_data.id);
                 $("#message_type").val(row_data.status).trigger("change");
+                $("#message_target").val(row_data.target).trigger("change");
                 $("#message_descr").val(row_data.text);
                 if (row_data.visible) {
                     $message_toggle.bootstrapToggle('on');
@@ -203,6 +227,7 @@
             else {
                     $("#message_id").val("");
                     $("#message_type").val("success").trigger("change");
+                    $("#message_target").val("success").trigger("change");
                     $("#message_descr").val("");
                     $("#deleteMessage").hide();
                     $("#st_rowIdx_edited").val("");

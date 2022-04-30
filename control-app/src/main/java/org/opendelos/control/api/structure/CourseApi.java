@@ -296,11 +296,10 @@ public class CourseApi {
 				courseDto.setStudyProgramTitle(studyProgramTitle);
 				courseDto.setStudyProgramId("program_default");
 			}
-			//long countTeachingStaff = opUserService.countStaffMembersTeachingCourseId(course.getId());
-			//courseDto.setTeaching(countTeachingStaff);\
 			courseDto.setTeaching(course.getTeachingCounter());
 			courseDtoList.add(courseDto);
 		}
+		courseDtoList.sort(Comparator.comparing(CourseDto::getTitle));
 
 		byte[] b;
 		b = ApiUtils.TransformResultsForDataTable(courseDtoList);
@@ -423,4 +422,6 @@ public class CourseApi {
 		Instant instant = Instant.now(); //can be LocalDateTime
 		return  zoneId.getRules().getOffset(instant);
 	}
+
+
 }

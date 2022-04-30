@@ -25,17 +25,17 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
 
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
 </head>
-<body style="font-size: 0.89em">
+<body>
 
 <input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
 <input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
 
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div th:replace="~{admin/sidebar-system :: sidebar-system}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
 
     <div class="loading-overlay"></div>
@@ -67,20 +67,29 @@
 
     <div class="body flex-grow-1 px-3">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-1 col-lg-10" id="content">
-                        <div class="card" id="streamers_card">
-                            <div class="card-header">
+             <!--   <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">-->
+                        <div class="card">
+                            <div class="card-header" style="border: none">
                                 <h5>Εξυπηρετητές</h5>
                                 <div class="text-medium-emphasis font-italic">
                                     Διαχείριση εξυπηρετητών μεταδόσεων και καταγραφών
                                 </div>
-                                <div class="text-high-emphasis">Βρέθηκαν <span id="count_streamers_results"></span> εξυπηρετητές</div>
-                                <span class="float-end">
+                                <hr/>
+                                <div class="row">
+                                    <div class="col-12 text-end">
                                         <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white" id="newStreamerBt" role="button">
                                             <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέoς Εξυπηρετητής
                                         </a>
-                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-3" id="streamers_card">
+                            <div class="card-header">
+                                        <h6>Κατάλογος Εξυπηρετητών
+                                            <small><span class="text-medium-emphasis"> (<span id="count_streamers_results"></span> εξυπηρετητές)</span></small>
+                                        </h6>
                             </div>
                             <div class="card-body">
                                     <div class="row">
@@ -88,7 +97,7 @@
                                             <div class="table-responsive" style="margin-top: 40px">
                                                  <table id="streamersDataTable" style="width:100%" class="row-border stripe">
                                                                 <thead>
-                                                                <tr style="font-weight: 700">
+                                                                <tr style="font-weight: 600">
                                                                     <td style="height: 12px;width: 20px">#</td>
                                                                     <td style="height: 12px;width: 20px"></td>
                                                                     <td>Κωδικός</td>
@@ -112,9 +121,11 @@
                                     </div>
                             </div>
                         </div>
-                        <div class="card" id="streamers_edit_card" style="display: none">
+                        <div class="card mt-3" id="streamers_edit_card" style="display: none">
                             <div class="card-header">
-                                <h5>Επεξεργασία Εξυπηρετητή</h5>
+                                       <span style="font-size: 1.2em;font-weight: 100">
+                                     <i class="fas fa-edit"></i>  Επεξεργασία στοιχείων Εξυπηρετητή
+                                    </span>
                                 <span class="float-end">
                                      <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateStreamer"><i class="far fa-save"></i> Αποθήκευση</button>
                                      <button type="button" class="btn btn-secondary" id="closeUpdateStreamer"><i class="fas fa-undo"></i> Επιστροφή</button>
@@ -232,8 +243,8 @@
                                 <button type="button" class="btn btn-danger"  id="deleteStreamer"><i class="fas fa-ban"></i> Διαγραφή</button>
                             </div>
                         </div>
-                    </div>
-                </div>
+                  <!--  </div>
+                </div>-->
             </div>
     </div>
     <footer class="c-footer">

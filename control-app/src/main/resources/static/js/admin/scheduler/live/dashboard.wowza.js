@@ -51,7 +51,7 @@
                 //print Stream sessions
                 let streamConnections  = json_response.totalConnections;
                 let html = '<dt class="col-9 mb-2 font-weight-normal">' + title + '</dt>' +
-                           '<dd class="col-3 text-right"><span class="badge badge-secondary badge-pill">' + streamConnections + '</span></dd>';
+                           '<dd class="col-3 text-right"><span class="badge bg-secondary badge-pill">' + streamConnections + '</span></dd>';
                 $("#streams_panel").append(html);
                 let stream_stat = {
                      id : streamInfo.departmentId,
@@ -98,7 +98,7 @@
         let html = "";
         departments_stats.forEach(function(dep_stat) {
             html += '<dt class="col-9 font-weight-normal">' + dep_stat.title + '</dt>' +
-                    '<dd class="col-3 text-right"><span class="badge badge-secondary badge-pill">' + dep_stat.users + '</span></dd>';
+                    '<dd class="col-3 text-right"><span class="badge bg-secondary badge-pill">' + dep_stat.users + '</span></dd>';
         });
         $departments_info_panel.append(html);
         $("#totalConnections").text(totalConnections);

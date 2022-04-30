@@ -186,4 +186,5 @@ public class CourseOoRepositoryImpl implements CourseOoRepository {
 
 		return result.getModifiedCount(); // document updated
 	}
+
 }

@@ -109,7 +109,7 @@
                         if (data != null && data !== "") {
                             let display_date = moment(data).format('ll');
                             let hiddenDataForSorting = '<span style="display:none">' + data + '<br/></span>';
-                            return hiddenDataForSorting + '<b>' + display_date + '</b>';
+                            return hiddenDataForSorting + '<span  style="font-weight: 500">' + display_date + '</span>';
                         }
                         else {
                             return "";

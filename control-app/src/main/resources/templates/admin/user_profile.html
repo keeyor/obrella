@@ -21,14 +21,14 @@
     <link rel="stylesheet" type="text/css" th:href="@{/lib/datatables-classic/datatables.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
 </head>
-<body style="font-size: 0.89em">
+<body>
 <!-- @thymesVar id="user" type="org.opendelos.model.delos.OpUser" -->
 <!-- @thymesVar id="staffAsSupervisorInResources" type="java.lang.Long" -->
 <input type="hidden" id="msg_value" th:value="${msg}"/>
 
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
 
     <header class="header header-sticky mb-4">
@@ -67,19 +67,21 @@
         </div>
     </header>
 
-    <div class="body flex-grow-1 px-3" >
-
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-lg-1 col-lg-10 col-md-12">
-                        <h5 th:text="${user.name}">></h5>
+    <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 th:text="${user.name}"></h5>
                         <div class="text-medium-emphasis">
-                            Προφίλ Χρήστη
+                            Προφίλ & Στατιστικά
                         </div>
+                    </div>
+                </div>
+
+
 
                         <div class="card mt-2">
-                            <div class="card-header">
-                                <strong>Ταυτότητα</strong>
+                            <div class="card-header bg-dark text-light">
+                                <span style="font-weight: 500">Ταυτότητα</span>
                             </div>
                             <div class="card-body">
                                 <div id="msg" class="font-weight-bolder" style="color: red;display: none">
@@ -140,8 +142,8 @@
 
 
                         <div class="card mt-2">
-                                <div class="card-header">
-                                    <strong>Δικαιώματα</strong>
+                                <div class="card-header bg-dark text-white">
+                                    <span style="font-weight: 500">Ασφάλεια & Πρόσβαση</span>
                                 </div>
                                 <div class="card-body">
                                     <dl class="row my-0">
@@ -258,12 +260,12 @@
                         <th:block sec:authorize="hasRole('ROLE_STAFFMEMBER')">
                             <input type="hidden" id="staff_id" th:value="${user.id}"/>
                             <div class="card mt-2">
-                                <div class="card-header">
-                                    <strong>Διδασκαλία - Μαθήματα</strong>
+                                <div class="card-header bg-info">
+                                    <span style="font-weight: 500">Μαθήματα - Διδάσκων - Υπ. Καθηγητής</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive" style="font-size: 0.95em">
-                                        <table id="staffCoursesDataTable" style="width:100%" class="row-border table-striped compact">
+                                        <table id="staffCoursesDataTable" style="width:100%" class="display compact">
                                             <thead>
                                             <tr style="font-weight: 400">
                                                 <th></th>
@@ -279,8 +281,8 @@
                                 </div>
                             </div>
                             <div class="card mt-2">
-                                <div class="card-header">
-                                    <strong>Στατιστικά</strong>
+                                <div class="card-header bg-info">
+                                    <span style="font-weight: 500">Στατιστικά</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -294,10 +296,11 @@
                                 </div>
                             </div>
                         </th:block>
+
                         <th:block sec:authorize="hasAnyRole('ROLE_SA','ROLE_MANAGER','ROLE_SUPPORT')">
                             <div class="card mt-2">
                                 <div class="card-header">
-                                    <strong>Στατιστικά</strong>
+                                    <span style="font-weight: 500">Στατιστικά</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -313,10 +316,7 @@
                         </th:block>
 
                     </div>
-                </div>
-            </div>
 
-    </div>
 </div>
 
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>

@@ -32,10 +32,11 @@ public class OpUserRegistrationValidator implements Validator {
         if (opUser.getId() == null || opUser.getId().trim().equals("")) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "OpUser.password.empty");
         }
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "OpUser.email.empty");
-
-        if (opUser.getPassword() != null && !opUser.getPassword().trim().equals("") && opUser.getPassword().length() < 8) {
+        if (opUser.getId() == null || opUser.getId().trim().equals("")  && opUser.getPassword().length() < 8) {
             errors.rejectValue("password", "OpUser.password.length");
         }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "OpUser.email.empty");
+
+
     }
 }

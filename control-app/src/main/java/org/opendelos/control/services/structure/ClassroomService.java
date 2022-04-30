@@ -135,7 +135,7 @@ public class ClassroomService {
         return classroomRepository.findAllExcludingIds(ids);
     }
     public List<Classroom> findAllByUsage(String usage) {
-        logger.info(String.format("Classroom.findAllByUsage: (%s)", usage));
+        logger.trace(String.format("Classroom.findAllByUsage: (%s)", usage));
         return classroomRepository.findByUsage(usage);
     }
     public List<Classroom> findAllByCalendar(String enabled) { // "true" or "false"

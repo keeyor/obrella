@@ -16,6 +16,7 @@ public interface ResourceOoRepository {
      QueryResourceResults searchPageableLectures(ResourceQuery lectureQuery);
      List<Resource> searchLecturesOnFilters(ResourceQuery lectureQuery);
 
+
      void clearCollection(String collectionName);
 
      void saveToCollection(Resource resource, String collectionName);

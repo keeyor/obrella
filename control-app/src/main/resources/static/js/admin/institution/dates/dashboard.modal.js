@@ -21,7 +21,7 @@
 
     		loader.showLoader();
     		let scope = $("#modal_scope").val();
-    		if (scope === "system") {
+    		if (scope === "system" || scope === "") {
     			   let refId = dashboard.institution;
     			   let inherit = "0";
     			   let dataJSON = getTableDataAsJSON($periodsDataTable, refId,inherit);
@@ -65,9 +65,7 @@
 	        "bDestroy": true, 
 	        "bFilter": false,
 	        "bPaginate": false,
-            "oLanguage": {
-                "sSearch": "<small>Αναζήτηση</small>"
-            },
+            "oLanguage": dtLanguageGr,
             "order": [[1, 'asc']],  
             "ajax":  { 
     			"url":  url,
@@ -115,22 +113,24 @@
                 		"name": "startDate",
                 		"render": function (data,type,row, meta) {
 
-							return '<div class="input-group input-group-sm date modal-start-date" data-row="' + meta.row + '" id="div-startDate-' + meta.row + '"  >' +
-								'<input class="form-control" value=""  />' +
-								'<span class="input-group-addon">' +
-								'<i class="glyphicon glyphicon-calendar "></i></span>' +
-								'</div>';
+							return '<div class="input-group date modal-start-date" data-row="' + meta.row + '" id="div-startDate-' + meta.row + '"  >' +
+									   '<span class="input-group-addon input-group-text">' +
+									   		'<i class="fas fa-calendar-alt"></i>' +
+									   '</span>' +
+									   '<input class="form-control" value=""  />' +
+								   '</div>';
 	                    }
                 	},
                 	{
                 		"aTargets": [5],
                 		"name": "endDate",
                 		"render": function (data,type,row, meta) {
-							return '<div class="input-group input-group-sm date modal-end-date" data-row="' + meta.row + '" id="div-endDate-' + meta.row + '"  >' +
-								'<input class="form-control" value=""  />' +
-								'<span class="input-group-addon">' +
-								'<i class="glyphicon glyphicon-calendar "></i></span>' +
-								'</div>';
+							return '<div class="input-group date modal-end-date" data-row="' + meta.row + '" id="div-endDate-' + meta.row + '"  >' +
+									'<span class="input-group-addon input-group-text">' +
+										'<i class="fas fa-calendar-alt"></i>' +
+									'</span>' +
+									'<input class="form-control" value=""  />' +
+									'</div>';
 	                    }
                 	},
             ],
@@ -226,7 +226,7 @@
     dashboard.modal.checkTableDates = function(table) {
     		
     	var data = table.rows().data();
-    	var message = "<div><b>Εντοπίστηκαν προβλήματα στη φόρμα</b><div><ul>";
+    	var message = "<div><i class=\"fas fa-exclamation-triangle me-1\"></i> Εντοπίστηκαν προβλήματα στη φόρμα:<div><ul>";
     	var errors = 0;
     	   //Check overlap between start and end date of the same period
     	   for (let c=0; c < data.length; c++) {
@@ -282,31 +282,31 @@
     	$element.attr('class', attributes);
     	$element.html(message); 
     }
-    
-    function getTableDataAsJSON($table,refId,inherit) {
-    	
-		var period_list = [];
-		var periods = {};
-			periods.refId = refId;
-			periods.inherit = inherit;
-		
-    	var data = $table.DataTable().rows().data();
-    	   for (let c=0; c < data.length; c++) {
-    		   let  _r 		 = data[c];
-    		   let name 	 = _r.name;
-    		   let startDate = _r.startDate;
-    		   let endDate 	 = _r.endDate;
 
-    		   var period = {"name":name, "endDate" : endDate, "startDate": startDate};
+	function getTableDataAsJSON($table,refId) {
 
-    		   period_list.push(period);
-    	   }
-    	   periods.period = period_list;
+		var data = $table.DataTable().rows().data();
 
-		//console.log("POST:" + dataJSON);
-    	   
-    	   return JSON.stringify(periods);
-    }
+		let argies_list = [];
+		let argies = {};
+		argies.refId = refId;
+
+		for (let c=0; c < data.length; c++) {
+			let name = $("#data_row_" + c).val();
+			let row_node = $table.DataTable().cell(c,6).node().innerHTML;
+			if (row_node.includes("btn-danger") === false) {
+				let  _r 		 = data[c];
+				let startDate 	 = _r.startDate;
+				let endDate 	 = _r.endDate;
+				let argia = {"name":name, "endDate" : endDate, "startDate": startDate};
+				argies_list.push(argia);
+			}
+			// console.log("line:" + c + " result:" + row_node.includes("btn-danger"));
+		}
+
+		argies.argia = argies_list;
+		return argies;
+	}
     
     function postCreateUpdatePeriods(postURL, dataJSON, scope, year, departmentId, studyId) {
  	   	   
@@ -319,17 +319,25 @@
 			success: function() {
 					loader.hideLoader();
 					setMessage($PeriodStatusMessages,'alert alert-success alert-dismissable visible',
-						'<b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Επιτυχής Ενημέρωση<b>');
-		  			setTimeout(function() {
-		  				dashboard.editPeriodModal.modal("hide");
+						'<b><i class="fas fa-thumbs-up me-1"></i>Επιτυχής Ενημέρωση<b>');
+		  			 setTimeout(function() {
+						 setMessage($PeriodStatusMessages,'alert alert-success invisible', " ");
+						 $UpdatePeriodsButton.attr("disabled", true);
+						 $("#calendar_edit_card").hide();
+						 $("#calendar_card").show();
 		  		    }, 1500);
+
 		  			let message = {msg: "Academic Calendar Updated!", year: dashboard.selected_year, department: departmentId, study: studyId};
 		            dashboard.broker.trigger('refresh.page', [message]);
 			},   		            	  
 			error : function(err_message) {
 				loader.hideLoader();
+				//## NEW WO MODAL
+				$("#calendar_edit_card").hide();
+				$("#calendar_card").show();
+				//#
 				setMessage($PeriodStatusMessages,'alert alert-danger alert-dismissable visible',
-					'<b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Πρόβλημα Συστήματος. Επικοινωνήστε με το διαχειριστή<b>');
+					'<b><i class="fas fa-exclamation-triangle me-1"></i>Πρόβλημα Συστήματος. Επικοινωνήστε με το διαχειριστή<b>');
 			 }
 		});
     }

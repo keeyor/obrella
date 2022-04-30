@@ -21,11 +21,12 @@
                     return jsonObj.data.results;
                 },
             },
-            pageLength : 10,
+            pageLength : 25,
             fixedHeader: true,
+            "ordering": false,
             language: dtLanguageGr,
             pagingType: "full_numbers",
-            "dom": '<"top"flB><p>rti<"bottom">p<"clear">',
+            "dom": '<"top"lB>rti<"bottom">p<"clear">',
             "columns": [
                 {"data": null},
                 {"data": "enabled"},
@@ -56,7 +57,7 @@
             ],
             "aoColumnDefs": [
                 {
-                    "aTargets": [2,7,10,11,12,13,14, 15,16,17,18,19,21,22,23,24,25],
+                    "aTargets": [2,3,4,7,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25],
                     "sortable": false,
                     "visible": false,
                     "sWidth": "0px"
@@ -66,23 +67,22 @@
                     "mData": "enabled",
                     "sortable": false,
                     "className" : "dt-center",
-                    "sWidth": "10px",
                     "mRender": function (data,type,row) {
                         if (data) {
                             return '<i class="fas fa-circle" style="color:greenyellow"   title="Ενεργοποιημένη μετάδοση"></i>';
                         }
                         else {
                             if (row["argia"] != null)  {
-                                     return '<i class="fas fa-circle" style="color:orangered"    title="Αργία/Παύση:' + row["argia"].name + '"></i>';
+                               return '<i class="fas fa-circle me-1" style="color:orangered"    title="Αργία/Παύση"></i>' + row["argia"].name;
                             }
                             else if (row["cancellation"] !== null)  {
-                                    return '<i class="fas fa-circle" style="color:orangered"    title="Ακύρωση:' + row["cancellation"].title + '"></i>';
+                                    return '<i class="fas fa-circle me-1" style="color:orangered"   title="Ακύρωση "></i>' + row["cancellation"].title;
                             }
                             else if (row["overlapInfo"] !== null)  {
-                                    return '<i class="fas fa-circle" style="color:orangered"    title="Αλληλοκάλυψη:' + row["overlapInfo"].title + '"></i>';
+                                    return '<i class="fas fa-circle me-1" style="color:orangered"   title="Αλληλοκάλυψη:' + row["overlapInfo"].title + '"></i>' + 'Μή Διαθέσιμη Αίθουσα';
                             }
                             else {
-                                 return '<i class="fas fa-circle" style="color:orangered" title="Ακύρωση"></i>'
+                                 return '<i class="fas fa-circle me-1" style="color:orangered" title="Ακύρωση"></i>' + 'ακύρωση';
                              }
                         }
                     }
@@ -127,7 +127,7 @@
                         if (data != null && data !== "") {
                             let display_date = moment(data).format('DD MMMM YYYY');
                             let hiddenDataForSorting = '<span style="display:none">' + data + '<br/></span>';
-                            return hiddenDataForSorting + '<b>' + display_date + '</b>';
+                            return hiddenDataForSorting + '<span  style="font-weight: 500">' + display_date + '</span>';
                         }
                         else {
                             return "";
@@ -265,9 +265,6 @@
                         if ( row["argia"] != null ) {
                             return 'αργία';
                         }
-                        if ( row["cancellation"] != null ) {
-                            return 'ακύρωση';
-                        }
                         if ( row["overlapInfo"] != null ) {
                             return 'άκυρη';
                         }
@@ -282,17 +279,14 @@
                                     '</a>';
                             }
                         }
-                        else if ( row["cancellation"] != null) {
+                        if ( row["cancellation"] != null) {
                             return  '<a role="button" title="ενεργοποίηση ημέρας" class="btn btn-secondary btn-sm un-cancel-scheduled ' + add_class + '" href="#" ' +
                                 'data-id="' + data + '" data-date="' + row["date"] + '" data-title="' + row["course"].title + '" data-type="lecture">' +
                                 '<i style="color:green" class="fas fa-circle-notch"></i>' +
                                 '</a>';
                         }
-                        else if ( row["overlap"] != null) {
-                            return  "";
-                        }
                         else {
-                            return "";
+                            return '';
                         }
                     }
                 }

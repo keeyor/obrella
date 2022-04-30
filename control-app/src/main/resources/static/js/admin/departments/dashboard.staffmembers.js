@@ -28,13 +28,13 @@
                 {"data": "name"}, //4
                 {"data": "altName"}, //5
                 {"data": "courses"}, //6
-                {"data": "affiliation"}, //6
-                {"data": "email"}, //7
-                {"data": "id"}, //8
-                {"data": "authorities"} //9
+                {"data": "affiliation"}, //7
+                {"data": "email"}, //8
+                {"data": "id"}, //9
+                {"data": "authorities"} //10
             ],
             "language": dtLanguageGr,
-            order: [[3, 'asc']],
+            order: [[4, 'asc']],
             "pageLength": 25,
             "pagingType": "full_numbers",
             "dom": '<"top"flp>rt<"bottom">p<"clear">',
@@ -52,7 +52,7 @@
                 {
                     "aTargets": [4],
                     "mRender": function (data,type,row) {
-                        return '<span class="pb-0 mb-0 me-1" style="color: #003476;font-weight: 500">' + data + '</span>' + row["affiliation"];
+                        return '<div class="pb-0 mb-0" style="color: #003476;font-weight: 500">' + data + '</div>' + row["affiliation"];
                     }
                 },
                 {
@@ -65,6 +65,13 @@
                     "aTargets": [7],
                     "mRender": function (data) {
                         return '<b>' + data + '</b>';
+                    }
+                },
+                {
+                    "aTargets": [8],
+                    "mRender": function (data) {
+                        let fields = data.split('@');
+                        return '<span style="color: #003476;font-weight: bolder">' + fields[0] + '</span><span>@'+ fields[1] + '</span>';
                     }
                 },
                 {
@@ -454,7 +461,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<span class="fas fa-plus mr-1"></span> προσθήκη μαθήματος', className: 'blue-btn-wcag-bgnd-color text-white', attr: {id: 'openCoursesSelectModal'},
+                        text: '<span class="fas fa-plus-circle mr-1"></span> ανάθεση μαθήματος', className: 'green-btn-wcag-bgnd-color text-white', attr: {id: 'openCoursesSelectModal'},
                         action: function () {
                             loadCourseSelectModal();
                         }
@@ -481,7 +488,7 @@
                     "sortable": false,
                     "className": "text-right",
                     "mRender": function () {
-                        return '<button type="button" title="αφαίρεση μαθήματος" class="btn btn-sm"><i class="fas fa-minus"></i> </button>';
+                        return '<button type="button" title="αφαίρεση μαθήματος από τα διδασκόμενα" class="btn btn-sm"><i class="fas fa-minus-circle"></i> </button>';
                     }
                 }
             ]
@@ -533,15 +540,26 @@
             let staff_id = $("#staff_id").val();
             reloadCourseSelectDepartmentInModal(staff_id,selected_dp_id);
         });
+
         $staffCourses.on("click", "tbody button", function (e) {
             // get selected row index
             let table_cell = $(this).closest('td');
             let rowIdx = staffCoursesDT.cell(table_cell).index().row;
             let row_data = staffCoursesDT.row( rowIdx ).data();
             let staff_id = $("#staff_id").val();
-            postUnAssignCourse(staff_id,row_data.id);
+
+            let staff_name = $("#staff_name").val();
+
+            let msg = '<div>Το Μάθημα θα αφαιρεθεί από τη λίστα των διδασκόμενων μαθημάτων του/της <b>' + staff_name + '</b>! Είστε σίγουρος (-η)?</div>';
+            alertify.confirm('Κατάργηση Ανάθεσης', msg,
+                function () {
+                    postUnAssignCourse(staff_id,row_data.id);
+                },
+                function () {
+                }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
             e.stopPropagation();
         });
+
     }
 
     dashboard.staffmembers.courseSelectsDT = function () {
@@ -575,7 +593,7 @@
                 {
                     "aTargets": [1],
                     "mRender": function (data,type, row) {
-                        let ret = '<h6 class="pb-0 mb-0" style="color: #003476">' + data + '</h6>';
+                        let ret = '<div class="pb-0 mb-0" style="color: #003476;font-weight: 600">' + data + '</div>';
                         ret += row["studyProgramTitle"];
                         return ret;
                     }

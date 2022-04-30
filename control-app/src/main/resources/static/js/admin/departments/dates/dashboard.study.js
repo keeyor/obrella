@@ -112,9 +112,15 @@
    		 	dashboard.modal_period_error_messages.attr('class','alert alert-danger invisible');
 
    		 	$modal_scope.val("study");
-   		 	$editPeriodModal.modal('show');
+			$("#study-edit-pane").show();
+			$("#study-pane").hide();
        	});
-    	
+
+		$("#study-edit-close").on('click',function(e){
+			$("#study-pane").show();
+			$("#study-edit-pane").hide();
+		});
+
     	$select_study.on('change', function () {
     		let value = $select_study.val();
     		if (value === null) { value="";}
@@ -131,13 +137,9 @@
 
 		$study_button_reset.on('click', function() {
 
-    		let department_name = dashboard.department.selectedDepartmentName;
-    		let study_name = $select_study.select2('data')[0].text;
-    		
-    		let header = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>Επαναφορά Περιόδων<br/><small><span>Τμήμα: " + department_name + "</span><br/>Πρόγραμμα Σπουδών:<span style='color:red'> " + study_name + "</span></small>";
-    		let confirm_text = "To Πρόγραμμα θα επανέλθει στις <b>προκαθορισμένες περιόδους του αντίστοιχου Τμήματος</b><br/><br/>Είστε σίγουρος?";
-    	
-    		
+    		let header = "Επαναφορά Ημερολογίου";
+    		let confirm_text = "To επιλεγμένο Πρόγραμμα Σπουδών θα επανέλθει στο Ακαδημαϊκό Ημερολόγιο του Τμήματος<br/><br/>Είστε σίγουρος?";
+
 	 		alertify.confirm(header, confirm_text , function (e) {
 	    	    if (e) {
 					let url = dashboard.siteurl + '/api/v1/programs/' + dashboard.study.studyId + '/calendar/reset/' + dashboard.selected_year;
@@ -147,7 +149,7 @@
     	});
     };
 
-    dashboard.study.refreshData = function (institutionId, departmentId) {
+    dashboard.study.refreshStudyList = function (institutionId, departmentId) {
     	getStudyPeriodList(institutionId, departmentId);
     };
 
@@ -213,6 +215,11 @@
 	    	//For Initial call in order to get an empty table
 			departmentId = "dummy";
 			year = "dummy";
+			$study_button_edit.attr("disabled",true);
+			$study_button_reset.attr("disabled", true);
+			$study_datatable.DataTable().clear().destroy();
+			$inherit_study_note.html("");
+			return;
 		}
     	else if (year === "" || departmentId === "" || studyId === "") {
     			$study_button_edit.attr("disabled",true);
@@ -221,6 +228,8 @@
     			$inherit_study_note.html("");
     			return;
     	}
+		$study_button_edit.attr("disabled",false);
+		$study_button_reset.attr("disabled", false);
 		let iid = $("#institutionId").val();
 		Study_DT = $study_datatable.DataTable({
 	        "bProcessing": false,

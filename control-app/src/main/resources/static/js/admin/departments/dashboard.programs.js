@@ -64,7 +64,7 @@
                 {
                     "aTargets": [4],
                     "mRender": function (data) {
-                        return '<b>' + data + '</b>';
+                        return '<span style="font-weight: 500">' + data + '</span>';
                     }
                 },
                 {

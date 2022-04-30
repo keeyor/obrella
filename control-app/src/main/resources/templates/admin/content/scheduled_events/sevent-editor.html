@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <!-- daterangepicker -->
     <link rel="stylesheet" type="text/css" th:href="@{/lib/daterangepicker/daterangepicker.css}"/>
     <style>
@@ -42,16 +42,10 @@
         .select2-selection__arrow {
             padding-top: 2rem!important;
         }
-        .my-nav{
-            color: #006A9B!important;
-        }
-        .my-nav.active {
-            color: grey!important;
-        }
-        .modal-open .select2-container--open { z-index: 999999 !important; width:100% !important; }
+
     </style>
 </head>
-<body style="font-size: 0.89em">
+<body>
 <input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
 <input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
 <input type="hidden" id="user_id" th:value="${user.id}"/>
@@ -62,7 +56,7 @@
 
 <input type="hidden" id="upload_base_path" th:value="${upload_base_path}"/>
 
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
@@ -102,8 +96,8 @@
                             <input type="hidden" id="editor_name" th:field="*{editor.name}"/>
                             <div class="card mt-2" id="sevents_edit_card">
                                 <div class="card-header">
-                                    <span style="font-size: 1.3em;font-weight: 500">
-                                        Επεξεργασία Εκδήλωσης
+                                    <span style="font-size: 1.2em;font-weight: 100">
+                                     <i class="fas fa-edit"></i> Επεξεργασία Εκδήλωσης
                                     </span>
                                     <span class="float-end">
                                                  <a role="button" id="closeUpdateSevent" title="Επιστροφή στον κατάλογο Εκδηλώσεων" class="btn btn-secondary" th:href="${user_events_history}">
@@ -200,12 +194,12 @@
                                                                     <div class="input-group">
                                                                         <span class="input-group-text me-2">
                                                                             <th:block th:if="${user_isManager}">
-                                                                                <a href="#"  class="selectRpersonBt blue-link-wcag-color skata">
+                                                                                <a href="#"  class="selectRpersonBt blue-link-wcag-color" title="Επιλέξτε επ.υπεύθυνο ή εκπρόσωπο...">
                                                                                     <i class="fas fa-user-tag"></i>
                                                                                 </a>
                                                                             </th:block>
                                                                             <th:block th:if="${user_isStaffMember}">
-                                                                                <a href="#" class="setMySelfBt blue-link-wcag-color sdfsdf">
+                                                                                <a href="#" class="setMySelfBt blue-link-wcag-color">
                                                                                         <i class="fas fa-mouse-pointer"></i>
                                                                                 </a>
                                                                             </th:block>
@@ -223,9 +217,9 @@
                                                                 <label for="sevent_rperson_text" class="col-sm-3 col-form-label  emph-label">Διοργανωτές*</label>
                                                                 <div class="col-sm-7">
                                                                     <div class="input-group">
-                                                                        <span class="input-group-text me-2 selectRunitBt" title="κλικ για επιλογή διοργανωτών">
+                                                                        <span class="input-group-text me-2 selectRunitBt" title="Επιλέξτε Διοργανωτές">
                                                                             <a href="#" class="blue-link-wcag-color">
-                                                                                    <i class="icon-main-menu-irm"></i>
+                                                                                <i class="icon-main-menu-irm"></i>
                                                                             </a>
                                                                         </span>
                                                                         <div id="sevent_unitsText" class="vstack gap-2 selectRunitBt">
@@ -256,13 +250,13 @@
                                                           </div>
                                                         <div class="form-group row mt-3">
                                                                 <label for="sevent_isactive_toggle" class="col-sm-3 col-form-label  emph-label">Ημερολόγιο*</label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-7" title="ενεργοποίηση/απνεργοποίηση ημερολογίου εκδήλωσης">
                                                                     <input id="sevent_isactive_toggle" name="sevent_isactive_toggle" type="checkbox" data-width="100" th:field="*{isActive}"/>
                                                                 </div>
                                                             </div>
                                                         <div class="form-group row my-3">
                                                                 <label for="sevent_isfeatured_toggle" class="col-sm-3 col-form-label  emph-label">Προβεβλημένη Εκδήλωση*</label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-7"  title="προβεβλημένη εκδήλωση">
                                                                     <input id="sevent_isfeatured_toggle" name="sevent_isfeatured_toggle" type="checkbox" data-width="100" th:field="*{isFeatured}"/>
                                                                 </div>
                                                             </div>

@@ -15,7 +15,7 @@
 
     function RegisterListeners() {
 
-        $("#system-argies-edit").on('click',function(e){
+        $("#argies-edit").on('click',function(e){
             dashboard.modala.initDataTable( dashboard.selected_year, dashboard.institution,"");
             $("#modal_p_year").html(" " + dashboard.selected_year + "-" + (parseInt(dashboard.selected_year)+1));
 
@@ -28,8 +28,16 @@
             $("#PPMessages").html(" ");
             $("#PPeriodErrorMessages").attr('class','alert alert-danger hidden');
             $("#modal_p_scope").val("system");
-            $("#editPauseModal").modal('show');
+
+            $("#argies_card").hide();
+            $("#argies_card_edit").show();
+
         });
+        $("#argies-edit-close").on('click',function(e){
+            $("#argies_card").show();
+            $("#argies_card_edit").hide();
+        });
+
         $("#department-argies-edit").on('click',function(e){
 
             let $department_s2 = $("#department_select2");

@@ -9,10 +9,10 @@
                 <a class="nav-link dropdown-toggle gray-link-wcag-color p-0" href="#" id="department-dropdown" role="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="text-medium-emphasis">Τμήμα</span>
                     <br/>
-                    <span th:unless="${department == null}" class="h4 text-wrap" th:text="${department.title}"></span>
-                    <span th:if="${department == null}" class="h4 text-wrap" th:text="${'Επιλέξτε Τμήμα'}"></span>
+                    <span th:unless="${department == null}" class="h5 text-wrap" th:text="${department.title}"></span>
+                    <span th:if="${department == null}" class="h5 text-wrap" th:text="${'Επιλέξτε Τμήμα'}"></span>
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="department-dropdown" id="department-columns"></ul>
+                <ul class="dropdown-menu" aria-labelledby="department-dropdown" id="department-ddlist" style="font-size: 1em"></ul>
             </li>
         </ul>
     </div>

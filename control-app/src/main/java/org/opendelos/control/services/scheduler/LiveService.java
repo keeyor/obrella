@@ -578,7 +578,7 @@ public class LiveService {
 
     private String generateLiveStreamId(ScheduleDTO scheduleDTO) {
 
-        StringBuilder streamIdsb = new StringBuilder();
+        StringBuilder streamId_sb = new StringBuilder();
         String classroomCode = scheduleDTO.getClassroom().getCode();
 
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -593,9 +593,9 @@ public class LiveService {
 
         //NOTE: the second part could be encrypted
         // It must be a known algorithm so that we can publish to youtube by streamId
-        streamIdsb.append(classroomCode).append("@").append(broadcast_hour).append(broadcast_min).append(dayOfYear).append(month).append(year);
+        streamId_sb.append(classroomCode).append("@").append(broadcast_hour).append(broadcast_min).append(dayOfYear).append(month).append(year);
 
-        return streamIdsb.toString();
+        return streamId_sb.toString();
     }
 
 

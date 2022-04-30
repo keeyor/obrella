@@ -16,13 +16,12 @@
     let $department_button_reset;
     let $department_datatable;
     let $inherit_note;
-    let data_table;
     let $editPeriodModal;
     let $modal_scope;
     let DEPARTMENT_PERIODS_DT;
 	let DEPARTMENT_PAUSES_DT;
 
-    dashboard.department.init = function() { 
+    dashboard.department.init = function() {
 
     	$select_department 		 = $("#department_select2");
     	$select_school 	   		 = $("#school_select2");
@@ -35,7 +34,7 @@
 
     	$department_button_edit.on('click', function() {
     		
-   		  	 dashboard.modal.initDataTable( dashboard.selected_year, dashboard.institution,dashboard.department.selectedDepartmentId,"");
+   		  	dashboard.modal.initDataTable( dashboard.selected_year, dashboard.institution,dashboard.department.selectedDepartmentId,"");
    		 	
    		 	dashboard.modal_year.html(" " + dashboard.selected_year + "-" + (parseInt(dashboard.selected_year)+1));
    		 	 
@@ -55,14 +54,21 @@
    		 	dashboard.modal_inherit.show();
    		 
    		 	$modal_scope.val("department");
-   		 	$editPeriodModal.modal('show');
+   		 	//$editPeriodModal.modal('show');
+			$("#department_edit_card").show();
+			$("#department_card").hide();
     	});
+		$("#calendar-edit-close").on('click',function(e){
+			$("#department_card").show();
+			$("#department_edit_card").hide();
+		});
+
 		$department_button_reset.on('click', function() {
     		let department_name = dashboard.department.selectedDepartmentName;
-    		let header = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>Επαναφορά Περιόδων<br/>" +
-						 "<small>Τμήμα: <span style='color:red'> " +  department_name + "</span></small>";
+    		let header = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>Επαναφορά Περιόδων<br/>";
+
     		let confirm_text = "To Τμήμα θα επανέλθει στις <b>προκαθορισμένες περιόδους του Ιδρύματος</b>." +
-				               " Θα επανέλθουν, επίσης, <b>τα προγράμματα σπουδών</b>, που δεν ακολουθούν προσαρμοσμένο πρόγραμμα. <br/><br/>Είστε σίγουρος?";
+				               " Μαζί Θα επανέλθουν και όλα τα προγράμματα σπουδών, που δεν ακολουθούν προσαρμοσμένο πρόγραμμα. <br/><br/>Είστε σίγουρος?";
 	 		alertify.confirm(header, confirm_text , function (e) {
 	    	    if (e) {
 	    	    		let url = dashboard.siteurl + '/api/v1/department/' + dashboard.department.departmentId + '/calendar/reset/' + dashboard.selected_year;
@@ -71,6 +77,7 @@
 	 		}, function() {});	
     	});
     };
+
 	dashboard.department.getDepartmentTables = function() {
 		if (dashboard.department.selectedDepartmentId != null && dashboard.department.selectedDepartmentId !== "") {
 			let name = dashboard.department.selectedDepartmentName;
@@ -82,9 +89,6 @@
 
 		let value = dashboard.department.selectedDepartmentId;
 		if (value === null) { value="";}
-
-		//console.log("Department Change:" +  value);
-
 		dashboard.department.departmentId = value;
 		dashboard.department.initDepartmentPeriodsDataTable( dashboard.selected_year, dashboard.department.selectedDepartmentId);
 		dashboard.department.initDepartmentPausesDataTable(dashboard.selected_year, dashboard.department.selectedDepartmentId);
@@ -92,15 +96,8 @@
 	}
 
     dashboard.department.initDepartmentPeriodsDataTable = function (year,departmentId) {
-		if (year === "" || departmentId === "")
+		if (year === "" || departmentId === "" || departmentId === null)
 		{
-			$department_button_edit.attr("disabled", true);
-			$department_button_reset.attr("disabled", true);
-			$inherit_note.html("");
-			$department_datatable.DataTable().clear().destroy();
-
-			$("#department-argies-edit").attr("disabled", true);
-			$("#table_department_a").DataTable().clear().destroy();
 			return;
 		}
 		let iid = $("#institutionId").val();
@@ -179,7 +176,7 @@
 	}
 	dashboard.department.initDepartmentPausesDataTable = function (year,departmentId) {
 
-		if (year === "" || departmentId === "")
+		if (year === "" || departmentId === "" || departmentId === null)
 		{
 			$("#department-argies-edit").attr("disabled", true);
 			//$inherit_note.html("");
@@ -260,6 +257,7 @@
 			$department_button_reset.attr("disabled", false);
 		}
 	}
+
 	dashboard.department.loadDepartmentsOnSearchBar = function ($elem) {
 
 		$elem.on('click','a.dropdown-toggle', function() {

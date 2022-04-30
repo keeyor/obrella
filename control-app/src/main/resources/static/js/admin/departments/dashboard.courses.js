@@ -70,9 +70,20 @@
                     "aTargets": [7],
                     "mRender": function (data) {
                         let dlist = '';
+                        let lmss = [];
                         $.each(data, function (index, el) {
                             if (el.lmsCode !== '') {
-                                dlist += (index > 0 ? ', ' : '') + el.lmsId + '=<b>' + el.lmsCode + '</b>';
+                                if (lmss.indexOf(el.lmsId) === -1) {
+                                    if (lmss.length > 0) { dlist += '<br/>';}
+                                    dlist += '<span style="color: #003476">' + el.lmsId + '</span> :: <span class="mx-1" style="font-weight: 500">' + el.lmsCode + '</span>';
+                                }
+                                else {
+                                    dlist +=  '<span class="mx-1" style="font-weight: 500">' + el.lmsCode + '</span>';
+                                }
+
+                                if (lmss.indexOf(el.lmsId) === -1) {
+                                    lmss.push(el.lmsId);
+                                }
                             }
                         });
                         return dlist;
@@ -462,7 +473,9 @@
                 multiple: true,
                 maximumSelectionLength: 5
             });
-           $("#course_study_filter").select2({});
+           $("#course_study_filter").select2({
+               minimumResultsForSearch: -1
+           });
 
            let $course_program_Id  = $("#course_programId");
            let programId = "";

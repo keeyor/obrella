@@ -14,7 +14,7 @@
     	InitControls();
     	RegisterListeners();
     	current_academic_year = dashboard.broker.getCurrentAcademicPeriod();
-    	dashboard.lectab.getAvailableYearList(current_academic_year);
+         dashboard.lectab.getAvailableYearList(current_academic_year);
     };
 
     function RegisterListeners() {
@@ -26,9 +26,10 @@
     }
 
     function InitControls() {
-        $select_year.select2({
-            placeholder: 'Επιλέξτε Ακαδημαϊκό Έτος'
-        });
+/*        $select_year.select2({
+            placeholder: 'Επιλέξτε Ακαδημαϊκό Έτος',
+            minimumResultsForSearch: -1
+        });*/
     }
 
     dashboard.lectab.getAvailableYearList = function (selectAcademicYear) {
@@ -48,6 +49,7 @@
                     placeholder: 'Επιλέξτε Ακαδημαϊκό Έτος',
                     width: 'style',
                     data : data.results,
+                    minimumResultsForSearch: -1,
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                     templateResult: formatRepo,
                     templateSelection: formatRepoSelection
@@ -138,7 +140,7 @@
                     "sortable": false
                 },
                 {
-                    "aTargets": [2,9,10,22,23],
+                    "aTargets": [2,3,9,10,22,23],
                     "sortable": false,
                     "visible": false,
                     "sWidth": "0px"
@@ -198,11 +200,11 @@
                         if (repeat === "regular") {
                             let cancellation_mark = "";
                             if (cancellations != null && cancellations.length >0) {
-                                cancellation_mark = '<i class="fas fa-exclamation font-weight-bolder ml-1" style="color: red" title="Υπάρχουν Ακυρώσεις"></i>';
+                                cancellation_mark = '<i class="fas fa-exclamation font-weight-bolder ms-1" style="color: red" title="Υπάρχουν Ακυρώσεις"></i>';
                             }
                             let ret;
                             ret =   '<span style="display:none">' + dashboard.broker.selectNumberedDayOfWeek(data) + row.startTime + '</span>';
-                            return ret + '<b>' + dashboard.broker.selectDayOfWeek(data) + '</b>' + cancellation_mark;
+                            return ret + '<span style="font-weight: 500">' + dashboard.broker.selectDayOfWeek(data) + '</span>' + cancellation_mark;
                         }
                         else {
                             return "";
@@ -221,9 +223,9 @@
                             let hiddenDataForSorting = '<span style="display:none">' + data + '</span>';
                             let cancellation_mark = "";
                             if (cancellations != null && cancellations.length >0) {
-                                cancellation_mark = '<i class="fas fa-exclamation font-weight-bolder ml-1" style="color: red" title="Ακύρωση"></i>';
+                                cancellation_mark = '<i class="fas fa-exclamation font-weight-bolder ms-1" style="color: red" title="Ακύρωση"></i>';
                             }
-                            return hiddenDataForSorting + '<span><b>' + display_date + '</b></span>' + cancellation_mark;
+                            return hiddenDataForSorting + '<span  style="font-weight: 500">' + display_date + '</span>' + cancellation_mark;
                         }
                         else {
                             return "";
@@ -371,7 +373,7 @@
                     "mData": "id",
                     "sortable": false,
                     "mRender": function (data) {
-                        return '<a role="button" class="btn blue-btn-wcag-bgnd-color btn-pill btn-sm edit-schedule" data-toggle="tooltip" title="Επεξεργασία παραμέτρων μετάδοσης" href="schedule?id=' + data + '"><i class="fas fa-edit text-white"></i></a>';
+                        return '<a role="button" class="btn blue-btn-wcag-bgnd-color btn-sm" data-toggle="tooltip" title="Επεξεργασία στοιχείων μετάδοσης" href="schedule?id=' + data + '"><i class="fas fa-edit fa-xs text-white"></i></a>';
                     }
                 },
                 {
@@ -380,8 +382,8 @@
                     "mData": "id",
                     "sortable": false,
                     "mRender": function (data) {
-                        return ' <a role="button" class="btn btn-sm btn-warning btn-pill edit-schedule" data-toggle="tooltip" title="Δημιουργία ΝΕΑΣ μετάδοσης με αντιγραφή" href="schedule?cloneId=' + data + '">' +
-                            '<i class="far fa-clone"></i></a>';
+                        return ' <a role="button" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Δημιουργία ΝΕΑΣ μετάδοσης με αντιγραφή" href="schedule?cloneId=' + data + '">' +
+                            '<i class="far fa-clone fa-xs text-dark"></i></a>';
                     }
                 },
                 {

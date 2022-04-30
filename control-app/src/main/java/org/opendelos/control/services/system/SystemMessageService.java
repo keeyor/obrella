@@ -81,6 +81,10 @@ public class SystemMessageService {
 		return systemMessagesRepository.findAllByStatus(status);
 	}
 
+	public List<SystemMessage> getAllByTarget(String target) {
+		return systemMessagesRepository.findAllByTarget(target);
+	}
+
 	public List<SystemMessage> getAllByVisibleIs(boolean visible) {
 		return systemMessagesRepository.findAllByVisibleIs(visible);
 	}

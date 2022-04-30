@@ -120,7 +120,7 @@
                     "mData": "scheduledEvent.title",
                     "className" : "dt-center",
                     "mRender": function (data) {
-                        return '<span style="color: #003476;font-weight: 600">' + data + '</span>';
+                        return '<span style="color: #003476;font-weight: 500">' + data + '</span>';
                     }
                 },
                 {

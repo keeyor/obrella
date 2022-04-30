@@ -32,8 +32,14 @@
 
             let user_authorities;
             user_authorities = $("#staff_authorities").val();
-            if (user_authorities.includes("STAFFMEMBER")) { $("#r_isStaffMember").val("true");}
-            else { $("#r_isStaffMember").val("false"); }
+            if (user_authorities.includes("STAFFMEMBER")) {
+                $("#r_isStaffMember").val("true");
+                $("#submit_button").attr("disabled",true);
+            }
+            else {
+                $("#r_isStaffMember").val("false");
+                $("#submit_button").attr("disabled",false);
+            }
 
             $("#staffModalLabel").html('<div style="font-size: 1.4em">' + staff_name + '</div><br/>');
             $(".rights_note").show();
@@ -41,6 +47,7 @@
 
             let manager_type = $("#staff_role").val();
             $("#r_manager_type").val(manager_type);
+
 
             hideShowPanel(manager_type);
 
@@ -80,20 +87,44 @@
         })
         $("#staff_password_2").passwordify({
             maxLength: 12
-        })
+        });
+        let pass_field = $("#user_password").val();
+        if (pass_field === "ISSET") {
+            $("#staff_password_1").attr("disabled",true);
+            $("#staff_password_2").attr("disabled",true);
+        }
+        else {
+            $("#user_password").val(""); //force to be set
+            $("#staff_password_1").attr("disabled",false);
+            $("#staff_password_2").attr("disabled",false);
+        }
+
         $("#userType_select").select2({
             minimumResultsForSearch: -1 //hides the searchbox
         });
 
-        $("#staff_enabled").bootstrapToggle({
+        $("#staff_enabled_toggle").bootstrapToggle({
             on: '<i class="fas fa-power-off"></i>',
             off: '<i class="fas fa-ban"></i>',
             onstyle: "success",
-            offstyle: "danger",
+            offstyle: "secondary",
             size: "small"
         });
+
+        let userIsActive = $("#staff_isactive").val();
+        if (staff_id === "") {
+            $("#staff_enabled_toggle").bootstrapToggle('disable');
+        }
+        else {
+            if (userIsActive === "true") {
+                $("#staff_enabled_toggle").bootstrapToggle('on');
+            } else {
+                $("#staff_enabled_toggle").bootstrapToggle('off');
+            }
+        }
         serialize_form = $("#staff_form").serialize();
     }
+
     function RegisterEvents() {
 
         $('#staff_password_1').keyup(function() {
@@ -103,14 +134,20 @@
             $("password_error_match").hide();
         });
         $("#submit_button").on('click',function(e){
-            let staff_password1_val = $("#staff_password_1").data("val");
-            let staff_password2_val = $("#staff_password_2").data("val");
-            if (staff_password1_val !== staff_password2_val) {
-                $("#password_error_match").show();
-                e.preventDefault();
+
+            let user_pass = $("#user_password").val();
+            if (user_pass !== "ISSET") {
+                let staff_password1_val = $("#staff_password_1").data("val");
+                let staff_password2_val = $("#staff_password_2").data("val");
+                if (staff_password1_val !== staff_password2_val) {
+                    $("#password_error_match").show();
+                    e.preventDefault();
+                } else {
+                    $("#user_password").val(staff_password1_val);
+                    $("#staff_form").submit();
+                }
             }
             else {
-                $("#user_password").val(staff_password1_val);
                 $("#staff_form").submit();
             }
         });
@@ -457,7 +494,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Μονάδας', className: 'my-2', attr: {id: 'openUnitsSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Ανάθεση Μονάδας', className: 'my-2', attr: {id: 'openUnitsSelectModal'},
                         action: function () {
                             openUnitsSelectModal();
                         }
@@ -465,7 +502,7 @@
                 ],
                 dom: {
                     button: {
-                        className: 'btn btn-sm btn-light openUnitsSelectModal'
+                        className: 'btn btn-sm green-btn-wcag-bgnd-color text-white openUnitsSelectModal'
                     }
                 }
             },
@@ -651,7 +688,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Μαθήματος', className: 'my-2', attr: {id: 'openStaffCourseSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Ανάθεση Μαθήματος', className: 'my-2', attr: {id: 'openStaffCourseSelectModal'},
                         action: function () {
                             openStaffCourseSelectModal();
                         }
@@ -659,7 +696,7 @@
                 ],
                 dom: {
                     button: {
-                        className: 'btn btn-sm btn-light openStaffCourseSelectModal'
+                        className: 'btn btn-sm green-btn-wcag-bgnd-color text-white openStaffCourseSelectModal'
                     }
                 }
             },
@@ -794,7 +831,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Προσθήκη Εκδήλωσης', className: 'my-2', attr: {id: 'openStaffEventSelectModal'},
+                        text: '<i class="fas fa-plus-circle"></i> Ανάθεση Εκδήλωσης', className: 'my-2', attr: {id: 'openStaffEventSelectModal'},
                         action: function () {
                             openStaffEventSelectModal();
                         }
@@ -802,7 +839,7 @@
                 ],
                 dom: {
                     button: {
-                        className: 'btn btn-sm btn-light  openStaffEventSelectModal'
+                        className: 'btn btn-sm green-btn-wcag-bgnd-color text-white  openStaffEventSelectModal'
                     }
                 }
             },

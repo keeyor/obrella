@@ -36,7 +36,7 @@
     dashboard.init = function () {
     	
     	dashboard.siteurl     = dashboard.broker.getRootSitePath();
-        dashboard.department.loadDepartmentsOnSearchBar($("#department-columns"));
+        dashboard.department.loadDepartmentsOnSearchBar($("#department-ddlist"));
     	dashboard.institution 		= $("#institutionId").val();
     	dashboard.institution_name  = $("#institutionName").val();
       
@@ -52,7 +52,7 @@
     	dashboard.modal_department_title = $("#modal_department_title");
     	dashboard.modal_study_title		 = $("#modal_study_title");
 	    
-    	dashboard.modal_period_error_messages = $("#PeriodErrorMessages");
+    	dashboard.modal_period_error_messages = $(".PeriodErrorMessages");
     	dashboard.modal_inherit = $("#modal_inherit");
     	
     	dashboard.modal_update_button = $("#updatePeriodsButton");
@@ -67,21 +67,20 @@
         dashboard.modala.init();
 
         alertify.defaults.transition = "slide";
-        alertify.defaults.theme.ok = "btn btn-primary";
-        alertify.defaults.theme.cancel = "btn btn-danger";
+        alertify.defaults.theme.ok = "btn blue-btn-wcag-bgnd-color text-white";
+        alertify.defaults.theme.cancel = "btn red-btn-wcag-bgnd-color text-white";
         alertify.defaults.theme.input = "form-control";
-        alertify.set('notifier','position', 'top-right');
-
-        let _init_dp_id     = $("#department_id").val();
-        let _init_dp_title  = $("#department_name").val();
-        let _init_sc_id     = $("#school_id").val();
-        let _init_sc_title  = $("#school_name").val();
+        alertify.set('notifier','position', 'top-center');
 
 
         let current_academic_year = dashboard.broker.getCurrentAcademicPeriod();
         dashboard.system.getAvailableYearList(current_academic_year);
 
-        if (_init_dp_id !== undefined && _init_dp_id != null && _init_dp_id !== "") {
+
+        let _init_dp_id     = $("#department_id").val();
+        let _init_dp_title  = $("#department_name").val();
+
+        if (_init_dp_id ) {
             $("#select_department_info").css("display","none");
             dashboard.department.selectedDepartmentId = _init_dp_id;
             dashboard.department.selectedDepartmentName = _init_dp_title;
@@ -89,14 +88,16 @@
 
             dashboard.selected_year = current_academic_year;
             dashboard.department.getDepartmentTables();
-            dashboard.study.refreshData(dashboard.institution,  dashboard.department.selectedDepartmentId);
+            dashboard.study.refreshStudyList(dashboard.institution,  dashboard.department.selectedDepartmentId);
 
-            $("#department-pane").show();
-            $("#study-pane").show();
+            //$("#department-pane").show();
+            //$("#study-pane").show();
+            $("#periods-panel").show();
         }
         else {
-            $("#department-pane").hide();
-            $("#study-pane").hide();
+            //$("#department-pane").hide();
+            //$("#study-pane").hide();
+            $("#periods-panel").hide();
         }
         loader.initialize();
     };
@@ -106,7 +107,7 @@
        dashboard.init();
        
       // dashboard.broker.on('afterSelect.year refresh.page reload.page', function (event, message) {
-      dashboard.broker.on('afterSelect.year refresh.page reload.page', function (event, message) {
+           dashboard.broker.on('afterSelect.year refresh.page reload.page', function (event, message) {
     	   dashboard.selected_year = message.year;
            if (event.type === "reload") {
         	   dashboard.system.getAvailableYearList(dashboard.selected_year);
@@ -147,7 +148,7 @@
                 }
            }
       });
-       dashboard.broker.on('ShowInstantMessage', function (event, message) {
+            dashboard.broker.on('ShowInstantMessage', function (event, message) {
            dashboard.broker.showInstantMessage(message.type ,message.val);
       });
        

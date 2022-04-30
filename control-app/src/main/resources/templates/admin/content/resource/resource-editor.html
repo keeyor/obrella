@@ -15,7 +15,7 @@
     <link rel="stylesheet" th:href="@{/lib/bootstrap-toggle/bootstrap-toggle.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <!-- select2 -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- bootstrap date-picker -->
@@ -47,14 +47,14 @@
             padding-top: 0.175rem!important;
             padding-bottom: 0.75rem!important;
             padding-left: 0.2rem!important;
-            font-size: 0.95em;
+            font-size: 1em;
         }
         .select2-container .select2-selection--multiple {
             height: 38px;
             padding-top: 0.175rem!important;
             padding-bottom: 0.75rem!important;
             padding-left: 0.2rem!important;
-            font-size: 0.95em;
+            font-size: 1em;
         }
         .select2-selection__arrow {
             padding-top: 2rem!important;
@@ -70,8 +70,8 @@
         }
     </style>
 </head>
-<body style="font-size: 0.89em">
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<body>
+<div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light">
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
@@ -115,7 +115,7 @@
                     <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
                     <th:block th:if="${Resource.type == 'COURSE'}">
                         <li class="breadcrumb-item active" th:if="${Resource.id == null || Resource.id == ''}" ><span>Νέα Διάλεξη</span></li>
-                        <li class="breadcrumb-item active" th:unless="${Resource.id == null || Resource.id == ''}" ><span>Επεξεργασία Διάλεξη</span></li>
+                        <li class="breadcrumb-item active" th:unless="${Resource.id == null || Resource.id == ''}" ><span>Επεξεργασία Διάλεξης</span></li>
                     </th:block>
                     <th:block th:if="${Resource.type == 'EVENT'}">
                         <li class="breadcrumb-item active" th:if="${Resource.id == null || Resource.id == ''}" ><span>Νέο Πολυμέσο Εκδήλωσης</span></li>

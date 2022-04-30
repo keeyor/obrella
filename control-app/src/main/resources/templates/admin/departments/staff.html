@@ -24,7 +24,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
     <style>
@@ -47,7 +47,7 @@
         }
     </style>
 </head>
-<body style="font-size: 0.89em">
+<body>
 <input type="hidden" id="signInUserid" th:value="${user.id}"/>
 <!--@thymesVar id="department" type="org.opendelos.model.structure.Department" -->
 <!--@thymesVar id="school" type="org.opendelos.model.structure.School" -->
@@ -57,8 +57,8 @@
 <input th:if="${department != null}" type="hidden" id="department_name" th:value="${department.title}"/>
 <input th:if="${school != null}" type="hidden" id="school_id" th:value="${school.id}"/>
 <input th:if="${school != null}" type="hidden" id="school_name" th:value="${school.title}"/>
-<!--<div th:replace="~{admin/fragments/a-sidebar-department :: a-sidebar}"></div>-->
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+
+<div th:replace="~{admin/sidebar-system :: sidebar-system}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
     <div class="loading-overlay"></div>
     <div class="loading-overlay-image-container">
@@ -88,20 +88,21 @@
     </header>
     <div class="body flex-grow-1 px-3">
         <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-1 col-lg-10" id="content">
+             <!--   <div class="row">
+                    <div class="offset-1 col-lg-10" id="content">-->
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-header" style="border: none">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-start" >
-                                            <div th:replace="~{admin/fragments/search/a-department-select :: a-deparment-select}"></div>
+                                            <div th:replace="~{admin/departments/fragments/a-department-select :: a-deparment-select}"></div>
                                         </div>
-                                        <div class="text-high-emphasis font-italic">
-                                            Διδακτικό Προσωπικό
+                                        <div class="text-medium-emphasis  font-italic">
+                                            Διαχείριση Διδακτικού Προσωπικού
                                         </div>
                                     </div>
                                 </div>
+                                <hr/>
                                 <div class="row">
                                     <div class="col-12 text-end">
                                         <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white"  id="newStaffBt" role="button">
@@ -114,33 +115,29 @@
 
                         <div class="card mt-3" id="staff_card" style="display: none">
                             <div class="card-header">
-                                <div class="text-high-emphasis">Βρέθηκαν <span id="count_staff_results"></span> μέλη προσωπικού</div>
+                                <h6>Κατάλογος Διδακτικού Προσωπικού
+                                    <small><span class="text-medium-emphasis"> (<span id="count_staff_results"></span> μέλη)</span></small>
+                                </h6>
                             </div>
                                    <!-- FILTERS -->
                              <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="table-responsive" style="margin-top: 40px">
                                               <table id="staffDataTable"  style="width:100%" class="row-border stripe">
                                                  <thead>
-                                                    <tr style="font-weight: 700">
-                                                        <td style="height: 12px;max-width: 20px"></td>
+                                                    <tr style="font-weight: 600">
+                                                        <td></td>
                                                         <td>#</td>
                                                         <td></td>
                                                         <td>uid</td>
-                                                        <td>Όνομα - Ιδιότητα</th>
+                                                        <td>Όνομα (Ιδιότητα)</th>
                                                         <td>Όνομα (en)</td>
-                                                        <td># Μαθήματα</td>
+                                                        <td>#Μαθήματα</td>
                                                         <td>Ιδιότητα</td>
-                                                        <td>E-mail</td>
+                                                        <td>uid @ e-mail</td>
                                                         <td style="width: 55px;"></td>
                                                         <td style="height: 12px;width: 20px"></td>
                                                     </tr>
                                                  </thead>
                                               </table>
-                                            </div>
-                                            </div>
-                                        </div>
                                     </div>
                        </div>
 
@@ -202,12 +199,11 @@
                                                   </div>
                                                   <div class="form-group  mt-3 row title_change_warning">
                                                       <label class="col-sm-2 col-form-label">&nbsp;</label>
-                                                      <div class="col-sm-7">
-                                                              <i style="color:red" class="fas fa-exclamation-triangle"></i> ΠΡΟΣΟΧΗ:<br/>
-                                                              <span class="text-medium-emphasis">
+                                                      <div class="col-sm-7 text-high-emphasis">
+                                                                  <i style="color:red" class="fas fa-exclamation-triangle me-1"></i>
                                                                 Ο κωδικός ταυτοποίησης <b>uid</b> του μέλους είναι το username του χρήστη στην υπηρεσία. Η καταχώρηση πρέπει να ακριβώς ίδια με αυτή που υπάρχει στη βάση δεδομένων του Ιδρύματος (SSO), αλλιώς η είσοδος στο σύστημα θα αποτύχει.
                                                                 Η Τροποποίηση του uid συνιστάται <b>ΜΟΝΟ</b> για τη διόρθωση τυπογραφικών λαθών ή αν αυτό έχει αλλάξει σε προγενέστερο χρόνο στη βάση δεδομένων του Ιδρύματος.
-                                                              </span>
+
                                                       </div>
                                                   </div>
                                                   <div class="form-group row mt-3">
@@ -226,9 +222,8 @@
                                                   <div class="form-group row mt-3">
                                                       <label class="col-sm-2 col-form-label"><b>Διδασκόμενα Μαθήματα</b></label>
                                                       <div class="col-sm-7 text-medium-emphasis">
-                                                          <i class="far fa-question-circle"></i>
                                                           Στο πίνακα που ακολουθεί, εμφανίζονται τα μαθήματα που διδάσκει το επιλεγμένο μέλος του προσωπικού. Μπορείτε να αφαιρέσετε μαθήματα
-                                                          κάνοντας κλικ στο αντίστοιχο κουμπί αφαίρεσης <i class="fas fa-minus"></i>. Για να προσθέσετε μαθήματα, κάντε κλικ στο κουμπί
+                                                          κάνοντας κλικ στο αντίστοιχο κουμπί αφαίρεσης <i class="fas fa-minus-circle"></i>. Για να προσθέσετε μαθήματα, κάντε κλικ στο κουμπί
                                                           'Προσθήκη'΄. Μπορείτε να επιλέξετε μαθήματα από όλα τα τμήματα του ιδρύματος.
                                                           <b>Οι τροποποιήσεις στα διδασκόμενα μαθήματα εφαρμόζονται άμεσα και ανεξάρτητα από την αποθήκευση της εγγραφής</b>
                                                       </div>
@@ -265,8 +260,8 @@
                                       </div>
                        </div>
 
-                    </div>
-               </div>
+               <!--     </div>
+               </div>-->
         </div>
     </div>
 

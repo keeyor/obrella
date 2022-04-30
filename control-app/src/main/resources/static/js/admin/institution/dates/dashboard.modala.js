@@ -29,7 +29,7 @@
             let institutionId = dashboard.institution;
             let dataJSON;
             let url;
-            if (scope === "system") {
+            if (scope === "system" || scope === "") {
                 dataJSON = getTableDataAsJSON($pausesDataTable, institutionId);
                 let dataString  = JSON.stringify(dataJSON);
                 url = dashboard.siteurl + '/api/v1/institution/' + institutionId + '/pause/update/' + year;
@@ -53,7 +53,7 @@
 
             // Add NEW ROW to DATATABLE with: name = "" and startDate==endData==Today
             let new_argia = {};
-            new_argia.name = "";
+            new_argia.name = "[Τίτλος Αργίας/Παύσης]";
 
             let d = new Date();
             let curr_date = d.getDate();
@@ -88,9 +88,7 @@
             "bDestroy": true,
             "bFilter": false,
             "bPaginate": false,
-            "oLanguage": {
-                "sSearch": "<small>Αναζήτηση</small>"
-            },
+            "oLanguage": dtLanguageGr,
             // "order": [[1, 'asc']],
             "ajax":  {
                 "url":  url,
@@ -130,7 +128,7 @@
                 {
                     "name": "name",
                     "render": function (data,type,row, meta) {
-                        return '<input size="30" type="text" value="' + data + '"  id="data_row_' + meta.row + '" name="data_row-' + meta.row + '"/>';
+                        return '<input class="form-control" size="30" type="text" value="' + data + '"  id="data_row_' + meta.row + '" name="data_row-' + meta.row + '"/>';
                     },
                     "targets" :3
                 },
@@ -138,11 +136,12 @@
                     "name": "startDate",
                     "render": function (data,type,row, meta) {
 
-                        return '<div class="input-group input-group-sm date modal-pstart-date" data-row="' + meta.row + '" id="div-startpDate-' + meta.row + '"  >' +
-                            '<input class="form-control" value=""  />' +
-                            '<span class="input-group-addon">' +
-                            '<i class="far fa-calendar-alt ms-1"></i></span>' +
-                            '</div>';
+                        return '<div class="input-group  date modal-pstart-date" data-row="' + meta.row + '" id="div-startpDate-' + meta.row + '"  >' +
+                                    '<span class="input-group-addon input-group-text">' +
+                                        '<i class="fas fa-calendar-alt"></i>' +
+                                    '</span>' +
+                                    '<input class="form-control" value=""  />' +
+                                '</div>';
                     },
                     "targets" : 4
                 },
@@ -151,11 +150,12 @@
                     "render": function (data,type,row, meta) {
 
 
-                        return '<div class="input-group input-group-sm date modal-pend-date" data-row="' + meta.row + '" id="div-endpDate-' + meta.row + '"  >' +
-                            '<input class="form-control" value=""  />' +
-                            '<span class="input-group-addon">' +
-                            '<i class="far fa-calendar-alt ms-1"></i></span>' +
-                            '</div>';
+                        return '<div class="input-group date modal-pend-date" data-row="' + meta.row + '" id="div-endpDate-' + meta.row + '"  >' +
+                                        '<span class="input-group-addon input-group-text">' +
+                                            '<i class="fas fa-calendar-alt"></i>' +
+                                        '</span>' +
+                                        '<input class="form-control" value=""  />' +
+                                '</div>';
                     },
                     "targets" : 5
                 },
@@ -163,7 +163,7 @@
 
                     "name": "name",
                     "render": function (data,type,row,meta) {
-                        return "<button data-row='" + meta.row + "' class='btn btn-light btn-sm delete_row float-end'><i class=\"far fa-trash-alt\"></i></button>";
+                        return "<button data-row='" + meta.row + "' class='btn btn-light delete_row float-end'><i class=\"far fa-trash-alt\"></i></button>";
                     },
                     "targets" : 6
                 },
@@ -278,8 +278,15 @@
                 if (endDate_m.isBefore(startDate_m)) {
                     errors = 1;
                     message += "<li>" + _r.name + ": Η καταληκτική ημερομηνία είναι <b>πρίν</b> την αρχική: " + "</li>";
-
                 }
+            }
+        }
+        // NULL TITLE
+        for (let c=0; c < data.length; c++) {
+            let  _r = data[c];
+            if (_r.name === null || _r.name === "") {
+                errors = 1;
+                message += "<li>" + "Πληκτρολογήστε 'Τίτλο' αργίας" + "</li>";
             }
         }
 
@@ -312,13 +319,12 @@
         message += "</ul>";
         if (errors === 1) {
             setMessage($PauseErrorMessages,'alert alert-danger show', message);
-            $("#updatePausesButton").attr("disabled", true);
+             $("#updatePausesButton").attr("disabled",true);
         }
         else {
-            setMessage($PauseErrorMessages,'alert alert-danger hidden', " ");
-            $("#updatePausesButton").attr("disabled", false);
+            setMessage($PauseErrorMessages,'alert alert-danger invisible', "");
+           $("#updatePausesButton").attr("disabled", false);
         }
-
 
     };
 
@@ -346,7 +352,7 @@
                 let argia = {"name":name, "endDate" : endDate, "startDate": startDate};
                 argies_list.push(argia);
             }
-            console.log("line:" + c + " result:" + row_node.includes("btn-danger"));
+           // console.log("line:" + c + " result:" + row_node.includes("btn-danger"));
         }
 
         argies.argia = argies_list;
@@ -363,20 +369,25 @@
             data: dataJSON,
             async: true,    	//Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
             success: function() {
-                loader.hideLoader();
-                    setMessage($PauseStatusMessages,'alert alert-success alert-dismissable show',
-                    '<b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Επιτυχής Ενημέρωση<b>');
+                    loader.hideLoader();
+                    setMessage($PauseStatusMessages,'alert alert-success alert-dismissable visible',
+                        '<b><i class="fas fa-thumbs-up me-1"></i>Επιτυχής Ενημέρωση<b>');
+
                     setTimeout(function() {
-                        dashboard.editPauseModal.modal("hide");
+                        setMessage($PauseStatusMessages,'alert alert-success invisible', " ");
+                        $("#argies_card_edit").hide();
+                        $("#argies_card").show();
                     }, 1500);
+
                     let message = {msg: "Academic Calendar Updated!", year: dashboard.selected_year, department: departmentId, institution: institutionId};
                     dashboard.broker.trigger('refresh.page', [message]);
-
             },
             error : function() {
                 loader.hideLoader();
+                $("#argies_card_edit").hide();
+                $("#argies_card").show();
                 setMessage($PauseStatusMessages,'alert alert-danger alert-dismissable show',
-                    '<b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Πρόβλημα Συστήματος. Επικοινωνήστε με το διαχειριστή<b>');
+                    '<b><i class="fas fa-exclamation-triangle me-1"></i>Πρόβλημα Συστήματος. Επικοινωνήστε με το διαχειριστή<b>');
             }
         });
     }

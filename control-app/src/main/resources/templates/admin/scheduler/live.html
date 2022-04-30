@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <style>
         .my-nav{
             color: #006A9B!important;
@@ -30,9 +30,9 @@
         }
     </style>
 </head>
-<body style="font-size: 0.89em">
+<body>
 
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
 
     <header class="header header-sticky mb-4">
@@ -52,7 +52,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
                     <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
-                    <li class="breadcrumb-item active"><span>Ημερολόγιο</span></li>
+                    <li class="breadcrumb-item active"><span>Ζωντανές Μεταδόσεις</span></li>
                 </ol>
             </nav>
         </div>
@@ -62,8 +62,9 @@
             <div id="stats-info-lectures"></div> <input type="hidden" id="nof-lectures" value=""/>
             <div id="stats-info-events"></div><input type="hidden" id="nof-events" value=""/>
             <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-lg-1 col-lg-10 col-md-12" id="content">
+                <!--<div class="row">
+                    <div class="offset-lg-1 col-lg-10 col-md-12" id="content">-->
+
                         <div class="card">
                             <div class="card-header">
                                 <h4><span class="icon-live-lecture" style="color: red;font-size: 1.3em"></span> Ζωντανές Μεταδόσεις!</h4>
@@ -140,8 +141,9 @@
                             </div>
                         </div>
                         <!-- @thymesVar id="QR" type="org.opendelos.dashboard.repository.resource.QueryResourceResults"-->
-                    </div>
-                </div>
+
+                 <!--   </div>
+                </div>-->
             </div>
 
         </div>

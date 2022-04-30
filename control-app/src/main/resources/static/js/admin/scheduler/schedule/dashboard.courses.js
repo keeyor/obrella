@@ -67,7 +67,7 @@
 
         function formatRepoSelection (repo) {
             if (!repo.text.startsWith("Επιλέξτε"))
-                return "<b>" + repo.text + "</b>";
+                return "<span  style=\"font-weight: 500\">" + repo.text + "</span>";
             else
                 return repo.text;
         }
@@ -128,7 +128,7 @@
         }
         function formatRepoSelection (repo) {
             if (!repo.text.startsWith("Επιλέξτε"))
-                return "<b>" + repo.text + "</b>";
+                return "<span  style=\"font-weight: 500\">" + repo.text + "</span>";
             else
                 return repo.text;
         }

@@ -25,7 +25,7 @@
     <link rel="stylesheet" th:href="@{/lib/bootstrap-switch-button/bootstrap-switch-button.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <!-- select2 -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
     <!-- time-picker-bootstrap -->
@@ -38,26 +38,12 @@
         div.dt-buttons .toggle_ {
             float: right;
         }
-        .select2-container .select2-selection--single {
-            height: 36px;
-            padding-top: 0.175rem!important;
-            padding-bottom: 0.75rem!important;
-            padding-left: 0.2rem!important;
-            font-size: 0.95em;
-        }
-        .select2-container .select2-selection--multiple {
-            height: 36px;
-            padding-top: 0.175rem!important;
-            padding-bottom: 0.75rem!important;
-            padding-left: 0.2rem!important;
-            font-size: 0.95em;
-        }
     </style>
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
 
 </head>
-<body style="font-size: 0.89em">
+<body>
 <input type="hidden" id="authorized"  th:value="${authorized}"/>
 <input type="hidden" id="institutionId"  th:value="${institutionId}"/>
 <input type="hidden" id="editor_id"  th:value="${user.id}"/>
@@ -66,7 +52,7 @@
 <!--@thymesVar id="msg_type" type="java.lang.String"-->
 <input type="hidden" id="msg_type" th:value="${msg_type}"/>
 
-<div th:replace="~{admin/content/sidebar-content :: sidebar-content}"></div>
+<div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
       <div class="loading-overlay"></div>
       <div class="loading-overlay-image-container">
@@ -101,10 +87,10 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="offset-1 col-lg-10" id="content">
-                        <div class="card mt-2">
+                        <div class="card mt-2 mb-4">
                             <div class="card-header">
-                                <span style="font-size: 1.3em;font-weight: 500">
-                                        Επεξεργασία στοιχείων Μετάδοσης
+                                <span style="font-size: 1.2em;font-weight: 100">
+                                     <i class="fas fa-edit"></i> Επεξεργασία στοιχείων Μετάδοσης
                                 </span>
                                 <span class="float-end">
                                                      <!--@thymesVar id="user_scheduler_search_history" type="java.lang.String"-->
@@ -148,357 +134,351 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 mt-2">
-                                        <span class="_fixed_error_msg" style="color:red;font-weight: 600"></span>
-                                        <span class="_fixed_warn_msg" style="color:darkorange;font-weight: 600"></span>
+                                        <span class="_fixed_error_msg" style="color:red;font-weight: 500"></span>
+                                        <span class="_fixed_warn_msg" style="color:darkorange;font-weight: 500"></span>
                                     </div>
                                 </div>
-                            </div>
-                            <!--@thymesVar id="Resource" type="org.opendelos.dashboard.model.resources.Resource"-->
-                            <form id="schedule-form" th:object="${ScheduleDTO}" th:action="@{schedule}" method="post">
-                                <input type="hidden" id="id"  th:field="*{id}" />
-                                <input type="hidden" id="_editor"  th:field="*{editor.id}" />
-                                <div class="card" style="border: none">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="p-2" id="_lecture"><span class="text-muted">1. Αρχικοποίηση</span></div>
-                                                <div class="p-3" style="background-color: #f7f7f9;border-top: black 1px solid;">
-                                                    <input id="_active" type="hidden" th:field="*{enabled}">
-                                                    <div class="form-group row">
-                                                        <label for="_type" class="col-sm-3  col-form-label emph-label">Είδος*</label>
-                                                        <div class="col-sm-4">
-                                                            <select id="_type" class="form-select" th:field="*{type}" style="width: 100%">
-                                                                <option value="lecture"> Διάλεξη</option>
-                                                                <option value="event"> Εκδήλωση</option>
-                                                            </select>
+                                <!--@thymesVar id="Resource" type="org.opendelos.dashboard.model.resources.Resource"-->
+                                <form id="schedule-form" th:object="${ScheduleDTO}" th:action="@{schedule}" method="post">
+                                    <input type="hidden" id="id"  th:field="*{id}" />
+                                    <input type="hidden" id="_editor"  th:field="*{editor.id}" />
+                                     <div class="row">
+                                                <div class="col-6">
+                                                    <div class="p-2" id="_lecture"><span class="text-muted">1. Αρχικοποίηση</span></div>
+                                                    <div class="p-3" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                        <input id="_active" type="hidden" th:field="*{enabled}">
+                                                        <div class="form-group row">
+                                                            <label for="_type" class="col-3  col-form-label emph-label">Είδος*</label>
+                                                            <div class="col-5">
+                                                                <select id="_type" class="form-select" th:field="*{type}" style="width: 100%">
+                                                                    <option value="lecture"> Διάλεξη</option>
+                                                                    <option value="event"> Εκδήλωση</option>
+                                                                </select>
 
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group row mt-3">
-                                                        <label for="_repeat" class="col-sm-3  col-form-label emph-label">Τύπος*</label>
-                                                        <div class="col-sm-4">
-                                                            <select id="_repeat" class="form-select" th:field="*{repeat}"  style="width: 100%">
-                                                                <option value="regular"> Τακτική</option>
-                                                                <option value="onetime"> Έκτακτη</option>
-                                                            </select>
+                                                        <div class="form-group row mt-3">
+                                                            <label for="_repeat" class="col-3  col-form-label emph-label">Τύπος*</label>
+                                                            <div class="col-5">
+                                                                <select id="_repeat" class="form-select" th:field="*{repeat}"  style="width: 100%">
+                                                                    <option value="regular"> Τακτική</option>
+                                                                    <option value="onetime"> Έκτακτη</option>
+                                                                </select>
 
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <!-- Lecture Choice-->
-                                                <div class="p-2 lecture_panel"><span class="text-muted">2. Στοιχεία Διάλεξης</span></div>
-                                                <div class="p-3 lecture_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
-                                                    <!-- COURSE -->
-                                                    <div class="form-group row">
-                                                        <input type="hidden" id="_course" th:field="*{course.id}"/>
-                                                        <label for="courses_s2" class="col-sm-3 col-form-label emph-label">
-                                                            Μάθημα*</label>
-                                                        <div class="col-sm-8">
-                                                            <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control">
-                                                                <option value=""></option>
-                                                            </select>
-                                                            <div class="form-error" th:if="${#fields.hasErrors('course.id')}" th:errors="*{course.id}"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mt-3">
-                                                        <input type="hidden" id="_supervisor"  th:field="*{supervisor.id}"/>
-                                                        <label for="supervisor_s2" class="col-sm-3 col-form-label emph-label">
-                                                            Διδάσκων*</label>
-                                                        <div class="col-sm-8">
-                                                            <select id="supervisor_s2" style="width: 100%" class="form-control js-staffMembers-tags reset_control">
-                                                                <option value=""></option>
-                                                            </select>
-                                                            <div class="form-error" th:if="${#fields.hasErrors('supervisor.id')}" th:errors="*{supervisor.id}"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Event Choice-->
-                                                <div class="p-2 event_panel"><span class="text-muted">2. Στοιχεία Εκδήλωσης</span></div>
-                                                <div class="p-3 event_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
-                                                    <div class="form-group row">
-                                                        <input type="hidden" id="_event" th:field="*{scheduledEvent.id}"/>
-                                                        <label for="events_s2" class="col-sm-3 col-form-label emph-label">
-                                                            Επιλέξτε Εκδήλωση*</label>
-                                                        <div class="col-sm-8">
-                                                            <select id="events_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
-                                                                <option value=""></option>
-                                                            </select>
-                                                            <small class="form-text text-muted">* Εμφανίζονται μόνο Εκδηλώσεις με ενεργό ημερολόγιο</small>
-                                                            <div class="form-error" th:if="${#fields.hasErrors('scheduledEvent.id')}" th:errors="*{scheduledEvent.id}"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Classroom/Place Choice-->
-                                                <div class="p-2 classroom_panel"><span class="text-muted">3. Αίθουσα/Χώρος</span></div>
-                                                <div class="p-3 classroom_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
-                                                <!-- CLASSROOM -->
-                                                <div class="form-group row mt-0 pt-0">
-                                                        <input type="hidden" id="_classroom" th:field="*{classroom.id}"/>
-                                                        <label for="classrooms_s2" class="col-sm-3 col-form-label emph-label">
-                                                            Χώρος Διδασκαλίας/Εκδήλωσης*</label>
-                                                        <div class="col-sm-8">
-                                                                <select id="classrooms_s2" style="width: 100%" class="form-control js-classrooms-tags reset_control">
+                                                    <!-- Lecture Choice-->
+                                                    <div class="p-2 lecture_panel"><span class="text-muted">2. Στοιχεία Διάλεξης</span></div>
+                                                    <div class="p-3 lecture_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                        <!-- COURSE -->
+                                                        <div class="form-group row">
+                                                            <input type="hidden" id="_course" th:field="*{course.id}"/>
+                                                            <label for="courses_s2" class="col-3 col-form-label emph-label">
+                                                                Μάθημα*</label>
+                                                            <div class="col-9">
+                                                                <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control">
                                                                     <option value=""></option>
                                                                 </select>
-                                                            <div class="form-error" th:if="${#fields.hasErrors('classroom.id')}" th:errors="*{classroom.id}"></div>
+                                                                <div class="form-error" th:if="${#fields.hasErrors('course.id')}" th:errors="*{course.id}"></div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="p-2 period_panel"><span class="text-muted">4. Περίοδος - Έτος</span></div>
-                                                <div class="p-3 period_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
-                                                    <!--@thymesVar id="ayList" type="java.util.List"-->
-                                                    <!--@thymesVar id="ayListText" type="java.util.List"-->
-                                                    <div class="form-group row">
-                                                        <label for="resource_ay" class="col-sm-3  col-form-labe emph-label">Ακαδημαϊκό Έτος*</label>
-                                                        <div class="col-sm-4">
-                                                            <select id="resource_ay" class="form-select" th:field="*{academicYear}"  style="width: 100%">
-                                                                <option value=""></option>
-                                                                <option th:each="i, iter : ${ayList}" th:value="${i}" th:text="${ayListText[iter.index]}"></option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <!--@thymesVar id="pdList" type="java.util.HashMap<String,String>"-->
-                                                    <div class="form-group row lecture_panel mt-3">
-                                                        <label for="resource_pd" class="col-sm-3  col-form-label emph-label">Περίοδος*</label>
-                                                        <div class="col-sm-4">
-                                                            <select id="resource_pd" class="form-select" th:field="*{period}" style="width: 100%">
-                                                                <option value=""></option>
-                                                                <option th:each="period: ${pdList}" th:value="${period.key}" th:text="${period.value}"></option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="px-2 mt-2 lecture_panel" id="period_info" style="background-color: lightgoldenrodyellow;color:black"></div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="p-2 dayOfWeek_panel"><span class="text-muted">5. Ημερομηνίες - Ώρα - Διάρκεια</span></div>
-                                                <div class="p-3 dayOfWeek_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
-                                                    <div class="form-group row dayOfWeek">
-                                                        <label for="_dayOfWeek" class="col-sm-3  col-form-label emph-label">Ημέρα*</label>
-                                                        <div class="col-sm-4">
-                                                            <select id="_dayOfWeek" class="custom-select" th:field="*{dayOfWeek}"  style="width: 100%">
-                                                                <option value=""></option>
-                                                                <option th:value="MONDAY"> Δευτέρα</option>
-                                                                <option th:value="TUESDAY"> Τρίτη</option>
-                                                                <option th:value="WEDNESDAY"> Τετάρτη</option>
-                                                                <option th:value="THURSDAY"> Πέμπτη</option>
-                                                                <option th:value="FRIDAY"> Παρασκευή</option>
-                                                                <option th:value="SATURDAY"> Σάββατο</option>
-                                                                <option th:value="SUNDAY"> Κυριακή</option>
-                                                            </select>
-                                                            <div class="form-error" th:if="${#fields.hasErrors('dayOfWeek')}" th:errors="*{dayOfWeek}"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row dayOfMonth">
-                                                        <label for="_date" class="col-sm-3  col-form-label emph-label">Ημερομηνία*</label>
-                                                        <div class="col-sm-4">
-                                                            <div class="input-group date">
-                                                                <span class="input-group-addon input-group-text">
-                                                                    <i class="fas fa-calendar-alt"></i>
-                                                                </span>
-                                                                <input class="form-control" value="" aria-label="" id="_date" th:field="*{date}" />
-                                                                <div class="form-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
+                                                        <div class="form-group row mt-3">
+                                                            <input type="hidden" id="_supervisor"  th:field="*{supervisor.id}"/>
+                                                            <label for="supervisor_s2" class="col-3 col-form-label emph-label">
+                                                                Διδάσκων*</label>
+                                                            <div class="col-9">
+                                                                <select id="supervisor_s2" style="width: 100%" class="form-control js-staffMembers-tags reset_control">
+                                                                    <option value=""></option>
+                                                                </select>
+                                                                <div class="form-error" th:if="${#fields.hasErrors('supervisor.id')}" th:errors="*{supervisor.id}"></div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row mt-3">
-                                                        <label for="_timeOfDay" class="col-sm-3  col-form-label emph-label">Ώρα Εκκίνησης*</label>
-                                                        <div class="col-sm-4">
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                                                                <select id="resource_hour" style="width: 75px">
-                                                                    <th:block th:each="i: ${#numbers.sequence(0, 23)}">"
-                                                                        <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
-                                                                        <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
-                                                                    </th:block>
-                                                                </select>
-                                                                <span class="input-group-text"><i class="fas fa-ellipsis-v"></i></span>
-                                                                <select id="resource_minutes" style="width: 75px">
-                                                                    <th:block th:each="i: ${#numbers.sequence(0, 59)}">"
-                                                                        <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
-                                                                        <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
-                                                                    </th:block>
-                                                                </select>
-                                                                <input type="hidden" class="form-control" value="" aria-label="" id="_timeOfDay" th:field="*{startTime}"/>
-                                                            </div>
-                                                            <div class="form-error" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mt-3">
-                                                        <label for="_duration_hours" class="col-sm-3  col-form-label emph-label">Διάρκεια*</label>
-                                                        <div class="col-sm-3 form-inline">
-                                                            <input type="number" id="_duration_hours" value="0" min="0" max="12" step="1" th:field="*{durationHours}"/>
-                                                            <label for="_duration_hours" class="mσ-2">Ώρες </label>
-                                                        </div>
-                                                        <div class="col-sm-3 form-inline">
-                                                            <input type="number" id="_duration_minutes" value="0" min="0" max="59" step="1" th:field="*{durationMinutes}"/>
-                                                            <label for="_duration_minutes"  class="mσ-2">Λεπτά </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-8 offset-3">
-                                                            <div class="form-error" th:if="${#fields.hasErrors('durationHours')}" th:errors="*{durationHours}"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-2 broadcast_panel"><span class="text-muted">6. Επιλογές Μετάδοσης</span></div>
-                                                <div class="p-3 broadcact_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
-                                                    <div class="form-group row">
-                                                        <label for="_broadcast" class="col-sm-3  col-form-label emph-label">
-                                                            <img title="Επιλογές Μετάδοσης" th:src="@{/public/images/icons/IconMetadosi.png}" alt="">
-                                                            Μετάδοση*
-                                                        </label>
-                                                        <div class="col-sm-4">
-                                                            <select id="_broadcast" class="custom-select" th:field="*{broadcast}"  style="width: 100%">
-                                                                <option th:value="1"> Μετάδοση</option>
-                                                                <option th:value="0"> Χωρίς Μετάδοση</option>
-                                                            </select>
-                                                            <div class="form-error" th:if="${#fields.hasErrors('broadcast')}" th:errors="*{broadcast}"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mt-3">
-                                                        <label for="_access" class="col-sm-3  col-form-label emph-label">
-                                                            <img title="Επιλογές Πρόσβασης" th:src="@{/public/images/icons/IconMetadosiStatus.png}" alt="">
-                                                            Πρόσβαση*</label>
-                                                        <div class="col-sm-4">
-                                                            <select id="_access" class="custom-select" th:field="*{access}"  style="width: 100%">
-                                                                <option value="open"> Ανοιχτή</option>
-                                                                <option value="sso"> Με Ιδρυματικό Λογαριασμό</option>
-                                                                <option value="password"> Με Κωδικό Μετάδοσης</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mt-3">
-                                                        <label for="_password" class="col-sm-3  col-form-label emph-label">Κωδικός Μετάδοσης*</label>
-                                                        <div class="col-sm-4 form-inline">
-                                                            <input id="_password" class="form-control" type="text" th:field="*{broadcastCode}"/>
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <button id="reveal_passfield" class="btn btn-light" title="εμφάνιση/απόκρυψη κωδικού"><i class="far fa-eye"></i></button>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-8 offset-3">
-                                                            <div class="form-error" th:if="${#fields.hasErrors('broadcastCode')}" th:errors="*{broadcastCode}"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-2 record_panel"><span class="text-muted">7. Επιλογές Καταγραφής</span></div>
-                                                <div class="p-3 record_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
-                                                    <div class="form-group row">
-                                                        <label for="_record" class="col-sm-3  col-form-label emph-label">
-                                                            <img title="Επιλογές Καταγραφής" th:src="@{/public/images/icons/IconRec.png}" alt="">
-                                                            Καταγραφή*</label>
-                                                            <div class="col-sm-4">
-                                                                <select id="_record" class="custom-select" th:field="*{recording}"  style="width: 100%">
-                                                                    <option th:value="1"> Καταγραφή</option>
-                                                                    <option th:value="0"> Χωρίς Καταγραφή</option>
-                                                                </select>
-                                                                <div class="form-error" th:if="${#fields.hasErrors('recording')}" th:errors="*{recording}"></div>
-                                                            </div>
-                                                    </div>
-                                                    <div class="form-group row mt-3">
-                                                        <label for="_publish" class="col-sm-3  col-form-label emph-label">
-                                                            <img title="Επιλογές Δημοσιοποίησης" th:src="@{/public/images/icons/IconRecStatus.png}" alt="">
-                                                            Δημοσίευση*
-                                                        </label>
-                                                        <div class="col-sm-4">
-                                                            <select id="_publish" class="custom-select" th:field="*{publication}"  style="width: 100%">
-                                                                <option value="private"> Ιδιωτικό (απαιτείται έγκριση)</option>
-                                                                <option value="public"> Δημόσιο (άμεση δημοσίευση)</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- PUBLICATION OPTIONS :: YOUTUBE - FOR SA ONLY FOR NOW!!! -->
-                                                <th:block sec:authorize="hasRole('ROLE_SA')">
-                                                    <th:block th:if="${ScheduleDTO.id != null && ScheduleDTO.type == 'event' && ScheduleDTO.access == 'open' && future_task}">
-                                                    <div class="p-2 youtube_panel"><span class="text-muted">8. Επιλογές Μετάδοσης σε άλλους Παρόχους</span></div>
-                                                    <div class="p-3 youtube_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                    <!-- Event Choice-->
+                                                    <div class="p-2 event_panel"><span class="text-muted">2. Στοιχεία Εκδήλωσης</span></div>
+                                                    <div class="p-3 event_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
                                                         <div class="form-group row">
-                                                            <label for="_record" class="col-sm-3  col-form-label">
-                                                                <img th:src="@{/public/images/youtube.png}" alt="youtube" src="">
-                                                            </label>
-                                                            <div th:if="${ScheduleDTO.youTubeBroadcast == null || ScheduleDTO.youTubeBroadcast.broadcast == false}" class="col-sm-9">
-                                                                <th:block th:if="${google_credentials_exist}">
-                                                                    <a  href="#" id="openYouTubeDialog" title="Ενεργοποίηση Μετάδοσης YouTube"
-                                                                       th:attr="data-target=${ScheduleDTO.id}">
-                                                                        <i class="fab fa-youtube mr-2" style="color:red;"></i><b>Προγραμματισμός Μετάδοσης</b>
-                                                                    </a>
-                                                                    <div class="text-medium-emphasis">
-                                                                        <b>Πριν προχωρήσετε, σιγουρευτείτε ότι έχετε αποθηκεύστε την καταγραφή</b><br/>
-                                                                        O σύνδεσμος Θα ανοίξει ένα νέο αναδυόμενο παράθυρο. Όταν ολοκληρωθεί η διαδικασία, μπορεί να χρειαστεί να ανανεώστε αυτή τη σελίδα πατώντας το κουμπί Ανανέωση του περιηγητή ή το κουμπί F5
-                                                                    </div>
-                                                                </th:block>
-                                                                <th:block th:unless="${google_credentials_exist}">
-                                                                    <a th:href="@{/admin/youtube/grant(id=${google_client_id})}" target="_blank">
-                                                                        Παραχωρήστε τα απαραίτητα δικαιώματα στην εφαρμογή, κάνοντας κλικ εδώ.
-                                                                    </a>
-                                                                    <div class="text-medium-emphasis">
-                                                                        <b>Πριν προχωρήσετε, σιγουρευτείτε ότι έχετε αποθηκεύστε την καταγραφή</b><br/>
-                                                                        O σύνδεσμος Θα ανοίξει νέο παράθυρο περιηγητή. Όταν ολοκληρωθεί η διαδικασία, ανανεώστε αυτή τη σελίδα πατώντας το κουμπί Ανανέωση του περιηγητή ή το κουμπί F5
-                                                                    </div>
-                                                                </th:block>
+                                                            <input type="hidden" id="_event" th:field="*{scheduledEvent.id}"/>
+                                                            <label for="events_s2" class="col-3 col-form-label emph-label">
+                                                                Επιλέξτε Εκδήλωση*</label>
+                                                            <div class="col-9">
+                                                                <select id="events_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
+                                                                    <option value=""></option>
+                                                                </select>
+                                                                <small class="form-text text-muted">* Εμφανίζονται μόνο Εκδηλώσεις με ενεργό ημερολόγιο</small>
+                                                                <div class="form-error" th:if="${#fields.hasErrors('scheduledEvent.id')}" th:errors="*{scheduledEvent.id}"></div>
                                                             </div>
-                                                            <div th:if="${ScheduleDTO.youTubeBroadcast != null && ScheduleDTO.youTubeBroadcast.broadcast == true}" class="col-sm-9">
-                                                                <div class="mb-2">
-                                                                    <b>Διεύθυνση Δημοσίευσης:</b>
-                                                                    <div th:text="${'https://www.youtube.com/watch?v=' + ScheduleDTO.youTubeBroadcast.broadcastId}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Classroom/Place Choice-->
+                                                    <div class="p-2 classroom_panel"><span class="text-muted">3. Αίθουσα/Χώρος</span></div>
+                                                    <div class="p-3 classroom_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                    <!-- CLASSROOM -->
+                                                    <div class="form-group row mt-0 pt-0">
+                                                            <input type="hidden" id="_classroom" th:field="*{classroom.id}"/>
+                                                            <label for="classrooms_s2" class="col-3 col-form-label emph-label">
+                                                                Χώρος/Αίθουσα*</label>
+                                                            <div class="col-9">
+                                                                    <select id="classrooms_s2" style="width: 100%" class="form-control js-classrooms-tags reset_control">
+                                                                        <option value=""></option>
+                                                                    </select>
+                                                                <div class="form-error" th:if="${#fields.hasErrors('classroom.id')}" th:errors="*{classroom.id}"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                                                    <a th:href="${'https://www.youtube.com/watch?v=' + ScheduleDTO.youTubeBroadcast.broadcastId}"
-                                                                         target="_blank" title="επίσκεψη">
-                                                                        <i class="fas fa-external-link-alt"></i>
-                                                                    </a>
-                                                                    <input type="hidden" id="copy_url_input" th:value="${'https://www.youtube.com/watch?v=' + ScheduleDTO.youTubeBroadcast.broadcastId}">
-                                                                    <a class="ml-2" href="#" id="copy-url" title="αντιγραφή συνδέσμου στο πρόχειρο"><i class="far fa-copy mr-1"></i></a>
-                                                                </div>
-                                                                <div>
-                                                                 <a class="mt-4 text-danger" id="unsetYouTubePublication" href="#"
-                                                                    th:attr="data-target=${ScheduleDTO.id},data-bid=${ScheduleDTO.youTubeBroadcast.broadcastId}">
-                                                                     <i class="fas fa-ban mr-2" style="color: red"></i> <b>Ακύρωση Μετάδοσης</b>
-                                                                 </a>
+                                                    <div class="p-2 period_panel"><span class="text-muted">4. Περίοδος - Έτος</span></div>
+                                                    <div class="p-3 period_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                        <!--@thymesVar id="ayList" type="java.util.List"-->
+                                                        <!--@thymesVar id="ayListText" type="java.util.List"-->
+                                                        <div class="form-group row">
+                                                            <label for="resource_ay" class="col-3  col-form-labe emph-label">Ακαδημαϊκό Έτος*</label>
+                                                            <div class="col-5">
+                                                                <select id="resource_ay" class="form-select" th:field="*{academicYear}"  style="width: 100%">
+                                                                    <option value=""></option>
+                                                                    <option th:each="i, iter : ${ayList}" th:value="${i}" th:text="${ayListText[iter.index]}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!--@thymesVar id="pdList" type="java.util.HashMap<String,String>"-->
+                                                        <div class="form-group row lecture_panel mt-3">
+                                                            <label for="resource_pd" class="col-3  col-form-label emph-label">Περίοδος*</label>
+                                                            <div class="col-5">
+                                                                <select id="resource_pd" class="form-select" th:field="*{period}" style="width: 100%">
+                                                                    <option value=""></option>
+                                                                    <option th:each="period: ${pdList}" th:value="${period.key}" th:text="${period.value}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="px-2 mt-2 lecture_panel" id="period_info" style="background-color: lightgoldenrodyellow;color:black"></div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="p-2 dayOfWeek_panel"><span class="text-muted">5. Ημερομηνίες - Ώρα - Διάρκεια</span></div>
+                                                    <div class="p-3 dayOfWeek_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                        <div class="form-group row dayOfWeek">
+                                                            <label for="_dayOfWeek" class="col-3  col-form-label emph-label">Ημέρα*</label>
+                                                            <div class="col-5">
+                                                                <select id="_dayOfWeek" class="custom-select" th:field="*{dayOfWeek}"  style="width: 100%">
+                                                                    <option value=""></option>
+                                                                    <option th:value="MONDAY"> Δευτέρα</option>
+                                                                    <option th:value="TUESDAY"> Τρίτη</option>
+                                                                    <option th:value="WEDNESDAY"> Τετάρτη</option>
+                                                                    <option th:value="THURSDAY"> Πέμπτη</option>
+                                                                    <option th:value="FRIDAY"> Παρασκευή</option>
+                                                                    <option th:value="SATURDAY"> Σάββατο</option>
+                                                                    <option th:value="SUNDAY"> Κυριακή</option>
+                                                                </select>
+                                                                <div class="form-error" th:if="${#fields.hasErrors('dayOfWeek')}" th:errors="*{dayOfWeek}"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row dayOfMonth">
+                                                            <label for="_date" class="col-3  col-form-label emph-label">Ημερομηνία*</label>
+                                                            <div class="col-5">
+                                                                <div class="input-group date">
+                                                                    <span class="input-group-addon input-group-text">
+                                                                        <i class="fas fa-calendar-alt"></i>
+                                                                    </span>
+                                                                    <input class="form-control" value="" aria-label="" id="_date" th:field="*{date}" />
+                                                                    <div class="form-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
-<!--                                                        <div class="form-group row" style="border-top: lightgrey solid 1px">
-                                                            <label for="_record" class="col-sm-3  col-form-label text-center">
-                                                                <i class="fab fa-facebook fa-4x"></i>
-                                                            </label>
-                                                            <div th:if="${ScheduleDTO.youTubeBroadcast == null || ScheduleDTO.youTubeBroadcast.broadcast == false}" class="col-sm-9">
-                                                                <a  id="openFacebookDialog" title="Ενεργοποίηση Μετάδοσης Facebook"
-                                                                   th:attr="data-target=${ScheduleDTO.id}">Ενεργοποίηση Δημοσίευσης
-                                                                </a>
+                                                        <div class="form-group row mt-3">
+                                                            <label for="_timeOfDay" class="col-3  col-form-label emph-label">Ώρα Εκκίνησης*</label>
+                                                            <div class="col-9">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                                    <select id="resource_hour" style="width: 75px">
+                                                                        <th:block th:each="i: ${#numbers.sequence(0, 23)}">"
+                                                                            <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
+                                                                            <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
+                                                                        </th:block>
+                                                                    </select>
+                                                                    <span class="input-group-text"><i class="fas fa-ellipsis-v"></i></span>
+                                                                    <select id="resource_minutes" style="width: 75px">
+                                                                        <th:block th:each="i: ${#numbers.sequence(0, 59)}">"
+                                                                            <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
+                                                                            <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
+                                                                        </th:block>
+                                                                    </select>
+                                                                    <input type="hidden" class="form-control" value="" aria-label="" id="_timeOfDay" th:field="*{startTime}"/>
+                                                                </div>
+                                                                <div class="form-error" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></div>
                                                             </div>
-                                                        </div>-->
+                                                        </div>
+                                                        <div class="form-group row mt-3">
+                                                            <label for="_duration_hours" class="col-3  col-form-label emph-label">Διάρκεια*</label>
+                                                            <div class="col-3 form-inline">
+                                                                <input type="number" id="_duration_hours" value="0" min="0" max="12" step="1" th:field="*{durationHours}"/>
+                                                                <label for="_duration_hours" class="mσ-2">Ώρες </label>
+                                                            </div>
+                                                            <div class="col-3 form-inline">
+                                                                <input type="number" id="_duration_minutes" value="0" min="0" max="59" step="1" th:field="*{durationMinutes}"/>
+                                                                <label for="_duration_minutes"  class="mσ-2">Λεπτά </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-8 offset-3">
+                                                                <div class="form-error" th:if="${#fields.hasErrors('durationHours')}" th:errors="*{durationHours}"></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </th:block>
-                                                </th:block>
-                                            </div>
-                                        </div>
-                                </div>
-                                    <div class="card-footer" th:unless="${ScheduleDTO.id != null && ScheduleDTO.id != ''}" >
-                                        <div class="py-2" style="font-weight: 500">
-                                            Με την επιτυχή αποθήκευση των παραμέτρων της μετάδοσης, θα εμφανιστεί εδώ, το αναλυτικό πρόγραμμα των μεταδόσεων
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                                                    <div class="p-2 broadcast_panel"><span class="text-muted">6. Επιλογές Μετάδοσης</span></div>
+                                                    <div class="p-3 broadcact_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                        <div class="form-group row">
+                                                            <label for="_broadcast" class="col-3  col-form-label emph-label">
+                                                                <img title="Επιλογές Μετάδοσης" th:src="@{/public/images/icons/IconMetadosi.png}" alt="">
+                                                                Μετάδοση*
+                                                            </label>
+                                                            <div class="col-5">
+                                                                <select id="_broadcast" class="custom-select" th:field="*{broadcast}"  style="width: 100%">
+                                                                    <option th:value="1"> Μετάδοση</option>
+                                                                    <option th:value="0"> Χωρίς Μετάδοση</option>
+                                                                </select>
+                                                                <div class="form-error" th:if="${#fields.hasErrors('broadcast')}" th:errors="*{broadcast}"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row mt-3">
+                                                            <label for="_access" class="col-3  col-form-label emph-label">
+                                                                <img title="Επιλογές Πρόσβασης" th:src="@{/public/images/icons/IconMetadosiStatus.png}" alt="">
+                                                                Πρόσβαση*</label>
+                                                            <div class="col-5">
+                                                                <select id="_access" class="custom-select" th:field="*{access}"  style="width: 100%">
+                                                                    <option value="open"> Ανοιχτή</option>
+                                                                    <option value="sso"> Με Ιδρυματικό Λογαριασμό</option>
+                                                                    <option value="password"> Με Κωδικό Μετάδοσης</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row mt-3">
+                                                            <label for="_password" class="col-3  col-form-label emph-label">Κωδικός Μετάδοσης*</label>
+                                                            <div class="col-5 form-inline">
+                                                                <input id="_password" class="form-control" type="text" th:field="*{broadcastCode}"/>
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <button id="reveal_passfield" class="btn btn-light" title="εμφάνιση/απόκρυψη κωδικού"><i class="far fa-eye"></i></button>
+                                                            </div>
 
-                        <div th:if="${ScheduleDTO.id != null && ScheduleDTO.id != ''}" class="card my-3 py-3 px-2" style="font-weight: 500">
-                            Ελέγξτε στον παρακάτω πίνακα το Πρόγραμμα των Μεταδόσεων, το οποίο δημιουργήθηκε σύμφωνα με τις παραπάνω επιλογές. Αποθηκεύστε τυχόν τροποποιήσεις για τον υπολογισμό του νέου προγράμματος μεταδόσεων
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-8 offset-3">
+                                                                <div class="form-error" th:if="${#fields.hasErrors('broadcastCode')}" th:errors="*{broadcastCode}"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="p-2 record_panel"><span class="text-muted">7. Επιλογές Καταγραφής</span></div>
+                                                    <div class="p-3 record_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                        <div class="form-group row">
+                                                            <label for="_record" class="col-3  col-form-label emph-label">
+                                                                <img title="Επιλογές Καταγραφής" th:src="@{/public/images/icons/IconRec.png}" alt="">
+                                                                Καταγραφή*</label>
+                                                                <div class="col-5">
+                                                                    <select id="_record" class="custom-select" th:field="*{recording}"  style="width: 100%">
+                                                                        <option th:value="1"> Καταγραφή</option>
+                                                                        <option th:value="0"> Χωρίς Καταγραφή</option>
+                                                                    </select>
+                                                                    <div class="form-error" th:if="${#fields.hasErrors('recording')}" th:errors="*{recording}"></div>
+                                                                </div>
+                                                        </div>
+                                                        <div class="form-group row mt-3">
+                                                            <label for="_publish" class="col-3  col-form-label emph-label">
+                                                                <img title="Επιλογές Δημοσιοποίησης" th:src="@{/public/images/icons/IconRecStatus.png}" alt="">
+                                                                Δημοσίευση*
+                                                            </label>
+                                                            <div class="col-5">
+                                                                <select id="_publish" class="custom-select" th:field="*{publication}"  style="width: 100%">
+                                                                    <option value="private"> Ιδιωτικό (απαιτείται έγκριση)</option>
+                                                                    <option value="public"> Δημόσιο (άμεση δημοσίευση)</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- PUBLICATION OPTIONS :: YOUTUBE - FOR SA ONLY FOR NOW!!! -->
+                                                    <th:block sec:authorize="hasRole('ROLE_SA')">
+                                                        <th:block th:if="${ScheduleDTO.id != null && ScheduleDTO.type == 'event' && ScheduleDTO.access == 'open' && future_task}">
+                                                        <div class="p-2 youtube_panel"><span class="text-muted">8. Επιλογές Μετάδοσης σε άλλους Παρόχους</span></div>
+                                                        <div class="p-3 youtube_panel" style="background-color: #f7f7f9;border-top: black 1px solid;">
+                                                            <div class="form-group row">
+                                                                <label for="_record" class="col-3  col-form-label">
+                                                                    <img th:src="@{/public/images/youtube.png}" alt="youtube" src="">
+                                                                </label>
+                                                                <div th:if="${ScheduleDTO.youTubeBroadcast == null || ScheduleDTO.youTubeBroadcast.broadcast == false}" class="col-9">
+                                                                    <th:block th:if="${google_credentials_exist}">
+                                                                        <a  href="#" id="openYouTubeDialog" title="Ενεργοποίηση Μετάδοσης YouTube"
+                                                                           th:attr="data-target=${ScheduleDTO.id}">
+                                                                            <i class="fab fa-youtube mr-2" style="color:red;"></i><b>Προγραμματισμός Μετάδοσης</b>
+                                                                        </a>
+                                                                        <div class="text-medium-emphasis">
+                                                                            <b>Πριν προχωρήσετε, σιγουρευτείτε ότι έχετε αποθηκεύστε την καταγραφή</b><br/>
+                                                                            O σύνδεσμος Θα ανοίξει ένα νέο αναδυόμενο παράθυρο. Όταν ολοκληρωθεί η διαδικασία, μπορεί να χρειαστεί να ανανεώστε αυτή τη σελίδα πατώντας το κουμπί Ανανέωση του περιηγητή ή το κουμπί F5
+                                                                        </div>
+                                                                    </th:block>
+                                                                    <th:block th:unless="${google_credentials_exist}">
+                                                                        <a th:href="@{/admin/youtube/grant(id=${google_client_id})}" target="_blank">
+                                                                            Παραχωρήστε τα απαραίτητα δικαιώματα στην εφαρμογή, κάνοντας κλικ εδώ.
+                                                                        </a>
+                                                                        <div class="text-medium-emphasis">
+                                                                            <b>Πριν προχωρήσετε, σιγουρευτείτε ότι έχετε αποθηκεύστε την καταγραφή</b><br/>
+                                                                            O σύνδεσμος Θα ανοίξει νέο παράθυρο περιηγητή. Όταν ολοκληρωθεί η διαδικασία, ανανεώστε αυτή τη σελίδα πατώντας το κουμπί Ανανέωση του περιηγητή ή το κουμπί F5
+                                                                        </div>
+                                                                    </th:block>
+                                                                </div>
+                                                                <div th:if="${ScheduleDTO.youTubeBroadcast != null && ScheduleDTO.youTubeBroadcast.broadcast == true}" class="col-9">
+                                                                    <div class="mb-2">
+                                                                        <b>Διεύθυνση Δημοσίευσης:</b>
+                                                                        <div th:text="${'https://www.youtube.com/watch?v=' + ScheduleDTO.youTubeBroadcast.broadcastId}"></div>
+
+                                                                        <a th:href="${'https://www.youtube.com/watch?v=' + ScheduleDTO.youTubeBroadcast.broadcastId}"
+                                                                             target="_blank" title="επίσκεψη">
+                                                                            <i class="fas fa-external-link-alt"></i>
+                                                                        </a>
+                                                                        <input type="hidden" id="copy_url_input" th:value="${'https://www.youtube.com/watch?v=' + ScheduleDTO.youTubeBroadcast.broadcastId}">
+                                                                        <a class="ml-2" href="#" id="copy-url" title="αντιγραφή συνδέσμου στο πρόχειρο"><i class="far fa-copy mr-1"></i></a>
+                                                                    </div>
+                                                                    <div>
+                                                                     <a class="mt-4 text-danger" id="unsetYouTubePublication" href="#"
+                                                                        th:attr="data-target=${ScheduleDTO.id},data-bid=${ScheduleDTO.youTubeBroadcast.broadcastId}">
+                                                                         <i class="fas fa-ban mr-2" style="color: red"></i> <b>Ακύρωση Μετάδοσης</b>
+                                                                     </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+    <!--                                                        <div class="form-group row" style="border-top: lightgrey solid 1px">
+                                                                <label for="_record" class="col-sm-3  col-form-label text-center">
+                                                                    <i class="fab fa-facebook fa-4x"></i>
+                                                                </label>
+                                                                <div th:if="${ScheduleDTO.youTubeBroadcast == null || ScheduleDTO.youTubeBroadcast.broadcast == false}" class="col-sm-9">
+                                                                    <a  id="openFacebookDialog" title="Ενεργοποίηση Μετάδοσης Facebook"
+                                                                       th:attr="data-target=${ScheduleDTO.id}">Ενεργοποίηση Δημοσίευσης
+                                                                    </a>
+                                                                </div>
+                                                            </div>-->
+                                                        </div>
+                                                    </th:block>
+                                                    </th:block>
+                                                </div>
+                                            </div>
+                                </form>
+                            </div>
                         </div>
+<!--                        <div class="card-footer" th:unless="${ScheduleDTO.id != null && ScheduleDTO.id != ''}" >
+                            <div class="py-2" style="font-weight: 500">
+                                Με την επιτυχή αποθήκευση των παραμέτρων της μετάδοσης, θα εμφανιστεί εδώ, το αναλυτικό πρόγραμμα των μεταδόσεων
+                            </div>
+                        </div>-->
+<!--                        <div th:if="${ScheduleDTO.id != null && ScheduleDTO.id != ''}" class="card my-3 py-3 px-2" style="font-weight: 500">
+                            Ελέγξτε στον παρακάτω πίνακα το Πρόγραμμα των Μεταδόσεων, το οποίο δημιουργήθηκε σύμφωνα με τις παραπάνω επιλογές. Αποθηκεύστε τυχόν τροποποιήσεις για τον υπολογισμό του νέου προγράμματος μεταδόσεων
+                        </div>-->
 
                         <!-- ΠΡΟΓΡΑΜΜΑ ΜΕΤΑΔΟΣΕΩΝ -->
                         <div class="card mt-3" id="schedule_panel">
                                 <div class="card-header">
-                                    <h6>Πρόγραμμα Μεταδόσεων</h6>
+                                    <h6>Ημερολόγιο Μεταδόσεων</h6>
                                     <div class="lecture_panel">
-
                                         <div style="display: none">
                                                 <div>Μάθημα: <span  style="font-style: italic" class="font-weight-bolder" id="_course_title" th:text="${ScheduleDTO.course.title}"></span>
                                                     - Τμήμα <span  id="_department_title" th:if="${ScheduleDTO.department != null}" style="font-style: italic"
@@ -557,13 +537,13 @@
                                 <div class="card-body">
                                     <div class="row lecture_panel">
                                         <div class="col-12">
-                                            <table id="schedule_table" style="width: 100%" class="row-border stripe">
+                                            <table id="schedule_table" style="width: 100%" class="display compact row-border stripe">
                                                 <thead>
-                                                <tr style="font-weight: 700">
+                                                <tr style="font-weight: 600">
                                                     <td style="width: 16px">#</td>
-                                                    <td style="width: 16px"><i class="fas fa-plug"></i></td>
+                                                    <td><i class="fas fa-plug"></i> Κατάσταση Μετάδοσης</td>
                                                     <td>[id]</td>
-                                                    <td style="width: 18px">Τύπος </td>
+                                                    <td>Τύπος </td>
                                                     <td>Περίοδος </td>
                                                     <td>Ημέρα</td>
                                                     <td>Ημερομηνία</td>
@@ -595,7 +575,7 @@
                                         <div class="col-12">
                                             <table id="schedule_etable" style="width: 100%" class="row-border stripe">
                                                 <thead>
-                                                <tr style="font-weight: 700">
+                                                <tr style="font-weight: 600">
                                                     <td style="width: 16px">#</td>
                                                     <td style="width: 16px"><i class="fas fa-plug"></i></td>
                                                     <td>[id]</td>

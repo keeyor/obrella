@@ -27,7 +27,7 @@
             $("#PPMessages").html(" ");
             $("#PPeriodErrorMessages").attr('class','alert alert-danger invisible');
             $("#modal_p_scope").val("system");
-            $("#editPauseModal").modal('show');
+           // $("#editPauseModal").modal('show');
         });
         $("#department-argies-edit").on('click',function(e){
 
@@ -46,7 +46,13 @@
             $("#PPMessages").html(" ");
             $("#PPeriodErrorMessages").attr('class','alert alert-danger invisible');
             $("#modal_p_scope").val("department");
-            $("#editPauseModal").modal('show');
+           // $("#editPauseModal").modal('show');
+            $("#argies_card_edit").show();
+            $("#argies_card").hide();
+        });
+        $("#argies-edit-close").on('click',function(e){
+            $("#argies_card").show();
+            $("#argies_card_edit").hide();
         });
     }
 

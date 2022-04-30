@@ -46,6 +46,12 @@ public class DepartmentController {
 	@Autowired
 	Institution defaultInstitution;
 
+	@Autowired
+	String currentAcademicYear;
+
+	@ModelAttribute("currentAcademicYear")
+	protected String getCurrentAcademicYear() {return currentAcademicYear;}
+
 	@ModelAttribute("mInstitution")
 	private Institution getInstitution()  {
 		return  defaultInstitution;
@@ -214,7 +220,7 @@ public class DepartmentController {
 	}
 
 	@RequestMapping(value = "admin/department/acalendar",   method = RequestMethod.GET)
-	public String getCurrentPeriod(final Model model, HttpServletRequest request, Locale locale,@RequestParam(value = "id",  required = false) String id) throws Exception {
+	public String getCurrentPeriod(final Model model, HttpServletRequest request,@RequestParam(value = "id",  required = false) String id) throws Exception {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user",editor);
@@ -222,34 +228,23 @@ public class DepartmentController {
 		HttpSession session = request.getSession();
 		//Department
 		Department department = null;
-		School school = null;
 		if (id != null && !id.equals("")) {
 			department = departmentService.findById(id);
-			school = schoolService.findById(department.getSchoolId());
 			session.setAttribute("user_dp", id);
 		}
 		else {
 			String user_dp = (String) session.getAttribute("user_dp");
 			if (user_dp != null) {
 				department = departmentService.findById(user_dp);
-				school = schoolService.findById(department.getSchoolId());
+			}
+			else {
+				department = new Department();
+				department.setTitle("Επιλέξτε Τμήμα");
+				department.setId(""); // leave black for select2 control
 			}
 		}
 		model.addAttribute("department", department);
-		model.addAttribute("school", school);
-		model.addAttribute("institution_identity",institution_identity);
-		//Licenses
-		String[] licenseList = optionServices.getLicenses(locale);
-		model.addAttribute("licenseList", licenseList);
-
-		//LMSs'
-		model.addAttribute("lms", lmsProperties);
 		model.addAttribute("page", "calendar");
-
-		model.addAttribute("institutionName", multilingualServices.getValue("default.institution.title",locale));
-
-		//List<School> schools =  schoolService.findAllSortedByTitle();
-		//model.addAttribute("schools",schools);
 
 		return "admin/departments/academicCalendar";
 	}

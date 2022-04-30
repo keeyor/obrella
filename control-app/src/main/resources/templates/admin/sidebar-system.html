@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<div th:fragment="sidebar-system" class="sidebar sidebar-fixed sidebar" id="sidebar">
+    <div class="sidebar-brand d-none d-md-flex">
+        <div class="sidebar-brand-full" width="118" height="46" alt="Delos Logo">
+            <img th:src="@{/public/images/logos/byOpenDelosWhite.png}"/>
+        </div>
+        <div class="sidebar-brand-narrow" width="46" height="46" alt="Delos Logo">
+            <img th:src="@{/public/images/logos/byOpenDelos_sm.png}"/>
+        </div>
+    </div>
+    <ul class="sidebar-nav"  style=" ">
+
+
+        <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+            <li class="nav-title">ΙΔΡΥΜΑ</li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/institution/structure}">
+                    <i class="nav-icon icon-main-menu-irm"></i> Σχολές & Τμήματα
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/institution/classrooms}">
+                    <i class="nav-icon icon-class"></i> Αίθουσες
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/institution/acalendar}">
+                    <i class="nav-icon fas fa-calendar-alt"></i> Ακαδημαϊκό Ημερολόγιο
+                </a>
+            </li>
+        </th:block>
+
+
+        <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_SA')">
+            <li class="nav-title">ΤΜΗΜΑΤΑ</li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/department/courses}">
+                    <i class="nav-icon icon-lecture-lesson"></i> Μαθήματα
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/department/staff}">
+                    <i class="nav-icon fas fa-users"></i> Προσωπικό
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/department/programs}">
+                    <i class="nav-icon fas fa-microscope"></i> Προγράμματα Σπουδών
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/department/acalendar}">
+                    <i class="nav-icon fas fa-calendar-alt"></i> Ακαδημαϊκό Ημερολόγιο
+                </a>
+            </li>
+        </th:block>
+
+
+   <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+        <li class="nav-title">ΙΣΤΟΤΟΠΟΣ</li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/system/users}">
+                <i class="nav-icon fas fa-users-cog"></i> Διαχειριστές
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/system/streamers}">
+                <i class="nav-icon fas fa-server"></i> Εξυπηρετητές
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/system/messages}">
+                <i class="nav-icon fas fa-info"></i> Μηνύματα Χρηστών
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="localhost:5601">
+                <i class="nav-icon fas fa-record-vinyl"></i> Αρχεία Καταγραφής
+            </a>
+        </li>
+        </th:block>
+
+    </ul>
+
+</div>

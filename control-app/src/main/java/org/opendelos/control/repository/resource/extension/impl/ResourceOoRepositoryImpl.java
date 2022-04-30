@@ -50,21 +50,23 @@ public class ResourceOoRepositoryImpl implements ResourceOoRepository {
 
 		String direction = resourceQuery.getDirection();
 		String field = null;
-		switch (resourceQuery.getSort()) {
-		case "title":
-			field = "title";
-			break;
-		case "date":
-			field = "date";
-			break;
-		case "dateModified":
-			field = "dateModified";
-			break;
-		case "views":
-			field = "statistics";
-			break;
-		case "rel":
-			field = "text-search";
+		if (resourceQuery.getSort() != null) {
+			switch (resourceQuery.getSort()) {
+			case "title":
+				field = "title";
+				break;
+			case "date":
+				field = "date";
+				break;
+			case "dateModified":
+				field = "dateModified";
+				break;
+			case "views":
+				field = "statistics";
+				break;
+			case "rel":
+				field = "text-search";
+			}
 		}
 
 		if (field != null && !field.equals("text-search")) {

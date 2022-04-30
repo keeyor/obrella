@@ -5,10 +5,10 @@
 <div th:fragment="sidebar-content" class="sidebar sidebar-fixed sidebar" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
         <div class="sidebar-brand-full" width="118" height="46" alt="Delos Logo">
-            <img th:src="@{/public/images/logos/byOpenDelosWhite.png}"/>
+
         </div>
         <div class="sidebar-brand-narrow" width="46" height="46" alt="Delos Logo">
-            <img th:src="@{/public/images/logos/byOpenDelos_sm.png}"/>
+
         </div>
     </div>
     <ul class="sidebar-nav"  style=" ">
@@ -60,7 +60,8 @@
                 <i class="nav-icon icon-live-lecture"></i> Ζωντανές Μεταδόσεις
             </a>
         </li>
-        <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+
+<!--        <th:block sec:authorize="hasAnyRole('ROLE_SA')">
             <li class="nav-title">ΙΔΡΥΜΑ</li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/admin/institution/structure}">
@@ -77,7 +78,8 @@
                     <i class="nav-icon fas fa-calendar-alt"></i> Ακαδημαϊκό Ημερολόγιο
                 </a>
             </li>
-        </th:block>
+        </th:block>-->
+<!--
 
         <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_SA')">
             <li class="nav-title">ΤΜΗΜΑΤΑ</li>
@@ -102,6 +104,7 @@
                 </a>
             </li>
         </th:block>
+-->
 
 <!--        <th:block sec:authorize="hasAnyRole('ROLE_SA')">
         <li class="nav-title">ΙΣΤΟΤΟΠΟΣ</li>

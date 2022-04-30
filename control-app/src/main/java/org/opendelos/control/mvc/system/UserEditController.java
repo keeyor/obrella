@@ -114,6 +114,7 @@ public class UserEditController {
 						isStaffMember = true;
 					}
 				}
+				adminUser.setPassword("ISSET");
 			}
 			else {
 				adminUser = this.createEmptyAdminUser();
@@ -159,7 +160,7 @@ public class UserEditController {
 			OpUser opUser_o = opUserService.findById(opUser_id); //get Resource from Database or return empty Resource
 
 			if (opUser_o != null) {
-				if (opUser.getPassword() == null || opUser.getPassword().trim().equals("")) {
+				if (opUser.getPassword() == null || opUser.getPassword().trim().equals("ISSET")) {
 					opUser.setPassword(opUser_o.getPassword());
 				}
 				if (opUser.getEduPersonPrimaryAffiliation() == null || opUser.getEduPersonPrimaryAffiliation()
@@ -178,6 +179,8 @@ public class UserEditController {
 				if (opUser.getCourses() == null || opUser.getCourses().isEmpty()) {
 					opUser.setCourses(opUser_o.getCourses());
 				}
+				opUser.setLastLogin(opUser_o.getLastLogin());
+				opUser.setActive(opUser_o.isActive());
 			}
 		}
 		if (bindingResult.hasErrors()) {
@@ -235,11 +238,11 @@ public class UserEditController {
 			}
 			else {
 					//Update password if changed!
-					if (!opUser.getPassword().trim().equals("")) {
+					/*if (!opUser.getPassword().trim().equals("")) {
 						BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 						String encoded_pass = bCryptPasswordEncoder.encode(opUser.getPassword());
 						opUser.setPassword(encoded_pass);
-					}
+					}*/
 					opUserService.update(opUser);
 			}
 
@@ -276,6 +279,7 @@ public class UserEditController {
 		OpUser adminUser = new OpUser();
 		adminUser.setId(null);
 		adminUser.setIdentity(null);
+		adminUser.setPassword("");
 
 		List<String> courses = new ArrayList<>();
 		adminUser.setCourses(courses);

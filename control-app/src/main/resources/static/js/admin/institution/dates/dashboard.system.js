@@ -35,6 +35,7 @@
             let message = {msg: "Year selected!", year: dashboard.selected_year};
             dashboard.broker.trigger('afterSelect.year', [message]);
         });
+
     	$system_button_edit.on('click', function() {
     		
     		 dashboard.modal.initDataTable( dashboard.selected_year, dashboard.institution,"");
@@ -57,6 +58,30 @@
     		 
     		 $editPeriodModal.modal('show');
     	});
+
+    	$("#calendar-edit").on('click',function(e){
+
+            dashboard.modal.initDataTable( dashboard.selected_year, dashboard.institution,"");
+            dashboard.modal_year.html(" " + dashboard.selected_year + "-" + (parseInt(dashboard.selected_year)+1));
+
+            dashboard.modal_header_img_institution.show();
+            dashboard.modal_header_img_department.hide();
+            dashboard.modal_header_img_study.hide();
+
+            dashboard.modal_header_institution.css("color", "red");
+            dashboard.modal_department_title.hide();
+            dashboard.modal_study_title.hide();
+
+            dashboard.modal_period_error_messages.html(" ");
+            dashboard.modal_period_error_messages.attr('class','alert alert-danger invisible');
+
+            $("#calendar_card").hide();
+            $("#calendar_edit_card").show();
+        });
+        $("#calendar-edit-close").on('click',function(e){
+            $("#calendar_card").show();
+            $("#calendar_edit_card").hide();
+        });
     };
 
 
@@ -79,9 +104,10 @@
 
     }
     function InitControls() {
-        $select_year.select2({
-            placeholder: 'Επιλέξτε Ακαδημαϊκό Έτος'
-        });
+/*        $select_year.select2({
+            placeholder: 'Επιλέξτε Ακαδημαϊκό Έτος',
+            minimumResultsForSearch: -1
+        });*/
     }
 
 
@@ -93,9 +119,7 @@
 	        "bFilter": false,
 	        "bPaginate": false,
 	        "bInfo" : false,	//hide Showing ....
-            "oLanguage": {
-                "sSearch": "<small>Αναζήτηση</small>"
-            },
+            "oLanguage": dtLanguageGr,
             "order": [[1, 'asc']],
             "ajax":  {
             			"url": dashboard.siteurl + '/api/v1/dt/institution/' + institutionId + '/calendar/' + year,
@@ -180,6 +204,7 @@
                     placeholder: 'Επιλέξτε Ακαδημαϊκό Έτος',
                     width: 'style',
                     data : data.results,
+                    minimumResultsForSearch: -1,
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                     templateResult: formatRepo,
                     templateSelection: formatRepoSelection
