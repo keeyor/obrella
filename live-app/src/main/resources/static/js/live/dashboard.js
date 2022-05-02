@@ -161,7 +161,7 @@
                     let recording = el.recording;
 
                     html += '<div class="row  row-cols-auto mt-2" style="font-size: 0.9em">';
-                    if (status === "live") {
+                    if (status === "live" || status === "future") {
                         if (access === "open") {
                             html += '<div class="col"><i class="fas fa-lock-open ms-lg-1 me-1"></i>Ελεύθερη</div>';
                         } else if (access === "sso") {

@@ -83,7 +83,7 @@ public class SecurityConfiguration {
 
 			http	.antMatcher("/cas/**")
 					.authorizeRequests()
-					.antMatchers("/cas/**").hasAnyRole("SA", "MANAGER", "SUPPORT", "STAFFMEMBER");
+					.antMatchers("/cas/**").hasAnyRole("SA", "MANAGER", "SUPPORT", "STAFFMEMBER", "STUDENT", "USER");
 
 			http
 					.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
