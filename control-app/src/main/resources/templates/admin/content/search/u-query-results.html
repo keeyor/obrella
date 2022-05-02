@@ -149,6 +149,10 @@
                                     </a>
                                 </th:block>
                             </th:block>
+                            <a  th:unless="${lecture.status.inclMultimedia == 1}" class="btn btn-pill btn-sm ms-lg-2  hover_button_warn"
+                                th:href="@{/admin/event-editor(id=${lecture.id})}"  title="εκκρεμεί ανάρτηση βίντεο">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
                         </th:block>
 
 

@@ -6,6 +6,7 @@ package org.opendelos.control.conf;
 
 
 import java.util.Locale;
+import java.util.Properties;
 
 import org.opendelos.control.services.structure.InstitutionService;
 import org.opendelos.model.structure.Institution;
@@ -18,6 +19,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.web.servlet.LocaleResolver;
@@ -33,6 +36,13 @@ public class MvcConfig implements WebMvcConfigurer {
 
 	@Value("${default.institution.identity}")
 	String institution_identity;
+
+	@Value( "${spring.mail.username}" )
+	private String mail_username;
+	@Value( "${spring.mail.password}" )
+	private String mail_password;
+	@Value( "${spring.mail.port}" )
+	private int mail_port;
 
 	private final InstitutionService institutionService;
 
@@ -93,6 +103,23 @@ public class MvcConfig implements WebMvcConfigurer {
 	}
 
 
+	@Bean
+	public JavaMailSender getJavaMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(mail_port);
+
+		mailSender.setUsername(mail_username);
+		mailSender.setPassword(mail_password);
+
+		Properties props = mailSender.getJavaMailProperties();
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.debug", "true");
+
+		return mailSender;
+	}
 
 	/*@Bean
 	public RedisCacheConfiguration cacheConfiguration() {

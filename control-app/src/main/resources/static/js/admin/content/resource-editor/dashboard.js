@@ -81,8 +81,6 @@
         alertify.defaults.theme.cancel = "btn red-btn-wcag-bgnd-color text-white";
         alertify.defaults.theme.input = "form-control";
 
-
-
         //DATE
         $("#_date_part").datepicker({
             format: "yyyy-mm-dd",
@@ -117,6 +115,9 @@
         let datetime_selected = moment(resource_datetime).hour(hour).minute(minute).format('YYYY-MM-DD'); //moment(resource_datetime).hour(hour).minute(minute).format('YYYY-MM-DDTHH:mm:ss[Z]');
 
         $("#_date_part").datepicker('setDate',datetime_selected);
+
+        let _form_datetime= moment(datetime_selected).hour(hour).minute(minute).format('YYYY-MM-DDTHH:mm:ss[Z]');
+        $("#_date").val(_form_datetime);
 
         //partNumber
         $("input[type='number']").inputSpinner();
