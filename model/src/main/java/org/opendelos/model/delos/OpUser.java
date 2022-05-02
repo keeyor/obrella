@@ -53,6 +53,6 @@ public class OpUser implements Serializable {
 
 	protected Instant lastLogin;
 
-	protected long resourceCounter; // how many resources refer this supervisor;
-	protected long resourcePublicCounter; // how many public resources refer this supervisor;
+	// protected long resourceCounter; // how many resources refer this supervisor;
+	 protected long resourcePublicCounter; // how many public resources refer this supervisor;
 }

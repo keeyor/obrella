@@ -20,6 +20,7 @@ public class SystemMessage implements Serializable {
 	@Id
 	private String id;
 	private String status;
+	private String target;
 	private String text;
 	private boolean visible;
 	private Instant startDate;

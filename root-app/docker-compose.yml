@@ -63,7 +63,7 @@ services:
     extra_hosts:
       - "dimos.med.uoa.gr:88.197.126.20"
     ports:
-      - "8071:8071"
+      - "8069:8069"
     networks:
       - elk
     depends_on:
@@ -78,7 +78,7 @@ services:
     extra_hosts:
       - "dimos.med.uoa.gr:172.22.80.1"
     ports:
-      - "8081:8080"
+      - "8071:8071"
       - "5005:5005"
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005

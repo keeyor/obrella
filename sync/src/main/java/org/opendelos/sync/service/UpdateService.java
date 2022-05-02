@@ -1077,11 +1077,13 @@ public class UpdateService {
 				}
 				else {
 					resourceV4.setCourse(course);
-					if (videoLecture.getRights().getSecurity().equalsIgnoreCase("public")) {
+					// Do not use PublicCounters for now! until you find a clever way to update the counters
+					 if (videoLecture.getRights().getSecurity().equalsIgnoreCase("public")) {
 						course.setResourcePublicCounter(course.getResourcePublicCounter() + 1);
+						courseService.update(course);
 					}
-					course.setResourceCounter(course.getResourceCounter() + 1);
-					courseService.update(course);
+					//course.setResourceCounter(course.getResourceCounter() + 1);
+					//courseService.update(course);
 				}
 				//Department
 				String departmentIdentity = videoLecture.getUnit().getIdentity();
@@ -1106,11 +1108,13 @@ public class UpdateService {
 					return -1;
 				} else {
 					resourceV4.setSupervisor(new Person(creator.getId(), creator.getName(), creator.getAffiliation(), creator.getDepartment()));
-					if (videoLecture.getRights().getSecurity().equalsIgnoreCase("public")) {
+					// Do not use PublicCounters for now! until you find a clever way to update the counters
+					 if (videoLecture.getRights().getSecurity().equalsIgnoreCase("public")) {
 						creator.setResourcePublicCounter(creator.getResourcePublicCounter() + 1);
+						 opUserService.update(creator);
 					}
-					creator.setResourceCounter(editor.getResourceCounter() + 1);
-					opUserService.update(creator);
+					//creator.setResourceCounter(creator.getResourceCounter() + 1);
+					//opUserService.update(creator);
 				}
 				//Period and Academic Year
 				CustomPeriod department_periods = departmentService.getDepartmentCalendar(department.getId(),institution_id,Integer.toString(academicYear));
@@ -1838,11 +1842,11 @@ public class UpdateService {
 		//RE-create sa
 		OpUser sa = new OpUser();
 		sa.setActive(true);
-		sa.setEmail("sa@med.uoa.gr");
+		sa.setEmail("sa@uoa.gr");
 		sa.setUid("sa");
 		sa.setName("Διαχειριστής Συστήματος");
 		sa.setAltName("System Admin");
-		sa.setAffiliation("ΕΔΙΠ");
+		sa.setAffiliation("STAFF");
 		sa.setEduPersonPrimaryAffiliation("staff");
 		List<String> eduPersonAffiliations = new ArrayList<>();
 		eduPersonAffiliations.add("staff");

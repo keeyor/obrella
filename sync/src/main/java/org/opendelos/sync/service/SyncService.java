@@ -100,10 +100,12 @@ public class SyncService {
 		 }
 
 		 if (import_scheduled && !in_process) {
+			 logger.info("IMPORT SCHEDULER CALENDAR");
 		 	importLegacyService.ImportScheduled(institution_identity,"2021");
 		 }
 
 		 if (enable_classrooms) {
+			 logger.info("ENABLE CLASSROOMS WITH DEFAULT SETTINGS");
 			 List<Classroom> classrooms = classroomService.findAll();
 			 for (Classroom classroom : classrooms) {
 				 List<Device> deviceList = new ArrayList<>();

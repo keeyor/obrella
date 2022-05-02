@@ -39,8 +39,8 @@ public class Course implements Serializable {
     protected String study;
     protected List<LmsReference> lmsReferences;
     protected String semester;
-    protected int teachingCounter; // how many are teaching the course currently
-    protected long resourceCounter; // how many resources refer this course;
+    protected int teachingCounter; // how many are teaching the course currently; updated with ASPECTS correctly!!
+    //protected long resourceCounter; // how many resources refer this course;
     protected long resourcePublicCounter; // how many public resources refer this course;
     protected int counter; // used in report
     protected String[] categories;

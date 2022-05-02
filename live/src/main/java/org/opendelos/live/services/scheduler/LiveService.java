@@ -187,6 +187,10 @@ public class LiveService {
         logger.info("LiveService: Update Today's Schedule - LoadTime: " + diff);
     }
 
+    public void saveToCollection(Resource resource, String collection) {
+        resourceRepository.saveToCollection(resource, collection);
+    }
+
     public boolean IsOneTimeScheduleScheduledForTodayAfterNow(Schedule schedule) {
         /* return true if it scheduled for today after now! (time) or Else false */
         boolean res = true;
@@ -459,7 +463,7 @@ public class LiveService {
     public Map<Integer,String> getStreamingServersMaps() {
 
         Map<Integer, String> ssMap = new HashMap<>();
-        List<StreamingServer> streamingServers = streamingServerService.getAllIdsByEnabled("true");
+        List<StreamingServer> streamingServers = streamingServerService.getAllByStatusAndType("true","ipcamera");
         if (streamingServers != null && streamingServers.size() > 0) {
             int index = 1;
             for (StreamingServer streamingServer: streamingServers) {
@@ -469,6 +473,7 @@ public class LiveService {
         }
         return ssMap;
     }
+
     public Map<String,StreamingServer> getMapOfStreamingServers() {
 
         Map<String, StreamingServer> ssMap = new HashMap<>();

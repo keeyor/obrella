@@ -14,6 +14,7 @@ import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 import org.opendelos.live.repository.resource.ResourceQuery;
+import org.opendelos.live.services.resource.ResourceService;
 import org.opendelos.live.services.scheduler.LiveService;
 import org.opendelos.live.services.wowza.WowzaRestService;
 import org.opendelos.model.properties.StreamingProperties;
@@ -29,11 +30,13 @@ import static net.logstash.logback.argument.StructuredArguments.*;
 @Slf4j
 public class LiveRunner {
 
+	private final ResourceService resourceService;
 	private final LiveService liveService;
 	private final WowzaRestService wowzaRestService;
 	private final StreamingProperties streamingProperties;
 
-	public LiveRunner(LiveService liveService, WowzaRestService wowzaRestService, StreamingProperties streamingProperties) {
+	public LiveRunner(ResourceService resourceService, LiveService liveService, WowzaRestService wowzaRestService, StreamingProperties streamingProperties) {
+		this.resourceService = resourceService;
 		this.liveService = liveService;
 		this.wowzaRestService = wowzaRestService;
 		this.streamingProperties = streamingProperties;
@@ -65,19 +68,25 @@ public class LiveRunner {
 			int streams_restart = 0;
 
 			if (mapOfStreamingServers.size()>0) {
+
 				// Get current time
 				Instant time_now = ZonedDateTime.now().toInstant().truncatedTo(ChronoUnit.MINUTES);
 
 				for (Resource resource: TodaySchedule) {
-
 					Instant resource_StartTime = resource.getDate();
 					long duration_hours = Long.parseLong(resource.getRealDuration().substring(0,2));
 					long duration_mins = Long.parseLong(resource.getRealDuration().substring(3,5));
 					Instant resource_EndTime = resource.getDate().plus(duration_hours,ChronoUnit.HOURS).plus(duration_mins,ChronoUnit.MINUTES);
 
-					String streamingServerId = resource.getStreamingServerId();
-					StreamingServer streamingServer = mapOfStreamingServers.get(streamingServerId);
+					//Get | Or (Re-) Allocate Streaming Server
+					StreamingServer streamingServer = null;
+					if (resource.getStreamingServerId() != null) {
+						String streamingServerId  = resource.getStreamingServerId();
+						streamingServer = mapOfStreamingServers.get(streamingServerId);
+					}
+					//USE PATENTA HERE WITH CAUTION::: See file on Desktop -> (IF USED) use only for stream starting now and future ! not old ones
 
+					//BE cAREFULL BELOW: StreamingServer could be null!!!! CHECK BEFORE YOU CONTINUE
 					if (resource_StartTime.isBefore(time_now) && resource_EndTime.isAfter(time_now)) {
 						//# SHOULD BE LIVE- > check if stream is alive and (if required) is recording. Re-start on error
 						/* STREAM_STATUS RETURNS:
@@ -278,8 +287,8 @@ public class LiveRunner {
 			}
 		}
 		else {
-			log.info("SCHEDULER REPORT AT '{}'. No Live Streams for today!", localDateTime);
-			//TODO: MAybe you should clean Scheduler.Live Collection
+			log.trace("SCHEDULER REPORT AT '{}'. No Live Streams for today!", localDateTime);
+			//TODO: Maybe you should clean Scheduler.Live Collection
 		}
 	}
 
