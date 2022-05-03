@@ -674,7 +674,7 @@
         let staff_filter_val = $("#staff_filter").val();
         let department_filter_val = $("#department_filter").val();
 
-        if ((staff_filter_val === "_all" || staff_filter_val === "") && course_filter_val === '' && department_filter_val === '') {
+        if ((staff_filter_val === "_all" || staff_filter_val === "") && course_filter_val === '') {
             dashboard.staffmembers.loadStaffByReport(department_filter_val);
             some_filters = 1;
         }
@@ -682,7 +682,7 @@
             $("#staffCanvasLink").hide();
         }
 
-        if ((course_filter_val === "_all" || course_filter_val === "") && staff_filter_val ==='' && department_filter_val === '') {
+        if ((course_filter_val === "_all" || course_filter_val === "") && staff_filter_val ==='') {
             dashboard.course.loadCourseByReport(department_filter_val);
             some_filters = 1;
         }
