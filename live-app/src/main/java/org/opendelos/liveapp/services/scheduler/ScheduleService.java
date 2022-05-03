@@ -581,7 +581,7 @@ public class ScheduleService {
                     if (!range_out_of_period) {
                         LocalDate _start_date = RS;
                         LocalDate _end_date = RE;
-                        logger.info("Calculate Regular Within range:" + _start_date + " to: " + _end_date + " . WHEN period start is: " + _start_period_date + " and period end: " +  _end_period_date);
+                        logger.trace("Calculate Regular Within range:" + _start_date + " to: " + _end_date + " . WHEN period start is: " + _start_period_date + " and period end: " +  _end_period_date);
 
                         DayOfWeek rDayOfWeek = schedule.getDayOfWeek();
                         while (!_start_date.getDayOfWeek().equals(rDayOfWeek)) {
