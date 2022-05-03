@@ -19,7 +19,8 @@
                 </ul>
                 <form class="d-flex">
                     <a role="button" th:href="@{feedback}" class="text-decoration-none text-white btn btn-sm">
-                        Επικοινωνία
+                       <span th:if="${page == 'home'}">Επικοινωνία</span>
+                       <span th:unless="${page == 'home'}" title="Επικοινωνία"><i class="fas fa-phone"></i></span>
                     </a>
                 </form>
             </div>
