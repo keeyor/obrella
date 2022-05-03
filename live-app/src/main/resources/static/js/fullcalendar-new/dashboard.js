@@ -14,51 +14,34 @@
     dashboard.dtLanguageGr = "";
     
     dashboard.init = function () {
-
+    	
     	dashboard.siteurl           = dashboard.broker.getRootSitePath();
     	dashboard.institution 		= $("#institutionId").val();
     	dashboard.institution_name  = $("#institutionName").val();
 
     	//dashboard.system.init();
+        //dashboard.department.init();
+        //dashboard.course.init();
+        //dashboard.classroom.init();
+
 
         loader.initialize();
 
         alertify.defaults.transition = "slide";
-        alertify.defaults.theme.ok = "btn btn-primary";
-        alertify.defaults.theme.cancel = "btn btn-danger";
+        alertify.defaults.theme.ok = "btn blue-btn-wcag-bgnd-color text-white";
+        alertify.defaults.theme.cancel = "btn red-btn-wcag-bgnd-color text-white";
         alertify.defaults.theme.input = "form-control";
         alertify.set('notifier','position', 'top-right');
 
         dashboard.selected_year = $("#currentAcademicYear").val();
-        //dashboard.department.loadDepartmentsOnSearchBar($("#department-columns"));
-
-       // let editor_is_staffMember = $("#editor_is_staffMember").val();
-       // if (editor_is_staffMember === "true") {
-       //     dashboard.editor.loadEditorsOnSearchBar($("#editor-columns"));
-       // }
-        //dashboard.classroom.loadEnabledClassroomsOnSearchBar($("#classroom-columns"));
-
-        if ($("#departmentFilterId").val() === '') {
-            $("#depCanvasLink").show();
-        }
-        if ($("#courseFilterId").val() === '') {
-            $("#courseCanvasLink").show();
-        }
-        if ($("#staffMemberFilterId").val() === '') {
-            $("#staffCanvasLink").show();
-        }
-        if ($("#classRoomFilterId").val() === '') {
-            $("#classCanvasLink").show();
-        }
 
         let view = $("#view").val();
         if (view === '' || view === undefined) {
-            dashboard.calendar.view = 'listWeek';
+            dashboard.calendar.view = 'listDay';
         }
         else {
             dashboard.calendar.view = view;
         }
-
 
         dashboard.calendar.LoadFullCalendar();
 
@@ -86,17 +69,21 @@
             dashboard.broker.toggleFilter(message,text);
         });
 
-        $(".fc-listMonth-button").on('click',function() {
-            $("#view").val("listMonth");
-        });
-        $(".fc-listWeek-button").on('click',function() {
-            $("#view").val("listWeek");
-        });
-        $(".fc-listDay-button").on('click',function() {
-            $("#view").val("listDay");
-        });
+       dashboard.broker.on('ShowInstantMessage', function (event, message) {
+           dashboard.broker.showInstantMessage(message.type ,message.val);
+      });
 
-        $(".short-list").on("keyup",function() {
+      $(".fc-listMonth-button").on('click',function() {
+          $("#view").val("listMonth");
+      });
+      $(".fc-listWeek-button").on('click',function() {
+            $("#view").val("listWeek");
+      });
+      $(".fc-listDay-button").on('click',function() {
+            $("#view").val("listDay");
+      });
+
+      $(".short-list").on("keyup",function() {
 
             let what = $(this).data("target");
             let value = $(this).val();
@@ -273,7 +260,7 @@
             restParams.delete("cv");
             restParams.delete("sd");
             restParams.delete("ed");
-
+            console.log("rest:" + restParams.toString());
             if (restParams.toString() === "") {
                 $("#clear-all-filters").hide();
             } else {
@@ -294,7 +281,7 @@
 
         let courseFilterText = $("#courseFilterText").val();
         if (courseFilterId !== undefined && courseFilterId != null && courseFilterId  !== '') {
-            $('#course-dd-header').html("<span class='far fa-times-circle'></span> | Μάθημα: " + courseFilterText);
+            $('#course-dd-header').html("<span class='far fa-times-circle'></span> Μάθημα: " + courseFilterText);
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("c");
             queryParams.delete("skip");
@@ -306,7 +293,7 @@
 
         let staffFilterText = $("#staffMemberFilterText").val();
         if (staffFilterId !== undefined && staffFilterId != null && staffFilterId !== '') {
-            $('#staff-dd-header').html("<span class='far fa-times-circle'></span> | Διδάσκων: " + staffFilterText);
+            $('#staff-dd-header').html("<span class='far fa-times-circle'></span> Διδάσκων: " + staffFilterText);
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("s");
             queryParams.delete("skip");
@@ -317,7 +304,7 @@
 
         let departmentFilterText = $("#departmentFilterText").val();
         if (departmentFilterId !== undefined && departmentFilterId != null && departmentFilterId !== '') {
-            $('#department-dd-header').html("<span class='far fa-times-circle'></span> | Τμήμα: " + departmentFilterText);
+            $('#department-dd-header').html("<span class='far fa-times-circle'></span> Τμήμα: " + departmentFilterText);
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("d");
             queryParams.delete("skip");
@@ -328,18 +315,17 @@
 
         let eventFilterText = $("#scheduledEventFilterText").val();
         if (eventFilterId !== undefined && eventFilterId != null && eventFilterId !== '') {
-            $('#events-dd-header').html("<span class='far fa-times-circle'></span> | Εκδήλωση: " + eventFilterText);
+            $('#event-dd-header').html("<span class='far fa-times-circle'></span> Εκδήλωση: " + eventFilterText);
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("e");
             queryParams.delete("skip");
             removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
             $("#clear-ev-filter").attr('href','calendar?' + queryParams);
-            $("#events-filter").show();
+            $("#event-filter").show();
         }
-
         let classroomFilterText = $("#classRoomFilterText").val();
         if (classroomFilterId !== undefined && classroomFilterId != null && classroomFilterId !== '') {
-            $('#class-dd-header').html("<span class='far fa-times-circle'></span> | Αίθουσα: " + classroomFilterText);
+            $('#class-dd-header').html("<span class='far fa-times-circle'></span> Αίθουσα: " + classroomFilterText);
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("cr");
             queryParams.delete("skip");
@@ -347,7 +333,6 @@
             $("#clear-cr-filter").attr('href','calendar?' + queryParams);
             $("#class-filter").show();
         }
-
         let categoryFilterText = $("#categoryTitle").val();
         if (categoryCode !== undefined && categoryCode != null && categoryCode !== '') {
             $('#category-dd-header').html("<b class='mr-2'>Κατηγορία:</b>" + categoryFilterText);
@@ -358,7 +343,6 @@
             $("#clear-ca-filter").attr('href','calendar?' + queryParams);
             $("#category-filter").show();
         }
-
         //ResourceType
         let resourceTypeTitle;
         if (resourceType !== undefined && resourceType != null && resourceType !== '') {
@@ -372,7 +356,6 @@
             $("#clear-rt-filter").attr('href','calendar?' + queryParams);
             $("#resourceType-filter").show();
         }
-
         //AccessPolicy
         let accessPolicyTitle;
         if (accessPolicy !== undefined && accessPolicy != null && accessPolicy !== '') {
@@ -386,7 +369,6 @@
             $("#clear-ap-filter").attr('href','calendar?' + queryParams);
             $("#accessPolicy-filter").show();
         }
-
         //Tags
         let tagTitle;
         let tag = $("#tag").val();

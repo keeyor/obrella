@@ -27,10 +27,21 @@
             headerToolbar: {
                 start: 'today prev next',
                 center: 'title',
-                // end: 'dayGridMonth,listMonth timeGridWeek,listWeek timeGridDay,listDay'
-                end: 'listMonth,listWeek,listDay'
+                end: 'listMonth ,listWeek ,listDay'
             },
             views: {
+                dayGrid: {
+                    // options apply to dayGrid
+                },
+                timeGrid: {
+                    // options apply to timeGridDay views
+                },
+                week: {
+                    // options apply to dayGridWeek and timeGridWeek views
+                },
+                day: {
+                    // options apply to dayGridDay and timeGridDay views
+                },
                 listDay: {
                     buttonText: 'Ημέρα'
                 },
@@ -41,7 +52,7 @@
                     buttonText: 'Μήνας',
                 }
             },
-            lazyFetching: false,
+            lazyFetching: false, //always get data again! >> otherwise does not refresh filters
             events: {
                 url: dashboard.siteurl + '/api/v1/timetable_daterange/users/cal',
                 method: 'GET',
@@ -64,16 +75,30 @@
                     staff_report = [];
                     classroom_report = [];
 
+
+                    //!important :: clear or otherwise filters area doubled in date change
                     $("#dpFilters").html("");
                     $("#coFilters").html("");
                     $("#stFilters").html("");
-                    $("#crFilters").html("");
+                    $("#evFilters").html("");
+                    $("#clFilters").html("");
 
                     //console.log("start=" + moment(start).format("YYYY-MM-DD") + " end=" + moment(end).format("YYYY-MM-DD"));
                     $("#start_date").val(moment(calendar.view.activeStart).format("YYYY-MM-DD"));
                     $("#end_date").val(moment(calendar.view.activeEnd).format("YYYY-MM-DD"));
 
                     $("#view").val(calendar.view.type);
+                    // Enable - Disable Month Range (disable if none of the major filter are selected
+/*                    let departmentId = $("#departmentFilterId").val();
+                    let courseId = $("#courseFilterId").val();
+                    let staffId =  $("#staffMemberFilterId").val();
+                    let classId = $("#classRoomFilterId").val();
+                    if (courseId === '' && staffId === '' && departmentId === '' && classId === '') {
+                        $(".fc-listMonth-button").attr("disabled",true);
+                    }
+                    else {
+                        $(".fc-listMonth-button").attr("disabled",false);
+                    }*/
                 },
                 color: 'yellow',   // a non-ajax option
                 textColor: 'black' // a non-ajax option
@@ -100,12 +125,11 @@
                 }
                 else {
                     loader.hideLoader();
-
                 }
             },
             eventContent: function(arg) {
                 dashboard.calendar.view = calendar.view.type;
-                appendReport(arg);
+                appendReport(arg); // create filters report
                 // if you need to customize event appearance
                 //let arrayOfDomNodes = createEventDom(arg);
                 // return { domNodes: arrayOfDomNodes }
@@ -123,45 +147,7 @@
         calendar.render();
     }
 
-    function createEventDom(arg) {
-        let mainEL = document.createElement('div');
-        mainEL.classList.add("row");
 
-        let col1 = document.createElement('div');
-        col1.classList.add("col-3");
-        col1.innerHTML = arg.event._def.title;
-
-        let col2 = document.createElement('div');
-        col2.classList.add("col-9");
-        col2.classList.add("smaller");
-
-        let det1 = document.createElement("span");
-        det1.classList.add("font-weight-bolder");
-        det1.classList.add("mr-2");
-        det1.innerHTML = arg.event._def.extendedProps.supervisor;
-
-
-/*      Add font-awesome example
-        let i_element = document.createElement('i');
-        i_element.classList.add("fas");
-        i_element.classList.add("fa-map-marked-alt");
-        i_element.classList.add("ml-5");
-        i_element.classList.add("mr-1");
-        i_element.classList.add("text-muted");*/
-
-        let span_element = document.createElement('span');
-        span_element.classList.add("text-muted");
-        span_element.innerHTML = arg.event._def.extendedProps.classroomName;
-
-        col2.appendChild(det1);
-        col2.appendChild(span_element);
-
-        mainEL.appendChild(col1);
-        mainEL.appendChild(col2);
-        let arrayOfDomNodes = [ mainEL ];
-
-        return arrayOfDomNodes;
-    }
 
     function appendReport(calEvent) {
 
@@ -182,7 +168,7 @@
                     new_department.id = calEvent.event._def.extendedProps.departmentId;
                     new_department.title = calEvent.event._def.extendedProps.department;
                     new_department.counter = 0;
-                    // dashboard.department.addRowToReportTable(new_department);
+                   // dashboard.department.addRowToReportTable(new_department);
                     let department_el = [calEvent.event._def.extendedProps.departmentId, calEvent.event._def.extendedProps.department];
                     departments_report.push(department_el);
 
@@ -207,27 +193,27 @@
 
         let classroomFilterId = $("#classRoomFilterId").val()
         if ( classroomFilterId === '') {
-            if (exists(classroom_report, calEvent.event._def.extendedProps.classroomId) === false) {
-                let new_classroom = {};
-                new_classroom.id = calEvent.event._def.extendedProps.classroomId;
-                new_classroom.title = calEvent.event._def.extendedProps.classroomName;
-                new_classroom.counter = 0;
-                //dashboard.classroom.addRowToReportTable(new_classroom);
-                let classsroom_el = [calEvent.event._def.extendedProps.classroomId, calEvent.event._def.extendedProps.classroomName];
-                classroom_report.push(classsroom_el);
+                if (exists(classroom_report, calEvent.event._def.extendedProps.classroomId) === false) {
+                    let new_classroom = {};
+                    new_classroom.id = calEvent.event._def.extendedProps.classroomId;
+                    new_classroom.title = calEvent.event._def.extendedProps.classroomName;
+                    new_classroom.counter = 0;
+                    //dashboard.classroom.addRowToReportTable(new_classroom);
+                    let classsroom_el = [calEvent.event._def.extendedProps.classroomId, calEvent.event._def.extendedProps.classroomName];
+                    classroom_report.push(classsroom_el);
 
-                $('#class-dd-header').html("<span class='fas fa-minus-circle'></span> | Μάθημα " + new_classroom.title);
-                let queryParams = new URLSearchParams(window.location.search);
-                queryParams.set("cr", new_classroom.id);
-                queryParams.delete("skip");
-                if (current_view !== undefined && current_view !== '') {
-                    queryParams.set("view", current_view);
+                    $('#class-dd-header').html("<span class='fas fa-minus-circle'></span> | Μάθημα " + new_classroom.title);
+                    let queryParams = new URLSearchParams(window.location.search);
+                    queryParams.set("cr", new_classroom.id);
+                    queryParams.delete("skip");
+                    if (current_view !== undefined && current_view !== '') {
+                        queryParams.set("view", current_view);
+                    }
+                    let html = '<li class="list-group-item">' +
+                        '<a class="text-dark text-decoration-none" href="calendar?' + queryParams + '">' + new_classroom.title + '</a>' +
+                        '</li>';
+                    $("#crFilters").append(html);
                 }
-                let html = '<li class="list-group-item">' +
-                    '<a class="text-dark text-decoration-none" href="calendar?' + queryParams + '">' + new_classroom.title + '</a>' +
-                    '</li>';
-                $("#crFilters").append(html);
-            }
             $("#classCanvasLink").show();
             $("#crFilters").show();
             $("#no_dyna_filters").hide();
@@ -246,7 +232,7 @@
                     new_course.department = [];
                     new_course.department.title = calEvent.event._def.extendedProps.department;
                     new_course.department.id = calEvent.event._def.extendedProps.departmentId;
-                    //  dashboard.course.addRowToReportTable(new_course);
+                  //  dashboard.course.addRowToReportTable(new_course);
                     let course_el = [calEvent.event._def.extendedProps.resourceId, res_title];
                     courses_report.push(course_el);
 
@@ -275,7 +261,7 @@
                     new_event.id = calEvent.event._def.extendedProps.resourceId;
                     new_event.title = res_title;
                     new_event.counter = 0;
-                    //  dashboard.sevents.addRowToReportTable(new_event);
+                  //  dashboard.sevents.addRowToReportTable(new_event);
                     let event_el = [calEvent.event._def.extendedProps.resourceId, res_title];
                     events_report.push(event_el);
 
@@ -300,16 +286,16 @@
         let staffMemberFilterId = $("#staffMemberFilterId").val();
         if (staffMemberFilterId === '') {
             if (exists(staff_report, calEvent.event._def.extendedProps.supervisorId) === false) {
-                let new_staff = {};
-                new_staff.id = calEvent.event._def.extendedProps.supervisorId;
-                new_staff.name = calEvent.event._def.extendedProps.supervisor;
-                new_staff.counter = 0;
-                new_staff.department = [];
-                new_staff.department.title = calEvent.event._def.extendedProps.department;
-                new_staff.department.id = calEvent.event._def.extendedProps.departmentId;
-                // dashboard.staffmembers.addRowToReportTable(new_staff);
-                let staff_el = [calEvent.event._def.extendedProps.supervisorId, calEvent.event._def.extendedProps.supervisor];
-                staff_report.push(staff_el);
+                    let new_staff = {};
+                    new_staff.id = calEvent.event._def.extendedProps.supervisorId;
+                    new_staff.name = calEvent.event._def.extendedProps.supervisor;
+                    new_staff.counter = 0;
+                    new_staff.department = [];
+                    new_staff.department.title = calEvent.event._def.extendedProps.department;
+                    new_staff.department.id = calEvent.event._def.extendedProps.departmentId;
+                   // dashboard.staffmembers.addRowToReportTable(new_staff);
+                    let staff_el = [calEvent.event._def.extendedProps.supervisorId, calEvent.event._def.extendedProps.supervisor];
+                    staff_report.push(staff_el);
 
                 $('#staff-dd-header').html("<span class='fas fa-minus-circle'></span> | Διδάσκων " + new_staff.name);
                 let queryParams = new URLSearchParams(window.location.search);
@@ -439,6 +425,44 @@
         return html;
     }
 
+    function createEventDom(arg) {
+        let mainEL = document.createElement('div');
+        mainEL.classList.add("row");
 
+        let col1 = document.createElement('div');
+        col1.classList.add("col-3");
+        col1.innerHTML = arg.event._def.title;
+
+        let col2 = document.createElement('div');
+        col2.classList.add("col-9");
+        col2.classList.add("smaller");
+
+        let det1 = document.createElement("span");
+        det1.classList.add("font-weight-bolder");
+        det1.classList.add("mr-2");
+        det1.innerHTML = arg.event._def.extendedProps.supervisor;
+
+
+        /*      Add font-awesome example
+                let i_element = document.createElement('i');
+                i_element.classList.add("fas");
+                i_element.classList.add("fa-map-marked-alt");
+                i_element.classList.add("ml-5");
+                i_element.classList.add("mr-1");
+                i_element.classList.add("text-muted");*/
+
+        let span_element = document.createElement('span');
+        span_element.classList.add("text-muted");
+        span_element.innerHTML = arg.event._def.extendedProps.classroomName;
+
+        col2.appendChild(det1);
+        col2.appendChild(span_element);
+
+        mainEL.appendChild(col1);
+        mainEL.appendChild(col2);
+        let arrayOfDomNodes = [ mainEL ];
+
+        return arrayOfDomNodes;
+    }
 
 })();
