@@ -4,16 +4,14 @@
 
 <div th:fragment="sidebar-system" class="sidebar sidebar-fixed sidebar" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
-        <div class="sidebar-brand-full" width="118" height="46" alt="Delos Logo">
-            <img th:src="@{/public/images/logos/byOpenDelosWhite.png}"/>
+        <div class="sidebar-brand-full" width="118" height="46" alt="Admin home">
+
         </div>
         <div class="sidebar-brand-narrow" width="46" height="46" alt="Delos Logo">
-            <img th:src="@{/public/images/logos/byOpenDelos_sm.png}"/>
+
         </div>
     </div>
     <ul class="sidebar-nav"  style=" ">
-
-
         <th:block sec:authorize="hasAnyRole('ROLE_SA')">
             <li class="nav-title">ΙΔΡΥΜΑ</li>
             <li class="nav-item">
@@ -81,7 +79,11 @@
                 <i class="nav-icon fas fa-record-vinyl"></i> Αρχεία Καταγραφής
             </a>
         </li>
-        </th:block>
+   </th:block>
+
+        <li class="nav-item mt-5"><a class="nav-link active" th:href="@{/admin}">
+            <i class="nav-icon fas fa-home"></i> ΑΡΧΙΚΗ</a>
+        </li>
 
     </ul>
 

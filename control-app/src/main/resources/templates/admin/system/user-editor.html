@@ -79,8 +79,8 @@
     <div class="body flex-grow-1 px-3">
 
             <div class="container-fluid">
-                <div class="row">
-                    <div class="offset-1 col-lg-10" id="content">
+                <!--<div class="row">
+                    <div class="offset-1 col-lg-10" id="content">-->
                         <div class="card" id="staff_edit_card" >
                             <div class="card-header">
                                    <span style="font-size: 1.2em;font-weight: 100">
@@ -111,8 +111,8 @@
                                     </div>
                                     <div class="col-6 text-end">
                                         <span data-toggle="tooltip" title="Κατάσταση χρήστη: Ενεργός/Ανενεργός">
-                                         <label for="staff_enabled_toggle" class="col-form-label text-end" style="font-weight: 600">Κατάσταση</label>
-                                         <input id="staff_enabled_toggle" name="sevent_isactive_toggle" type="checkbox"  />
+                                         <label for="staff_status_toggle" class="col-form-label text-end" style="font-weight: 600">Κατάσταση</label>
+                                         <input id="staff_status_toggle" name="staff_status_toggle" type="checkbox"  />
                                         </span>
                                     </div>
                                 </div>
@@ -142,9 +142,9 @@
                                                     <input type="hidden" id="staff_name" th:value="${OpUser.name}" class="form-control"/>
                                                     <th:block th:if="${isStaffMember}">
                                                         <div class="my-4">
-                                                            O επιλεγμένος χρήστης είναι μέλος του Διδακτικού Προσωπικού του Ιδρύματος.
+                                                            <span style="font-weight: 500" th:text="${'Τμήμα ή Υπηρεσία: ' + OpUser.department.title}"></span> O επιλεγμένος χρήστης είναι μέλος του Διδακτικού Προσωπικού του Ιδρύματος ή ανήκει στο Τεχνικό Προσωπικό Υπηρεσίας ή Τμήματος με αυξημένα δικαιώματα
                                                             <br/>Η ενημέρωση των στοιχείων ταυτότητας, μπορεί να πραγματοποιηθεί αποκλειστικά στην σελίδα
-                                                            <a th:href="@{/admin/department/staff}">"Προσωπικό" του Τμήματος</a>
+                                                            <a th:href="@{/admin/department/staff}">"Προσωπικό Τμήματος"</a>
                                                         </div>
                                                     </th:block>
                                                     <th:block th:unless="${isStaffMember}">
@@ -186,37 +186,38 @@
                                                                             <div class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect uid</div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group row mt-3 title_change_warning">
-                                                                        <label class="col-sm-2 col-form-label">&nbsp;</label>
-                                                                        <div class="col-sm-7">
-                                                                            <div style="font-size: 1em;color: red">
-
-                                                                                <p class="text-high-emphasis">
-                                                                                 <i style="color:red" class="fas fa-exclamation-triangle"></i>
-                                                                                Τo Όνομα Χρήστη <b>(username)</b> είναι μοναδικό για κάθε χρήστη
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
                                                                     <div class="form-group row mt-3">
-                                                                        <label for="staff_uid" class="col-sm-2 col-form-label emph-label">Όνομα Χρήστη (username)*</label>
-                                                                        <div class="col-sm-2">
+                                                                        <label for="staff_uid" class="col-2 col-form-label emph-label">Όνομα Χρήστη (username)*</label>
+                                                                        <div class="col-2">
                                                                             <input type="text" tabindex="5"  id="staff_uid" th:field="*{uid}"  name="staff_email" class="form-control" autocomplete="new-username"/>
                                                                             <div class="form-error" th:if="${#fields.hasErrors('uid')}" th:errors="*{uid}">Incorrect uid</div>
                                                                         </div>
+                                                                        <div class="col-5">
+                                                                            <p class="text-high-emphasis">
+                                                                                <i style="color:red" class="fas fa-exclamation-triangle"></i>
+                                                                                Τo Όνομα Χρήστη <b>(username)</b> είναι μοναδικό για κάθε χρήστη. Αν βρεθεί χρήστης με ίδιο username, η καταχώρηση/ενημέρωση θα αποτύχει<br/>
+                                                                                <b>Αν το username του πεδίου αντιστοιχεί σε Ιδρυματικό Λογαριασμό</b>, τότε ο χρήστης του θα μπορεί αν εισέλθει στο σύστημα <b>και</b> με τον ιδρυματικό του λογαριασμό, <b>ανεξάρτητα</b> από τον κωδικό πρόσβασης που θα ορίσετε παρακάτω.
+
+                                                                            </p>
+                                                                        </div>
                                                                     </div>
                                                                     <input type="hidden" id="user_password"  th:field="*{password}" />
-                                                                    <th:block th:if="${OpUser.password == ''}">
+
                                                                         <div class="form-group row mt-3">
-                                                                            <label for="staff_password_1" class="col-sm-2 col-form-label emph-label">Κωδικός Εισόδου*</label>
-                                                                            <div class="col-sm-6 form-inline">
-                                                                                <input type="text" tabindex="6" id="staff_password_1" data-val="" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
+                                                                            <label for="staff_password_1" class="col-2 col-form-label emph-label">Κωδικός Εισόδου*</label>
+                                                                            <div class="col-2 form-inline">
+                                                                                <input type="text" tabindex="6" id="staff_password_1" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
+                                                                            </div>
+                                                                            <div class="col-5">
+                                                                                <p class="text-high-emphasis">
+                                                                                    Ο Κωδικός Εισόδου δεν εμφανίζεται για λόγους ασφαλείας. Αν τον ξεχάσατε, πατήστε "Αλλαγή Κωδικού Πρόσβασης" για να ορίσετε νέο
+                                                                                </p>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group row mt-3">
-                                                                            <label for="staff_password_2" class="col-sm-2 col-form-label emph-label">Κωδικός Εισόδου* (Επαν.)</label>
-                                                                            <div class="col-sm-3">
-                                                                                <input type="text" tabindex="7" id="staff_password_2" data-val="" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
+                                                                            <label for="staff_password_2" class="col-2 col-form-label emph-label">Κωδικός Εισόδου* (Επαν.)</label>
+                                                                            <div class="col-5">
+                                                                                <input type="text" tabindex="7" id="staff_password_2" class="form-control" size="25" autocomplete="off" maxlength="25" style="width:150px;max-width: 150px"/>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group row mt-3">
@@ -227,23 +228,19 @@
                                                                                 <div id="password_error" class="form-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect password</div>
                                                                             </div>
                                                                         </div>
-                                                                    </th:block>
-                                                                    <th:block th:if="${OpUser.password == 'ISSET'}">
-                                                                        <div class="form-group row my-3">
-                                                                            <label for="change_pass" class="col-sm-2 col-form-label emph-label">Κωδικός Πρόσβασης</label>
-                                                                            <div class="col-sm-5">
+
+
+                                                                        <div class="form-group row mb-3">
+                                                                            <label for="change_pass" class="col-sm-2 col-form-label emph-label"></label>
+                                                                            <div class="col-4">
                                                                                 <button id="change_pass" class="btn btn-sm blue-btn-wcag-bgnd-color text-white">
-                                                                                    <i class="fas fa-key me-1"></i>Αλλαγή κωδικού πρόσβασης
+                                                                                    <i class="fas fa-key me-1"></i>Αλλαγή Κωδικού Πρόσβασης
+                                                                                </button>
+                                                                                <button id="cancel_change_pass" class="btn btn-sm btn-secondary" style="display: none">
+                                                                                    <i class="fas fa-key me-1"></i>Ακύρωση
                                                                                 </button>
                                                                             </div>
                                                                         </div>
-                                                                    </th:block>
-                                                              <!--      <div class="form-group row my-3">
-                                                                        <label for="staff_enabled" class="col-sm-2 col-form-label emph-label">Ενεργός Χρήστης</label>
-                                                                        <div class="col-sm-5">
-                                                                            <input id="staff_enabled" tabindex="8" name="sevent_isactive_toggle" type="checkbox" th:field="*{active}" />
-                                                                        </div>
-                                                                    </div>-->
 
                                                     </th:block>
                                                 </form>
@@ -297,7 +294,7 @@
                                                             <!-- Ανάθεση Tμημάτων -->
                                                             <div class="form-group row unit_panel">
                                                                 <label class="col-2 col-form-label emph-label"></label>
-                                                                <div class="col-10 pt-2 text-medium-emphasis">
+                                                                <div class="col-8 pt-2 text-medium-emphasis">
                                                                     <div>Στον πίνακα που ακολουθεί, εμφανίζονται οι μονάδες στις οποίες έχει πρόσβαση ο επιλεγμένος χρήστης</div>
                                                                     <ul>
                                                                         <li>Αναθέστε μονάδα, πατώντας 'Ανάθεση Μονάδας'</li>
@@ -309,7 +306,7 @@
                                                             </div>
                                                             <div class="form-group row unit_panel">
                                                                 <label for="unitRightsDataTable" class="col-2 col-form-label"></label>
-                                                                <div class="col-10">
+                                                                <div class="col-8">
                                                                     <div class="table-responsive">
                                                                         <table id="unitRightsDataTable"  style="width:100%" class="row-border stripe">
                                                                             <thead>
@@ -332,7 +329,7 @@
                                                             <!-- Ανάθεση Καθηγητών+Μαθημάτων -->
                                                             <div class="form-group row course_panel">
                                                                 <label class="col-2 col-form-label emph-label"></label>
-                                                                <div class="col-10 pt-2 text-medium-emphasis">
+                                                                <div class="col-8 pt-2 text-medium-emphasis">
                                                                     <div>Στον πίνακα που ακολουθεί, εμφανίζονται τα ζεύγη Καθηγητής-Μάθημα που διαχειρίζεται ο επιλεγμένος χρήστης</div>
                                                                     <ul>
                                                                         <li>Αναθέστε Καθηγητή+Μάθημα, πατώντας 'Ανάθεση Μαθήματος'</li>
@@ -344,7 +341,7 @@
                                                             </div>
                                                             <div class="form-group row course_panel">
                                                                 <label for="staffRightsDataTable" class="col-2 col-form-label"></label>
-                                                                <div class="col-10">
+                                                                <div class="col-8">
                                                                     <div class="table-responsive">
                                                                         <table id="staffRightsDataTable" style="width:100%" class="row-border stripe">
                                                                             <thead>
@@ -366,7 +363,7 @@
                                                             <!-- Ανάθεση Καθηγητών+Εκδηλώσεων -->
                                                             <div class="form-group row event_panel">
                                                                 <label class="col-2 col-form-label emph-label"></label>
-                                                                <div class="col-10 pt-2 text-medium-emphasis">
+                                                                <div class="col-8 pt-2 text-medium-emphasis">
                                                                     <div>Στον πίνακα που ακολουθεί, εμφανίζονται τα ζεύγη Καθηγητής+Εκδήλωση που διαχειρίζεται ο επιλεγμένος χρήστης</div>
                                                                     <ul>
                                                                         <li>Αναθέστε Καθηγητή+Εκδήλωση, πατώντας 'Ανάθεση Εκδήλωσης'</li>
@@ -378,7 +375,7 @@
                                                             </div>
                                                             <div class="form-group row  event_panel">
                                                                 <label for="staffEventRightsDataTable" class="col-2 col-form-label"></label>
-                                                                <div class="col-10">
+                                                                <div class="col-8">
                                                                     <div class="table-responsive">
                                                                         <table id="staffEventRightsDataTable" style="width:100%" class="row-border stripe">
                                                                             <thead>
@@ -399,7 +396,7 @@
                                                             </div>
 
                                                             <div class="form-group row admin_panel">
-                                                                <div class="col-10 pt-2 offset-2 text-medium-emphasis">
+                                                                <div class="col-8 pt-2 offset-2 text-medium-emphasis">
                                                                     <i class="fas fa-info-circle"></i>
                                                                     Όλα τα διαθέσιμα δικαιώματα έχουν εκχωρηθεί!
                                                                 </div>
@@ -415,8 +412,8 @@
                                 <i class="far fa-comment-dots"></i>  Τα πεδία με αστερίσκο* είναι υποχρεωτικά</div>
                             </div>
                         </div>
-                    </div>
-                </div>
+             <!--       </div>
+                </div>-->
             </div>
     </div>
 </div>

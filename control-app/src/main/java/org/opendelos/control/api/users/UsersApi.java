@@ -128,6 +128,12 @@ public class UsersApi {
 		opUserService.unassignEventPermissionFromManagerById(id,staffMemberId,event_id);
 	}
 
+	@RequestMapping(value = "/api/v1/manager/updatestatus/{id}/status/{status}", method = RequestMethod.PUT, produces = MediaType.TEXT_HTML_VALUE)
+	public void updateManagersStatus(@PathVariable("id") String id,@PathVariable("status") boolean status) throws Exception {
+		opUserService.updateManagerStatus(id,status);
+	}
+
+
 	@RequestMapping(value = "/api/v1/manager/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteManager(@PathVariable("id") String id) {
 		try {

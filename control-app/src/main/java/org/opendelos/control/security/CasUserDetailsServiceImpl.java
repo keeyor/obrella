@@ -61,11 +61,11 @@ public class CasUserDetailsServiceImpl implements AuthenticationUserDetailsServi
             throw new UsernameNotFoundException("username " + uid + " locked");
         }
         else {
-            if (eduPersonPrimaryAffiliation.equalsIgnoreCase("staff") ||  eduPersonPrimaryAffiliation.equalsIgnoreCase("faculty") ||
-                eduPersonPrimaryAffiliation.equalsIgnoreCase("employees") ||  eduPersonPrimaryAffiliation.equalsIgnoreCase("affiliate") ) {
+        	//Choose those affiliations that should have (by default) content editing rights!!!
+            if (eduPersonPrimaryAffiliation.equalsIgnoreCase("staff") ||  eduPersonPrimaryAffiliation.equalsIgnoreCase("faculty") ||        //eduPersonPrimaryAffiliation.equalsIgnoreCase("employee") ||
+                eduPersonPrimaryAffiliation.equalsIgnoreCase("affiliate") ) {
                 opdeus = opUserService.createNewStaffMemberFromCASAttributes(attributes);
-                opdeus
-                        .setLastLogin(Instant.now());
+                opdeus.setLastLogin(Instant.now());
                 OpUser new_opUser = opUserService.createAndReturn(opdeus);
                 return populateActiveUser.populate(new_opUser);
             }

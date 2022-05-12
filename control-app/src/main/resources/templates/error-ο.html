@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error page</title>
+    <meta charset="utf-8" />
+</head>
+<!--@thymesVar id="errorMessage" type="java.lang.String"-->
+<!--@thymesVar id="stackTrace" type="java.lang.String"-->
+<body th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
+    <h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1>
+    <h4>Error Message</h4>
+    <p th:utext="${errorMessage}">Error java.lang.NullPointerException</p>
+    <h4>StackTrace</h4>
+    <p th:utext="${stackTrace}">StackTrace</p>
+    <hr/>
+    <a  th:href="@{/}">Back to Home Page</a>
+</body>
+</html>

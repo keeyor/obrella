@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.opendelos.model.users.ActiveUserStore;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.model.users.UserAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,12 +62,21 @@ public class OdSimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             log.info("redirect to:" + targetUrl);
         }
         OoUserDetails loggedIn_user = (OoUserDetails) authentication.getPrincipal();
-        if (loggedIn_user.getDepartmentId().equalsIgnoreCase("ASK")) {
-            targetUrl = "/admin/user_profile";
+        if (
+                (!loggedIn_user.getUserAuthorities().contains(UserAccess.UserAuthority.MANAGER)) &&
+                (!loggedIn_user.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER)) &&
+                (!loggedIn_user.getUserAuthorities().contains(UserAccess.UserAuthority.SUPPORT))
+            ) {
+            targetUrl = "/403";
         }
-        if (response.isCommitted()) {
-            log.debug("Response has already been committed. Unable to redirect to " + targetUrl);
-            return;
+        else {
+            if (loggedIn_user.getDepartmentId().equalsIgnoreCase("ASK")) {
+                targetUrl = "/admin/user_profile";
+            }
+            if (response.isCommitted()) {
+                log.debug("Response has already been committed. Unable to redirect to " + targetUrl);
+                return;
+            }
         }
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }

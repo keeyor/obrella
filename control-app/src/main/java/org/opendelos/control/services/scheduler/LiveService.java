@@ -159,7 +159,7 @@ public class LiveService {
                 for (ScheduleDTO scheduleDTO : updatedTodaySchedule) {
                     String scheduleId = scheduleDTO.getId();
                     if (!containsScheduleId(existingTodaySchedule,scheduleId)) {
-                        if (scheduleDTO.isBroadcastToChannel()) {
+                        if (scheduleDTO.isBroadcastToChannel()) {                                        //Not used for now! removed channel Option
                             Resource TvResource = createLiveChannelResourceFromScheduleDTO(scheduleDTO);
                             if (TvResource != null) {
                                 existingTodaySchedule.add(TvResource);
@@ -386,13 +386,6 @@ public class LiveService {
         Resource liveEntry = new Resource();
         //STREAMID
         String streamId = this.generateLiveStreamId(scheduleDTO);
-        if (streamId != null) {
-            liveEntry.setStreamId(streamId);
-        }
-        else {
-            logger.warn("Could not generate streamId for scheduled item:" + scheduleDTO.getId());
-            return null;
-        }
         liveEntry.setId(null);
         liveEntry.setBroadcastToChannel(false); //!Important : do not broadcast to channel by default
         liveEntry.setStreamName(scheduleDTO.getClassroom().getCode());
@@ -473,7 +466,7 @@ public class LiveService {
         liveEntry.setStreamingServerId(streamingServerId);
         liveEntry.setBroadcastCode(scheduleDTO.getBroadcastCode());
 
-        if (streamingServerId != null) { //to re-use in WeekController
+        if (streamingServerId != null) {        //to re-use in WeekController
             StreamingServer streamingServer = streamingServerService.findById(streamingServerId);
             liveEntry.setStreamingServerInfo(streamingServer.getCode() + "/" + streamingServer.getApplication());
         }

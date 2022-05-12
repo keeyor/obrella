@@ -220,6 +220,18 @@ public class OpUserService {
         }
     }
 
+    @CacheEvict(key = "#id")
+    public void updateManagerStatus(String id, boolean status) throws Exception {
+        logger.trace(String.format("updateManagerStatus: %s", id));
+        OpUser opUser  = opUserRepository.findById(id).orElse(null);
+        if (opUser!= null) {
+            opUser.setActive(status);
+            this.update(opUser);
+        }
+        else {
+            throw new Exception("_NOT_FOUND");
+        }
+    }
     @CacheEvict(key = "#opUser.id")
     public void findAndUpdate(OpUser opUser) {
         try {

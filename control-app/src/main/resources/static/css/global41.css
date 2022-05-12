@@ -3,6 +3,10 @@ body {
     font-size: 0.82em!important;
 }
 
+.sidebar-nav .nav-link {
+    color:white!important;
+}
+
 html:not([dir=rtl]) .wrapper {
     padding-left: var(--cui-sidebar-occupy-start,0);
 }

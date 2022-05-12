@@ -80,30 +80,27 @@
             $("#staff_rights_card").show();
         }
 
-        $("#staff_password_1").passwordify().focus();
-        $("#staff_password_2").passwordify().focus();
-        $("#staff_password_1").passwordify({
-            maxLength: 12
-        })
-        $("#staff_password_2").passwordify({
-            maxLength: 12
-        });
         let pass_field = $("#user_password").val();
         if (pass_field === "ISSET") {
             $("#staff_password_1").attr("disabled",true);
             $("#staff_password_2").attr("disabled",true);
+            $("#change_pass").attr("disabled",false);
+            $("#cancel_change_pass").hide();
         }
         else {
             $("#user_password").val(""); //force to be set
             $("#staff_password_1").attr("disabled",false);
             $("#staff_password_2").attr("disabled",false);
+            $("#change_pass").attr("disabled",true);
+            $("#cancel_change_pass").show();
         }
+
 
         $("#userType_select").select2({
             minimumResultsForSearch: -1 //hides the searchbox
         });
 
-        $("#staff_enabled_toggle").bootstrapToggle({
+        $("#staff_status_toggle").bootstrapToggle({
             on: '<i class="fas fa-power-off"></i>',
             off: '<i class="fas fa-ban"></i>',
             onstyle: "success",
@@ -113,19 +110,69 @@
 
         let userIsActive = $("#staff_isactive").val();
         if (staff_id === "") {
-            $("#staff_enabled_toggle").bootstrapToggle('disable');
+            $("#staff_status_toggle").bootstrapToggle('disable');
         }
         else {
             if (userIsActive === "true") {
-                $("#staff_enabled_toggle").bootstrapToggle('on');
+                $("#staff_status_toggle").bootstrapToggle('on');
             } else {
-                $("#staff_enabled_toggle").bootstrapToggle('off');
+                $("#staff_status_toggle").bootstrapToggle('off');
             }
         }
         serialize_form = $("#staff_form").serialize();
     }
 
     function RegisterEvents() {
+
+        $("#change_pass").on('click',function(e){
+            $("#user_password").val(""); //force to be set
+            $("#staff_password_1").attr("disabled",false);
+            $("#staff_password_2").attr("disabled",false);
+            $("#staff_password_1").data("val","");
+            $("#staff_password_2").data("val","");
+            $("#change_pass").attr("disabled",true);
+            $("#cancel_change_pass").show();
+            e.preventDefault();
+        });
+        $("#cancel_change_pass").on('click',function(e){
+            $("#user_password").val("ISSET");
+            $("#staff_password_1").data("val","");
+            $("#staff_password_2").data("val","");
+            $("#staff_password_1").attr("disabled",true);
+            $("#staff_password_2").attr("disabled",true);
+            $("#change_pass").attr("disabled",false);
+            $("#cancel_change_pass").hide();
+            e.preventDefault();
+        });
+
+
+
+        $('#staff_status_toggle').change(function(e) {
+                let staff_id = $("#staff_id").val();
+                let data = $(this).prop('checked');
+                if (data) {
+                    let msg = '<p>Ο επιλεγμένος χρήστης θα ενεργοποιηθεί. <b>Είστε σίγουρος;</b></p>';
+                    alertify.confirm('Ενεργοποίηση Χρήστη', msg,
+                        function () {
+                            updateManagerStatus(staff_id, true);
+                            $("#staff_status_toggle").bootstrapToggle('enable');
+                        },
+                        function () {
+                            $("#staff_status_toggle").prop('checked', false).change();
+                        }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
+                } else {
+                    let msg = '<p>Ο επιλεγμένος χρήστης θα απενεργοποιηθεί και δεν θα έχει δυνατότητα εισόδου στην εφαρμογή! <b>Είστε σίγουρος;</b></p>';
+                    alertify.confirm('Απενεργοποίηση Χρήστη', msg,
+                        function() {
+                            updateManagerStatus(staff_id, false);
+                            $("#publication_toggle").bootstrapToggle('enable');
+                        },
+                        function() {
+                            $("#publication_toggle").prop('checked', true).change();
+                        }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
+                }
+                e.preventDefault();
+        });
 
         $('#staff_password_1').keyup(function() {
             $("password_error_match").hide();
@@ -137,8 +184,8 @@
 
             let user_pass = $("#user_password").val();
             if (user_pass !== "ISSET") {
-                let staff_password1_val = $("#staff_password_1").data("val");
-                let staff_password2_val = $("#staff_password_2").data("val");
+                let staff_password1_val = $("#staff_password_1").val();
+                let staff_password2_val = $("#staff_password_2").val();
                 if (staff_password1_val !== staff_password2_val) {
                     $("#password_error_match").show();
                     e.preventDefault();
@@ -310,6 +357,30 @@
             },
             function () {
             }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
+    }
+
+    function updateManagerStatus(staffId, status) {
+
+        let url = dashboard.siteurl + '/api/v1/manager/updatestatus/' + staffId + '/status/' + status;
+
+        $.ajax({
+            type:        "PUT",
+            url: 		  url,
+            contentType: "application/json; charset=utf-8",
+            async:		  true,
+            success: function(){
+                let status_text = "Ενεργός";
+                if (status === false) {
+                    status_text = "Ανενεργός";
+                }
+                let info = "Η κατάσταση του χρήστη άλλαξε σε: <b>" + status_text + '</b>';
+                alertify.alert('Επιτυχής Αλλαγή!', info);
+            },
+            error: function ()  {
+                let info = "Άγνωστο Σφάλμα";
+                alertify.alert('Σφάλμα', '<i style="color: red" class="fas fa-exclamation-circle"></i> ' + info);
+            }
+        });
     }
 
     function postRecallOrDeleteManager(staffId) {

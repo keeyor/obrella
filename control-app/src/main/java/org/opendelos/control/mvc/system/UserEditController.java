@@ -238,11 +238,12 @@ public class UserEditController {
 			}
 			else {
 					//Update password if changed!
-					/*if (!opUser.getPassword().trim().equals("")) {
-						BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-						String encoded_pass = bCryptPasswordEncoder.encode(opUser.getPassword());
-						opUser.setPassword(encoded_pass);
-					}*/
+					 if (!opUser.getPassword().trim().equals("ISSET")) {
+						//BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+						//String encoded_pass = bCryptPasswordEncoder.encode(opUser.getPassword());
+						///opUser.setPassword(encoded_pass);
+						 opUser.setPassword(opUser.getPassword());
+					}
 					opUserService.update(opUser);
 			}
 

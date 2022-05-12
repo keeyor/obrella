@@ -10,6 +10,7 @@ import java.util.List;
 import org.jasig.cas.client.session.SingleSignOutFilter;
 import org.jasig.cas.client.validation.Saml11TicketValidator;
 import org.opendelos.control.conf.CasServiceConfig;
+import org.opendelos.control.mvc.CustomAccessDeniedHandler;
 import org.opendelos.control.services.opUser.OpUserService;
 import org.opendelos.control.security.database.DatabaseAuthenticationFailureHandler;
 import org.opendelos.control.security.database.DatabaseAuthenticationSuccessHandler;
@@ -35,6 +36,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -91,6 +93,10 @@ public class SecurityConfiguration  {
 				throw new Exception("Database Authentication Provider exception");
 			}
 		}
+		@Bean
+		public AccessDeniedHandler accessDeniedHandler(){
+			return new CustomAccessDeniedHandler();
+		}
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
@@ -109,7 +115,7 @@ public class SecurityConfiguration  {
 					.antMatchers("/admin/system/**").hasAnyRole("SA")
 					.antMatchers("/admin/department/**").hasAnyRole("SA","MANAGER")
 					.anyRequest().authenticated()
-					.and().exceptionHandling()
+					.and().exceptionHandling().accessDeniedHandler(accessDeniedHandler())
 					.and().csrf()
 					.ignoringAntMatchers("/admin/user_profile", "/search" ,"/admin/multimediaUpload", "/admin/imageUpload","/admin/startMultimediaProcessing", "/admin/startSlidesProcessing", "/api/v1/**",
 							"/secure/image_upload","/admin/sevent-editor","/api/youtube/setBroadcast","/api/youtube/unsetBroadcast/**", "/protected_player", "/api/youtube/store")

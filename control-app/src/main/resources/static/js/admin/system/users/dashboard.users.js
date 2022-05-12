@@ -128,7 +128,7 @@
                         ret += '<a role="button" class="btn btn-sm btn-pill blue-btn-wcag-bgnd-color me-1 text-white" title="επεξεργασία στοιχείων"' +
                                 ' href="user-editor?id=' + data + '"><i class="fas fa-edit"></i></a>';
                         if (user_authorities.includes("STAFFMEMBER")) {
-                            ret += '<i class="fas fa-user-tag ms-2" title="Μέλος ΔΕΠ"></i>';
+                            ret += '<i class="fas fa-user-tag ms-2" title="Διδακτικό ή Τεχνικό Προσωπικό Τμήματος/Υπηρεσίας"></i>';
                         }
                         return  ret;
                     }
