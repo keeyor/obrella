@@ -58,7 +58,7 @@ public class LiveRunner {
 		if (TodaySchedule.size()>0) {
 			log.info("SCHEDULER RUN AT '{}'", localDateTime);
 			//get enabled streaming servers
-			Map<String, StreamingServer> mapOfStreamingServers = liveService.getMapOfStreamingServers();
+			Map<String, StreamingServer> mapOfEnabledStreamingServers = liveService.getMapOfStreamingServers();
 			int streams_passed = 0;
 			int streams_live = 0;
 			int streams_stop_now = 0;
@@ -67,7 +67,7 @@ public class LiveRunner {
 			int streams_errors = 0;
 			int streams_restart = 0;
 
-			if (mapOfStreamingServers.size()>0) {
+			if (mapOfEnabledStreamingServers.size()>0) {
 
 				// Get current time
 				Instant time_now = ZonedDateTime.now().toInstant().truncatedTo(ChronoUnit.MINUTES);
@@ -78,15 +78,12 @@ public class LiveRunner {
 					long duration_mins = Long.parseLong(resource.getRealDuration().substring(3,5));
 					Instant resource_EndTime = resource.getDate().plus(duration_hours,ChronoUnit.HOURS).plus(duration_mins,ChronoUnit.MINUTES);
 
-					//Get | Or (Re-) Allocate Streaming Server
 					StreamingServer streamingServer = null;
 					if (resource.getStreamingServerId() != null) {
 						String streamingServerId  = resource.getStreamingServerId();
-						streamingServer = mapOfStreamingServers.get(streamingServerId);
+						streamingServer = mapOfEnabledStreamingServers.get(streamingServerId);
 					}
-					//USE PATENTA HERE WITH CAUTION::: See file on Desktop -> (IF USED) use only for stream starting now and future ! not old ones
 
-					//BE cAREFULL BELOW: StreamingServer could be null!!!! CHECK BEFORE YOU CONTINUE
 					if (resource_StartTime.isBefore(time_now) && resource_EndTime.isAfter(time_now)) {
 						//# SHOULD BE LIVE- > check if stream is alive and (if required) is recording. Re-start on error
 						/* STREAM_STATUS RETURNS:
@@ -290,6 +287,23 @@ public class LiveRunner {
 			log.trace("SCHEDULER REPORT AT '{}'. No Live Streams for today!", localDateTime);
 			//TODO: Maybe you should clean Scheduler.Live Collection
 		}
+	}
+
+	private StreamingServer pickRandomStreamingServer(Map<String, StreamingServer> mapOfEnabledStreamingServers ) {
+
+		StreamingServer streamingServer = null;
+		java.util.Random random = new java.util.Random();
+		int random_server_index = random.nextInt(mapOfEnabledStreamingServers.size() + 1);
+		int index = 0;
+		for (Map.Entry<String, StreamingServer> entry : mapOfEnabledStreamingServers.entrySet()) {
+			if (index == random_server_index) {
+				 streamingServer = entry.getValue();
+			}
+			else {
+				index++;
+			}
+		}
+		return streamingServer;
 	}
 
 }
