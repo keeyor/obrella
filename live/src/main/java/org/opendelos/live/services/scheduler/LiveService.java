@@ -293,13 +293,8 @@ public class LiveService {
         Resource liveEntry = new Resource();
         //STREAMID
         String streamId = this.generateLiveStreamId(scheduleDTO);
-        if (streamId != null) {
-            liveEntry.setStreamId(streamId);
-        }
-        else {
-            logger.warn("Could not generate streamId for scheduled item:" + scheduleDTO.getId());
-            return null;
-        }
+        liveEntry.setStreamId(streamId);
+
         liveEntry.setId(null);
         liveEntry.setStreamName(scheduleDTO.getClassroom().getCode());
         liveEntry.setScheduleId(scheduleDTO.getId());
@@ -394,35 +389,11 @@ public class LiveService {
          int month  =_datetime.getMonthValue();
          int dayOfYear = _datetime.getDayOfYear();
 
-         //NOTE: the second part could be encrypted
-        // It must be a known algorithm so that we can publish to youtube by streamId
+          //NOTE: the second part could be encrypted
+          // It must be a known algorithm so that we can publish to youtube by streamId
          streamIdsb.append(classroomCode).append("@").append(broadcast_hour).append(broadcast_min).append(dayOfYear).append(month).append(year);
 
          return streamIdsb.toString();
-
-
-/*        String streamId;
-        if (!scheduleDTO.getAccess().equals("open")) {
-            if (scheduleDTO.getType().equals("lecture")) {
-                streamId = scheduleDTO.getCourse().getId();
-            }
-            else if (scheduleDTO.getType().equals("event")) {
-                streamId = scheduleDTO.getScheduledEvent().getId();
-            }
-            else {
-                return null;
-            }
-            String broadcast_hour_str = scheduleDTO.getStartTime().substring(0, 2);
-            String broadcast_min_str = scheduleDTO.getStartTime().substring(3, 5);
-            String broadcast_datetime_str = broadcast_hour_str + broadcast_min_str;
-            streamId += broadcast_datetime_str;
-        }
-        else {
-            streamId = scheduleDTO.getClassroom().getStreamName();
-        }
-
-        return streamId;
-        */
     }
 
     public List<Resource> searchTodaysSchedule(ResourceQuery resourceQuery) {
@@ -451,7 +422,7 @@ public class LiveService {
     private Map<String,Integer> initStreamingServersUtilization() {
 
         Map<String, Integer> ssUtilizationMap = new HashMap<>();
-        List<StreamingServer> streamingServers = streamingServerService.getAllByStatus("true");
+        List<StreamingServer> streamingServers = streamingServerService.getAllByStatusAndType("true","ipcamera");
         if (streamingServers != null && streamingServers.size() > 0) {
              for (StreamingServer streamingServer: streamingServers) {
                  ssUtilizationMap.put(streamingServer.getId(), 0);
