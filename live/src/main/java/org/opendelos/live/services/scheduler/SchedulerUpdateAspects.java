@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.bson.types.ObjectId;
 import org.opendelos.live.services.resource.Utils.MultimediaAnalyzeComponent;
 import org.opendelos.live.services.resource.ResourceService;
 import org.opendelos.model.properties.StreamingProperties;
@@ -82,6 +83,8 @@ public class SchedulerUpdateAspects {
 				List<String> relatedParts = new ArrayList<>();
 				for (File vFile : recorded_files) {
 
+					ObjectId newResourceId = new ObjectId(); //Generates unique id
+
 					File videoFile = new File(vFile.getAbsolutePath());
 					String videoFileName = videoFile.getName();
 					if (!videoFile.isFile()) {
@@ -89,7 +92,7 @@ public class SchedulerUpdateAspects {
 					}
 
 					String sub_dir_by_year_month_and_id = LocalDate.now().getMonthValue() + "-" + LocalDate.now()
-							.getYear() + "/" + resource.getId();
+							.getYear() + "/" + newResourceId; //+ resource.getId();
 					String videoDstDir = streamingProperties.getAbsDir() + sub_dir_by_year_month_and_id;
 
 					File videoDstFolder = new File(videoDstDir);
@@ -116,6 +119,11 @@ public class SchedulerUpdateAspects {
 					//2. Create VOD (just copy live entry to resources collection
 					Resource vod_resource = new Resource();
 					BeanUtils.copyProperties(resource, vod_resource);
+					// --> SOS
+					vod_resource.setId(newResourceId.toString());
+					vod_resource.setIdentity(null);
+					vod_resource.setStorage(newResourceId.toString());
+					// < -- SOS
 					vod_resource.setRealDuration(resourceAccess.getDuration());
 					vod_resource.setResourceAccess(resourceAccess);
 					vod_resource.getStatus().setInclMultimedia(1);
@@ -128,7 +136,7 @@ public class SchedulerUpdateAspects {
 					vod_resource.setTitle(vod_resource.getTitle());
 					/* the exact time that the recording started :: use this instead in the title */
 					vod_resource.setRecTime(v_SegmentSimpleTime.replace(".", ":"));
-					vod_resource.setId(null);
+					//vod_resource.setId(null);
 
 					if (multipleParts) {
 						vod_resource.setParts(true);
@@ -145,11 +153,11 @@ public class SchedulerUpdateAspects {
 						vod_resource.setAccessPolicy("private");
 					}
 
-					String generated_id = resourceService.create(vod_resource);
+					resourceService.update(vod_resource);
 					if (multipleParts && v_SegmentNumber == 1) {
-						parentId = generated_id;
+						parentId = vod_resource.getId();
 					}
-					logger.info(" New Resource created from Live with id " + generated_id);
+					logger.info(" New Resource created from Live with id " + vod_resource.getId());
 				} //For each video file
 			}
 			else {
