@@ -54,7 +54,10 @@
         let poster_image        = "";
         let mode                = "sync_off";
         dashboard.player.init(intro_url, video_url, play_intro, poster_image,global_vid_duration,mode);
-        $("#download_video_link").attr("href",video_url);
+        let rid = $("#rid").val();
+        $("#download_video_link").attr("href",dashboard.siteUrl + "/admin/download-video?id=" + rid);
+        //$("#download_video_link").attr("href",video_url);
+
         $("#player_container").show();
 
         $("#mm_delete").on("click",function(event){

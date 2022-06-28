@@ -283,30 +283,30 @@
     	$element.html(message); 
     }
 
-	function getTableDataAsJSON($table,refId) {
+    function getTableDataAsJSON($table,refId,inherit) {
 
-		var data = $table.DataTable().rows().data();
+		var period_list = [];
+		var periods = {};
+			periods.refId = refId;
+			periods.inherit = inherit;
 
-		let argies_list = [];
-		let argies = {};
-		argies.refId = refId;
+    	var data = $table.DataTable().rows().data();
+    	   for (let c=0; c < data.length; c++) {
+    		   let  _r 		 = data[c];
+    		   let name 	 = _r.name;
+    		   let startDate = _r.startDate;
+    		   let endDate 	 = _r.endDate;
 
-		for (let c=0; c < data.length; c++) {
-			let name = $("#data_row_" + c).val();
-			let row_node = $table.DataTable().cell(c,6).node().innerHTML;
-			if (row_node.includes("btn-danger") === false) {
-				let  _r 		 = data[c];
-				let startDate 	 = _r.startDate;
-				let endDate 	 = _r.endDate;
-				let argia = {"name":name, "endDate" : endDate, "startDate": startDate};
-				argies_list.push(argia);
-			}
-			// console.log("line:" + c + " result:" + row_node.includes("btn-danger"));
-		}
+    		   var period = {"name":name, "endDate" : endDate, "startDate": startDate};
 
-		argies.argia = argies_list;
-		return argies;
-	}
+    		   period_list.push(period);
+    	   }
+    	   periods.period = period_list;
+
+		//console.log("POST:" + dataJSON);
+
+    	   return JSON.stringify(periods);
+    }
     
     function postCreateUpdatePeriods(postURL, dataJSON, scope, year, departmentId, studyId) {
  	   	   

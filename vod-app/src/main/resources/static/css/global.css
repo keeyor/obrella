@@ -5,11 +5,6 @@ body {
     color: #000000!important;
 }
 
-.help-box {
-    background-color: yellow!important;
-    color:white;
-    font-size: 0.85em;
-}
 .link_hover { color: #005cbf!important; text-decoration: none }
 .link_hover:hover { color: blue!important; text-decoration: none }
 
@@ -57,57 +52,7 @@ body {
         white-space: pre;
     }
 }
-/*
 
-@media (min-width: 641px) {
-    .month {
-        padding-top: 5px;
-        color: #555555;
-    }
-    .month:after {
-        content: "\A";
-        white-space: pre; !* or pre-wrap *!
-    }
-    .day_of_month {
-        font-size:1.5em;
-        font-weight: 500;
-    }
-    .day_of_month:after {
-        content: "\A";
-        white-space: pre; !* or pre-wrap *!
-    }
-    .date_info {
-        text-align: center;
-    }
-}
-@media (max-width: 639px) {
-    .month {
-        padding-top: 5px;
-        color: #555555;
-
-    }
-    .day_of_month {
-        padding-left: 12px;
-        font-size:1em;
-        font-weight: 500;
-    }
-    .date_info {
-        text-align: left;
-        margin-bottom: 15px;
-    }
-}
-
-*/
-
-.live_day {
-    padding-top: 20px;
-    font-size:25px;
-    font-weight: 500;
-}
-
-.live_img {
-    top: 70px;
-}
 .fa-arrow-circle-up {
     color: #005cbf!important
 }
@@ -120,14 +65,6 @@ body {
     border: none!important;
 }
 
-.help-panel {
-    padding-right:20px;
-    margin-top: 10px;
-    border-right: 1px solid #CCC;
-    -webkit-box-shadow: 5px 0 5px -6px #888;
-    -moz-box-shadow: 5px 0 5px -6px #888;
-    box-shadow: 5px 0 5px -6px #888;
-}
 b {
     font-weight: 500!important;
 }

@@ -9,7 +9,7 @@
 
     dashboard.course.loadCourseByReport = function () {
 
-        let url = dashboard.siteUrl + '/api/v1/getCoursesOfReport';
+        let url = dashboard.siteUrl + '/apiw/v1/getCoursesOfReport';
 
         $.ajax({
             type: 'GET',
@@ -22,7 +22,7 @@
                     queryParams.set("c", courseDtId);
                     queryParams.delete("skip");
                     let html =
-                        '<a class="text-dark list-group-item list-group-item-action text-decoration-none" href="search?' + queryParams + '">' + element.title +' (' + element.counter + ')<br/>' +
+                        '<a class="text-dark list-group-item list-group-item-action text-decoration-none" href="search?' + queryParams + '">' + element.title  + '<br/>' +
                         '<div class="font-sm text-medium-emphasis"> Τμήμα ' + element.department.title + '</div></a>';
                     $("#coFilters").append(html);
                 });

@@ -19,20 +19,24 @@
         })
             .done(function( data ) {
 
-                $elem.select2({
-                    placeholder: 'Επιλέξτε Τμήμα',
-                    width: 'style', // need to override the changed default
-                    data : data.results,
-                    dropdownParent: $elem.parent(),
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    templateResult: formatRepo,
-                    templateSelection: formatRepoSelection
-                });
-                //if (departmentId === "") {
-                $elem.val(departmentId).trigger("change");
-               // }
-                let message = {msg: "Department afterInit!"};
-                dashboard.broker.trigger('afterInit.Department', [message]);
+                    $elem.show();
+
+                    $elem.select2({
+                        placeholder: 'Επιλέξτε Τμήμα',
+                        width: 'style', // need to override the changed default
+                        data: data.results,
+                        dropdownParent: $elem.parent(),
+                        escapeMarkup: function (markup) {
+                            return markup;
+                        }, // let our custom formatter work
+                        templateResult: formatRepo,
+                        templateSelection: formatRepoSelection
+                    });
+                    //if (departmentId === "") {
+                    $elem.val(departmentId).trigger("change");
+                    // }
+                    let message = {msg: "Department afterInit!"};
+
             });
 
         function formatRepo (repo) {

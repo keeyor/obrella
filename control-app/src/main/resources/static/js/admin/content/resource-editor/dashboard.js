@@ -40,20 +40,23 @@
 
     dashboard.init = function () {
 
+        //PRESERVE TAB AFTER RELOAD
+        // use HTML5 localStorage object to save some parameter for the current tab locally in the browser and get it back to make the last active tab selected on page reload.
+        //ON CHANGE TAB EVENT
+        $('a[data-coreui-toggle="tab"]').on('show.coreui.tab', function(e) {
+            localStorage.setItem('activeTab', $(e.target).attr('href'));
+            //console.log($(e.target).attr('href'));
+        });
+        //LOAD ACTIVE TAB
+        var activeTab = localStorage.getItem('activeTab');
+        if(activeTab){
+            $('#myTab a[href="' + activeTab + '"]').tab('show');
+        }
+
         dashboard.rid        =  $("#rid").val();
         dashboard.siteUrl    =  dashboard.broker.getRootSitePath();
         dashboard.baseUrl_pp =  $("#mediaBaseUrl").val();
         dashboard.baseUrl_mm =  $("#streamingBaseUrl").val();
-
-        //load specific tab when returning from edit
-        let url = document.location.toString();
-        if (url.match('t=')) {
-            $('.nav-tabs a[href="#' + url.split('t=')[1] + '"]').tab('show');
-        }
-        //Change hash for page-reload
-        $('.nav-tabs a[href="#' + url.split('t')[1] + '"]').on('shown', function (e) {
-            window.location.hash = e.target.hash;
-        });
 
         let   msg_val   = $("#msg_val").val();
         let   msg_type  =$("#msg_type").val();
@@ -263,7 +266,7 @@
         });
 
         $('#publication_toggle').change(function(e) {
-            if (checkSave() === false) {
+            if (checkSaveWithIgnore() === false) {
                 alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα", "Η φόρμα έχει τροποποιηθεί. Αποθηκεύστε τις αλλαγές και δοκιμάστε πάλι");
                 e.preventDefault();
             }
@@ -314,7 +317,7 @@
         });
         $("#copy-button").on('click',function(e){
             e.preventDefault();
-            if (checkSave() === false) {
+            if (checkSaveWithIgnore() === false) {
                 alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα", "Η φόρμα έχει τροποποιηθεί. Αποθηκεύστε τις αλλαγές και δοκιμάστε πάλι");
             }
             else {
@@ -333,7 +336,7 @@
         });
         $("#clone-button").on('click',function(e){
             e.preventDefault();
-            if (checkSave() === false) {
+            if (checkSaveWithIgnore() === false) {
                 alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα", "Η φόρμα έχει τροποποιηθεί. Αποθηκεύστε τις αλλαγές και δοκιμάστε πάλι");
             }
             else {
@@ -351,19 +354,19 @@
         });
 
         $(".edit_video_link").on('click',function(e){
-            if (checkSave() === false) {
+            if (checkSaveWithIgnore() === false) {
                 alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα", "Η φόρμα έχει τροποποιηθεί. Αποθηκεύστε τις αλλαγές και δοκιμάστε πάλι");
                 e.preventDefault();
             }
         });
         $("#pr_syncPp").on('click',function(e){
-            if (checkSave() === false) {
+            if (checkSaveWithIgnore() === false) {
                 alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα", "Η φόρμα έχει τροποποιηθεί. Αποθηκεύστε τις αλλαγές και δοκιμάστε πάλι");
                 e.preventDefault();
             }
         });
         $(".related_link").on('click',function(e){
-            if (checkSave() === false) {
+            if (checkSaveWithIgnore() === false) {
                 alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα", "Η φόρμα έχει τροποποιηθεί. Αποθηκεύστε τις αλλαγές και δοκιμάστε πάλι");
                 e.preventDefault();
             }
@@ -394,6 +397,30 @@
             else {
                 return true;
             }
+        }
+
+        function checkSaveWithIgnore() {
+            let serial_form_without_ignored = "";
+            let ser_array = serialize_form.split("&");
+            $.each(ser_array, function (i, input) {
+                let _name = input.split("=")[0];
+                if (_name !== "status.inclMultimedia" && _name !== "status.inclPresentation") {
+                    serial_form_without_ignored += input;
+                }
+            });
+
+            let end_serialize = $("#lecture-form").serialize();
+            let end_form_without_ignored = "";
+            let end_array = end_serialize.split("&");
+            $.each(end_array, function (i, input) {
+                let _name = input.split("=")[0];
+                if (_name !== "status.inclMultimedia" && _name !== "status.inclPresentation") {
+                    end_form_without_ignored += input;
+                }
+            });
+
+            return serial_form_without_ignored === end_form_without_ignored;
+
         }
     }
 

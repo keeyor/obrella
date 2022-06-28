@@ -84,59 +84,26 @@ public class LiveService {
     }
 
     @Scheduled(cron = "0 0 6 * * *", zone = "Europe/Athens") // Every day at 6 a.m. [Run's on appStart too: See StartUpApplicationListener]
-    public void updateLiveEntries() throws Exception {
-        logger.info("*** UPDATE TODAY'S SCHEDULE *** ");
+    public void updateLiveEntries()  {
         this.UpdateTodaysSchedule();
     }
 
     public void UpdateTodaysSchedule() {
 
-        logger.info("INITIATE TODAYS UPDATE");
+        logger.info("*** CREATE TODAY'S SCHEDULE *** ");
 
         Calendar time_start = Calendar.getInstance();
         Date startTime = time_start.getTime();
 
-        logger.info("Academic Year:" + currentAcademicYear);
-        Map<String, Integer> ssUtilizationMap = this.initStreamingServersUtilization();
-        if (ssUtilizationMap.size() > 0) {
-            //> Calculate Today's Schedule (from scratch)
-            ScheduleQuery scheduleQuery = new ScheduleQuery();
-            scheduleQuery.setYear(currentAcademicYear);
-            scheduleQuery.setEnabled("true");
-            LocalDate today = LocalDate.now();
-            scheduleQuery.setFromDate(today);
-            scheduleQuery.setToDate(today);
-            List<ScheduleDTO> updatedTodaySchedule = scheduleService.computeScheduleInDateRange(scheduleQuery);
+        //> Get Today's Schedule. GET FROM DB existing_todays_list
+        List<Resource> existingTodaySchedule = this.getTodaysScheduleFromDatabase();
+        logger.trace("LiveService: Today's Schedule (Existing):" + existingTodaySchedule.size());
 
-            logger.info("LiveService: Today's Schedule (Scratch):" + updatedTodaySchedule.size());
-
-            //> DELETE FROM updated_todays_list passed event ( so to live them intact as far as streaming server )
-            List<ScheduleDTO> delete_list = new ArrayList<>();
-            for (ScheduleDTO liveDto: updatedTodaySchedule) {
-                DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                int broadcast_hour = Integer.parseInt(liveDto.getStartTime().substring(0,2));
-                int broadcast_min = Integer.parseInt(liveDto.getStartTime().substring(3,5));
-                LocalDateTime broadcast_datetime = LocalDate.parse(liveDto.getDate(), f).atTime(broadcast_hour,broadcast_min);
-                //LocalDateTime broadcast_datetime = liveDto.getDate().atTime(broadcast_hour,broadcast_min);
-                if (broadcast_datetime.isBefore(LocalDateTime.now())) {
-                    delete_list.add(liveDto);
-                }
-            }
-            updatedTodaySchedule.removeAll(delete_list);
-            logger.trace("LiveService: Removing Passed Events: " + updatedTodaySchedule.toString());
-
-            //> Get Today's Schedule. GET FROM DB existing_todays_list
-            ResourceQuery resourceQuery = new ResourceQuery();
-            resourceQuery.setCollectionName("Scheduler.Live");
-            resourceQuery.setSort("date");
-            resourceQuery.setDirection("asc");
-            List<Resource> existingTodaySchedule = this.searchTodaysSchedule(resourceQuery);
-            logger.trace("LiveService: Today's Schedule (Existing):" + existingTodaySchedule.size());
-
-            //> DELETE FROM  existing_todays_list future events and events that are left from previous call (like yesterday)
-            List<Resource> delete_db_list = new ArrayList<>();
-            Instant beginning_of_day = Instant.now().truncatedTo(ChronoUnit.DAYS); //in order to throw passed events
-            for (Resource exist_res: existingTodaySchedule) {
+        //> DELETE FROM  existingTodaySchedule future events (TO BE UPDATED) and trash events that are left from previous days (like yesterday)
+        // Future events will be copied from computedTodaysSchedule
+        List<Resource> delete_db_list = new ArrayList<>();
+        Instant beginning_of_day = Instant.now().truncatedTo(ChronoUnit.DAYS); //in order to throw passed events
+        for (Resource exist_res: existingTodaySchedule) {
                 Instant broadcast_datetime = exist_res.getDate();
                 if (broadcast_datetime.isAfter(Instant.now())) {
                     delete_db_list.add(exist_res);
@@ -145,46 +112,61 @@ public class LiveService {
                     delete_db_list.add(exist_res);
                 }
             }
-            existingTodaySchedule.removeAll(delete_db_list);
-            logger.trace("LiveService: Remove Future & Obsolete events" + delete_db_list.size());
+        existingTodaySchedule.removeAll(delete_db_list);
+        logger.trace("LiveService: Remove Future & Obsolete events:" + delete_db_list.size());
 
-            //Update Streaming Server Utilization from existing Items (Passed & Live events)
-            for (Resource resource: existingTodaySchedule) {
-                String ss_id = resource.getStreamingServerId();
-                updateStreamingServerUtilization(ss_id,ssUtilizationMap);
-            }
+        //# This is the list for today's schedule computed from scratch :: on application start or at 6 am
+        List<ScheduleDTO> computedTodaySchedule = scheduleService.computeTodaysSchedule(currentAcademicYear);
+        logger.trace("LiveService: Today's Schedule (Scratch):" + computedTodaySchedule.size());
 
-            //merge 2 lists (updatedTodaySchedule+existingTodaySchedule)
-            logger.trace("LiveService: new & updated items:" + updatedTodaySchedule.size());
-            if (updatedTodaySchedule.size() > 0) {
-                for (ScheduleDTO scheduleDTO : updatedTodaySchedule) {
-                    //Get StreamingServer with Min Usage and Assign to NEW ITEM
-                    String ss_min = this.getStreamingHostWithMinimumUtilization(ssUtilizationMap);
-                    updateStreamingServerUtilization(ss_min,ssUtilizationMap);
-                    logger.trace("LiveService: assign to Streaming Server:" + ss_min);
-                    Resource liveEntry = createLiveResourceFromScheduleDTO(scheduleDTO, ss_min);
-                    if (liveEntry != null) {
-                        existingTodaySchedule.add(liveEntry);
+        //merge 2 lists (updatedTodaySchedule+existingTodaySchedule) :: Keep passed and live from existingTodaySchedule
+        logger.trace("LiveService: new & updated items:" + computedTodaySchedule.size());
+        if (computedTodaySchedule.size() > 0) {
+            for (ScheduleDTO scheduleDTO : computedTodaySchedule) {
+                    DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    int broadcast_hour = Integer.parseInt(scheduleDTO.getStartTime().substring(0,2));
+                    int broadcast_min = Integer.parseInt(scheduleDTO.getStartTime().substring(3,5));
+                    LocalDateTime broadcast_startDateTime = LocalDate.parse(scheduleDTO.getDate(), f).atTime(broadcast_hour,broadcast_min);
+                    //Check if this should be Live or Passed
+                    //Then add to today's schedule if (and only if not already there :: check existence using streamId)
+                    if (broadcast_startDateTime.isBefore(LocalDateTime.now())) {
+                      boolean found = false;
+                      String computed_streamId = this.generateLiveStreamId(scheduleDTO);
+                      for (Resource ex_resource: existingTodaySchedule) {
+                          if (ex_resource.getStreamId().equals(computed_streamId)) {
+                              found = true;
+                              break;
+                          }
+                      }
+                      if (!found) {
+                          logger.trace("Broadcast with Id:" + computed_streamId + " should have been live or passed, but was not found in Live collection. Add it!");
+                          Resource liveEntry = createLiveResourceFromScheduleDTO(scheduleDTO);
+                          if (liveEntry != null) {
+                              existingTodaySchedule.add(liveEntry);
+                          }
+                      }
+                    }
+                    else {
+                        Resource liveEntry = createLiveResourceFromScheduleDTO(scheduleDTO);
+                        if (liveEntry != null) {
+                            existingTodaySchedule.add(liveEntry);
+                        }
                     }
                 }
-            }
-            //Update today list: save to db
-            resourceRepository.clearCollection("Scheduler.Live");
-            if (existingTodaySchedule.size() > 0) {
+        }
+
+        //Update today list: save to db
+        resourceRepository.clearCollection("Scheduler.Live");
+        if (existingTodaySchedule.size() > 0) {
                 for (Resource resource: existingTodaySchedule) {
                    resourceRepository.saveToCollection(resource, "Scheduler.Live");
                 }
             }
-        }
-        else {
-                logger.warn("LiveService: No Streaming Servers defined or enabled");
-                resourceRepository.clearCollection("Scheduler.Live");
-        }
 
         Calendar time_now = Calendar.getInstance();
         Date endTime = time_now.getTime();
         long diff = endTime.getTime() - startTime.getTime();
-        logger.info("LiveService: Update Today's Schedule - LoadTime: " + diff);
+        logger.info("LiveService: create Today's Schedule - LoadTime: " + diff);
     }
 
     public void saveToCollection(Resource resource, String collection) {
@@ -200,7 +182,7 @@ public class LiveService {
         else {
             String classroom_id = schedule.getClassroom();
             if (classroomService.getClassroomStatus(classroom_id) != 0) {
-                logger.info("ONTIME SCHEUDLER: CLASSROOM DISABLED : SKIPPING UPDATE");
+                logger.info("ONTIME SCHEDULER: CLASSROOM DISABLED : SKIPPING UPDATE");
                 res = false;
             }
         }
@@ -288,6 +270,93 @@ public class LiveService {
         return liveResources;
     }
 
+    public Resource createLiveResourceFromScheduleDTO(ScheduleDTO scheduleDTO) {
+
+        Resource liveEntry = new Resource();
+        //STREAMID
+        String streamId = this.generateLiveStreamId(scheduleDTO);
+        liveEntry.setStreamId(streamId);
+
+        liveEntry.setId(null);
+        liveEntry.setStreamName(scheduleDTO.getClassroom().getCode());
+        liveEntry.setScheduleId(scheduleDTO.getId());
+        if (scheduleDTO.getType().equals("lecture")) {
+            Course course = courseService.findById(scheduleDTO.getCourse().getId());
+            liveEntry.setTitle(course.getTitle());
+            if (scheduleDTO.getRepeat().equals("regular")) {
+                liveEntry.setDescription("Προγραμματισμένη Μετάδοση Μαθήματος");
+            }
+            else if (scheduleDTO.getRepeat().equals("onetime")) {
+                liveEntry.setDescription("Έκτακτη Μετάδοση Μαθήματος");
+            }
+            Department department = departmentService.findById(scheduleDTO.getDepartment().getId());
+            liveEntry.setInstitution(defaultInstitution.getId());
+            liveEntry.setSchool(department.getSchoolId());
+            liveEntry.setDepartment(scheduleDTO.getDepartment());
+            Person supervisor = scheduleDTO.getSupervisor();
+            supervisor.setDepartment(scheduleDTO.getDepartment());
+            liveEntry.setSupervisor(supervisor);
+            liveEntry.setCourse(course);
+            liveEntry.setType("COURSE");
+            liveEntry.setPeriod(scheduleDTO.getPeriod());
+        }
+        else if (scheduleDTO.getType().equals("event")) {
+            ScheduledEvent scheduledEvent = scheduledEventService.findById(scheduleDTO.getScheduledEvent().getId());
+            liveEntry.setTitle(scheduledEvent.getTitle());
+            liveEntry.setDescription("Προγραμματισμένη Μετάδοση Εκδήλωσης");
+            liveEntry.setSchool(null);
+            liveEntry.setDepartment(null);
+            if (scheduledEvent.getResponsiblePerson() != null) {
+                liveEntry.setSupervisor(scheduledEvent.getResponsiblePerson());
+            }
+            liveEntry.setEvent(scheduledEvent);
+            liveEntry.setType("EVENT");
+        }
+        //COMMON PROPERTIES
+        liveEntry.setAcademicYear(scheduleDTO.getAcademicYear());
+        liveEntry.setPartNumber(0);
+        liveEntry.setEditor(scheduleDTO.getEditor());
+        liveEntry.setSpeakers("");
+        liveEntry.setExt_speakers("");
+        liveEntry.setLanguage("el");
+        //>Date & Time
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        int broadcast_hour = Integer.parseInt(scheduleDTO.getStartTime().substring(0,2));
+        int broadcast_min = Integer.parseInt(scheduleDTO.getStartTime().substring(3,5));
+        LocalDateTime broadcast_datetime = LocalDate.parse(scheduleDTO.getDate(), f).atTime(broadcast_hour,broadcast_min);
+        //LocalDateTime broadcast_datetime = scheduleDTO.getDate().atTime(broadcast_hour,broadcast_min);
+        Instant instant = broadcast_datetime.atZone(ZoneId.of(app_zone)).toInstant();
+        liveEntry.setDate(instant);
+        liveEntry.setDateModified(Instant.now());
+        //others
+        liveEntry.setTopics(null);
+        liveEntry.setCategories(null);
+        liveEntry.setAccessPolicy(scheduleDTO.getAccess());
+        liveEntry.setLicense(defaultInstitution.getOrganizationLicense());
+        liveEntry.setStatistics(0);
+        liveEntry.setStatus(new ResourceStatus(-1,-1,"SCHEDULER"));
+        liveEntry.setPlayerOptions(new PlayerOptions(true,false));
+        //Real Duration
+        DecimalFormat df = new DecimalFormat("00");
+        String h = df.format(scheduleDTO.getDurationHours());
+        String m = df.format(scheduleDTO.getDurationMinutes());
+        liveEntry.setRealDuration(h + ":" + m); //should re-set at recording end
+        liveEntry.setResourceAccess(null);
+        liveEntry.setPresentation(null);
+        liveEntry.setClassroom(scheduleDTO.getClassroom().getId());
+
+        //LIVE ENTRIES
+        liveEntry.setBroadcast(scheduleDTO.isBroadcast());
+        liveEntry.setAccess(scheduleDTO.getAccess());
+        if (scheduleDTO.getBroadcastCode() != null) {
+            liveEntry.setBroadcastCode(scheduleDTO.getBroadcastCode());
+        }
+        liveEntry.setRecording(scheduleDTO.isRecording());
+        liveEntry.setPublication(scheduleDTO.getPublication());
+
+        return  liveEntry;
+    }
+
     public Resource createLiveResourceFromScheduleDTO(ScheduleDTO scheduleDTO, String streamingServerId) {
 
         Resource liveEntry = new Resource();
@@ -364,6 +433,9 @@ public class LiveService {
         //LIVE ENTRIES
         liveEntry.setBroadcast(scheduleDTO.isBroadcast());
         liveEntry.setAccess(scheduleDTO.getAccess());
+        if (scheduleDTO.getBroadcastCode() != null) {
+            liveEntry.setBroadcastCode(scheduleDTO.getBroadcastCode());
+        }
         liveEntry.setRecording(scheduleDTO.isRecording());
         liveEntry.setPublication(scheduleDTO.getPublication());
         liveEntry.setStreamingServerId(streamingServerId);
@@ -396,8 +468,12 @@ public class LiveService {
          return streamIdsb.toString();
     }
 
-    public List<Resource> searchTodaysSchedule(ResourceQuery resourceQuery) {
+    public List<Resource> getTodaysScheduleFromDatabase() {
 
+        ResourceQuery resourceQuery = new ResourceQuery();
+        resourceQuery.setCollectionName("Scheduler.Live");
+        resourceQuery.setSort("date");
+        resourceQuery.setDirection("asc");
         QueryResourceResults queryResourceResults;
         queryResourceResults = resourceService.searchPageableLectures(resourceQuery);
         resourceQuery.setTotalResults(queryResourceResults.getTotalResults());
@@ -445,6 +521,19 @@ public class LiveService {
         return ssMap;
     }
 
+
+    public Map<String,StreamingServer> getStreamingServersHM(String enabled, String type) {
+
+        Map<String, StreamingServer> ssMap = new HashMap<>();
+        List<StreamingServer> streamingServers = streamingServerService.getAllByStatusAndType(enabled,type);
+        if (streamingServers != null && streamingServers.size() > 0) {
+            for (StreamingServer streamingServer: streamingServers) {
+                ssMap.put(streamingServer.getId(), streamingServer);
+            }
+        }
+        return ssMap;
+    }
+
     public Map<String,StreamingServer> getMapOfStreamingServers() {
 
         Map<String, StreamingServer> ssMap = new HashMap<>();
@@ -458,9 +547,9 @@ public class LiveService {
         return ssMap;
     }
 
-    public  StreamingServer getRecorderServer() {
+    public StreamingServer getRecorderServer() {
 
-         StreamingServer recorderServer = null;
+        StreamingServer recorderServer = null;
         List<StreamingServer> streamingServers = streamingServerService.getAllByStatusAndType("true","recorder");
         if (streamingServers != null && streamingServers.size() > 0) {
             for (StreamingServer streamingServer: streamingServers) {

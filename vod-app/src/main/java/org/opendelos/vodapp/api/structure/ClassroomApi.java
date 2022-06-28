@@ -42,7 +42,7 @@ public class ClassroomApi {
 		this.courseService = courseService;
 	}
 
-	@RequestMapping(value = "/api/v1/room/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/room/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveClassroom(@RequestBody Classroom classroom) {
 
 		String _id;
@@ -63,7 +63,7 @@ public class ClassroomApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/room/save/dep_id/{did}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/room/save/dep_id/{did}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveClassroom(@RequestBody Classroom classroom, @PathVariable("did") String did) {
 
 		String _id;
@@ -84,7 +84,7 @@ public class ClassroomApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/room/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/room/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteClassroom(@PathVariable("id") String id) {
 		try {
 			classroomService.delete(id);
@@ -96,7 +96,7 @@ public class ClassroomApi {
 	}
 
 	//NOT USED
-	@RequestMapping(value = "/api/v1/room/delete/{id}/dep_id/{did}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/room/delete/{id}/dep_id/{did}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteClassroom(@PathVariable("id") String id, @PathVariable("did") String did) {
 		try {
 			classroomService.delete(id);
@@ -108,7 +108,7 @@ public class ClassroomApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/device/save/room_id/{roomId}/device_idx/{deviceIdx}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/device/save/room_id/{roomId}/device_idx/{deviceIdx}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveDevice(@RequestBody Device device, @PathVariable("roomId") String roomId, @PathVariable("deviceIdx") int deviceIdx) {
 
 		try {
@@ -120,7 +120,7 @@ public class ClassroomApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/device/delete/room_id/{roomId}/device_idx/{deviceIdx}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/device/delete/room_id/{roomId}/device_idx/{deviceIdx}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> deleteDevice(@PathVariable("roomId") String roomId, @PathVariable("deviceIdx") int deviceIdx) {
 
 		try {
@@ -132,7 +132,7 @@ public class ClassroomApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/room/devices/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/room/devices/{id}", method = RequestMethod.GET, produces = "application/json")
 	public List<Device> getClassroomDevices(@PathVariable("id") String id) {
 		try {
 			return classroomService.getClassroomDevices(id);
@@ -142,7 +142,7 @@ public class ClassroomApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/dt/rooms.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/rooms.web", method = RequestMethod.GET)
 	public byte[] findAllClassroomsForDt() {
 
 		List<Classroom> classrooms = classroomService.findAll();
@@ -151,7 +151,7 @@ public class ClassroomApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/s2/class.web/staff/{sid}/course/{cid}/usage/{usage}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/class.web/staff/{sid}/course/{cid}/usage/{usage}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAssignedClassrooms(@PathVariable("sid") String sid, @PathVariable("cid") String cid, @PathVariable("usage") String usage) {
 
 		List<String> departmentIds = new ArrayList<>();
@@ -185,7 +185,7 @@ public class ClassroomApi {
 	}
 
 
-	@RequestMapping(value = "/api/v1/s2/class.web", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/class.web", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAllClassrooms() {
 
 		List<Classroom> classroom_list = classroomService.findAll();
@@ -207,7 +207,7 @@ public class ClassroomApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/s2/class_enabled.web", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/class_enabled.web", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAllEnabledClassrooms() {
 
 		List<Classroom> classroom_list = classroomService.findAllByCalendar("true");
@@ -229,7 +229,7 @@ public class ClassroomApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/s2/class.web/usage/{usage}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/class.web/usage/{usage}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAllClassroomsByUsage(@PathVariable String usage) {
 
 		List<Classroom> classroom_list = classroomService.findAllByUsage(usage);

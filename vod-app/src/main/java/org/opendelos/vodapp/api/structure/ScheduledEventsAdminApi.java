@@ -44,7 +44,7 @@ public class ScheduledEventsAdminApi {
 		this.opUserService = opUserService;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/sevents.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/sevents.web", method = RequestMethod.GET)
 	public byte[] findAllForDt() {
 
 		List<ScheduledEvent> scheduledEvents = scheduledEventService.findAll();
@@ -53,7 +53,7 @@ public class ScheduledEventsAdminApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/sevents.web/authorized/{access}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/sevents.web/authorized/{access}", method = RequestMethod.GET)
 	public byte[] getAuthorizedScheduledEvents(@PathVariable String access) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -65,7 +65,7 @@ public class ScheduledEventsAdminApi {
 	}
 
 
-	@RequestMapping(value = "/api/v1/sevent/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/sevent/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveScheduledEvent(@RequestBody ScheduledEvent scheduledEvent) {
 
 		String _id;
@@ -97,7 +97,7 @@ public class ScheduledEventsAdminApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/sevent/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/sevent/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteScheduledEvent(@PathVariable("id") String id) {
 
 		try {
@@ -109,7 +109,7 @@ public class ScheduledEventsAdminApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/sevent/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/sevent/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ScheduledEvent> getScheduledEventById(@PathVariable("id") String id) {
 
 		try {

@@ -32,13 +32,13 @@ public class LiveUtils {
 
 		final String fileTemplate = identity;
 
-		logger.info("Searching for recorded files in folder:" + uploadPath);
+		logger.trace("Searching for recorded files in folder:" + uploadPath);
 		File dir = new File(uploadPath);
 		File[] files = dir.listFiles((dir1, name) -> !name.endsWith(".tmp") && name.startsWith(fileTemplate));
 		if (files != null && files.length >0) {
 			Arrays.sort(files, (f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
 			for (File videofile : files) {
-				logger.info("GetRecordedVideoFiles:" + videofile.getAbsolutePath());
+				logger.trace("GetRecordedVideoFiles:" + videofile.getAbsolutePath());
 			}
 		}
 		return files;

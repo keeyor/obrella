@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block sec:authorize="isAuthenticated()">
+        <i class="fas fa-user fa-lg mr-1" style="vertical-align:middle"></i><span sec:authentication="name"></span>
+</th:block>
+<th:block sec:authorize="isAnonymous()">
+    anonymous
+</th:block>
+</body>
+</html>

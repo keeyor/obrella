@@ -37,6 +37,8 @@ public class StreamingPropertiesConfig {
 	private boolean userRecorder;
 	@Value( "${streaming.segmentation_duration}" )
 	private int segmentationDuration;
+	@Value( "${streaming.override_url}" )
+	private String overrideResourceUrl;
 
 	@Bean
 	public StreamingProperties streamingProperties() {
@@ -54,6 +56,7 @@ public class StreamingPropertiesConfig {
 		streamingProperties.setStorage(storage);
 		streamingProperties.setUse_recorder(userRecorder);
 		streamingProperties.setSegmentation_duration(segmentationDuration);
+		streamingProperties.setOverrideResourceUrl(overrideResourceUrl);
 
 		return streamingProperties;
 	}

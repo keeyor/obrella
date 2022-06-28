@@ -15,7 +15,6 @@ import org.bson.types.ObjectId;
 import org.opendelos.control.repository.scheduledEvent.extension.ScheduledEventOoRepository;
 import org.opendelos.model.repo.QueryScheduledEventsResults;
 import org.opendelos.model.repo.ResourceQuery;
-import org.opendelos.model.resources.Resource;
 import org.opendelos.model.resources.ScheduledEvent;
 import org.opendelos.model.users.UserAccess;
 
@@ -169,9 +168,7 @@ public class ScheduledEventOoRepositoryImpl implements ScheduledEventOoRepositor
 		Criteria.where("responsiblePerson._id").is(objID));
 		andExpression.add(expression);
 
-		if (!andExpression.isEmpty()) {
-			query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
-		}
+		query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
 
 		if (limit != -1) {
 			return mongoTemplate.find(query, ScheduledEvent.class);
@@ -223,9 +220,7 @@ public class ScheduledEventOoRepositoryImpl implements ScheduledEventOoRepositor
 		andExpression.add(expression);
 
 		Query query = new Query();
-		if (!andExpression.isEmpty()) {
-			query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
-		}
+		query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
 		Sort sort = Sort.by(Sort.Order.asc("title"));
 		query.with(sort);
 
@@ -247,9 +242,7 @@ public class ScheduledEventOoRepositoryImpl implements ScheduledEventOoRepositor
 		andExpression.add(expression);
 
 		Query query = new Query();
-		if (!andExpression.isEmpty()) {
-			query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
-		}
+		query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
 		Sort sort = Sort.by(Sort.Order.asc("title"));
 		query.with(sort);
 
@@ -281,12 +274,19 @@ public class ScheduledEventOoRepositoryImpl implements ScheduledEventOoRepositor
 
 	@Override
 	public long CountEventsByManagerAsEditor(String userId) {
+
+
 		Query query = new Query();
-		Criteria expression = new Criteria();
+		Criteria andCriteria = new Criteria();
+		List<Criteria> andExpression =  new ArrayList<>();
 
 		ObjectId objID = new ObjectId(userId);
-		expression.and("editor._id").is(objID);
-		query.addCriteria(expression);
+		Criteria expression = new Criteria();
+		expression.andOperator(Criteria.where("editor._id").is(objID),
+				Criteria.where("responsiblePerson._id").ne(objID));
+		andExpression.add(expression);
+
+		query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
 
 		return mongoTemplate.count(query,ScheduledEvent.class);
 	}
@@ -395,7 +395,7 @@ public class ScheduledEventOoRepositoryImpl implements ScheduledEventOoRepositor
 		orEventExpression.add(event_expression);
 
 		if (resourceQuery.isStaffMember()) {
-			orEventExpression.add(Criteria.where("event.responsiblePerson._id").is(new ObjectId(resourceQuery.getManagerId())));
+			orEventExpression.add(Criteria.where("responsiblePerson._id").is(new ObjectId(resourceQuery.getManagerId())));
 		}
 
 		expression.orOperator(new Criteria().orOperator(orEventExpression.toArray(new Criteria[orEventExpression.size()])));

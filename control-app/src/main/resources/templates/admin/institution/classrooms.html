@@ -49,19 +49,17 @@
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <ul class="header-nav d-none d-md-flex">
-                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/institution/structure}">Σχολές & Τμήματα</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/admin/institution/classrooms}">Αίθουσες</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/institution/structure}">Σχολές & Τμήματα</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/institution/classrooms}">Αίθουσες</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/institution/acalendar}">Ακαδημαϊκό Ημερολόγιο</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active"><span>Αίθουσες</span></li>
                 </ol>
             </nav>
@@ -117,8 +115,8 @@
                         <div class="card mt-3" id="rooms_edit_card" style="display: none">
                             <div class="card-header" >
                                 <span class="float-end">
+                                    <button type="button" class="btn btn-secondary" id="closeUpdateRoom"><i class="fas fa-undo"></i> Επιστροφή</button>
                                     <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color" id="addOrUpdateRoom"><i class="far fa-save"></i> Αποθήκευση</button>
-                                        <button type="button" class="btn btn-secondary" id="closeUpdateRoom"><i class="fas fa-undo"></i> Επιστροφή</button>
                                     <button type="button" class="btn btn-danger"  title="Διαγραφή Αίθουσας" id="deleteRoomBt"><i class="fas fa-trash"></i></button>
                                 </span>
                                 <span>
@@ -134,27 +132,27 @@
                                                             <!-- TITLE -->
                                                             <div class="form-group row mt-3">
                                                                 <label for="room_name" class="col-sm-2 col-form-label"><b>Τίτλος*</b></label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-4">
                                                                     <input type="text" id="room_name" name="room_name" class="form-control"/>
                                                                 </div>
                                                             </div>
                                                             <!-- Code -->
                                                             <div class="form-group row mt-3">
                                                                 <label for="room_code" class="col-sm-2 col-form-label"><b>Κωδικός*</b></label>
-                                                                <div class="col-sm-3">
+                                                                <div class="col-sm-4">
                                                                     <input type="text" id="room_code" name="room_code" class="form-control"/>
                                                                 </div>
                                                             </div>
                                                             <!-- TITLE -->
                                                             <div class="form-group row mt-3">
                                                                 <label for="room_descr" class="col-sm-2 col-form-label">Περιγραφή</label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-4">
                                                                     <input type="text" id="room_descr" name="room_descr" class="form-control"/>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row mt-3">
                                                                 <label for="departments_s2" class="col-sm-2 col-form-label"><b>Διαθεσιμότητα</b></label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-4">
                                                                     <select id="departments_s2" style="width: 100%" class="form-control course_department"  multiple="multiple">
                                                                         <option value=""></option>
                                                                     </select>
@@ -173,7 +171,7 @@
                                                             <!-- OVERLAY -->
                                                             <div class="form-group row title_change_warning mt-2">
                                                                 <label class="col-sm-2 col-form-label">&nbsp;</label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-4">
                                                                     <div style="font-size: 0.9em;color: red;font-weight: bold"><i style="color:red" class="fas fa-exclamation-triangle"></i> ΠΡΟΣΟΧΗ:<br/>
                                                                         <span style="color:black;font-weight: normal">
                                                                             Η <b>απενεργοποίηση</b> του ημερολογίου της Άιθουσας/Χώρου <b>ΘΑ ΑΚΥΡΩΣΕΙ</b> τυχόν προγραμματισμένες μεταδόσεις για τον επιλεγμένο χώρο.
@@ -185,14 +183,14 @@
                                                             </div>
                                                             <div class="form-group row mt-3">
                                                                 <label for="room_calendar_toggle" class="col-sm-2 col-form-label"><b>Ενεργό Ημερολόγιο*</b></label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-4">
                                                                     <input id="room_calendar_toggle" name="room_calendar_toggle" type="checkbox" />
                                                                 </div>
                                                             </div>
                                                             <!-- DEVICES -->
                                                             <div class="form-group row mt-3">
                                                                 <label class="col-sm-2 col-form-label"><b><b>Συσκευή Χώρου</b></b></label>
-                                                                <div class="col-sm-7"  style="border-top:#cccccc 1px solid;color:black;font-size: 0.9em;font-weight: normal">
+                                                                <div class="col-sm-4"  style="border-top:#cccccc 1px solid;color:black;font-size: 0.9em;font-weight: normal">
                                                                     <i class="far fa-question-circle"></i>
                                                                     Επιλέξτε ή πληκτρολογήστε τα στοιχεία της συσκευής του χώρου. Η αίθουσα δεν μπορεί να ενεργοποιηθεί και επομένως να συμμετάσχει σε ζωντανές μεταδόσεις,
                                                                     αν δεν οριστεί συσκευή</b>

@@ -147,11 +147,17 @@ public class ResourceUtils {
 	public String getVideoUrlOfResource(Resource resource) {
 
 		String video_filename = resource.getResourceAccess().getFileName();
-		StringBuilder stringBuilder = this.getStreamingBaseWebPath()
-				.append(resource.getResourceAccess().getFolder())
-				.append("/")
-				.append(video_filename);
-		return  stringBuilder.toString();
+		if (streamingProperties.getOverrideResourceUrl() == null || streamingProperties.getOverrideResourceUrl().trim().equals("")) {
+			StringBuilder stringBuilder = this.getStreamingBaseWebPath()
+					.append(resource.getResourceAccess().getFolder())
+					.append("/")
+					.append(video_filename);
+			return stringBuilder.toString();
+		}
+		else {
+			return streamingProperties.getOverrideResourceUrl() + resource.getResourceAccess()
+					.getFolder() + "/" + video_filename;
+		}
 	}
 
 	public String getMediaBasePathOfResource(Resource resource) {

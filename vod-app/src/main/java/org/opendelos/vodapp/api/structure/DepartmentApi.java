@@ -7,6 +7,7 @@ package org.opendelos.vodapp.api.structure;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -66,10 +67,10 @@ public class DepartmentApi {
 		this.scheduleUtils = scheduleUtils;
 	}
 
-	@RequestMapping(value = "/api/v1/s2/departments.web/school/{schoolId}", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<String> getDepartmentsBySchoolIds2(@PathVariable String schoolId) {
+	@RequestMapping(value = "/apiw/v1/s2/departments.web/school/{schoolId}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<String> getDepartmentsBySchoolIds2(@PathVariable String schoolId, Locale locale) {
 
-		List<Select2GenGroup> select2GenGroupList = departmentService.getAllDepartmentsGroupedBySchool(schoolId);
+		List<Select2GenGroup> select2GenGroupList = departmentService.getAllDepartmentsGroupedBySchool(schoolId, locale);
 		try {
 			//select2GenGroupList.sort(new TitleSorter());
 			String s2departments = ApiUtils.FormatResultsForSelect2(select2GenGroupList);
@@ -80,7 +81,7 @@ public class DepartmentApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v2/s2/departments.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v2/s2/departments.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAuthorizedDepartmentsBySchoolIds2(@PathVariable String access) {
 
 		OoUserDetails user = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -123,7 +124,7 @@ public class DepartmentApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/s3/departments.web/school/{schoolId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s3/departments.web/school/{schoolId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getDepartmentsIdentityBySchoolIds2(@PathVariable String schoolId) {
 
 		List<School> schools = new ArrayList<>();
@@ -161,7 +162,7 @@ public class DepartmentApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/dt/departments.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/departments.web", method = RequestMethod.GET)
 	public byte[] findAllForDt() {
 
 		List<Department> departments = departmentService.findAll();
@@ -170,7 +171,7 @@ public class DepartmentApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/class.web/department/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/class.web/department/{id}", method = RequestMethod.GET)
 	public byte[] findAllDepartmentClassroomsForDt(@PathVariable("id") String id) {
 
 		List<Classroom> classrooms = new ArrayList<>();
@@ -188,7 +189,7 @@ public class DepartmentApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/class.web/u/department/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/class.web/u/department/{id}", method = RequestMethod.GET)
 	public byte[] findAllUnAssignedDepartmentClassroomsForDt(@PathVariable("id") String id) {
 
 		List<String> department_assigned_classrooms = departmentService.findClassroomIdsById(id);
@@ -198,17 +199,17 @@ public class DepartmentApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/department/assign_rooms/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/department/assign_rooms/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void AssignRoomsToDepartment(@RequestBody String[] ids, @PathVariable("id") String id) {
 		departmentService.assignRoomsToDepartment(id, ids);
 	}
 
-	@RequestMapping(value = "/api/v1/department/unassign_room/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/department/unassign_room/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UnAssignCourseFromStaffMember(@RequestBody String roomId, @PathVariable("id") String id) {
 		departmentService.unAssignRoomFromDepartment(id, roomId);
 	}
 
-	@RequestMapping(value = "/api/v1/dt/devices.web/classroom/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/devices.web/classroom/{id}", method = RequestMethod.GET)
 	public byte[] findAllDevicesForClassroomByIdForDt(@PathVariable("id") String id) {
 
 		Classroom classroom = classroomService.findById(id);
@@ -219,7 +220,7 @@ public class DepartmentApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/departments.web/school/{schoolId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/departments.web/school/{schoolId}", method = RequestMethod.GET)
 	public byte[] findBySchoolIdForDt(@PathVariable("schoolId") String schoolId) {
 
 		List<Department> departments = departmentService.findBySchoolId(schoolId);
@@ -228,7 +229,7 @@ public class DepartmentApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/department/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/department/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> updateDepartment(@RequestBody Department department) {
 
 		String _id;
@@ -247,7 +248,7 @@ public class DepartmentApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/department/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/department/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteDepartment(@PathVariable("id") String id) {
 
 		try {
@@ -260,7 +261,7 @@ public class DepartmentApi {
 	}
 
 	/* CALENDAR ACTION */
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/dt/institution/{iid}/department/{id}/calendar/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/dt/institution/{iid}/department/{id}/calendar/{year}")
 	public byte[] getDepartmentCalendarDt(@PathVariable("iid") String iid, @PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPeriod customPeriod = departmentService.getDepartmentCalendar(id, iid, year);
@@ -270,7 +271,7 @@ public class DepartmentApi {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/department/{id}/calendar/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/department/{id}/calendar/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> updateCalendar(@PathVariable("id") String id, @RequestBody String jsonString, @PathVariable("year") String year) throws JsonProcessingException {
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -290,7 +291,7 @@ public class DepartmentApi {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/department/{id}/calendar/reset/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/department/{id}/calendar/reset/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> resetCalendar(@PathVariable("id") String id, @PathVariable("year") String year) throws JsonProcessingException {
 
 		try {
@@ -303,7 +304,7 @@ public class DepartmentApi {
 	}
 
 	/* ARGIES ACTION */
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/dt/department/{id}/pause/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/dt/department/{id}/pause/{year}")
 	public byte[] getPauseDt(@PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPause customPause = departmentService.getCustomPause(id, year);
@@ -317,7 +318,7 @@ public class DepartmentApi {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/department/{id}/pause/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/department/{id}/pause/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> updatePause(@PathVariable("id") String id, @RequestBody String jsonString, @PathVariable("year") String year) throws JsonProcessingException {
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -336,7 +337,7 @@ public class DepartmentApi {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/department/{id}/pause/delete/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/department/{id}/pause/delete/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> deletePause(@PathVariable("id") String id, @PathVariable("year") String year) throws JsonProcessingException {
 
 		try {
@@ -349,7 +350,7 @@ public class DepartmentApi {
 	}
 
 	/* RECURSIVE PAUSES */
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/dt/institution/{iid}/department/{id}/pause-recursive/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/dt/institution/{iid}/department/{id}/pause-recursive/{year}")
 	public byte[] getPauseRecursiveDt(@PathVariable("iid") String iid, @PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPause customPause = departmentService.getCustomPause(id, year);

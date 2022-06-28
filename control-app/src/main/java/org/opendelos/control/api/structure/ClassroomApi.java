@@ -238,6 +238,12 @@ public class ClassroomApi {
 			child.setId(classroom.getId());
 			child.setText(classroom.getName());
 			child.setSubheader(" " + classroom.getDescription());
+			if (classroom.getCalendar().equals("true")) {
+				child.setInfo("active");
+			}
+			else {
+				child.setInfo("inactive");
+			}
 			children.add(child);
 		}
 		try {

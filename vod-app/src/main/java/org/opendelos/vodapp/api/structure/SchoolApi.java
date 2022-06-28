@@ -32,7 +32,7 @@ public class SchoolApi {
 		this.schoolService = schoolService;
 	}
 
-	@RequestMapping(value = "/api/v1/s2/schools.web", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/schools.web", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAll() {
 		List<School> schools = schoolService.findAllSortedByTitle();
 		List<Select2GenChild> children = new ArrayList<>();
@@ -52,7 +52,7 @@ public class SchoolApi {
 
 	}
 
-	@RequestMapping(value = "/api/v1/dt/schools.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/schools.web", method = RequestMethod.GET)
 	public byte[] findAllForDt() {
 
 		List<School> schools = schoolService.findAllSortedByTitle();
@@ -61,7 +61,7 @@ public class SchoolApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/school/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/school/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveSchool(@RequestBody School school) {
 
 		String _id;
@@ -80,7 +80,7 @@ public class SchoolApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/school/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/school/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteSchool(@PathVariable("id") String id) {
 
 		try {

@@ -90,7 +90,7 @@
 			let $department_pauses_dt = $("#table_department_argies_edit");
 			$department_pauses_dt.DataTable().row.add(new_argia).draw(true);
 			let data = getArgiesTableDataAsJSON($department_pauses_dt,"");
-			PauseEditCallback(data);
+			PauseEditCallback(data, "new_argia_added"); //!Important
 		});
 
 		$updateArgiesButton.on('click',function(){
@@ -772,7 +772,7 @@
 		}).draw();
 	}
 
-     function PauseEditCallback(json) {
+     function PauseEditCallback(json, action) {
 
 		$view_a_pane.hide();
 		$edit_a_pane.show();
@@ -822,8 +822,16 @@
 			else {
 				$endDateElementInPosI.datepicker("setDate", "");
 			}
-
 		}
+		 //SET FOCUS ON NEWLY CREATED ARGIA
+		 if (action !== undefined && action === "new_argia_added") {
+			 let last_row_counter = json.argia.length - 1;
+			 let $last_argia_input = $("#data_row_" + last_row_counter);
+			 $last_argia_input.focus();
+			 $last_argia_input.select();
+			 let $closest_tr = $last_argia_input.closest('tr');
+			 $closest_tr.css('background-color', '#2eb85c');
+		 }
 
 		$(".delete_argia_row").on('click',function(e){
 			if ($(this).hasClass("btn-light")) {
@@ -874,7 +882,7 @@
 					setMessage($argiesMessages,'alert alert-success invisible', " ");
 					$edit_a_pane.hide();
 					$view_a_pane.show();
-				}, 1500);
+				}, 1000);
 
 				let message = {msg: "Academic Calendar Updated!", year: dashboard.selected_year, department: departmentId, institution: institutionId};
 				dashboard.broker.trigger('refresh.page', [message]);

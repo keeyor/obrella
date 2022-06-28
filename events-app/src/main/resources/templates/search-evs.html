@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"   th:lang="${localeCode}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -58,7 +58,7 @@
                 <div class="container-fluid" style="margin-top: 20px">
                     <div class="row">
                         <div class="offset-lg-1 col-lg-2 col-md-12" id="event-filters">
-                            <div class="text-muted mb-2 font-italic">
+                            <div class="mb-2 font-italic">
                                 <span th:text="#{filter.text.header}"></span>
                             </div>
                             <div class="card mb-1">
@@ -69,7 +69,7 @@
                                     </button>
                                 </p>
                                 <div class="collapse d-lg-block" id="collapseType">
-                                    <div class="text-muted"><span th:text="#{filter.text.type}"></span></div>
+                                    <div><span th:text="#{filter.text.type}"></span></div>
                                     <div class="card card-body mb-0">
                                         <th:block th:each="subarea, iStat: ${subAreasList}" th:style="${iStat.odd}? ''">
                                             <div class="form-check">
@@ -90,13 +90,13 @@
                                     </button>
                                 </p>
                                 <div class="collapse   d-lg-block" id="collapseUnit">
-                                    <div class="text-muted"><span th:text="#{filter.text.unit}"></span></div>
+                                    <div ><span th:text="#{filter.text.unit}"></span></div>
                                     <div class="card card-body">
                                         <th:block th:each="scUnit, iStat: ${unitFilter}" th:style="${iStat.odd}? ''">
                                             <div class="form-check mt-2">
                                                 <input class="form-check-input school-type-filter" type="checkbox" value="" th:id="${scUnit.id}">
                                                 <label class="form-check-label" th:for="${scUnit.id}">
-                                                    <span th:id="${scUnit.id + '_text'}" style="font-weight: 500;color:#1385ba !important" th:text="${scUnit.text}"></span>
+                                                    <span class="blue-link-wcag-color" th:id="${scUnit.id + '_text'}" style="font-weight: 500" th:text="${scUnit.text}"></span>
                                                 </label>
                                             </div>
                                             <th:block th:if="${scUnit.children != null}" th:each="dpUnit, iStat: ${scUnit.children}" th:style="${iStat.odd}? ''">
@@ -122,12 +122,12 @@
                                 <div class="pt-3" th:text="#{area.es.header.text}"></div>
                                 <div class="card">
                                     <div class="card-body">
-                                            <h6 id="filters-header" style="display: none">
+                                            <div id="filters-header" style="display: none;font-weight: 500">
                                                 <i class="fas fa-search"></i> <span th:text="#{search.active.filters}">Ενεργά φίλτρα</span>
                                                 <a  th:title="#{search.active.remove}"  href="#" class="remove_all_filters mx-2" style="display: none">
                                                     <i style="color: red" class="fas fa-ban"></i>
                                                 </a>
-                                            </h6>
+                                            </div>
                                             <div style="background-color: floralwhite">
                                                 <div id="schoolTextFilters"></div>
                                                 <div id="depTextFilters"></div>
@@ -152,20 +152,26 @@
                                     <div class="row mt-3 justify-content-center">
                                         <th:block th:each="ScEvent, iStat: ${QR.searchResultList}" th:style="${iStat.odd}? ''">
                                             <!--@thymesVar id="mEventsWedDir" type="java.lang.String"-->
-                                            <a target="_blank" style="color:#006A9B" th:href="@{/player(id=${ScEvent.id})}">
-                                                <div class="card mr-1 mb-1" style="width: 11rem;">
+                                            <div class="card mr-1 mb-1" style="width: 11rem;">
+                                                <a target="_blank" style="color:#006A9B" th:href="@{/player(id=${ScEvent.id})}">
                                                     <th:block th:if="${ScEvent.event.photoRelativeUrl != null &&  ScEvent.event.photoRelativeUrl != ''}">
-                                                        <img th:src="${mEventsWedDir + ScEvent.event.id + '/' + ScEvent.event.photoRelativeUrl}" class="card-img-top" alt="..." src="">
+                                                        <img th:src="${mEventsBaseWedDir + ScEvent.event.id + '/' + ScEvent.event.photoRelativeUrl}" class="card-img-top" alt="..." src="">
                                                     </th:block>
                                                     <th:block th:unless="${ScEvent.event.photoRelativeUrl != null && ScEvent.event.photoRelativeUrl != ''}">
-                                                         <img th:src="${mBaseWedDir + ScEvent.resourceAccess.folder + '/' + #strings.substringBefore(ScEvent.resourceAccess.fileName, '.mp4' ) + '-1.jpg'}"  class="card-img-top" alt="..." src="">
+                                                        <!--<img th:src="@{public/images/default/default_event_thumb.jpg}"  class="card-img-top" alt="..." src="">-->
+                                                        <img th:src="${mBaseWedDir + ScEvent.resourceAccess.folder + '/' + #strings.substringBefore(ScEvent.resourceAccess.fileName, '.mp4' ) + '-1.jpg'}"  class="card-img-top" alt="..." src="">
                                                     </th:block>
-                                                    <div class="card-body px-0">
-                                                        <h6 class="card-title" th:text="${#strings.abbreviate(ScEvent.getEvent.title,60)}" style="color: #3c4b64; font-weight: 600"></h6>
-                                                        <p  th:text="${ScEvent.statistics + ' views'}" class="text-muted card-text" style="color: #3c4b64; font-weight: 600"></p>
-                                                    </div>
+                                                </a>
+
+                                                <div class="card-body px-0" style="text-decoration: none">
+                                                    <a target="_blank" style="color:#006A9B" th:href="@{/player(id=${ScEvent.id})}">
+                                                        <div class="card-title" th:text="${#strings.abbreviate(ScEvent.event.title,60)}" th:title="${ScEvent.event.title}" style="color: #3c4b64; font-weight: 600">
+                                                        </div>
+                                                    </a>
+                                                    <p th:if="${ScEvent.title != ScEvent.event.title}"  th:text="${ScEvent.title}"></p>
+                                                    <p th:text="${ScEvent.statistics + ' '} + #{results.views}" class="card-text" style="color: #3c4b64; font-weight: 600"></p>
                                                 </div>
-                                            </a>
+                                            </div>
                                         </th:block>
                                     </div>
                                     <div class="row">

@@ -43,61 +43,58 @@
             dataType: 'json',
             success: function (data) {
                 $.each(data.data, function (index, el) {
-                    let access = el.access;
-                    let live_url;
-                    if (access === "open" || access === "password") {
-                        live_url = "live_player";
-                    }
-                    else if (access === "sso") {
-                        live_url = "cas/live_player";
-                    }
-                    let html = '';
-                        html += '<div class="mt-2" style="font-weight: 500">' + (index+1) + '. Τμήμα ' + el.department.title
-                             + ' - ' + el.supervisor.name
-                             + '</div>';
+
+                    if (el.broadcast) {
+                        let access = el.access;
+                        let live_url;
+                        if (access === "open" || access === "password") {
+                            live_url = "live_player";
+                        } else if (access === "sso") {
+                            live_url = "cas/live_player";
+                        }
+                        let html = '';
+                        html += '<div class="mt-2" style="font-weight: 500">' + (index + 1) + '. Τμήμα ' + el.department.title
+                            + ' - ' + el.supervisor.name
+                            + '</div>';
                         html +=
-                                '<div class="card-header row">';
-                                    html += '<div class="col-2" style="display: flex;align-items: center">' +
-                                                '<a class="text-decoration-none" target="_blank" href="' + live_url + '?id=' + el.id + '">' +
-                                                '<img alt="live-broadcast status" src="' + dashboard.siteUrl + '/public/images/icons/IconLive25x25.png"></a>' +
-                                            '</div>';
-                                     html += '<div class="vr"></div>';
-                                     html += '<div class="col-9">' +
-                                            '<i class="icon-time-duration me-1"></i>' +  getStartTimeAndDuration(el.date, el.realDuration) + ': ' +
-                                            '<a class="text-dark text-decoration-none blue-link-wcag-color" target="_blank" href="' + live_url + '?id=' + el.id + '">' + el.title + '</a>';
+                            '<div class="card-header row">';
+                        html += '<div class="col-2" style="display: flex;align-items: center">' +
+                            '<a class="text-decoration-none" target="_blank" href="' + live_url + '?id=' + el.streamName + '">' +
+                            '<img alt="live-broadcast status" src="' + dashboard.siteUrl + '/public/images/icons/IconLive25x25.png"></a>' +
+                            '</div>';
+                        html += '<div class="vr"></div>';
+                        html += '<div class="col-9">' +
+                            '<i class="icon-time-duration me-1"></i>' + getStartTimeAndDuration(el.date, el.realDuration) + ': ' +
+                            '<a class="text-dark text-decoration-none blue-link-wcag-color" target="_blank" href="' + live_url + '?id=' + el.streamName + '">' + el.title + '</a>';
 
-                                            html += '<div class="row  row-cols-auto mt-2" style="font-size: 0.9em">';
-                                                if (access === "open") {
-                                                    html += '<div class="col"><i class="fas fa-lock-open ms-lg-1 me-1"></i>Ελεύθερη</div>';
-                                                }
-                                                else if (access === "sso") {
-                                                    html += '<div class="col">' +   '<img class="ms-lg-1 me-1" src="' + dashboard.siteUrl +
-                                                                                    '/public/images/icons/IconMetadosiStatusUserName.png" width="20px" alt="">' + '' +
-                                                                                    'Ιδρυματικός Λογαριασμός</div>';
-                                                }
-                                                else if (access === "password") {
-                                                    html += '<div class="col"><i class="fas fa-lock  ms-lg-1 me-1"></i>Κωδικός Μετάδοσης</div>';
-                                                }
-                                                let recording = el.recording;
-                                                if (recording) {
-                                                    html += '<div class="col">' +   '<img class="me-1" width="16px"  src="' + dashboard.siteUrl +
-                                                                                    '/public/images/icons/IconRecAuto.png" alt="" src="">' +
-                                                                                    'Kαταγραφή</div>';
-                                                }
-                                                else {
-                                                    html += '<div class="col">' +   '<img class="me-1" width="16px"  src="' + dashboard.siteUrl +
-                                                                                    '/public/images/icons/IconRecOff.png" alt="" src="">' +
-                                                                                    'Χωρίς Kαταγραφή</div>';
-                                                }
-                                                html += '<div class="col"><i class="fas fa-map-marked ms-lg-1 me-1"></i>' + el.classroomName + '</div>';
-                                                html += '<div class="col"></div>';
-                                            html += '</div>';
-                                     html += '</div>';
-                                    html += '</div>';
-                                html += '</div>';
-
-
-                    container.append(html);
+                        html += '<div class="row  row-cols-auto mt-2" style="font-size: 0.9em">';
+                        if (access === "open") {
+                            html += '<div class="col"><i class="fas fa-lock-open ms-lg-1 me-1"></i>Ελεύθερη</div>';
+                        } else if (access === "sso") {
+                            html += '<div class="col">' + '<img class="ms-lg-1 me-1" src="' + dashboard.siteUrl +
+                                '/public/images/icons/IconMetadosiStatusUserName.png" width="20px" alt="">' + '' +
+                                'Ιδρυματικός Λογαριασμός</div>';
+                        } else if (access === "password") {
+                            html += '<div class="col"><i class="fas fa-lock  ms-lg-1 me-1"></i>Κωδικός Μετάδοσης</div>';
+                        }
+                        let recording = el.recording;
+                        if (recording) {
+                            html += '<div class="col">' + '<img class="me-1" width="16px"  src="' + dashboard.siteUrl +
+                                '/public/images/icons/IconRecAuto.png" alt="" src="">' +
+                                'Kαταγραφή</div>';
+                        } else {
+                            html += '<div class="col">' + '<img class="me-1" width="16px"  src="' + dashboard.siteUrl +
+                                '/public/images/icons/IconRecOff.png" alt="" src="">' +
+                                'Χωρίς Kαταγραφή</div>';
+                        }
+                        html += '<div class="col"><i class="fas fa-map-marked ms-lg-1 me-1"></i>' + el.classroomName + '</div>';
+                        html += '<div class="col"></div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        container.append(html);
+                    }
                 });
                 if (data.data.length < 1) {
                     container.html("δεν βρέθηκαν μεταδόσεις σε εξέλιξη");
@@ -119,6 +116,8 @@
             dataType: 'json',
             success: function (data) {
                 $.each(data.data, function (index, el) {
+
+                    let broadcast = el.broadcast;
                     let status = getPastPresentFuture(el.date,el.realDuration);
 
                     let access = el.access;
@@ -136,7 +135,10 @@
                     html +=
                         '<div class="card-header row">';
                             html += '<div class="col-2" style="display: flex;align-items: center">';
-                                if (status === "live") {
+                                if (status === "live" && !broadcast) {
+                                    html += '<img src="' + dashboard.siteUrl + '/public/images/icons/IconMetadosiOff.png" alt="" src="" title="χωρίς μετάδοση">';
+                                }
+                                if (status === "live" && broadcast) {
                                     html += '<a class="text-decoration-none" title="ζωντανή μετάδοση" target="_blank" href="' + live_url + '?id=' + el.id + '">';
                                     html += '<img alt="live-broadcast status" src="' + dashboard.siteUrl + '/public/images/icons/IconLive25x25.png"></a>';
                                 }
@@ -150,10 +152,10 @@
                         html += '<div class="vr"></div>';
                         html += '<div class="col-9">' +
                         '<i class="icon-time-duration me-1"></i>' +  getStartTimeAndDuration(el.date, el.realDuration) + ': ';
-                        if (status === "live") {
+                        if (status === "live" && broadcast) {
                             html += '<a class="text-dark text-decoration-none blue-link-wcag-color" target="_blank" href="' + live_url + '?id=' + el.id + '">' + el.title + '</a>';
                         }
-                        else if (status === "past" || status === "future") {
+                        else {
                             html += '<span class="text-dark text-decoration-none" style="font-weight: 500">' + el.title + '</span>';
                         }
 
@@ -186,6 +188,17 @@
                             html += ret_lnk;
                         }
                     }
+
+                    if (broadcast) {
+                        html += '<div class="col">' +   '<img class="me-1" width="16px"  src="' + dashboard.siteUrl +
+                            '/public/images/icons/IconMetadosiOn.png" alt="" src="">' +
+                            'Μετάδοση</div>';
+                    }
+                    else {
+                        html += '<div class="col">' +   '<img class="me-1" width="16px"  src="' + dashboard.siteUrl +
+                            '/public/images/icons/IconMetadosiOff.png" alt="" src="">' +
+                            'Χωρίς Μετάδοση</div>';
+                    }
                     if (recording) {
                         html += '<div class="col">' +   '<img class="me-1" width="16px"  src="' + dashboard.siteUrl +
                             '/public/images/icons/IconRecAuto.png" alt="" src="">' +
@@ -196,6 +209,7 @@
                             '/public/images/icons/IconRecOff.png" alt="" src="">' +
                             'Χωρίς Kαταγραφή</div>';
                     }
+
                     html += '<div class="col"><i class="fas fa-map-marked ms-lg-1 me-1"></i>' + el.classroomName + '</div>';
                     html += '<div class="col"></div>';
                     html += '</div>';

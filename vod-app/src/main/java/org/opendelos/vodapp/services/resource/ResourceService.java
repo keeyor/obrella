@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.bson.types.ObjectId;
+import org.opendelos.model.delos.OpUser;
 import org.opendelos.model.properties.MultimediaProperties;
 import org.opendelos.model.properties.StreamingProperties;
 import org.opendelos.model.repo.QueryResourceResults;
@@ -449,24 +450,24 @@ public class ResourceService {
         else return null;
     }
 
-    public ResourceQuery setAccessRestrictions(ResourceQuery resourceQuery, OoUserDetails editor) {
+    public ResourceQuery setAccessRestrictions(ResourceQuery resourceQuery, OpUser editor) {
 
         List<ObjectId> authorizedUnitIds;
 
         resourceQuery.setManagerId(editor.getId());
-        if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER"))) {
+        if (editor.getAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER)) {
             resourceQuery.setStaffMember(true);
         }
-        if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SA"))) {
+        if (editor.getRights().getIsSa()) {
             resourceQuery.setSA(true);
             return resourceQuery;
         }
-        if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
+        if (editor.getAuthorities().contains( UserAccess.UserAuthority.MANAGER)) {
             resourceQuery.setManager(true);
             List<String> authorizedUnits = opUserService.getManagersAuthorizedDepartmentIdsByAccessType(editor.getId(),"content");
             resourceQuery.setAuthorizedUnitIds(authorizedUnits);
         }
-        else if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SUPPORT"))) {
+        else if (editor.getAuthorities().contains(UserAccess.UserAuthority.SUPPORT)) {
             resourceQuery.setSupport(true);
             List<UserAccess.UserRights.CoursePermission> editors_course_support;
             List<UserAccess.UserRights.EventPermission> editors_event_support;

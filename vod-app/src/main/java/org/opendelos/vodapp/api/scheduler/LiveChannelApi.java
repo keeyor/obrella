@@ -40,7 +40,7 @@ public class LiveChannelApi {
 		this.scheduleService = scheduleService;
 	}
 
-	@RequestMapping(value = "/api/v1/channel/timetable/today", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/channel/timetable/today", method = RequestMethod.GET, produces = "application/json")
 	public List<ChannelProgram> SearchTimeTableByEditor() {
 
 		List<ScheduleDTO> scheduleDTOList = scheduleService.getNextLiveBroadcastToChannel(0, false);

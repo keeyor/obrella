@@ -144,7 +144,7 @@ html {
 
 #overlay_1 {
     position: relative;
-    bottom: 215px;
+    bottom: 255px;
     color: #FFF;
     text-align: left;
     font-size: 20px;
@@ -167,7 +167,7 @@ html {
 
 #channel_overlay {
     position: relative;
-    bottom: 215px;
+    bottom: 255px;
     color: #FFF;
     text-align: left;
     font-size: 20px;

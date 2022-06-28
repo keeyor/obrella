@@ -151,7 +151,7 @@
                                     <div class="card ps-2 mb-1" style="background-color: #f7f7f9" >
                                         <div class="form-group row mt-3">
                                             <label for="resource_title" class="col-sm-3  col-form-label emph-label">Τίτλος*</label>
-                                            <div class="col-sm-7">
+                                            <div class="col-sm-4">
                                                 <input type="text" id="resource_title" class="form-control" th:field="*{title}" placeholder="πληκτρολογήστε έναν τίτλο"/>
                                                 <div class="form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</div>
                                             </div>
@@ -161,7 +161,7 @@
                                             <div class="form-group row mt-2">
                                                 <input type="hidden" id="course_id" th:field="*{course.id}"/>
                                                 <label for="courses_s2" class="col-sm-3 col-form-label emph-label">Μάθημα*</label>
-                                                <div class="col-sm-7 pr-1">
+                                                <div class="col-sm-4 pr-1">
                                                     <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
                                                         <option value=""></option>
                                                     </select>
@@ -178,7 +178,7 @@
                                             <div class="form-group row mt-2">
                                                 <input type="hidden" id="supervisor_id" th:field="*{supervisor.id}"/>
                                                 <label for="supervisor_s2" class="col-sm-3 col-form-label emph-label">Διδάσκων*</label>
-                                                <div class="col-sm-7">
+                                                <div class="col-sm-4">
                                                     <select id="supervisor_s2" style="width: 100%"
                                                             class="form-control js-staffMembers-tags reset_control">
                                                         <option value=""></option>
@@ -191,7 +191,7 @@
                                             <div class="form-group row mt-2">
                                                 <input type="hidden" id="event_id" th:field="*{event.id}"/>
                                                 <label for="events_s2" class="col-sm-3 col-form-label emph-label">Εκδήλωση*</label>
-                                                <div class="col-sm-7 pr">
+                                                <div class="col-sm-4 pr">
                                                     <select id="events_s2" style="width: 100%" class="form-control js-events-tags reset_control" >
                                                         <option value=""></option>
                                                     </select>
@@ -259,7 +259,7 @@
                                             <!--@thymesVar id="catList" type="java.util.HashMap<String, List<String>"-->
                                             <div class="form-group row mt-2">
                                                 <label for="event_cats" class="col-sm-3 col-form-label emph-label">Θεματικές Περιοχές*</label>
-                                                <div class="col-sm-7">
+                                                <div class="col-sm-4">
                                                     <select id="event_cats" style="width: 100%" class="form-control js-category-tags" multiple="multiple" th:field="*{categories}">
                                                         <optgroup th:each="cheader:${catList}" th:label="${#strings.listSplit(cheader.key,'::')[1]}" label="">
                                                             <option th:each="cat:${cheader.value}" th:value="${#strings.listSplit(cat,'::')[0]}" th:text="${#strings.listSplit(cat,'::')[1]}">
@@ -529,9 +529,10 @@
                                                             <a title="Συγχρονισμός βίντεο-παρουσίασης" th:href="@{/admin/video-sync(id=${Resource.id})}" role="button" id="pr_syncPp" class="btn-light btn-sm btn mx-1">
                                                                 <i class="fas fa-sync-alt"></i> Συγχρονισμός
                                                             </a>
-                                                             <button id="pr_exportPp" title="Εξαγωγή Εικόνων" class="btn-light btn btn-sm">
-                                                                    <i class="fas fa-download"></i> Εξαγωγή αρχείου
-                                                             </button>
+                                                            <a target="_blank" download id="pr_exportPp" title="κατεβάστε την παρουσίαση σε  αρχείο στον υπολογιστή σας" role="button"
+                                                               class="btn btn-sm btn-light" href="#">
+                                                                <i class="fas fa-download"></i><span> Εξαγωγή αρχείου</span>
+                                                            </a>
 
                                                             <button id="pr_removePp" class="btn-light btn btn-sm"><i class="fas fa-trash" style="color:red;"></i> Διαγραφή παρουσίασης</button>
 
@@ -552,7 +553,7 @@
                                     <div class="card ps-2" style="background-color: #f7f7f9" >
                                         <div class="form-group row mt-3">
                                             <label for="resource_description" class="col-sm-3 col-form-label">Περιγραφή</label>
-                                            <div class="col-sm-7">
+                                            <div class="col-sm-4">
                                                 <textarea th:field="*{description}" class="form-control reset_control" id="resource_description" placeholder=""></textarea>
                                             </div>
                                         </div>
@@ -560,7 +561,7 @@
                                         <div class="form-group row mt-3">
                                             <input type="hidden" id="classroom_id" th:field="*{classroom}"/>
                                             <label for="classrooms_s2" class="col-sm-3 col-form-label">Χώρος Διδασκαλίας | Διεξαγωγής</label>
-                                            <div class="col-sm-7">
+                                            <div class="col-sm-4">
                                                 <select id="classrooms_s2" style="width: 100%" class="form-control js-classrooms-tags reset_control">
                                                     <option value=""></option>
                                                 </select>
@@ -569,7 +570,7 @@
                                         <!-- Λέξεις κλειδιά -->
                                         <div class="form-group row mt-3">
                                             <label for="resource_tpcs" class="col-sm-3 col-form-label">Λέξεις Κλειδιά</label>
-                                            <div class="col-sm-7">
+                                            <div class="col-sm-4">
                                                 <select id="resource_tpcs" style="width: 100%" class="form-control js-topics-tags" multiple="multiple" th:field="*{topics}">
                                                     <option th:each="tp:${Resource.topics}" th:value="${tp}" th:text="${tp}"></option>
                                                 </select>

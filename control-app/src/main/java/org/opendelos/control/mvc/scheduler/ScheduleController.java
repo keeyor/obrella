@@ -44,6 +44,7 @@ import org.opendelos.model.scheduler.ScheduleDTO;
 import org.opendelos.model.structure.Course;
 import org.opendelos.model.structure.Institution;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.model.users.UserAccess;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,6 +147,11 @@ public class ScheduleController {
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user",editor);
 
+		boolean userIsStaffMemberOnly = false;
+		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER) && editor.getUserAuthorities().size() == 1) {
+			userIsStaffMemberOnly= true;
+		}
+		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
 
 		boolean authorize = scheduleService.ApproveScheduledItemEdit(editor,id);
 		model.addAttribute("authorized", authorize);

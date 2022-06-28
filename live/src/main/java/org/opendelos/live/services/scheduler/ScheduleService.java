@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.opendelos.live.repository.resource.QueryResourceResults;
+import org.opendelos.live.repository.resource.ResourceQuery;
 import org.opendelos.live.repository.scheduler.ScheduleRepository;
 import org.opendelos.live.services.opUser.OpUserService;
+import org.opendelos.live.services.resource.ResourceService;
 import org.opendelos.live.services.scheduledEvent.ScheduledEventService;
 import org.opendelos.live.services.structure.ClassroomService;
 import org.opendelos.live.services.structure.CourseService;
@@ -71,10 +73,11 @@ public class ScheduleService {
     private final ScheduledEventService scheduledEventService;
     private final OpUserService opUserService;
     private final ClassroomService classroomService;
+    private final ResourceService resourceService;
 
 
     @Autowired
-    public ScheduleService(ScheduleRepository scheduleRepository, DepartmentService departmentService, CourseService courseService, StudyProgramService studyProgramService, ScheduledEventService scheduledEventService, OpUserService opUserService, ClassroomService classroomService) {
+    public ScheduleService(ScheduleRepository scheduleRepository, DepartmentService departmentService, CourseService courseService, StudyProgramService studyProgramService, ScheduledEventService scheduledEventService, OpUserService opUserService, ClassroomService classroomService, ResourceService resourceService) {
         this.scheduleRepository = scheduleRepository;
         this.departmentService = departmentService;
         this.courseService = courseService;
@@ -82,6 +85,7 @@ public class ScheduleService {
         this.scheduledEventService = scheduledEventService;
         this.opUserService = opUserService;
         this.classroomService = classroomService;
+        this.resourceService = resourceService;
     }
 
     public List<Schedule> findAll() {
@@ -593,6 +597,17 @@ public class ScheduleService {
         return  overlapInfo;
     }
 
+    public List<ScheduleDTO> computeTodaysSchedule(String currentAcademicYear) {
+
+        ScheduleQuery scheduleQuery = new ScheduleQuery();
+        scheduleQuery.setYear(currentAcademicYear);
+        scheduleQuery.setEnabled("true");
+        LocalDate today = LocalDate.now();
+        scheduleQuery.setFromDate(today);
+        scheduleQuery.setToDate(today);
+        return computeScheduleInDateRange(scheduleQuery);
+    }
+
     public List<ScheduleDTO> computeScheduleInDateRange(ScheduleQuery scheduleQuery) {
 
         List<ScheduleDTO> inRangeResults = new ArrayList<>();
@@ -652,11 +667,11 @@ public class ScheduleService {
            int classroom_status = classroomService.getClassroomStatus(classroomId);
            if (classroom_status == 1) {
                disabledClassroomList.add(scheduleDTO);
-               removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Ανύπαρκτη αίθουσα:"  + classroomId);
+               removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Room NOT FOUND:"  + classroomId);
            }
            else if (classroom_status == 2) {
                disabledClassroomList.add(scheduleDTO);
-               removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Απενεργοποιημένη αίθουσα:"  + classroomId);
+               removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Room INACTIVE:"  + classroomId);
            }
        }
        inRangeResults.removeAll(disabledClassroomList);
@@ -851,11 +866,25 @@ public class ScheduleService {
     private void removeScheduleFromTodaysProgrammeMessage(ScheduleDTO scheduleDTO, String cause) {
 
         if (scheduleDTO.getCourse() != null && !scheduleDTO.getCourse().getId().equals("")) {
-            logger.info("Αφαίρεση Διάλεξης από το πρόγραμμα μεταδόσεων:" + scheduleDTO.getCourse().getTitle() + " Αίτία: " +  cause);
+            logger.info("Remove Lecture from broadcast schedule:" + scheduleDTO.getCourse().getTitle() + " reason: " +  cause);
         }
         if (scheduleDTO.getScheduledEvent() != null && !scheduleDTO.getScheduledEvent().getId().equals("")) {
-            logger.info("Αφαίρεση Εκδήλωσης από το πρόγραμμα μεταδόσεων:" + scheduleDTO.getScheduledEvent().getTitle() + " Αίτία: " +  cause);
+            logger.info("Remove Event from broadcast schedule:" + scheduleDTO.getScheduledEvent().getTitle() + " Αίτία: " +  cause);
         }
+    }
+
+
+    public List<Resource> getTodaysProgrammeFromDatabase() {
+
+        ResourceQuery resourceQuery = new ResourceQuery();
+        resourceQuery.setCollectionName("Scheduler.Live");
+        resourceQuery.setSort("date");
+        resourceQuery.setDirection("asc");
+        QueryResourceResults queryResourceResults;
+        queryResourceResults = resourceService.searchPageableLectures(resourceQuery);
+        resourceQuery.setTotalResults(queryResourceResults.getTotalResults());
+
+        return queryResourceResults.getSearchResultList();
     }
 
 }

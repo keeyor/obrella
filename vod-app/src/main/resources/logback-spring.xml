@@ -35,6 +35,12 @@
 		</encoder>
 	</appender>
 
+	<logger name="org.opendelos.vodapp.api.world.LmsResourceApi" level="trace" additivity="false">
+		<appender-ref ref="Console" />
+		<appender-ref ref="FileAppender" />
+		<appender-ref ref="logstash" />
+	</logger>
+
 	<root level="debug">
 		<appender-ref ref="FileAppender" />
 	</root>

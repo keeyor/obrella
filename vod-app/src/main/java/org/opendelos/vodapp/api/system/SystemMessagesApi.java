@@ -30,7 +30,7 @@ public class SystemMessagesApi {
 		this.systemMessageService = systemMessageService;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/messages.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/messages.web", method = RequestMethod.GET)
 	public byte[] findAllForDt() {
 
 		List<SystemMessage> streamingServers = systemMessageService.findAll();
@@ -39,7 +39,7 @@ public class SystemMessagesApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/message/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/message/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveSystemMessage(@RequestBody SystemMessage systemMessage) {
 
 		String _id;
@@ -59,7 +59,7 @@ public class SystemMessagesApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/message/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/message/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteSystemMessage(@PathVariable("id") String id) {
 
 		try {

@@ -4,6 +4,7 @@
 */
 package org.opendelos.control.api.structure;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -12,12 +13,16 @@ import java.util.Locale;
 import org.opendelos.control.api.common.ApiUtils;
 import org.opendelos.control.services.i18n.MultilingualServices;
 import org.opendelos.control.services.opUser.OpUserService;
+import org.opendelos.control.services.scheduledEvent.ScheduledEventService;
 import org.opendelos.control.services.structure.CourseService;
 import org.opendelos.control.services.structure.DepartmentService;
 import org.opendelos.control.services.structure.StudyProgramService;
 import org.opendelos.model.common.Select2GenChild;
 import org.opendelos.model.delos.OpUser;
+import org.opendelos.model.repo.QueryScheduledEventsResults;
+import org.opendelos.model.repo.ResourceQuery;
 import org.opendelos.model.resources.Person;
+import org.opendelos.model.resources.ScheduledEvent;
 import org.opendelos.model.resources.StructureType;
 import org.opendelos.model.resources.Unit;
 import org.opendelos.model.structure.Course;
@@ -49,14 +54,16 @@ public class StaffMemberApi {
 
 	private final OpUserService opUserService;
 	private final CourseService courseService;
+	private final ScheduledEventService scheduledEventService;
 	private final DepartmentService departmentService;
 	private final StudyProgramService studyProgramService;
 	private final MultilingualServices multilingualServices;
 
 	@Autowired
-	public StaffMemberApi(OpUserService opUserService, CourseService courseService, DepartmentService departmentService, StudyProgramService studyProgramService, MultilingualServices multilingualServices) {
+	public StaffMemberApi(OpUserService opUserService, CourseService courseService, ScheduledEventService scheduledEventService, DepartmentService departmentService, StudyProgramService studyProgramService, MultilingualServices multilingualServices) {
 		this.opUserService = opUserService;
 		this.courseService = courseService;
+		this.scheduledEventService = scheduledEventService;
 		this.departmentService = departmentService;
 		this.studyProgramService = studyProgramService;
 		this.multilingualServices = multilingualServices;
@@ -102,6 +109,19 @@ public class StaffMemberApi {
 		b = ApiUtils.TransformResultsForDataTable(staffMembers);
 		return b;
 	}
+
+	@RequestMapping(value="/api/v1/dt/staff.web/sevents/authorized",method = RequestMethod.GET)
+	public byte[] getAuthorizedStaffMembersWithAccessToEvents() {
+
+		OoUserDetails ooUserDetails = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		OpUser editor = opUserService.findById(ooUserDetails.getId());
+		List<OpUser> staffMembers;
+		staffMembers = opUserService.getStaffMembersWithGrantedEventCreationPermissions(editor);
+		byte[] b;
+		b = ApiUtils.TransformResultsForDataTable(staffMembers);
+		return b;
+	}
+
 
 	@RequestMapping(value="/api/v1/dt/staff.web/course/{id}",method = RequestMethod.GET,produces =  "application/json")
 	public byte[] getStaffByCourseIdDt(@PathVariable("id") String id) {
@@ -303,6 +323,26 @@ public class StaffMemberApi {
 		return b;
 	}
 
+
+	@RequestMapping(value= "/api/v1/dt/events.web/staff/{id}", method = RequestMethod.GET, produces =  "application/json")
+	public byte[] getScheduledEventsByStaffId(@PathVariable("id") String id, Locale locale) {
+
+		ResourceQuery resourceQuery = new ResourceQuery();
+		resourceQuery.setStaffMemberId(id);
+		resourceQuery.setManagerId(id);
+		resourceQuery.setSort("date");
+		resourceQuery.setDirection("desc");
+		resourceQuery.setStaffMember(true);
+		QueryScheduledEventsResults queryScheduledEventsResults;
+		queryScheduledEventsResults = scheduledEventService.searchPageableScheduledEvents(resourceQuery);
+		resourceQuery.setTotalResults(queryScheduledEventsResults.getTotalResults());
+		List<ScheduledEvent> scheduledEvents = queryScheduledEventsResults.getSearchResultList();
+
+		byte[] b;
+		b = ApiUtils.TransformResultsForDataTable(scheduledEvents);
+		return b;
+	}
+
 	@RequestMapping(value= "/api/v1/dt/courses.web/staff/u/{id}/dp/{did}", method = RequestMethod.GET, produces =  "application/json")
 	public byte[] getUnAssignedCoursesByStaffId(@PathVariable("id") String id, @PathVariable("did") String did, Locale locale) {
 
@@ -395,16 +435,20 @@ public class StaffMemberApi {
 				 userPreferences.setAccess("open");
 				 userPreferences.setPublish("private");
 				 //active or not
-				 staffMember.setActive(staffMember.isActive());
+				 staffMember.setActive(true);
 				 staffMember.setId(null);
-				 //password
-				 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-				 String encoded_pass = bCryptPasswordEncoder.encode(staffMember.getPassword());
-				 staffMember.setPassword(encoded_pass);
+				 // 12-06-2022 ==> DO NOT UNDERSTAND WHY I PUT PASSWORD HERE. It's about staffmember
+				if (staffMember.getPassword() != null && !staffMember.getPassword().equals("")) {
+					//password
+					BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+					String encoded_pass = bCryptPasswordEncoder.encode(staffMember.getPassword());
+					staffMember.setPassword(encoded_pass);
+				}
 				_id = opUserService.create(staffMember);
 				 logger.info("Created User:" + _id);
 			}
 			else {
+				 // 12-06-2022 ==> DO NOT UNDERSTAND WHY I PUT PASSWORD HERE. It's about staffmember
 				  if (staffMember.getPassword() != null && !staffMember.getPassword().equals("")) {
 					  //password
 					  BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();

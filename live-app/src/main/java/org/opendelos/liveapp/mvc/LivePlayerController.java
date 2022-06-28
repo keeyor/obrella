@@ -130,6 +130,7 @@ public class LivePlayerController {
 		//Locale
 		model.addAttribute("localeData", locale.getDisplayName());
 		model.addAttribute("localeCode", locale.getLanguage());
+		model.addAttribute("page", "live_player");
 
 		if (allow_access) {
 			this.setSlidesAttribute(model, resource);
@@ -140,10 +141,10 @@ public class LivePlayerController {
 			model.addAttribute("resource", resource);
 			model.addAttribute("seconds_to_end", getSecondsToLiveEndInSeconds(resource));
 
-			return new ModelAndView("/live_player");
+			return new ModelAndView("live_player");
 		}
 		else {
-			return new ModelAndView("/403");
+			return new ModelAndView("403");
 		}
 	}
 
@@ -181,7 +182,7 @@ public class LivePlayerController {
 		String reason="";
 		resource = resourceService.findByIdInCollection(lid, "Scheduler.Live");
 		if (resource != null) {
-			if (resource.getBroadcastCode().equals(pass)) {
+			if (resource.getBroadcastCode() != null && resource.getBroadcastCode().equals(pass)) {
 				 request.getSession().setAttribute("allow_access_to", lid);
 				 return new ModelAndView("redirect:/live_player?id=" + lid);
 			}

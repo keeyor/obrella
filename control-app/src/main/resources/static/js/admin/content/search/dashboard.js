@@ -72,7 +72,8 @@
                             $("#events_filter_row_filter_row").hide();
                             $("#table-typefilter").hide();
                         }
-                        if (staffId === '') {
+                        let userIsStaffMemberOnly = $("#userIsStaffMemberOnly").val();
+                        if (staffId === '' && userIsStaffMemberOnly === "false") {
                             dashboard.staffmembers.loadStaffByReport();
                             $("#stFilters").show();
                         }

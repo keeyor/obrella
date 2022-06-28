@@ -11,11 +11,27 @@
 
         </div>
     </div>
+    <!-- @thymesVar id="userIsStaffMemberOnly" type="boolean" -->
     <ul class="sidebar-nav"  style=" ">
+        <li class="nav-item mb-3"><a class="nav-link active" th:href="@{/admin}">
+            <i class="nav-icon fas fa-home"></i> ΑΡΧΙΚΗ</a>
+        </li>
+
+        <li class="nav-item">
+            <a  class="nav-link" th:href="@{/admin/user_profile}">
+                <i class="nav-icon fas fa-address-card"></i> Το Προφίλ μου
+            </a>
+            <a class="nav-link" title="logout" href="#" data-coreui-toggle="modal" data-coreui-target="#logout_modal">
+                <i class="nav-icon fas fa-sign-out-alt"></i> Αποσύνδεση
+            </a>
+        </li>
         <li class="nav-title">ΠΕΡΙΕΧΟΜΕΝΟ</li>
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/search}">
+            <a th:unless="${userIsStaffMemberOnly}" class="nav-link" th:href="@{/admin/search}">
                 <i class="nav-icon fas fa-search"></i> Διαχείριση Περιεχομένου
+            </a>
+            <a th:if="${userIsStaffMemberOnly}" class="nav-link" th:href="@{/admin/search}">
+                <i class="nav-icon fas fa-search"></i> Διαλέξεις & Πολυμέσα
             </a>
         </li>
         <li class="nav-item">
@@ -30,8 +46,11 @@
         </li>
         <li class="nav-title">ΕΚΔΗΛΩΣΕΙΣ</li>
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/sevents}">
+            <a th:unless="${userIsStaffMemberOnly}" class="nav-link" th:href="@{/admin/sevents}">
                 <i class="nav-icon fas fa-search"></i> Διαχείριση Εκδηλώσεων
+            </a>
+            <a th:if="${userIsStaffMemberOnly}" class="nav-link" th:href="@{/admin/sevents}">
+                <i class="nav-icon fas fa-search"></i> Οι Εκδηλώσεις μου
             </a>
         </li>
         <li class="nav-item">
@@ -41,29 +60,32 @@
         </li>
         <li class="nav-title">ΠΡΟΓΡΑΜΜΑΤΣΜΟΣ</li>
         <li class="nav-item">
+            <a th:unless="${userIsStaffMemberOnly}" class="nav-link" th:href="@{/admin/scheduler/timetable}">
+                <i class="nav-icon icon-main-menu-scheduler"></i> Πρόγραμμα Μεταδόσεων
+            </a>
+            <a th:if="${userIsStaffMemberOnly}" class="nav-link" th:href="@{/admin/scheduler/timetable}">
+                <i class="nav-icon icon-main-menu-scheduler"></i> Οι Μεταδόσεις μου
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" th:href="@{/admin/scheduler/schedule}">
                 <i class="nav-icon icon-live-lecture"></i> Νέα Μετάδοση
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/scheduler/timetable}">
-                <i class="nav-icon icon-main-menu-scheduler"></i> Πρόγραμμα
-            </a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" th:href="@{/admin/scheduler/calendar}">
-                <i class="nav-icon icon-scheduler-menu-calendar"></i> Ημερολόγιο
+                <i class="nav-icon icon-scheduler-menu-calendar"></i> Ημερολόγιο Μεταδόσεων
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/scheduler/live}">
-                <i class="nav-icon icon-live-lecture"></i> Ζωντανές Μεταδόσεις
-            </a>
-        </li>
+        <th:block sec:authorize="hasAnyRole('ROLE_SA')">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/scheduler/live}">
+                    <i class="nav-icon icon-live-lecture"></i> Ζωντανές Μεταδόσεις
+                </a>
+            </li>
+        </th:block>
 
-        <li class="nav-item mt-5"><a class="nav-link active" th:href="@{/admin}">
-            <i class="nav-icon fas fa-home"></i> ΑΡΧΙΚΗ</a>
-        </li>
+
 
      </ul>
 

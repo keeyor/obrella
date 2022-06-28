@@ -121,6 +121,8 @@ public class ScheduledEventsAdminApi {
 		}
 	}
 
+
+
 	private Person getPersonFromUserId(String userId) {
 
 		OpUser opUser = opUserService.findById(userId);

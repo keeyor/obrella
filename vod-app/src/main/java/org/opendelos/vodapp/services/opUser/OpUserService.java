@@ -158,6 +158,11 @@ public class OpUserService {
         return opUserRepository.findByUid(uid);
 
     }
+    public OpUser findByToken(String token) {
+        logger.trace(String.format("Users.findByToken(%s)", token));
+        return opUserRepository.findByToken(token);
+
+    }
     public OpUser findByEmail(String email) {
         logger.trace(String.format("Users.findByEmail(%s)", email));
         return opUserRepository.findByEmail(email);
@@ -738,12 +743,13 @@ public class OpUserService {
             OpUser staffMember = opUserRepository.findById(coursePermission.getStaffMemberId()).orElse(null);
             if (staffMember != null) {
                 coursePermission.setStaffMemberName(staffMember.getName());
-                if (coursePermission.getCourseId().equals("*")) {
+                if (coursePermission.getCourseId().equals("ALL_COURSES") || coursePermission.getCourseId().equals("*")) {
                     List<String> staffMember_courses = staffMember.getCourses();
                     for (String staffMember_course_id: staffMember_courses) {
                         Course course = courseRepository.findById(staffMember_course_id).orElse(null);
                         if (course != null) {
                             coursePermission.setCourseTitle(course.getTitle());
+                            coursePermission.setCourseId(course.getId());
                         }
                         else {
                             error_list.add(coursePermission);

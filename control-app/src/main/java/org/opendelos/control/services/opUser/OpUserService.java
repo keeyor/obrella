@@ -308,9 +308,8 @@ public class OpUserService {
              staffMemberList = this.findStaffMembersTeachingCourseId(courseId);
         }
         else if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SUPPORT"))) {
-            OpUser opUser = this.findById(editor.getId());
-            List<UserAccess.UserRights.CoursePermission> coursePermissions = opUser.getRights().getCoursePermissions();
-            if (coursePermissions != null && coursePermissions.size()>0) {
+            List<UserAccess.UserRights.CoursePermission> coursePermissions = this.getManagersCoursePermissions(editor.getId());//opUser.getRights().getCoursePermissions();
+            if (coursePermissions.size()>0) {
                 for (UserAccess.UserRights.CoursePermission coursePermission : coursePermissions) {
                     if (ACCESS_TYPE.equals("content") && coursePermission.isContentManager() || ACCESS_TYPE.equals("scheduler") && coursePermission.isScheduleManager()) {
                         if (coursePermission.getCourseId().equals(courseId)) {
@@ -321,7 +320,7 @@ public class OpUserService {
                 }
             }
         }
-        else if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER"))) {
+        if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER"))) {
             OpUser opUser = this.findById(editor.getId());
             List<String> editor_courses = opUser.getCourses();
             for (String course_id: editor_courses) {
@@ -480,6 +479,60 @@ public class OpUserService {
     public void unassignCourseFromStaffMemberById(String staffMemberId, String id) {
         opUserRepository.UnAssignCourseFromStaffMember(staffMemberId,id);
     }
+
+    public List<OpUser> getStaffMembersWithGrantedEventCreationPermissions(OpUser editor) {
+
+        List<OpUser> staffMemberList = new ArrayList<>();
+
+        if (editor.getRights().getIsSa()) {
+            staffMemberList.addAll(this.findAllStaffMembers());
+        }
+        else if (editor.getAuthorities().contains(UserAccess.UserAuthority.MANAGER)) {
+            {
+                OpUser opUser = this.findById(editor.getId());
+                List<UserAccess.UserRights.UnitPermission> unitPermissions = opUser.getRights().getUnitPermissions();
+
+                if (unitPermissions != null && unitPermissions.size() > 0) {  // user is Unit Manager
+                    for (UserAccess.UserRights.UnitPermission unitPermission : unitPermissions) {
+                            if (unitPermission.getUnitType().equals(UserAccess.UnitType.INSTITUTION)) {
+                                staffMemberList.addAll(this.findAllStaffMembers());
+                                break; // nothing else to add
+                            }
+                            else if (unitPermission.getUnitType().equals(UserAccess.UnitType.SCHOOL)) {
+                                List<Department> departmentList = departmentService.findBySchoolId(unitPermission.getUnitId());
+                                for (Department department : departmentList) {
+                                    staffMemberList.addAll(this.findStaffMembersTeachingInDepartment(department.getId()));
+                                }
+                            }
+                            else if (unitPermission.getUnitType().equals(UserAccess.UnitType.DEPARTMENT)) {
+                                staffMemberList.addAll(this.findStaffMembersTeachingInDepartment(unitPermission.getUnitId()));
+                            }
+                    } //For
+                }
+            }
+        }
+        else if (editor.getAuthorities().contains(UserAccess.UserAuthority.SUPPORT)) {
+
+            OpUser opUser = this.findById(editor.getId());
+            List<UserAccess.UserRights.EventPermission> eventPermissions = opUser.getRights().getEventPermissions();
+
+            if (eventPermissions != null && eventPermissions.size() > 0) {    // user is Support Personnel
+                for (UserAccess.UserRights.EventPermission eventPermission : eventPermissions) {
+                    if (eventPermission.getEventId().equals("ALL_EVENTS")) {
+                        opUserRepository.findById(eventPermission.getStaffMemberId()).ifPresent(staffMemberList::add);
+                    }
+                }
+            }
+        }
+        if (editor.getAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER)) {
+            OpUser mySelf = this.findById(editor.getId());
+            staffMemberList.add(mySelf);
+        }
+
+        return staffMemberList;
+
+    }
+
     public OpUser createNewStaffMemberFromCASAttributes(Map<String, Object> attributes){
 
         OpUser nsm = new OpUser();
@@ -577,7 +630,7 @@ public class OpUserService {
             info_changed = true;
         }
         String user_altname = (String) attributes.get("cn");
-        if (!opUser.getAltName().equalsIgnoreCase(user_altname)) {
+        if (opUser.getAltName() == null || !opUser.getAltName().equalsIgnoreCase(user_altname)) {
             opUser.setAltName(user_altname);
             info_changed = true;
         }
@@ -745,27 +798,19 @@ public class OpUserService {
         return authorized_unit_ids;
     }
 
-
-    private List<UserAccess.UserRights.CoursePermission> getManagersCoursePermissions(String id) {
+    private List<UserAccess.UserRights.CoursePermission> getManagersCoursePermissionsList(String id) {
         List<UserAccess.UserRights.CoursePermission> coursePermissions = opUserRepository.getUsersCoursePermissions(id);
         List<UserAccess.UserRights.CoursePermission> error_list = new ArrayList<>();
+
         for (UserAccess.UserRights.CoursePermission coursePermission: coursePermissions) {
             OpUser staffMember = opUserRepository.findById(coursePermission.getStaffMemberId()).orElse(null);
             if (staffMember != null) {
-                coursePermission.setStaffMemberName(staffMember.getName());
-                if (coursePermission.getCourseId().equals("*")) {
-                    List<String> staffMember_courses = staffMember.getCourses();
-                    for (String staffMember_course_id: staffMember_courses) {
-                        Course course = courseRepository.findById(staffMember_course_id).orElse(null);
-                        if (course != null) {
-                            coursePermission.setCourseTitle(course.getTitle());
-                        }
-                        else {
-                            error_list.add(coursePermission);
-                        }
-                    }
+                if (coursePermission.getCourseId().equals("*") || coursePermission.getCourseId().equals("ALL_COURSES")) {
+                    coursePermission.setStaffMemberName(staffMember.getName());
+                    coursePermission.setCourseTitle("-- Όλα τα Μαθήματα --");
                 }
                 else {
+                    coursePermission.setStaffMemberName(staffMember.getName());
                     Course course = courseRepository.findById(coursePermission.getCourseId()).orElse(null);
                     if (course != null) {
                         coursePermission.setCourseTitle(course.getTitle());
@@ -785,11 +830,61 @@ public class OpUserService {
         }
         return coursePermissions;
     }
+
+    private List<UserAccess.UserRights.CoursePermission> getManagersCoursePermissions(String id) {
+        List<UserAccess.UserRights.CoursePermission> coursePermissions = opUserRepository.getUsersCoursePermissions(id);
+        List<UserAccess.UserRights.CoursePermission> error_list = new ArrayList<>();
+        List<UserAccess.UserRights.CoursePermission> add_list = new ArrayList<>();
+        for (UserAccess.UserRights.CoursePermission coursePermission: coursePermissions) {
+            OpUser staffMember = opUserRepository.findById(coursePermission.getStaffMemberId()).orElse(null);
+            if (staffMember != null) {
+                if (coursePermission.getCourseId().equals("*") || coursePermission.getCourseId().equals("ALL_COURSES")) {
+                    List<String> staffMember_courses = staffMember.getCourses();
+                    for (String staffMember_course_id: staffMember_courses) {
+                        Course course = courseRepository.findById(staffMember_course_id).orElse(null);
+                        if (course != null) {
+                            UserAccess.UserRights.CoursePermission ncp = new UserAccess.UserRights.CoursePermission();
+                            ncp.setContentManager(coursePermission.isContentManager());
+                            ncp.setScheduleManager(coursePermission.isScheduleManager());
+                            ncp.setCourseId(course.getId());
+                            ncp.setCourseTitle(course.getTitle());
+                            ncp.setStaffMemberId(coursePermission.getStaffMemberId());
+                            ncp.setStaffMemberName(staffMember.getName());
+                            add_list.add(ncp);
+                        }
+                    }
+                    error_list.add(coursePermission);
+                }
+                else {
+                    coursePermission.setStaffMemberName(staffMember.getName());
+                    Course course = courseRepository.findById(coursePermission.getCourseId()).orElse(null);
+                    if (course != null) {
+                        coursePermission.setCourseTitle(course.getTitle());
+                    }
+                    else {
+                        error_list.add(coursePermission);
+                    }
+                }
+            }
+            else {
+                error_list.add(coursePermission);
+            }
+        }
+        if (error_list.size() > 0) {
+            coursePermissions.removeAll(error_list);
+        }
+        coursePermissions.addAll(add_list);
+
+        return coursePermissions;
+    }
+
     public List<UserAccess.UserRights.CoursePermission> getManagersCoursePermissionsByAccessType(String id, String ACCESS_TYPE) {
-        List<UserAccess.UserRights.CoursePermission> coursePermissions = this.getManagersCoursePermissions(id);
+
         if (ACCESS_TYPE.equals("IGNORE_ACCESS_TYPE")) {
+            List<UserAccess.UserRights.CoursePermission> coursePermissions = this.getManagersCoursePermissionsList(id);
             return coursePermissions;
         }
+        List<UserAccess.UserRights.CoursePermission> coursePermissions = this.getManagersCoursePermissions(id);
         List<UserAccess.UserRights.CoursePermission> coursePermissionsByAccess = new ArrayList<>();
         for (UserAccess.UserRights.CoursePermission coursePermission: coursePermissions) {
             if (ACCESS_TYPE.equals("content") && coursePermission.isContentManager() || ACCESS_TYPE.equals("scheduler") && coursePermission.isScheduleManager()) {
@@ -799,21 +894,26 @@ public class OpUserService {
         return coursePermissionsByAccess;
     }
 
-    private List<UserAccess.UserRights.EventPermission> getManagersEventPermissions(String id) {
-
+    private List<UserAccess.UserRights.EventPermission> getManagersEventPermissionsList(String id) {
         List<UserAccess.UserRights.EventPermission> eventPermissions = opUserRepository.getUsersEventPermissions(id);
-
         List<UserAccess.UserRights.EventPermission> error_list = new ArrayList<>();
+
         for (UserAccess.UserRights.EventPermission eventPermission: eventPermissions) {
             OpUser staffMember = opUserRepository.findById(eventPermission.getStaffMemberId()).orElse(null);
             if (staffMember != null) {
-                eventPermission.setStaffMemberName(staffMember.getName());
-                ScheduledEvent scheduledEvent = scheduledEventRepository.findById(eventPermission.getEventId()).orElse(null);
-                if (scheduledEvent != null) {
-                    eventPermission.setEventTitle(scheduledEvent.getTitle());
+                if (eventPermission.getEventId().equals("*") || eventPermission.getEventId().equals("ALL_EVENTS")) {
+                    eventPermission.setStaffMemberName(staffMember.getName());
+                    eventPermission.setEventTitle("-- Όλες οι Εκδηλώσεις --");
                 }
                 else {
-                    error_list.add(eventPermission);
+                    eventPermission.setStaffMemberName(staffMember.getName());
+                    ScheduledEvent scheduledEvent = scheduledEventRepository.findById(eventPermission.getEventId()).orElse(null);
+                    if (scheduledEvent != null) {
+                        eventPermission.setEventTitle(scheduledEvent.getTitle());
+                    }
+                    else {
+                        error_list.add(eventPermission);
+                    }
                 }
             }
             else {
@@ -827,12 +927,62 @@ public class OpUserService {
         return eventPermissions;
     }
 
+    private List<UserAccess.UserRights.EventPermission> getManagersEventPermissions(String id) {
+
+        List<UserAccess.UserRights.EventPermission> eventPermissions = opUserRepository.getUsersEventPermissions(id);
+        List<UserAccess.UserRights.EventPermission> error_list = new ArrayList<>();
+        List<UserAccess.UserRights.EventPermission> add_list = new ArrayList<>();
+
+        for (UserAccess.UserRights.EventPermission eventPermission: eventPermissions) {
+            OpUser staffMember = opUserRepository.findById(eventPermission.getStaffMemberId()).orElse(null);
+            if (staffMember != null) {
+                if (eventPermission.getEventId().equals("*") || eventPermission.getEventId().equals("ALL_EVENTS")) {
+                    List<ScheduledEvent> staffMember_events = scheduledEventRepository.findAllByResponsiblePersonId(staffMember.getId(),-1);
+                    for (ScheduledEvent staffMember_event: staffMember_events) {
+                        if (staffMember_event != null) {
+                            UserAccess.UserRights.EventPermission nep = new UserAccess.UserRights.EventPermission();
+                            nep.setContentManager(eventPermission.isContentManager());
+                            nep.setScheduleManager(eventPermission.isScheduleManager());
+                            nep.setEventId(staffMember_event.getId());
+                            nep.setEventTitle(staffMember_event.getTitle());
+                            nep.setStaffMemberId(eventPermission.getStaffMemberId());
+                            nep.setStaffMemberName(staffMember.getName());
+                            add_list.add(nep);
+                        }
+                    }
+                    error_list.add(eventPermission);
+                }
+                else {
+                    eventPermission.setStaffMemberName(staffMember.getName());
+                    ScheduledEvent scheduledEvent = scheduledEventRepository.findById(eventPermission.getEventId())
+                            .orElse(null);
+                    if (scheduledEvent != null) {
+                        eventPermission.setEventTitle(scheduledEvent.getTitle());
+                    }
+                    else {
+                        error_list.add(eventPermission);
+                    }
+                }
+            }
+            else {
+                error_list.add(eventPermission);
+            }
+        }
+        if (error_list.size() > 0) {
+            eventPermissions.removeAll(error_list);
+        }
+        eventPermissions.addAll(add_list);
+
+        return eventPermissions;
+    }
+
 
     public List<UserAccess.UserRights.EventPermission> getManagersEventPermissionsByAccessType(String id, String ACCESS_TYPE) {
-        List<UserAccess.UserRights.EventPermission> eventsPermissions = this.getManagersEventPermissions(id);
+
         if (ACCESS_TYPE.equals("IGNORE_ACCESS_TYPE")) {
-            return eventsPermissions;
+            return this.getManagersEventPermissionsList(id);
         }
+        List<UserAccess.UserRights.EventPermission> eventsPermissions = this.getManagersEventPermissions(id);
         List<UserAccess.UserRights.EventPermission> eventPermissionsByAccess = new ArrayList<>();
         for (UserAccess.UserRights.EventPermission eventPermission: eventsPermissions) {
             if (ACCESS_TYPE.equals("content") && eventPermission.isContentManager() || ACCESS_TYPE.equals("scheduler") && eventPermission.isScheduleManager()) {

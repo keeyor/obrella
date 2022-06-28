@@ -70,7 +70,7 @@ public class InstitutionApi {
 		this.opUserService = opUserService;
 	}
 
-	@RequestMapping(value = "/api/v1/institution/identity/{identity}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/institution/identity/{identity}", method = RequestMethod.GET)
 	public ResponseEntity<Institution> findByIdentity(@PathVariable("identity") String identity) {
 
 		Institution institution;
@@ -83,7 +83,7 @@ public class InstitutionApi {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/api/v1/institution/update", consumes = "application/json")
+	@RequestMapping(method = RequestMethod.PUT, value = "/apiw/v1/institution/update", consumes = "application/json")
 	public ResponseEntity<Void> update(@RequestBody Institution institution, UriComponentsBuilder ucBuilder) {
 
 		HttpHeaders headers = new HttpHeaders();
@@ -97,7 +97,7 @@ public class InstitutionApi {
 		return new ResponseEntity<>(headers, HttpStatus.ACCEPTED);
 	}
 
-	@RequestMapping(value = "/api/v1/s2/units.web", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/units.web", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAllUnitss2() {
 
 		List<Select2GenGroup> select2GenGroupList = new ArrayList<>();
@@ -165,7 +165,7 @@ public class InstitutionApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/dt/units.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/units.web", method = RequestMethod.GET)
 	public byte[] findAllForDt(Locale locale) {
 
 		List<Unit> units = new ArrayList<>();
@@ -187,7 +187,7 @@ public class InstitutionApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/authorized/units-inherited.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/authorized/units-inherited.web", method = RequestMethod.GET)
 	public byte[] findAllAuthorizedUnitWithInheritanceForDt(Locale locale) {
 
 		List<Unit> units = new ArrayList<>();
@@ -229,7 +229,7 @@ public class InstitutionApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/units-inherited.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/units-inherited.web", method = RequestMethod.GET)
 	public byte[] findAllUnitWithInheritanceForDt(Locale locale) {
 
 		List<Unit> units = new ArrayList<>();
@@ -253,7 +253,7 @@ public class InstitutionApi {
 		return b;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/institution/{id}/calendar/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/institution/{id}/calendar/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> updateCalendar(@PathVariable("id") String id, @RequestBody String jsonString, @PathVariable("year") String year) throws JsonProcessingException {
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -274,7 +274,7 @@ public class InstitutionApi {
 
 
 	/* CALENDAR */
-	@RequestMapping(method = RequestMethod.DELETE, value = "/api/v1/institution/{id}/calendar/delete/{year}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/apiw/v1/institution/{id}/calendar/delete/{year}")
 	public ResponseEntity<Void> deleteCalendar(@PathVariable("id") String id, @PathVariable("year") String year) {
 
 		HttpHeaders headers = new HttpHeaders();
@@ -287,7 +287,7 @@ public class InstitutionApi {
 		return new ResponseEntity<>(headers, HttpStatus.ACCEPTED);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/s2/institution/{id}/calendars")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/s2/institution/{id}/calendars")
 	public ResponseEntity<String> getCalendars(@PathVariable("id") String id) {
 
 		List<CustomPeriod> customPeriods;
@@ -312,7 +312,7 @@ public class InstitutionApi {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/s2/institution/{id}/calendar/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/s2/institution/{id}/calendar/{year}")
 	public ResponseEntity<CustomPeriod> getCalendar(@PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPeriod customPeriod;
@@ -325,7 +325,7 @@ public class InstitutionApi {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/dt/institution/{id}/calendar/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/dt/institution/{id}/calendar/{year}")
 	public byte[] getCalendarDt(@PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPeriod customPeriod = institutionService.getCustomPeriod(id, year);
@@ -335,7 +335,7 @@ public class InstitutionApi {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/s2/institution/{id}/calendar-default/{year}")
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/s2/institution/{id}/calendar-default/{year}")
 	public ResponseEntity<String> createDefaultCalendar(@PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPeriod institution_period = institutionService.getCustomPeriod(id, year);
@@ -391,7 +391,7 @@ public class InstitutionApi {
 	}
 
 	/* ARGIES */
-	@RequestMapping(method = RequestMethod.DELETE, value = "/api/v1/institution/{id}/pause/delete/{year}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/apiw/v1/institution/{id}/pause/delete/{year}")
 	public ResponseEntity<Void> deletePause(@PathVariable("id") String id, @PathVariable("year") String year) {
 
 		HttpHeaders headers = new HttpHeaders();
@@ -404,7 +404,7 @@ public class InstitutionApi {
 		return new ResponseEntity<>(headers, HttpStatus.ACCEPTED);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/s2/institution/{id}/pauses")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/s2/institution/{id}/pauses")
 	public ResponseEntity<String> getPauses(@PathVariable("id") String id) {
 
 		List<CustomPause> customPauses;
@@ -429,7 +429,7 @@ public class InstitutionApi {
 	}
 
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/s2/institution/{id}/pause/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/s2/institution/{id}/pause/{year}")
 	public ResponseEntity<CustomPause> getPause(@PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPause customPause;
@@ -442,7 +442,7 @@ public class InstitutionApi {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/dt/institution/{id}/pause/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/dt/institution/{id}/pause/{year}")
 	public byte[] getPauseDt(@PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPause customPause = institutionService.getCustomPause(id, year);
@@ -457,7 +457,7 @@ public class InstitutionApi {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/institution/{id}/pause/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/institution/{id}/pause/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> updatePause(@PathVariable("id") String id, @RequestBody String jsonString, @PathVariable("year") String year) throws JsonProcessingException {
 
 		ObjectMapper mapper = new ObjectMapper();

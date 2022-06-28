@@ -26,6 +26,7 @@
 <!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
 <!--@thymesVar id="queryString" type="java.lang.String"-->
 <input type="hidden" id="queryString"  th:value="${queryString}" />
+                    <input id="userIsStaffMemberOnly"       type="hidden" th:value="${userIsStaffMemberOnly}"/>
 
                      <input id="departmentFilterId"         type="hidden" th:value="${departmentFilter.id}"/>
                      <input id="departmentFilterText"       type="hidden" th:value="${departmentFilter.text}"/>
@@ -48,20 +49,22 @@
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <ul class="header-nav d-none d-md-flex">
-                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/search}">Διαχείριση Περιεχομένου</a></li>
+                <li class="nav-item">
+                    <a th:unless="${userIsStaffMemberOnly}" class="nav-link active" th:href="@{/admin/search}">Διαχείριση Περιεχομένου</a>
+                    <a th:if="${userIsStaffMemberOnly}" class="nav-link active" th:href="@{/admin/search}">Διαλέξεις & Πολυμέσα</a>
+                </li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/lecture-editor}">Νέα Διάλεξη</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/event-editor}">Νέο Πολυμέσο Εκδήλωσης</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
-                    <li class="breadcrumb-item active"><span>Διαχείριση Περιεχομένου</span></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
+                    <li th:unless="${userIsStaffMemberOnly}"  class="breadcrumb-item active"><span>Διαχείριση Περιεχομένου</span></li>
+                    <li th:if="${userIsStaffMemberOnly}"  class="breadcrumb-item active"><span>Διαλέξεις & Πολυμέσα</span></li>
                 </ol>
             </nav>
         </div>

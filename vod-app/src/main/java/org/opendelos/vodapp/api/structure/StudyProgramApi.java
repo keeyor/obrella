@@ -50,7 +50,7 @@ public class StudyProgramApi {
 		this.institutionService = institutionService;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/programs.web/school/{schoolId}/department/{departmentId}/study/{study}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/programs.web/school/{schoolId}/department/{departmentId}/study/{study}", method = RequestMethod.GET)
 	public byte[] findProgramsWithCriteria(@PathVariable("schoolId") String schoolId,
 			@PathVariable("departmentId") String departmentId,
 			@PathVariable("study") String study, Locale locale) {
@@ -95,7 +95,7 @@ public class StudyProgramApi {
 
 	}
 
-	@RequestMapping(value = "/api/v1/s2/programs.web/department/{departmentId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/programs.web/department/{departmentId}", method = RequestMethod.GET, produces = "application/json")
 	public String getProgramsByDepartmentIds2(@PathVariable("departmentId") String departmentId) {
 
 		List<StudyProgram> programList;
@@ -127,7 +127,7 @@ public class StudyProgramApi {
 
 	}
 
-	@RequestMapping(value = "/api/v1/s21/programs.web/department/{departmentId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s21/programs.web/department/{departmentId}", method = RequestMethod.GET, produces = "application/json")
 	public String getProgramsByDepartmentIds21(@PathVariable("departmentId") String departmentId) {
 
 		List<StudyProgram> programList;
@@ -154,7 +154,7 @@ public class StudyProgramApi {
 
 	}
 
-	@RequestMapping(value = "/api/v1/s3/programs.web/department/{departmentId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s3/programs.web/department/{departmentId}", method = RequestMethod.GET, produces = "application/json")
 	public String getProgramsByDepartmentIdentitys2(@PathVariable("departmentId") String departmentId) {
 
 		List<StudyProgram> programList;
@@ -179,7 +179,7 @@ public class StudyProgramApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/programs/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/programs/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveStudyProgram(@RequestBody StudyProgram studyProgram) {
 
 		String _id = null;
@@ -198,7 +198,7 @@ public class StudyProgramApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/programs/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/programs/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteStudyProgram(@PathVariable("id") String id) {
 
 		try {
@@ -212,7 +212,7 @@ public class StudyProgramApi {
 
 
 	/* CALENDAR ACTION */
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/dt/institution/{iid}/department/{did}/program/{id}/calendar/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/dt/institution/{iid}/department/{did}/program/{id}/calendar/{year}")
 	public byte[] getCalendarDt(@PathVariable("iid") String iid, @PathVariable("did") String did, @PathVariable("id") String id, @PathVariable("year") String year) {
 
 		CustomPeriod customPeriod;
@@ -239,7 +239,7 @@ public class StudyProgramApi {
 		return b;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/programs/{id}/calendar/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/programs/{id}/calendar/update/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> updateCalendar(@PathVariable("id") String id, @RequestBody String jsonString, @PathVariable("year") String year) throws JsonProcessingException {
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -259,7 +259,7 @@ public class StudyProgramApi {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/api/v1/programs/{id}/calendar/reset/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/apiw/v1/programs/{id}/calendar/reset/{year}", consumes = "application/json", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> resetCalendar(@PathVariable("id") String id, @PathVariable("year") String year) throws JsonProcessingException {
 
 		try {

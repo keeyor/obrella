@@ -133,27 +133,33 @@ public class WowzaApi {
 				ObjectMapper mapper = new ObjectMapper();
 
 				streamFiles = mapper.readValue(response.getBody(), StreamFiles.class);
+				logger.trace("SS status: " + streamingServer.getCode());
 				for (StreamType streamType: streamFiles.getStreamFiles()) {
 						 String stream_id = streamType.getId();
 						 String stream_db_id = stream_id;
-						 if (stream_db_id.endsWith("-rec")) {
-							 stream_db_id = stream_db_id.substring(0,stream_db_id.lastIndexOf("-rec"));
-						 }
+						 //DB stream is always without "-rec"
+						  if (stream_db_id.endsWith("-rec")) {
+						 	stream_db_id = stream_db_id.substring(0,stream_db_id.lastIndexOf("-rec"));
+						  }
 						 Resource live_resource = resourceService.findByStreamIdInCollection(stream_db_id,"Scheduler.Live");
+
+						 //Stream Status CAN contain "-rec"
 						 IncomingStreamConfig incomingStreamConfig = wowzaRestService.getIncomingStreamInformation(streamingServer,stream_id + ".stream");
-						 IncomingStreamConfigExtended incomingStreamConfigExtended = new IncomingStreamConfigExtended();
-						 BeanUtils.copyProperties(incomingStreamConfig,incomingStreamConfigExtended);
-						 incomingStreamConfigExtended.setServerCode(streamingServer.getCode());
-						 incomingStreamConfigExtended.setApplicationName(app);
-						 String roomCode = "NA";
-						 boolean isRecording = false;
-						 if (live_resource != null && live_resource.getStreamName() != null) {
-						 	roomCode = live_resource.getStreamName();
-						 	isRecording = live_resource.isRecording();
+						 if (incomingStreamConfig != null) {
+							 IncomingStreamConfigExtended incomingStreamConfigExtended = new IncomingStreamConfigExtended();
+							 BeanUtils.copyProperties(incomingStreamConfig, incomingStreamConfigExtended);
+							 incomingStreamConfigExtended.setServerCode(streamingServer.getCode());
+							 incomingStreamConfigExtended.setApplicationName(app);
+							 String roomCode = "NA";
+							 boolean isRecording = false;
+							 if (live_resource != null && live_resource.getStreamName() != null) {
+								 roomCode = live_resource.getStreamName();
+								 isRecording = live_resource.isRecording();
+							 }
+							 incomingStreamConfigExtended.setRecording(isRecording);
+							 incomingStreamConfigExtended.setRoomCode(roomCode);
+							 incomingStreamConfigs.add(incomingStreamConfigExtended);
 						 }
-						 incomingStreamConfigExtended.setRecording(isRecording);
-						 incomingStreamConfigExtended.setRoomCode(roomCode);
-						 incomingStreamConfigs.add(incomingStreamConfigExtended);
 				}
 			}
 			catch(Exception e) {

@@ -27,4 +27,5 @@ public class StreamingProperties {
 	private boolean use_recorder;
 	private boolean allowRegularOverlaps;
 	private boolean allowOnetimeOverlaps;
+	private String overrideResourceUrl;		//play resources from uoa storage (debug)
 }

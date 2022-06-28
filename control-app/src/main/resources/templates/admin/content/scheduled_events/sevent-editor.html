@@ -18,34 +18,16 @@
     <!-- bootstrap-toggle -->
     <link th:href="@{/lib/bootstrap4-toggle/bootstrap4-toggle.min.css}" rel="stylesheet">
     <!-- select2 -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/4.1/select2.min.css}"/>
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
     <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
     <!-- daterangepicker -->
     <link rel="stylesheet" type="text/css" th:href="@{/lib/daterangepicker/daterangepicker.css}"/>
-    <style>
-        .select2-container .select2-selection--single {
-            height: 36px;
-            padding-top: 0.175rem!important;
-            padding-bottom: 0.75rem!important;
-            padding-left: 0.2rem!important;
-            font-size: 1em;
-        }
-        .select2-container .select2-selection--multiple {
-            height: 38px;
-            padding-top: 0.175rem!important;
-            padding-bottom: 0.75rem!important;
-            padding-left: 0.2rem!important;
-            font-size: 1em;
-        }
-        .select2-selection__arrow {
-            padding-top: 2rem!important;
-        }
 
-    </style>
 </head>
 <body>
+<input type="hidden" id="userIsStaffMemberOnly" th:value="${userIsStaffMemberOnly}"/>
 <input type="hidden" id="institutionIdentity" th:value="${institution_identity}"/>
 <input type="hidden" id="institutionTitle" th:value="#{default.institution.title}"/>
 <input type="hidden" id="user_id" th:value="${user.id}"/>
@@ -61,19 +43,20 @@
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <ul class="header-nav d-none d-md-flex">
-                <li class="nav-item"><a class="nav-link" th:href="@{/admin/sevents}">Διαχείριση Εκδηλώσεων</a></li>
+                <li class="nav-item">
+                    <a  th:unless="${userIsStaffMemberOnly}"  class="nav-link" th:href="@{/admin/sevents}">Διαχείριση Εκδηλώσεων</a>
+                    <a  th:if="${userIsStaffMemberOnly}"  class="nav-link" th:href="@{/admin/sevents}">Οι Εκδηλώσεις μου</a>
+                </li>
                 <li class="nav-item"><a class="nav-link active" th:if="${ScheduledEventDto.id == null || ScheduledEventDto.id == ''}" th:href="@{/admin/sevent-editor}">Νέα Εκδήλωση</a></li>
                 <li class="nav-item"><a class="nav-link active" th:unless="${ScheduledEventDto.id == null || ScheduledEventDto.id == ''}" th:href="@{/admin/sevent-editor}">Επεξεργασία Εκδήλωσης</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active" th:if="${ScheduledEventDto.id == null || ScheduledEventDto.id == ''}"><span>Νέα Εκδήλωση</span></li>
                     <li class="breadcrumb-item active" th:unless="${ScheduledEventDto.id == null || ScheduledEventDto.id == ''}"><span>Επεξεργασία Εκδήλωσης</span></li>
                 </ol>
@@ -141,14 +124,15 @@
                                                         <input type="hidden" id="sevent_id" th:field="*{id}"/>
                                                         <div class="form-group row mt-3">
                                                              <label for="sevent_title" class="col-sm-3 col-form-label  emph-label">Τίτλος*</label>
-                                                            <div class="col-sm-7">
-                                                                <input type="text" th:field="*{title}" id="sevent_title" name="sevent_title" class="form-control" placeholder="πληκτρολογήσε ένα σύντομο τίτλο για την Εκδήλωση"/>
+                                                            <div class="col-sm-5">
+                                                                <input type="text" th:field="*{title}" id="sevent_title" name="sevent_title" class="form-control"
+                                                                       style="font-size: 1em" placeholder="πληκτρολογήσε ένα σύντομο τίτλο για την Εκδήλωση"/>
                                                                 <div class="form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row mt-3">
                                                                 <label for="sevent_area" class="col-sm-3 col-form-label  emph-label">Κατηγορία*</label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-5">
                                                                     <select id="sevent_area" name="sevent_area" style="width: 100%" class="custom-select" th:field="*{area}">
                                                                         <option value=""></option>
                                                                         <option th:each="area:${areas}" th:value="${area}" th:text="#{${area}}"></option>
@@ -158,7 +142,7 @@
                                                          </div>
                                                         <div class="form-group row mt-3">
                                                                 <label for="sevent_type" class="col-sm-3 col-form-label  emph-label">Τύπος*</label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-5">
                                                                     <select id="sevent_type" name="sevent_type" style="width: 100%" class="custom-select" th:field="*{type}">
                                                                     </select>
                                                                     <div class="form-error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Incorrect Type</div>
@@ -166,8 +150,9 @@
                                                          </div>
                                                         <div class="form-group row mt-3">
                                                                 <label for="sevent_cat" class="col-sm-3 col-form-label  emph-label ">Θεματικές Περιοχές*</label>
-                                                                <div class="col-sm-7">
-                                                                    <select id="sevent_cat" name="sevent_cat" class="form-control js-category-tags" multiple="multiple" th:field="*{categories}" disabled>
+                                                                <div class="col-5">
+                                                                    <select id="sevent_cat" multiple="multiple"
+                                                                            class="js-category-tags form-control" th:field="*{categories}" disabled>
                                                                         <optgroup th:each="cheader:${catList}" th:label="${#strings.listSplit(cheader.key,'::')[1]}" label="">
                                                                             <option th:each="cat:${cheader.value}" th:value="${#strings.listSplit(cat,'::')[0]}"
                                                                                     th:text="${#strings.listSplit(cat,'::')[1]}"></option>
@@ -181,7 +166,7 @@
                                                                 <div class="col-sm-3">
                                                                     <div class="input-group">
                                                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                                                        <input type="text" id="daterange" class="form-control" value="">
+                                                                        <input type="text" id="daterange" class="form-control" value="" style="font-size: 1em">
                                                                     </div>
                                                                     <input type="hidden" id="startDate" class="form-control" value="" th:field="*{startDate}">
                                                                     <input type="hidden" id="endDate" class="form-control" value="" th:field="*{endDate}">
@@ -189,42 +174,32 @@
                                                                 </div>
                                                          </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="sevent_rperson_text" class="col-sm-3 col-form-label  emph-label">Επιστημονικός Υπεύθυνος ή Εκπρόσωπος*</label>
-                                                                <div class="col-sm-5">
-                                                                    <div class="input-group">
-                                                                        <span class="input-group-text me-2">
-                                                                            <th:block th:if="${user_isManager}">
-                                                                                <a href="#"  class="selectRpersonBt blue-link-wcag-color" title="Επιλέξτε επ.υπεύθυνο ή εκπρόσωπο...">
-                                                                                    <i class="fas fa-user-tag"></i>
-                                                                                </a>
-                                                                            </th:block>
-                                                                            <th:block th:if="${user_isStaffMember}">
-                                                                                <a href="#" class="setMySelfBt blue-link-wcag-color">
-                                                                                        <i class="fas fa-mouse-pointer"></i>
-                                                                                </a>
-                                                                            </th:block>
-                                                                        </span>
-                                                                        <input th:if="${user_isManager}" type="text" id="sevent_rperson_text" class="form-control selectRpersonBt" value="" readonly>
-                                                                        <input th:if="${user_isStaffMember}" type="text" id="sevent_rperson_text" class="form-control setMySelfBt" value="" readonly>
-                                                                    </div>
+                                                                <div class="col-3">
+                                                                <!--<label for="sevent_rperson_text" class="col-sm-3 col-form-label  emph-label">Επιστημονικός Υπεύθυνος ή Εκπρόσωπος*</label>-->
+                                                                    <th:block th:if="${userIsStaffMemberOnly}">
+                                                                        <label for="sevent_rperson_text" class="col-form-label  emph-label">Επιστημονικός Υπεύθυνος*</label>
+                                                                    </th:block>
+                                                                    <th:block th:unless="${userIsStaffMemberOnly}">
+                                                                        <div class="btn btn-sm btn-outline-info selectRpersonBt">Επιστημονικός Υπεύθυνος*...</div>
+                                                                    </th:block>
+                                                                </div>
+                                                                <div class="col-4">
                                                                     <input type="hidden" id="sevent_rpersonId"   th:field="*{responsiblePerson.id}" />
                                                                     <input type="hidden" id="sevent_rPersonName"  th:field="*{responsiblePerson.name}" />
                                                                     <input type="hidden" id="sevent_rpersonDepartmentName" th:field="*{responsiblePerson.department.title}" />
+
+                                                                    <div style="font-weight: 500" id="sevent_rperson_text" class="vstack gap-2"></div>
+
                                                                     <div class="form-error" th:if="${#fields.hasErrors('responsiblePerson.id')}" th:errors="*{responsiblePerson.id}">null or empty</div>
                                                                 </div>
                                                          </div>
                                                         <div class="form-group row mt-3">
-                                                                <label for="sevent_rperson_text" class="col-sm-3 col-form-label  emph-label">Διοργανωτές*</label>
-                                                                <div class="col-sm-7">
+                                                            <div class="col-3">
+                                                                <div class="btn btn-sm btn-outline-info selectRunitBt">Διοργανωτές*...</div>
+                                                            </div>
+                                                                <div class="col-sm-4">
                                                                     <div class="input-group">
-                                                                        <span class="input-group-text me-2 selectRunitBt" title="Επιλέξτε Διοργανωτές">
-                                                                            <a href="#" class="blue-link-wcag-color">
-                                                                                <i class="icon-main-menu-irm"></i>
-                                                                            </a>
-                                                                        </span>
-                                                                        <div id="sevent_unitsText" class="vstack gap-2 selectRunitBt">
-                                                                        </div>
-                                                                       <!-- <input type="text" id="sevent_unitsText" class="form-control selectRunitBt" value="" readonly>-->
+                                                                        <div  style="font-weight: 500" id="sevent_unitsText" class="vstack gap-2"></div>
                                                                     </div>
                                                                     <div class="form-error" th:if="${#fields.hasErrors('responsibleUnitIds')}" th:errors="*{responsibleUnitIds}">null or empty</div>
                                                                     <div class="table-responsive" style="display: none">
@@ -250,13 +225,13 @@
                                                           </div>
                                                         <div class="form-group row mt-3">
                                                                 <label for="sevent_isactive_toggle" class="col-sm-3 col-form-label  emph-label">Ημερολόγιο*</label>
-                                                                <div class="col-sm-7" title="ενεργοποίηση/απνεργοποίηση ημερολογίου εκδήλωσης">
+                                                                <div class="col-sm-5" title="ενεργοποίηση/απνεργοποίηση ημερολογίου εκδήλωσης">
                                                                     <input id="sevent_isactive_toggle" name="sevent_isactive_toggle" type="checkbox" data-width="100" th:field="*{isActive}"/>
                                                                 </div>
                                                             </div>
                                                         <div class="form-group row my-3">
                                                                 <label for="sevent_isfeatured_toggle" class="col-sm-3 col-form-label  emph-label">Προβεβλημένη Εκδήλωση*</label>
-                                                                <div class="col-sm-7"  title="προβεβλημένη εκδήλωση">
+                                                                <div class="col-sm-5"  title="προβεβλημένη εκδήλωση">
                                                                     <input id="sevent_isfeatured_toggle" name="sevent_isfeatured_toggle" type="checkbox" data-width="100" th:field="*{isFeatured}"/>
                                                                 </div>
                                                             </div>
@@ -267,14 +242,14 @@
                                                 <!-- Description -->
                                                 <div class="form-group row mt-3">
                                                     <label for="event_description" class="col-3 col-form-label">Περιγραφή</label>
-                                                    <div class="col-7">
-                                                        <textarea  id="event_description" class="form-control" th:field="*{description}" rows="3" col="30"></textarea>
+                                                    <div class="col-5">
+                                                        <textarea  id="event_description" class="form-control" th:field="*{description}" rows="3" cols="30"></textarea>
                                                     </div>
                                                 </div>
                                                 <!-- Place -->
                                                 <div class="form-group row mt-3">
                                                     <label for="event_url" class="col-3 col-form-label" id="enroll_label">Ηλεκτρονική Σελίδα Εκδήλωσης</label>
-                                                    <div class="col-7">
+                                                    <div class="col-5">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
                                                                 <div class="input-group-text">URL</div>
@@ -286,7 +261,7 @@
                                                 </div>
                                                 <div class="form-group row my-3" >
                                                     <label for="sevent_place" class="col-3 col-form-label">Χώρος Διεξαγωγής | Τοποθεσία</label>
-                                                    <div class="col-7">
+                                                    <div class="col-5">
                                                         <input type="text" id="sevent_place" name="sevent_place" class="form-control" placeholder="περιγράψτε το χώρο της Εκδήλωσης" th:field="*{place}"/>
                                                     </div>
                                                 </div>
@@ -312,7 +287,7 @@
                                                                     <div class="col-3">
                                                                         <label for="pickfiles" class="col-12 col-form-label   emph-label">Φωτογραφία</label>
                                                                     </div>
-                                                                    <div class="col-8 pl-1">
+                                                                    <div class="col-5 pl-1">
                                                                         <div id="file_select_label" class="mb-2 font-italic"></div>
                                                                         <div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
                                                                         <div id="container">
@@ -336,14 +311,14 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="col-8 offset-3 pl-0" id="image_placeholder">
+                                                                    <div class="col-5 offset-3 pl-0" id="image_placeholder">
                                                                         <div id="_image_panel">
                                                                             <a href="#" title="εμφάνιση φωτογραφίας-εικόνας" id="enlarge_image_link">
                                                                                 <img id="event_photo_url" class="img-fluid" alt="" src="">
                                                                             </a>
                                                                         </div>
                                                                         <div>
-                                                                            <img id="default_photo" class="img-fluid" data-src="holder.js/1024x768?text=Φωτογραφία Εκδήλωσης"
+                                                                            <img id="default_photo" class="img-fluid" data-src="holder.js/640x480?text=Φωτογραφία Εκδήλωσης"
                                                                                  alt="" src="">
                                                                         </div>
                                                                     </div>
@@ -388,7 +363,7 @@
 <script th:src="@{/lib/datatables-classic/datatables.min.js}" type="application/javascript"></script>
 <script th:src="@{/lib/datatables-classic/row().show().js}" type="application/javascript"></script>
 <!-- Select2 -->
-<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
+<script th:src="@{/css/select2/4.1/select2.full.min.js}" type="application/javascript"></script>
 <!-- alertify -->
 <script th:src="@{/lib/alertify/alertify.min.js}"></script>
 

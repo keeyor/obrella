@@ -4,6 +4,7 @@
 */
 package org.opendelos.control.api.users;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.opendelos.control.api.common.ApiUtils;
@@ -26,8 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UsersApi {
-
-	private final Logger logger = LoggerFactory.getLogger(UsersApi.class);
 
 	private final OpUserService opUserService;
 
@@ -104,8 +103,41 @@ public class UsersApi {
 
 	@RequestMapping(value = "/api/v1/managers/assign_course/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void AssignCourseToStaffMember(@RequestBody UserAccess.UserRights.CoursePermission coursePermission, @PathVariable("id") String id)  {
-		opUserService.assignCoursePermissionToManagerById(id,coursePermission);
+
+		boolean courseIsAlreadyIncluded = false;
+		OpUser manager = opUserService.findById(id);
+		if (coursePermission.getCourseId().equals("ALL_COURSES")) {
+			//remove all other courses of same staffmember
+			if (manager.getRights().getCoursePermissions() != null && manager.getRights().getCoursePermissions().size()>0) {
+				List<UserAccess.UserRights.CoursePermission> removeList = new ArrayList<>();
+				for (UserAccess.UserRights.CoursePermission checkPermission: manager.getRights().getCoursePermissions()) {
+					if (checkPermission.getStaffMemberId().equals(coursePermission.getStaffMemberId())) {
+							removeList.add(checkPermission);
+					}
+				}
+				if (removeList.size() >0) {
+					manager.getRights().getCoursePermissions().removeAll(removeList);
+					opUserService.update(manager);
+				}
+			}
+		}
+		else {
+			// check if course is included in ALL_COURSES rule
+			if (manager.getRights().getCoursePermissions() != null && manager.getRights().getCoursePermissions().size()>0) {
+				for (UserAccess.UserRights.CoursePermission checkPermission: manager.getRights().getCoursePermissions()) {
+					if (checkPermission.getStaffMemberId().equals(coursePermission.getStaffMemberId()) &&
+							checkPermission.getCourseId().equals("ALL_COURSES")) {
+						courseIsAlreadyIncluded = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!courseIsAlreadyIncluded) {
+			opUserService.assignCoursePermissionToManagerById(id, coursePermission);
+		}
 	}
+
 	@RequestMapping(value = "/api/v1/managers/assign_course_update/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UpdateAssignCourseToStaffMember(@RequestBody UserAccess.UserRights.CoursePermission coursePermission, @PathVariable("id") String id)  {
 		opUserService.assignUpdateCoursePermissionToManagerById(id,coursePermission);
@@ -117,7 +149,39 @@ public class UsersApi {
 
 	@RequestMapping(value = "/api/v1/managers/assign_event/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void AssignEventToStaffMember(@RequestBody UserAccess.UserRights.EventPermission eventPermission, @PathVariable("id") String id)  {
-		opUserService.assignEventPermissionToManagerById(id,eventPermission);
+
+		boolean eventIsAlreadyIncluded = false;
+		OpUser manager = opUserService.findById(id);
+		if (eventPermission.getEventId().equals("ALL_EVENTS")) {
+			if (manager.getRights().getEventPermissions() != null && manager.getRights().getEventPermissions().size()>0) {
+				//remove all other events of same staffmember
+				List<UserAccess.UserRights.EventPermission> removeList = new ArrayList<>();
+				for (UserAccess.UserRights.EventPermission checkPermission: manager.getRights().getEventPermissions()) {
+					if (checkPermission.getStaffMemberId().equals(eventPermission.getStaffMemberId())) {
+						removeList.add(checkPermission);
+					}
+				}
+				if (removeList.size() >0) {
+					manager.getRights().getEventPermissions().removeAll(removeList);
+					opUserService.update(manager);
+				}
+			}
+		}
+		else {
+			// check if event is included in ALL_EVENTS rule
+			if (manager.getRights().getEventPermissions() != null && manager.getRights().getEventPermissions().size()>0) {
+				for (UserAccess.UserRights.EventPermission checkPermission: manager.getRights().getEventPermissions()) {
+					if (checkPermission.getStaffMemberId().equals(eventPermission.getStaffMemberId()) &&
+							checkPermission.getEventId().equals("ALL_EVENTS")) {
+						eventIsAlreadyIncluded = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!eventIsAlreadyIncluded) {
+			opUserService.assignEventPermissionToManagerById(id, eventPermission);
+		}
 	}
 	@RequestMapping(value = "/api/v1/managers/assign_event_update/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UpdateAssignEventToStaffMember(@RequestBody UserAccess.UserRights.EventPermission eventPermission, @PathVariable("id") String id)  {

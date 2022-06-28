@@ -4,7 +4,14 @@
 */
 package org.opendelos.control.mvc.content;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,15 +25,24 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.opendelos.control.services.i18n.MultilingualServices;
 import org.opendelos.control.services.i18n.OptionServices;
 import org.opendelos.control.services.opUser.OpUserService;
+import org.opendelos.control.services.resource.FileNameCleaner;
+import org.opendelos.control.services.resource.GreekChar;
 import org.opendelos.control.services.resource.ResourceService;
 import org.opendelos.control.services.resource.ResourceUtils;
+import org.opendelos.control.services.resource.ZipUtility;
 import org.opendelos.control.services.scheduledEvent.ScheduledEventService;
 import org.opendelos.control.services.structure.CourseService;
 import org.opendelos.control.services.structure.InstitutionService;
+import org.opendelos.legacydomain.slidesync.Slideshow;
 import org.opendelos.model.delos.OpUser;
 import org.opendelos.model.resources.Person;
 import org.opendelos.model.resources.Presentation;
@@ -34,11 +50,13 @@ import org.opendelos.model.resources.Resource;
 import org.opendelos.model.resources.ResourceAccess;
 import org.opendelos.model.resources.ResourceStatus;
 import org.opendelos.model.resources.ScheduledEvent;
+import org.opendelos.model.resources.Slide;
 import org.opendelos.model.resources.StructureType;
 import org.opendelos.model.resources.Unit;
 import org.opendelos.model.structure.Course;
 import org.opendelos.model.structure.Institution;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.model.users.UserAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,6 +133,10 @@ public class ResourceController {
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user",editor);
 
+		boolean userIsStaffMemberOnly = editor.getUserAuthorities()
+				.contains(UserAccess.UserAuthority.STAFFMEMBER) && editor.getUserAuthorities().size() == 1;
+		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
+
 		String urlString  = request.getRequestURL().toString();
 		String resourceType = urlString.contains("event-editor") ? "EVENT" : "COURSE";
 		String pageSelect = urlString.contains("event-editor") ? "event" : "lecture";
@@ -133,7 +155,6 @@ public class ResourceController {
 		if (!model.containsAttribute(BINDING_RESULT_NAME)) {
 			if (id != null) {
 				resource = resourceService.findById(id);
-				//TODO: CHECK ACCESS PERMISSIONS
 				if (resource.getType().equals("COURSE")) {
 					List<String> authorizedCourseIds = courseService.getAuthorizedCourseIdsByEditor(editor, "content");
 					if (!authorizedCourseIds.contains(resource.getCourse().getId())) {
@@ -472,6 +493,137 @@ public class ResourceController {
 
 	}
 
+	@GetMapping(value = {"admin/download-video"})
+	public void downloadVideoFile(@RequestParam(value = "id") String id, HttpServletResponse response)  {
+
+		Resource resource = resourceService.findById(id);
+		String gen_filename = "";
+		if (resource.getType().equals("COURSE")) {
+			gen_filename += resource.getCourse().getTitle();
+		}
+		else {
+			gen_filename += resource.getEvent().getTitle();
+		}
+		if (resource.isParts()) {
+			gen_filename += "-part-" + resource.getPartNumber();
+		}
+		String original_filename = resource.getResourceAccess().getFileName();
+		LocalDateTime ldt = LocalDateTime.ofInstant(resource.getDate(),ZoneId.of(app_zone));
+		gen_filename += "-" + ldt;
+		String latin_gen_filename = GreekChar.translate(gen_filename);
+		latin_gen_filename = FileNameCleaner.cleanFileName(latin_gen_filename)  + FilenameUtils.getExtension(original_filename);
+
+		String dataDirectory = resourceUtils.getStreamingFolder(resource).toString();
+
+		this.DownloadFile(dataDirectory, original_filename,latin_gen_filename, response);
+	}
+
+	@GetMapping(value = {"admin/download-presentation"})
+	public void downloadPresentationInZipFile(@RequestParam(value = "id") String id, HttpServletResponse response)  {
+
+		Resource resource = resourceService.findById(id);
+		String gen_filename = "";
+		if (resource.getType().equals("COURSE")) {
+			gen_filename += resource.getCourse().getTitle();
+		}
+		else {
+			gen_filename += resource.getEvent().getTitle();
+		}
+		if (resource.isParts()) {
+			gen_filename += "-part-" + resource.getPartNumber();
+		}
+		LocalDateTime ldt = LocalDateTime.ofInstant(resource.getDate(),ZoneId.of(app_zone));
+		gen_filename += "-" + ldt;
+		String latin_gen_filename = GreekChar.translate(gen_filename);
+		latin_gen_filename = FileNameCleaner.cleanFileName(latin_gen_filename) + ".zip";
+
+		String dataDirectory = resourceUtils.getMultimediaFolder(resource).toString();
+
+		String zipFilePath = dataDirectory + latin_gen_filename;
+		//Delete previously create zip file
+		File zipFile = new File(zipFilePath);
+		if (zipFile.isFile()) FileUtils.deleteQuietly(zipFile);
+
+		Presentation presentation = resource.getPresentation();
+
+		//Create & send to download
+		List<String> inFiles = new ArrayList<>();
+		Slideshow slidesync = new Slideshow();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+		slidesync.setDate(sdf.format(cal.getTime()));
+		sdf = new SimpleDateFormat("hh:mm:ss");
+		slidesync.setNowtime(sdf.format(cal.getTime()));
+		Slideshow.Slides legacy_slides = new Slideshow.Slides();
+		legacy_slides.setDescription(gen_filename);
+		//Add Directory First
+		inFiles.add("slides/");
+		inFiles.add("slideSync.xml");
+
+		for (Slide slide: presentation.getSlides()) {
+
+			Slideshow.Slides.Slide slideshow_slide = new Slideshow.Slides.Slide();
+			slideshow_slide.setUrl(slide.getUrl());
+			slideshow_slide.setTime(slide.getTime());
+			slideshow_slide.setTitle(slide.getTitle());
+			legacy_slides.getSlide().add(slideshow_slide);
+			String slideFileName = slide.getUrl();
+			inFiles.add(slideFileName);
+		}
+		slidesync.setSlides(legacy_slides);
+
+		JAXBContext jc;
+		try {
+			jc = JAXBContext.newInstance("org.opendelos.legacydomain.slidesync");
+			// Marshal Object to the Document
+			Marshaller marshaller = jc.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			OutputStream os = new FileOutputStream(dataDirectory + "slideSync.xml");
+			marshaller.marshal(slidesync, os );
+			os.close();
+		}
+		catch (JAXBException | IOException e) {
+			logger.error("Presentation export error:" + e.getMessage());
+		}
+
+
+		ZipUtility zipUtility = new ZipUtility(dataDirectory);
+		try {
+			zipUtility.zipThese(zipFilePath, inFiles);
+		}
+		catch (IOException e) {
+			logger.error("Presentation export to ZIP error:" + e.getMessage());
+		}
+
+		File slideSyncFile = new File(dataDirectory + "slideSync.xml");
+		if (slideSyncFile.exists()) {
+			FileUtils.deleteQuietly(slideSyncFile);
+		}
+
+		if (zipFile.isFile()) {
+			this.DownloadFile(dataDirectory,latin_gen_filename,latin_gen_filename,response);
+		}
+	}
+
+	private void DownloadFile(String dataDirectory, String fileName, String wanted_name, HttpServletResponse response) {
+
+		Path file = Paths.get(dataDirectory, fileName);
+		if (Files.exists(file))
+		{
+			response.setContentType("application/force-download");
+			response.addHeader("Content-Disposition", "attachment; filename=" + wanted_name);
+			try
+			{
+				//logger.info("Downloading file:" + wanted_name);
+				Files.copy(file, response.getOutputStream());
+				response.getOutputStream().flush();
+			}
+			catch (IOException ex) {
+				logger.error("Download File error:" + wanted_name);
+			}
+		}
+	}
 
 	private void SetModelAttributes(Model model,Locale locale, String editorId, String currentAcademicYear) {
 

@@ -27,7 +27,7 @@
             headerToolbar: {
                 start: 'today prev next',
                 center: 'title',
-                end: 'listMonth ,listWeek ,listDay'
+                end: 'dayGridMonth,listMonth timeGridWeek,listWeek timeGridDay,listDay'//end: 'listMonth ,listWeek ,listDay'
             },
             views: {
                 dayGrid: {
@@ -283,8 +283,9 @@
                 $("#no_dyna_filters").hide();
             }
         }
+        let userIsStaffMemberOnly = $("#userIsStaffMemberOnly").val();
         let staffMemberFilterId = $("#staffMemberFilterId").val();
-        if (staffMemberFilterId === '') {
+        if (staffMemberFilterId === '' && userIsStaffMemberOnly === "false") {
             if (exists(staff_report, calEvent.event._def.extendedProps.supervisorId) === false) {
                     let new_staff = {};
                     new_staff.id = calEvent.event._def.extendedProps.supervisorId;

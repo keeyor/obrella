@@ -505,7 +505,15 @@ public class OpUserService {
         Unit user_department = new Unit(StructureType.DEPARTMENT,"NONE","NONE");
         nsm.setDepartment(user_department);
         nsm.setName((String) attributes.get("cn;lang-el"));
-        nsm.setAltName((String) attributes.get("cn"));
+        if (attributes.get("cn") != null) {
+            if (attributes.get("cn") instanceof String) {
+                nsm.setAltName((String) attributes.get("cn"));
+            }
+            else if (attributes.get("cn") instanceof List) {
+                List<String> altname_list = (List<String>) attributes.get("cn");
+                nsm.setAltName(altname_list.get(0));
+            }
+        }
         nsm.setAffiliation((String) attributes.get("title;lang-el"));
         nsm.setEduPersonPrimaryAffiliation((String) attributes.get("eduPersonPrimaryAffiliation"));
         if (attributes.get("eduPersonAffiliation") instanceof String) {

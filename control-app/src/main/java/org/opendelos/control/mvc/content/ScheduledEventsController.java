@@ -48,6 +48,7 @@ import org.opendelos.model.structure.Department;
 import org.opendelos.model.structure.Institution;
 import org.opendelos.model.structure.School;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.model.users.UserAccess;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,6 +132,12 @@ public class ScheduledEventsController {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user",editor);
+
+		boolean userIsStaffMemberOnly = false;
+		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER) && editor.getUserAuthorities().size() == 1) {
+			userIsStaffMemberOnly= true;
+		}
+		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
 
 		Calendar time_start = Calendar.getInstance();
 		Date startTime = time_start.getTime();
@@ -242,6 +249,12 @@ public class ScheduledEventsController {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user",editor);
+
+		boolean userIsStaffMemberOnly = false;
+		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER) && editor.getUserAuthorities().size() == 1) {
+			userIsStaffMemberOnly= true;
+		}
+		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
 
 		ScheduledEventDto scheduledEventDto;
 		int responsibleUnitsSize = 0;

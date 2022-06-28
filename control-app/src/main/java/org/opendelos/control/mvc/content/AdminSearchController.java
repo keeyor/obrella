@@ -27,6 +27,7 @@ import org.opendelos.model.repo.QueryResourceResults;
 import org.opendelos.model.repo.ResourceQuery;
 import org.opendelos.model.structure.Institution;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.model.users.UserAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,6 +97,13 @@ public class AdminSearchController {
 		String c_page = "search";
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user", editor);
+
+		boolean userIsStaffMemberOnly = false;
+		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER) && editor.getUserAuthorities().size() == 1) {
+			userIsStaffMemberOnly= true;
+		}
+		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
+
 
 		addUserAccessAttributes(model,editor);
 

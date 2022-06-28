@@ -369,23 +369,38 @@ public class ResourceOoRepositoryImpl implements ResourceOoRepository {
 
 	@Override
 	public long CountResourcesByManagerAsEditor(String userId) {
+
 		Query query = new Query();
-		Criteria expression = new Criteria();
+		Criteria andCriteria = new Criteria();
+		List<Criteria> andExpression =  new ArrayList<>();
 
 		ObjectId objID = new ObjectId(userId);
-		expression.and("editor._id").is(objID);
-		query.addCriteria(expression);
+		Criteria expression = new Criteria();
+		expression.andOperator(Criteria.where("editor._id").is(objID),
+				Criteria.where("supervisor._id").ne(objID));
+		andExpression.add(expression);
 
+		if (!andExpression.isEmpty()) {
+			query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
+		}
 		return mongoTemplate.count(query,Resource.class);
 	}
+
 	@Override
 	public long CountScheduledByManagerAsEditor(String userId, String collectionName) {
 		Query query = new Query();
+		Criteria andCriteria = new Criteria();
+		List<Criteria> andExpression =  new ArrayList<>();
+
+		ObjectId objID = new ObjectId(userId);
 		Criteria expression = new Criteria();
+		expression.andOperator(Criteria.where("editor._id").is(objID),
+				Criteria.where("supervisor._id").ne(objID));
+		andExpression.add(expression);
 
-		expression.and("editor").is(userId);
-		query.addCriteria(expression);
-
+		if (!andExpression.isEmpty()) {
+			query.addCriteria(andCriteria.andOperator(andExpression.toArray(new Criteria[andExpression.size()])));
+		}
 		return mongoTemplate.count(query,Resource.class,collectionName);
 	}
 

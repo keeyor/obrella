@@ -17,16 +17,20 @@ import org.opendelos.control.services.scheduledEvent.ScheduledEventService;
 import org.opendelos.control.services.structure.CourseService;
 import org.opendelos.control.services.structure.DepartmentService;
 import org.opendelos.control.services.structure.SchoolService;
+import org.opendelos.control.services.system.SystemMessageService;
 import org.opendelos.model.delos.OpUser;
+import org.opendelos.model.resources.ScheduledEvent;
 import org.opendelos.model.resources.StructureType;
 import org.opendelos.model.resources.Unit;
 import org.opendelos.model.structure.Course;
 import org.opendelos.model.structure.Department;
 import org.opendelos.model.structure.Institution;
 import org.opendelos.model.structure.School;
+import org.opendelos.model.system.SystemMessage;
 import org.opendelos.model.users.ActiveUserStore;
 import org.opendelos.model.users.CourseRightDto;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.model.users.ScheduledEventRightDto;
 import org.opendelos.model.users.UnitRightDto;
 import org.opendelos.model.users.UserAccess;
 import org.slf4j.Logger;
@@ -58,6 +62,7 @@ public class AdminController {
 	private final CourseService courseService;
 	private final ResourceService resourceService;
 	private final ScheduledEventService scheduledEventService;
+	private final SystemMessageService systemMessageService;
 
 	@Autowired
 	Institution defaultInstitution;
@@ -71,24 +76,48 @@ public class AdminController {
 	ActiveUserStore activeUserStore;
 
 
-	public AdminController(OpUserService opUserService, DepartmentService departmentService, SchoolService schoolService, CourseService courseService, ResourceService resourceService, ScheduledEventService scheduledEventService) {
+	public AdminController(OpUserService opUserService, DepartmentService departmentService, SchoolService schoolService, CourseService courseService, ResourceService resourceService, ScheduledEventService scheduledEventService, SystemMessageService systemMessageService) {
 		this.opUserService = opUserService;
 		this.departmentService = departmentService;
 		this.schoolService = schoolService;
 		this.courseService = courseService;
 		this.resourceService = resourceService;
 		this.scheduledEventService = scheduledEventService;
+		this.systemMessageService = systemMessageService;
 	}
 
 	@GetMapping(value = {"admin/", "admin"})
 	public String getAdminControlPanel(final Model model) {
 
+		boolean userIsStaffMember = false;
+		boolean userIsStaffMemberOnly = false;
+
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user",editor);
 
+
+		List<SystemMessage> adminAllMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"admins-all");
+		List<SystemMessage> adminStaffMessages;
+		List<SystemMessage> adminUsersMessages;
+
 		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER) && editor.getUserAuthorities().size() == 1) {
-			model.addAttribute("userIsStaffMember",true);
+			userIsStaffMemberOnly= true;
 		}
+		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
+
+		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER)) {
+			userIsStaffMember = true;
+			adminStaffMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"admins-staff");
+			adminAllMessages.addAll(adminStaffMessages);
+		}
+		model.addAttribute("userIsStaffMember",userIsStaffMember);
+
+		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.MANAGER)) {
+			adminUsersMessages = systemMessageService.findAllByVisibleIsAndTarget(true, "admins-users");
+			adminAllMessages.addAll(adminUsersMessages);
+		}
+		model.addAttribute("adminAllMessages", adminAllMessages);
+
 		//Logged on Users
 		model.addAttribute("logged_users_counter", activeUserStore.getUsers().size());
 
@@ -122,6 +151,17 @@ public class AdminController {
 	public String getIncompleteUserProfile(final Model model) {
 
 		OoUserDetails logged_on_user = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		boolean userIsStaffMemberOnly = false;
+		if (logged_on_user.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER) && logged_on_user.getUserAuthorities().size() == 1) {
+			userIsStaffMemberOnly= true;
+		}
+		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
+		boolean userIsStaffMember = false;
+		if (logged_on_user.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER)) {
+			userIsStaffMember= true;
+		}
+		model.addAttribute("userIsStaffMember",userIsStaffMember);
 
 		if (logged_on_user.getUserAuthorities().contains(UserAccess.UserAuthority.STUDENT) && logged_on_user.getUserAuthorities().size() == 1) {
 			model.addAttribute("user", logged_on_user);
@@ -244,24 +284,78 @@ public class AdminController {
 			courseRightDtos = new ArrayList<>();
 			for (UserAccess.UserRights.CoursePermission coursePermission: coursePermissions) {
 				CourseRightDto courseRightDto = new CourseRightDto();
-				Course course = courseService.findById(coursePermission.getCourseId());
-				OpUser staffMember = opUserService.findById(coursePermission.getStaffMemberId());
-				if (course != null && staffMember != null) {
-					courseRightDto.setCourseId(course.getId());
-					courseRightDto.setCourseTitle(course.getTitle());
-					courseRightDto.setDepartmentTitle(course.getDepartment().getTitle());
-					courseRightDto.setStaffMemberId(staffMember.getId());
-					courseRightDto.setStaffMemberName(staffMember.getName());
-					courseRightDto.setContentManager(coursePermission.isContentManager());
-					courseRightDto.setScheduleManager(coursePermission.isScheduleManager());
-					courseRightDtos.add(courseRightDto);
+				if (!coursePermission.getCourseId().equals("*") && !coursePermission.getCourseId().equals("ALL_COURSES")) {
+					Course course = courseService.findById(coursePermission.getCourseId());
+					OpUser staffMember = opUserService.findById(coursePermission.getStaffMemberId());
+					if (course != null && staffMember != null) {
+						courseRightDto.setCourseId(course.getId());
+						courseRightDto.setCourseTitle(course.getTitle());
+						courseRightDto.setDepartmentTitle(course.getDepartment().getTitle());
+						courseRightDto.setStaffMemberId(staffMember.getId());
+						courseRightDto.setStaffMemberName(staffMember.getName());
+						courseRightDto.setContentManager(coursePermission.isContentManager());
+						courseRightDto.setScheduleManager(coursePermission.isScheduleManager());
+						courseRightDtos.add(courseRightDto);
+					}
+					else {
+						logger.warn("Course Permission Warning: course {} or staff member {} error", coursePermission.getCourseId(), coursePermission.getStaffMemberId());
+					}
 				}
 				else {
-					logger.warn("Course Permission Warning: course {} or staff member {} error",coursePermission.getCourseId(),coursePermission.getStaffMemberId());
+					OpUser staffMember = opUserService.findById(coursePermission.getStaffMemberId());
+					if (staffMember != null) {
+						courseRightDto.setCourseId("*");
+						courseRightDto.setCourseTitle("-- όλα τα Μαθήματα -- ");
+						courseRightDto.setDepartmentTitle("-");
+						courseRightDto.setStaffMemberId(staffMember.getId());
+						courseRightDto.setStaffMemberName(staffMember.getName());
+						courseRightDto.setContentManager(coursePermission.isContentManager());
+						courseRightDto.setScheduleManager(coursePermission.isScheduleManager());
+						courseRightDtos.add(courseRightDto);
+					}
 				}
 			}
 		}
 		model.addAttribute("User_CourseRights", courseRightDtos);
+
+		//ScheduledEvents Permissions
+		List<UserAccess.UserRights.EventPermission> eventPermissions = user_info.getRights().getEventPermissions();
+		List<ScheduledEventRightDto> scheduledEventRightDtos = null;
+		if (eventPermissions != null && eventPermissions.size()>0) {
+			scheduledEventRightDtos = new ArrayList<>();
+			for (UserAccess.UserRights.EventPermission eventPermission: eventPermissions) {
+				ScheduledEventRightDto scheduledEventRightDto = new ScheduledEventRightDto();
+				if (!eventPermission.getEventId().equals("*") && !eventPermission.getEventId().equals("ALL_EVENTS")) {
+					ScheduledEvent scheduledEvent = scheduledEventService.findById(eventPermission.getEventId());
+					OpUser staffMember = opUserService.findById(eventPermission.getStaffMemberId());
+					if (scheduledEvent != null && staffMember != null) {
+						scheduledEventRightDto.setEventId(scheduledEvent.getId());
+						scheduledEventRightDto.setEventTitle(scheduledEvent.getTitle());
+						scheduledEventRightDto.setStaffMemberId(staffMember.getId());
+						scheduledEventRightDto.setStaffMemberName(staffMember.getName());
+						scheduledEventRightDto.setContentManager(eventPermission.isContentManager());
+						scheduledEventRightDto.setScheduleManager(eventPermission.isScheduleManager());
+						scheduledEventRightDtos.add(scheduledEventRightDto);
+					}
+					else {
+						logger.warn("Course Permission Warning: course {} or staff member {} error", eventPermission.getEventId(), eventPermission.getStaffMemberId());
+					}
+				}
+				else {
+					OpUser staffMember = opUserService.findById(eventPermission.getStaffMemberId());
+					if (staffMember != null) {
+						scheduledEventRightDto.setEventId("*");
+						scheduledEventRightDto.setEventTitle("-- όλες οι Εκδηλώσεις -- ");
+						scheduledEventRightDto.setStaffMemberId(staffMember.getId());
+						scheduledEventRightDto.setStaffMemberName(staffMember.getName());
+						scheduledEventRightDto.setContentManager(eventPermission.isContentManager());
+						scheduledEventRightDto.setScheduleManager(eventPermission.isScheduleManager());
+						scheduledEventRightDtos.add(scheduledEventRightDto);
+					}
+				}
+			}
+		}
+		model.addAttribute("User_EventRights", scheduledEventRightDtos);
 	}
 
 }

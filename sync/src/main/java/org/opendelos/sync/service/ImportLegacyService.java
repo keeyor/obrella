@@ -75,6 +75,9 @@ public class ImportLegacyService {
 	@Value("${public_only}")
 	boolean public_only;
 
+	@Value("${main_col}")
+	String main_col;
+
 
 	private final ElegacyRepository elegacyRepository;
 	private final AcademicCalendarSeDAO academicCalendarSeDAO;
@@ -581,7 +584,7 @@ public class ImportLegacyService {
 
 		int ImportedUsers = 0;
 
-		DlmUsers dlmUsers = elegacyRepository.getDlmUsers(import_url, "guest", "guest", "/db/apps/delos-uoa/Users", "nonStaffMembers", "");
+		DlmUsers dlmUsers = elegacyRepository.getDlmUsers(import_url, "guest", "guest", main_col + "Users", "nonStaffMembers", "");
 		logger.info("MANAGERS - ALL_USERS=" + dlmUsers.getUser().size());
 		try {
 			if (!dlmUsers.getUser().isEmpty()) {
@@ -654,7 +657,7 @@ public class ImportLegacyService {
 		int i;
 		int validEvents = 0;
 		scheduledEventService.deleteAll();
-		XEvents xEvents = elegacyRepository.findAllEvents(import_url, "guest", "guest", "/db/apps/Events", legacyInstitution.getId());
+		XEvents xEvents = elegacyRepository.findAllEvents(import_url, "guest", "guest", main_col + "Events", legacyInstitution.getId());
 		try {
 			if (xEvents != null && xEvents.getEvent() != null && xEvents.getEvent().size() > 0) {
 				logger.info("Importing :" + xEvents.getEvent().size() + " scheduled events...");
@@ -688,7 +691,7 @@ public class ImportLegacyService {
 		int counter_extra = 0;
 		int counter_errors = 0;
 
-		List<DsmCalendarXml> dsmEvents = elegacyRepository.findAllScheduled(import_url, "guest", "guest", "/db/apps/delos-uoa/Scheduler/Calendar", institution_id,year);
+		List<DsmCalendarXml> dsmEvents = elegacyRepository.findAllScheduled(import_url, "guest", "guest", main_col +  "Scheduler/Calendar", institution_id,year);
 		try {
 			if (dsmEvents != null && dsmEvents.size() > 0) {
 				logger.info("Importing :" + dsmEvents.size() + " scheduled...");
@@ -836,7 +839,7 @@ public class ImportLegacyService {
 			QueryResponse queryResults;
 			String xmlQuery= this.ConstructXQuery();
 			queryResults   = (QueryResponse) elegacyRepository.QueryDatabase(import_url,"guest","guest",
-					"/db/apps/delos-uoa/Videolectures",xmlQuery,QueryResponse.class);
+					main_col + "Videolectures",xmlQuery,QueryResponse.class);
 			logger.info("READ VIDEOLECTURES:" + queryResults.getResources().size());
 			if (!queryResults.getResources().isEmpty()) {
 				 resourceService.deleteAll();
@@ -870,7 +873,7 @@ public class ImportLegacyService {
 		namespace += " declare namespace ft =\"http://exist-db.org/xquery/lucene\"; ";
 		namespace += " declare namespace xmldb=\"http://exist-db.org/xquery/xmldb\"; ";
 
-		String collection = " for $m1 in xmldb:xcollection('/db/apps/delos-uoa/Videolectures/')//vl:VideoLecture";
+		String collection = " for $m1 in xmldb:xcollection('" + main_col + "Videolectures/')//vl:VideoLecture";
 
 		StringBuilder prereq = new StringBuilder();
 
@@ -886,7 +889,7 @@ public class ImportLegacyService {
 
 */
 
-		prereq.append("[vl:Status/vl:StatusProperty[@name='Video'] = '1']");
+	/*	prereq.append("[vl:Status/vl:StatusProperty[@name='Video'] = '1']");*/
 
 	 	if (public_only) {
 			prereq.append("[vl:Rights/vl:Security = 'public']");

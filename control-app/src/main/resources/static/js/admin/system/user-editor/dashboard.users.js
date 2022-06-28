@@ -21,7 +21,16 @@
     }; // Staff DataTable Init
 
     function InitControls() {
+
+        $("#user_role_sel").select2({
+            placeholder: 'Επιλέξτε Ρόλο',
+            maximumSelectionLength: -1
+        });
+
+
+
         let staff_id = $("#staff_id").val();
+
         if (staff_id === "") {
             $("#staffModalLabel").html('<div>Νέος Διαχειριστής</div><br/>');
             $(".rights_note").hide();
@@ -311,11 +320,14 @@
             let rights_scheduler = $('#staff_schedule_toggle').is(":checked");
 
             // console.log(rights_course_id + " " + rights_staff_id + " " + rights_content + " " + rights_scheduler);
-            if (rights_course_id == null || rights_staff_id == null || rights_course_id === '' || rights_staff_id === '' ||
+            if (rights_staff_id == null || rights_staff_id === '' ||
                 (rights_content === false && rights_scheduler === false)) {
                 alertify.error("Το δικαίωμα δεν αποθηκεύτηκε. Υπάρχουν παραλείψεις στη φόρμα εισαγωγής");
             }
             else {
+                if (rights_course_id == null || rights_course_id === "") {
+                    rights_course_id = "ALL_COURSES";
+                }
                 let staff_id = $("#staff_id").val();
                 let coursePermission = {
                     "staffMemberId": rights_staff_id,
@@ -333,11 +345,14 @@
             let rights_scheduler = $('#event_schedule_toggle').is(":checked");
 
             //console.log(rights_events_id + " " + rights_staff_id + " " + rights_content + " " + rights_scheduler);
-            if (rights_events_id == null || rights_staff_id == null || rights_events_id === '' || rights_staff_id === '' ||
+            if (rights_staff_id == null || rights_staff_id === '' ||
                 (rights_content === false && rights_scheduler === false)) {
                 alertify.error("Το δικαίωμα δεν αποθηκεύτηκε. Υπάρχουν παραλείψεις στη φόρμα εισαγωγής");
             }
             else {
+                if (rights_events_id == null || rights_events_id === "") {
+                    rights_events_id = "ALL_EVENTS";
+                }
                 let staff_id = $("#staff_id").val();
                 let eventPermission = {
                     "staffMemberId": rights_staff_id,
@@ -426,23 +441,32 @@
         let $event_panel    = $(".event_panel");
         $unit_panel.show();
         $course_panel.show();
+
+
+        if (manager_type !== "") {
+            $("#user_role_sel").attr("disabled",true);
+        }
+
         if (manager_type === "SA") {$("#saRadio").prop("checked",true);
             $unit_panel.hide();
             $course_panel.hide();
             $event_panel.hide();
             $admin_panel.show();
+            $("#user_role_sel").val(manager_type).trigger("change");
         }
         if (manager_type === "MANAGER" || manager_type === "INSTITUTION_MANAGER") {
             $("#managerRadio").prop("checked",true);
             $course_panel.hide();
             $event_panel.hide();
             $admin_panel.hide();
+            $("#user_role_sel").val("MANAGER").trigger("change");
         }
         if (manager_type === "SUPPORT" || manager_type === "NOT_SET") {
             $("#supportRadio").prop("checked",true);
             $unit_panel.hide();
             $admin_panel.hide();
             $event_panel.show();
+            $("#user_role_sel").val(manager_type).trigger("change");
         }
     }
     function showTypeChangeWarning(name ,previous_value, selected_value) {
@@ -759,7 +783,7 @@
             buttons: {
                 buttons: [
                     {
-                        text: '<i class="fas fa-plus-circle"></i> Ανάθεση Μαθήματος', className: 'my-2', attr: {id: 'openStaffCourseSelectModal'},
+                        text: '<i class="fas fa-plus-circle me-1"></i>Ανάθεση Μαθήματος', className: 'my-2', attr: {id: 'openStaffCourseSelectModal'},
                         action: function () {
                             openStaffCourseSelectModal();
                         }
@@ -852,7 +876,9 @@
             dashboard.add_action = "course";
             $("#departments_s2").val("").trigger("change");
             $("#supervisor_s2").val("").trigger("change");
+            $("#supervisor_s2").empty();
             $("#courses_s2").val("").trigger("change");
+            $("#courses_s2").empty();
             $("#staffCourseSelectModalLabel").html('<div style="font-size: 1.4em">' + staff_name + '</div><small>ΠΑΡΑΧΩΡΗΣΗ ΔΙΚΑΙΩΜΑΤΟΣ: Καθηγητής+Μάθημα</small>');
             $("#staffCourseSelectModal").modal('show');
         }
@@ -983,7 +1009,9 @@
             dashboard.add_action = "event";
             $("#departments_s21").val("").trigger("change");
             $("#supervisor_s21").val("").trigger("change");
+            $("#supervisor_s21").empty()
             $("#events_s2").val("").trigger("change");
+            $("#events_s2").empty();
             $("#staffEventSelectModalLabel").html('<div style="font-size: 1.4em">' + staff_name + '</div><small>ΠΑΡΑΧΩΡΗΣΗ ΔΙΚΑΙΩΜΑΤΟΣ: Καθηγητής+Εκδήλωση</small>');
             $("#staffEventSelectModal").modal('show');
         }

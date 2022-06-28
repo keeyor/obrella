@@ -49,7 +49,7 @@ function getRootSitePath() {
 
 function getResourceById(siteUrl, id) {
 
-    let url =  dashboard.siteUrl + '/api/v1/resource/' + id;
+    let url =  dashboard.siteUrl + '/apiw/v1/resource/' + id;
     $.ajax({
         type: 'GET',
         url: url,
@@ -146,7 +146,7 @@ function getResourceById(siteUrl, id) {
 
 function getResourceByIdInRightSideBar(siteUrl, id) {
 
-    let url =  dashboard.siteUrl + '/api/v1/resource/' + id;
+    let url =  dashboard.siteUrl + '/apiw/v1/resource/' + id;
     $.ajax({
         type: 'GET',
         url: url,

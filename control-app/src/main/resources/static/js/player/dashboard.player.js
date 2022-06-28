@@ -274,8 +274,16 @@ $(function () {
             if (getVideo() !== undefined) {
                 let time_now = getVideo().currentTime;
                 let hms = secondsTimeSpanToHMS(Math.round(time_now))
+
                 if (!introPlaying()) {
-                    $(".show_current_time").html(hms + " / " + secondsTimeSpanToHMS(global_vid_duration));
+                    let duration = secondsTimeSpanToHMS(Math.round(global_vid_duration));
+                    let real_duration = $("#real_duration").val();
+                    if (real_duration !== undefined && real_duration !== duration) {
+                        $(".show_current_time").html(hms + " / " + duration + " (" + real_duration + ")");
+                    }
+                    else {
+                        $(".show_current_time").html(hms + " / " + duration);
+                    }
                 }
                 else {
                     $(".show_current_time").html(hms + " / " + getVideo().duration + " <span class='text-muted'> - CC License</span>");

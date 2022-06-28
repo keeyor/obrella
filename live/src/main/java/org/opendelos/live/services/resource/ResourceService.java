@@ -155,6 +155,16 @@ public class ResourceService {
         }
     }
 
+    public void updateToCollection(Resource resource, String collection) {
+        logger.trace(String.format("Resource.update: %s", resource.getTitle()));
+        try {
+            resourceRepository.saveToCollection(resource, collection);
+        }
+        catch (Exception e) {
+            logger.error("error: Resource.update:" + e.getMessage());
+        }
+    }
+
     public void updateResourceAccess(String id, ResourceAccess resourceAccess) {
         logger.trace(String.format("Resource.updateResourceAccess: %s", id));
         try {

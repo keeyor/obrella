@@ -68,7 +68,7 @@
 
             $pausesDataTable.DataTable().row.add(new_argia).draw(true);
             let data = getTableDataAsJSON($pausesDataTable,"");
-            myDataTableCallback(data);										//!Important
+            myDataTableCallback(data, "new_argia_added"); //!Important
         });
 
     };
@@ -180,7 +180,7 @@
             });
         }).draw();
     };
-    var myDataTableCallback = function(json) {
+    var myDataTableCallback = function(json, action) {
 
         let table = $("#table_p_modal").DataTable();
 
@@ -227,7 +227,15 @@
             else {
                 $endDateElementInPosI.datepicker("setDate", "");
             }
-
+        }
+        //SET FOCUS ON NEWLY CREATED ARGIA
+        if (action !== undefined && action === "new_argia_added") {
+            let last_row_counter = json.argia.length - 1;
+            let $last_argia_input = $("#data_row_" + last_row_counter);
+            $last_argia_input.focus();
+            $last_argia_input.select();
+            let $closest_tr = $last_argia_input.closest('tr');
+            $closest_tr.css('background-color', '#2eb85c');
         }
 
         $(".delete_row").on('click',function(e){

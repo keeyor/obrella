@@ -38,29 +38,29 @@ public class ResourceApi {
 		this.resourceService = resourceService;
 	}
 
-	@RequestMapping(value = "/api/v1/resource/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/resource/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Resource getResourceById(@PathVariable String id) {
 		return resourceService.findById(id);
 	}
 
-	@RequestMapping(value = "/api/v1/resource/slides/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/resource/slides/{id}", method = RequestMethod.GET, produces = "application/json")
 	public List<Slide> getResourceSlidesById(@PathVariable String id) {
 		return resourceService.getResourceSlides(id);
 	}
 
-	@RequestMapping(value = "/api/v1/resource/presentation/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/resource/presentation/{id}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody
 	Presentation getResourcePresentationById(@PathVariable String id) {
 		return resourceService.getResourcePresentation(id);
 	}
 
-	@RequestMapping(value = "/api/v1/resource/real_edited_presentation/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/resource/real_edited_presentation/{id}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody
 	Presentation getResourceRealEditedPresentationById(@PathVariable String id) {
 		return resourceService.getResourceRealEditedPresentation(id);
 	}
 
-	@RequestMapping(value = "/api/v1/resource/delete_slide/{id}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
+	@RequestMapping(value = "/apiw/v1/resource/delete_slide/{id}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
 	public @ResponseBody
 	String deleteResourceSlideByIndex(@PathVariable String id, @RequestBody String jsonString) {
 
@@ -74,7 +74,7 @@ public class ResourceApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/resource/update_slide_title/{id}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
+	@RequestMapping(value = "/apiw/v1/resource/update_slide_title/{id}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
 	public @ResponseBody
 	String updateSlideTitle(@PathVariable String id, @RequestBody String jsonString) {
 
@@ -119,7 +119,7 @@ public class ResourceApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/resource/cuts/{id}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
+	@RequestMapping(value = "/apiw/v1/resource/cuts/{id}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
 	public @ResponseBody
 	String setResourceCuts(@PathVariable String id, @RequestBody String jsonString) {
 
@@ -134,7 +134,7 @@ public class ResourceApi {
 		return cuts;
 	}
 
-	@RequestMapping(value = "/api/v1/resource/slides/{id}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
+	@RequestMapping(value = "/apiw/v1/resource/slides/{id}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
 	public @ResponseBody
 	String setResourceSlidesSync(@PathVariable String id, @RequestBody String jsonString) {
 

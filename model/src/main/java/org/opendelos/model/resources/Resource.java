@@ -89,6 +89,7 @@ public class Resource {
     protected String scheduleId;
     protected String streamingServerId;
     protected String streamingServerInfo;
+    protected String recordingServerId;
     protected String streamId;
     protected String streamName;
     protected boolean broadcastToChannel;
@@ -98,7 +99,7 @@ public class Resource {
 
     public String getIdentity() {
         if (identity == null || identity.equals("")) {
-            identity = id;
+            return id;
         }
         return identity;
     }
@@ -106,10 +107,10 @@ public class Resource {
     public String getStorage() {
         if (storage == null || storage.equals("")) {
             if (identity == null || identity.equals("")) {
-                storage = id;
+                return id;
             }
             else {
-                storage = identity; // compatibility with resources from eXist-db
+                return identity; // compatibility with resources from eXist-db
             }
         }
         return storage;

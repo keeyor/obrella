@@ -11,10 +11,10 @@
                 <div class="carousel-inner">
                     <th:block th:each="slide, iStat: ${resource.presentation.slides}">
                        <div th:if="${iStat.index == 0}" class="carousel-item active">
-                           <img th:src="${media_base_path +  'slides/' + slide.url}" class="d-block w-100" alt="" style="max-width: 800px">
+                           <img th:src="${media_base_path +  'slides/' + slide.url}" class="d-block w-100" alt="" style="max-width: 800px" src="">
                        </div>
                        <div th:if="${iStat.index != 0}" class="carousel-item">
-                           <img th:src="${media_base_path +  'slides/' + slide.url}" class="d-block w-100" alt="" style="max-width: 800px">
+                           <img th:src="${media_base_path +  'slides/' + slide.url}" class="d-block w-100" alt="" style="max-width: 800px" src="">
                        </div>
                     </th:block>
                 </div>
@@ -28,50 +28,37 @@
                 </a>
             </div>
             <!--@thymesVar id="slidesSynced" type="java.lang.Boolean"-->
-            <div th:if="${slidesSynced}" class="mt-2 pl-2  demo-content">
+            <div th:if="${slidesSynced}" class="mt-2 ps-2  demo-content">
                 <div class="row">
                     <div class="col-6"><label for="sync_mode_btn"><i class="fab fa-slideshare"></i> Διαφάνειες</label></div>
-                    <div class="col float-right justify-content-end text-right">
+                    <div class="col float-end justify-content-end text-end" title="Ενεργοποίηση ή Απενεργοποίηση Συγχρονισμού Διαφανειών">
                          <input title="Sync" type="checkbox" data-toggle="switch" id="sync_mode_btn" checked name="sync_mode" data-size="small" data-label-text="Sync"  />
                     </div>
                 </div>
-                <div class="row mr-1 ml-1 mt-2">
+                <div class="row me-1 ms-1 mt-2">
                     <th:block th:each="slide, iStat: ${resource.presentation.slides}">
-                        <span class="mt-1 mr-1">
-                                    <a role="button" href="#" class="go_to_slide btn btn-sm" style="background-color: #337ab7;color:white" th:title="${slide.time + ':' + slide.title}"
-                                    th:attr="data-slide=${slide.index + '#' + slide.time + '#' + slide.title}" th:text="${slide.index}">Slide</a>
-                        </span>
-                    </th:block>
-                </div>
-            </div>
-            <div th:unless="${slidesSynced}" class="pl-2 pb-0 mt-2" style="font-size: 0.9em">
-                <div class="row">
-                    <div class="col-6" title="Παρουσίαση - Διαφάνειες"><label for="sync_mode_btn"><i class="fab fa-slideshare"></i></label></div>
-                </div>
-                <div class="row mr-1 ml-1 mt-2  demo-content">
-                    <th:block th:each="slide, iStat: ${resource.presentation.slides}">
-                        <span class="mt-1 mr-1" style="width: 32px;min-width: 32px;background-color: #337ab7;color:white;text-align: center">
-                             <a role="button" href="#" class="go_to_slide  btn btn-sm" style="color:white" th:title="${slide.time + ':' + slide.title}"
-                                  th:attr="data-slide=${iStat.index + '#' + slide.time + '#' + slide.title}" th:text="${iStat.index}">Slide
+                         <span class="mt-1 mx-1 px-0" style="background-color: #337ab7;color:white;text-align: center;width: 32px">
+                             <a role="button" href="#" class="go_to_slide btn btn-sm" style="color:white" th:title="${slide.time + ':' + slide.title}"
+                                th:attr="data-slide=${iStat.index + '#' + slide.time + '#' + slide.title}" th:text="${iStat.index}">Slide
                              </a>
                         </span>
                     </th:block>
                 </div>
             </div>
-            <!-- Trim Start -->
-            <th:block th:if="${resource.presentation.cuts != null && resource.presentation.cuts.trims.start != null}">
-                <input type="hidden" id="trim_start" th:attr="data-trim=${resource.presentation.cuts.trims.start.begin + '#' + resource.presentation.cuts.trims.start.end}"/>
-            </th:block>
-            <!-- Trim End -->
-            <th:block  th:if="${resource.presentation.cuts != null &&  resource.presentation.cuts.trims.finish != null}">
-                <input type="hidden" id="trim_end" th:attr="data-trim=${resource.presentation.cuts.trims.finish.begin + '#' + resource.presentation.cuts.trims.finish.end}"/>
-            </th:block>
-            <!-- Cuts -->
-            <th:block th:if="${resource.presentation.cuts != null && resource.presentation.cuts.clips != null && resource.presentation.cuts.clips.cuts != null}">
-                <th:block class="cut_space" th:each="cut, iStat: ${resource.presentation.cuts.clips.cuts}">
-                    <input type="hidden" th:attr="data-cut=${cut.begin + '-' + cut.end}"/>
-                </th:block>
-             </th:block>
+            <div th:unless="${slidesSynced}" class="ps-2 pb-0 mt-2" style="font-size: 0.9em">
+                <div class="row">
+                    <div class="col-6" title="Παρουσίαση - Διαφάνειες"><label for="sync_mode_btn"><i class="fab fa-slideshare"></i></label></div>
+                </div>
+                <div class="row me-1 ms-1 mt-2  demo-content">
+                    <th:block th:each="slide, iStat: ${resource.presentation.slides}">
+                        <span class="mt-1 mx-1 px-0" style="background-color: #337ab7;color:white;text-align: center;width: 32px">
+                             <a role="button" href="#" class="go_to_slide btn btn-sm" style="color:white" th:title="${slide.time + ':' + slide.title}"
+                                th:attr="data-slide=${iStat.index + '#' + slide.time + '#' + slide.title}" th:text="${iStat.index}">Slide
+                             </a>
+                        </span>
+                    </th:block>
+                </div>
+            </div>
         </th:block>
     </div>
  </div>

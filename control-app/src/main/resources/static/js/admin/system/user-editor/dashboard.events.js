@@ -7,7 +7,7 @@
     dashboard.events.init = function () {
         $event_el = $("#events_s2");
         $event_el.select2({
-            placeholder: "Επιλέξτε Τμήμα -> Καθηγητή -> Εκδήλωση"
+            placeholder: "Επιλέξτε Τμήμα -> Επ. Υπεύθυνο -> Εκδήλωση"
         });
     };
 
@@ -19,9 +19,11 @@
         })
         .done(function( data ) {
                 $event_el.select2({
-                    placeholder: 'Επιλέξτε Προγραμματισμένη Εκδήλωση',
+                    placeholder: '-- Επιλέξτε Εκδήλωση ή αφήστε κενό για όλες τις Εκδηλώσεις--',
+                    allowClear: true,
                     width: 'style', // need to override the changed default
                     data : data.results,
+                    dropdownParent: $("#staffEventSelectModal"),
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                     templateResult: formatRepo,
                     templateSelection: formatRepoSelection

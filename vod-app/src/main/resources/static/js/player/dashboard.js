@@ -5,7 +5,7 @@ $(function () {
     dashboard.broker = $({});
     dashboard.siteUrl   = "";
 
-    let debug = 0;
+    let debug = 1;
     let hasSlides;
     let showSlides = "true";
     let mode;
@@ -88,6 +88,7 @@ $(function () {
                 actions.go_to_slide(slideIndexToShow);
             }
         });
+
     });
 
 
@@ -102,21 +103,38 @@ $(function () {
         poster_image = "";
         mode         = "sync_on";
 
-        dashboard.player.init(intro_url, video_url, play_intro, poster_image,global_vid_duration,mode);
+        $.ajax({
+            url: video_url,
+            type:'HEAD',
+            error: function()
+            {
+                console.log("VIDEO FILE NOT FOUND");
+                $("#video_wrapper_1").hide();
+                $("#no_video_wrapper").show();
+            },
+            success: function()
+            {
+                $("#video_wrapper_1").show();
+                $("#no_video_wrapper").hide();
 
-        hasSlides = $("#hasSlides").val();
-        if (hasSlides === "true" && showSlides === "true") {
-            showPresentation();
-            $("#layout_button").show();
+                dashboard.player.init(intro_url, video_url, play_intro, poster_image,global_vid_duration,mode);
 
-        }
-        else {
-            hidePresentation();
-            $("#layout_button").hide();
-            $("#right-box").hide();
-        }
-        define_menu_actions();
-        define_menu_events();
+                hasSlides = $("#hasSlides").val();
+                if (hasSlides === "true" && showSlides === "true") {
+                    showPresentation();
+                    $("#layout_button").show();
+
+                }
+                else {
+                    hidePresentation();
+                    $("#layout_button").hide();
+                    $("#right-box").hide();
+                }
+                define_menu_actions();
+                define_menu_events();
+            }
+        });
+
 
         $("#copy-url").on('click', function(e){
             copyUrl();
@@ -137,6 +155,8 @@ $(function () {
 
         return _location.substring(0, webFolderIndex);
     };
+
+
 
     function showPresentation() {
 
@@ -385,7 +405,7 @@ $(function () {
     function copyEmbedUrl() {
         let input = $("#embed_code_input");
         let resource_id = $("#resourceId").val();
-        let text = '<iframe width="560" height="315" src="' + dashboard.siteUrl + '/api/v1/embed/' + resource_id + '" frameBorder="0"></iframe>';
+        let text = '<iframe width="560" height="315" src="' + dashboard.siteUrl + '/apiw/v1/embed/' + resource_id + '" frameBorder="0"></iframe>';
         input.val(text);
         copyToClipboard(input, "Η κώδικας ενσωμάτωσης έχει αντιγραφεί στο πρόχειρο!");
     }

@@ -75,7 +75,7 @@ public class TimeTableApi {
 		this.liveService = liveService;
 	}
 
-	@RequestMapping(value = "/api/v1/timetable/dt/authorized/{access}", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/timetable/dt/authorized/{access}", method = RequestMethod.POST, produces = "application/json")
 	public byte[] SearchTimeTableByEditor(@RequestBody ScheduleQuery scheduleQuery, @PathVariable String access, HttpServletRequest request) throws JsonProcessingException {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -143,7 +143,7 @@ public class TimeTableApi {
 	}
 
 	//> scheduleQuery should contain fromDate+toDate
-	@RequestMapping(value = "/api/v1/timetable_daterange/dt", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/timetable_daterange/dt", method = RequestMethod.POST, produces = "application/json")
 	public byte[] SearchTimeTableInDataRange(@RequestBody ScheduleQuery scheduleQuery) throws JsonProcessingException {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -165,7 +165,7 @@ public class TimeTableApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/timetable_daterange/users/dt", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/timetable_daterange/users/dt", method = RequestMethod.POST, produces = "application/json")
 	public byte[] SearchTimeTableInDataRangeForUsers(@RequestBody ScheduleQuery scheduleQuery) throws JsonProcessingException {
 
 		List<ScheduleDTO> scheduleDTOList = new ArrayList<>();
@@ -178,7 +178,7 @@ public class TimeTableApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/timetable_daterange/users/cal", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/timetable_daterange/users/cal", method = RequestMethod.GET, produces = "application/json")
 	public byte[] SearchTimeTableInDataRangeForUsersCalendar(String start, String end, String d, String c, String e, String s, String cr, String rt) throws JsonProcessingException {
 
 		ScheduleQuery scheduleQuery = new ScheduleQuery();
@@ -295,7 +295,7 @@ public class TimeTableApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/timetable_daterange/users/next", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/timetable_daterange/users/next", method = RequestMethod.GET, produces = "application/json")
 	public List<ScheduleDTO> getNextBroadcastsExcludingLive() {
 
 		List<ScheduleDTO> nextBroadcastList = scheduleService.getNextScheduledEvents();
@@ -326,7 +326,7 @@ public class TimeTableApi {
 		return nextBroadcastList;
 	}
 
-	@RequestMapping(value = "/api/v1/timetable_daterange/users/live", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/timetable_daterange/users/live", method = RequestMethod.GET, produces = "application/json")
 	public QueryResourceResults getLiveHomeScheduledEvent(HttpServletRequest request,
 			@RequestParam(value = "d", required = false) String d) throws ExecutionException, InterruptedException, UnsupportedEncodingException {
 

@@ -53,6 +53,12 @@ public class PlayerController {
 		else if (identity != null && !identity.isEmpty()) {
 			resource = resourceService.findByIdentity(identity);
 		}
+		if (resource == null && identity != null) {
+			if (identity.lastIndexOf(".") != -1) {
+				identity = identity.substring(0,identity.lastIndexOf(".")).trim();
+			}
+			resource = resourceService.findById(identity);
+		}
 		if (resource == null || resource.getAccessPolicy() == null) {
 			return "redirect:404";
 		}

@@ -160,7 +160,7 @@
                 let roomId = $("#room_id").val();
 
                 let msg = '<div class="font-weight-bold">Η Αίθουσα/Χώρος "' + room_name + '" Θα διαγραφεί! Είστε σίγουρος;</div>';
-                msg += '<div>Προσοχή: Αν έχουν υπάρχουν Διαλέξεις  ή προγραμματισμένες μεταδόσεις που αναφέρονται στο χώρο, η διαγραφή θα ακυρωθεί'
+                msg += '<div>Προσοχή: Αν έχουν υπάρχουν Διαλέξεις ή προγραμματισμένες μεταδόσεις που αναφέρονται στο χώρο, η διαγραφή θα ακυρωθεί'
                 alertify.confirm('<i style="color: red" class="fas fa-trash-alt"></i> Διαγραφή Αίθουσας/Χώρου', msg,
                     function () {
                          postRoomDelete(roomId);
@@ -177,7 +177,7 @@
                 let devices = [];
                 let type            = $("#device_type").val();
                 let descr           = $("#device_descr").val();
-                let streamAccessUrl = $("#device_url").val();
+                let streamAccessUrl = $("#device_url").val().trim();
                 let ip              = $("#device_ip").val();
                 let mac             = $("#device_mac").val();
                 let socket          = $("#device_socket").val();
@@ -210,7 +210,11 @@
                     devices: devices
                 }
                 //check for errors
-                if (name == null || name ==="" || code == null || code === "") {
+                if ( (streamAccessUrl === null || streamAccessUrl === "") && calendar === true) {
+                    alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα","Ενεργό Ημερολόγιο: Το πεδίο StreamURL/StreamKey δεν μπορεί να είναι κενό!");
+                    loader.hideLoader();
+                }
+                else if (name == null || name ==="" || code == null || code === "") {
                     alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα","Υπάρχουν παραλείψεις στη φόρμα. Διορθώστε τα κενά και προσπαθήστε πάλι");
                     loader.hideLoader();
                 }
@@ -342,15 +346,14 @@
                 if (departmentId == null) { departmentId = "";}
                 $("#departments_s2").val(departmentId).trigger("change");
                 let device = data.devices[0];
-                let can_enable_room = fillDeviceForm(device);
-                if (can_enable_room === false) {
-                    $calendar_toggle.bootstrapToggle('disable');
-                } else {
-                    $calendar_toggle.bootstrapToggle('enable');
-                    if (data.calendar === "true") {
-                        $calendar_toggle.bootstrapToggle('on');
-                    }
+
+                if (data.calendar === "true") {
+                    $calendar_toggle.bootstrapToggle('on');
                 }
+                else {
+                    $calendar_toggle.bootstrapToggle('off');
+                }
+                fillDeviceForm(device);
                 $("#deleteRoomBt").show();
             }
             else {
@@ -363,7 +366,7 @@
                 $(".room_devices").hide();
                 $("#editRoomLabel").html('<div style="font-size: 1.4em">Άίθουσα/Χώρος</div><small>Νέα Δήλωση</small>');
                 fillDeviceForm();
-                $calendar_toggle.bootstrapToggle('disable');
+                //$calendar_toggle.bootstrapToggle('disable');
                 $("#deleteRoomBt").hide();
                 $("#departments_s2").val("").trigger("change");
             }
@@ -374,11 +377,31 @@
             let can_enable_room = false;
             if (device !== undefined && device !== null) {
                 $("#device_type").val(device.type);
-                $("#device_descr").val(device.description);
-                $("#device_url").val(device.streamAccessUrl);
-                $("#device_ip").val(device.ipAddress);
-                $("#device_mac").val(device.macAddress);
-                $("#device_socket").val(device.socket);
+                if (device.description !== null && device.description !== "null") {
+                    $("#device_descr").val(device.description);
+                } else {
+                    $("#device_descr").val("");
+                }
+                if (device.streamAccessUrl !== null && device.streamAccessUrl !== "null") {
+                    $("#device_url").val(device.streamAccessUrl);
+                } else {
+                    $("#device_url").val("");
+                }
+                if (device.ipAddress !== null && device.ipAddress !== "null") {
+                    $("#device_ip").val(device.ipAddress);
+                } else {
+                    $("#device_ip").val("");
+                }
+                if (device.macAddress !== null && device.macAddress !== "null") {
+                    $("#device_mac").val(device.macAddress);
+                } else {
+                    $("#device_mac").val("");
+                }
+                if (device.socket !== null && device.socket !== "null") {
+                    $("#device_socket").val(device.socket);
+                } else {
+                    $("#device_socket").val("");
+                }
                 if (device.streamAccessUrl !== null && device.streamAccessUrl !== "") {
                     can_enable_room = true;
                 }

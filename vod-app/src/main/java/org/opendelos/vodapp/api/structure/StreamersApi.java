@@ -30,7 +30,7 @@ public class StreamersApi {
 		this.streamingServerService = streamingServerService;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/streamers.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/streamers.web", method = RequestMethod.GET)
 	public byte[] findAllForDt() {
 
 		List<StreamingServer> streamingServers = streamingServerService.findAll();
@@ -39,7 +39,7 @@ public class StreamersApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/streamer/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/streamer/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveStreamingServer(@RequestBody StreamingServer streamingServer) {
 
 		String _id;
@@ -59,7 +59,7 @@ public class StreamersApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/streamer/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/streamer/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteStreamingServer(@PathVariable("id") String id) {
 
 		try {

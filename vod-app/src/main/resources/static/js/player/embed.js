@@ -36,7 +36,7 @@
 
     function init_() {
         let siteUrl = getRootSitePath();
-        fetch(siteUrl + '/api/v1/emurl/' + resource_id)
+        fetch(siteUrl + '/apiw/v1/emurl/' + resource_id)
             .then(function (response) {
                 // Successful fetch return as json
                 return response.json();

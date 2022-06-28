@@ -53,7 +53,7 @@ public class ScheduleApi {
 		this.resourceService = resourceService;
 	}
 
-	@RequestMapping(value = "/api/v1/schedule_table/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/schedule_table/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> DeleteScheduleEntry(@PathVariable("id") String id) {
 
 		/* Authorize Cancellation */
@@ -71,7 +71,7 @@ public class ScheduleApi {
 		return new ResponseEntity<>("", HttpStatus.ACCEPTED);
 	}
 
-	@RequestMapping(value = "/api/v1/schedule_table/dt/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/schedule_table/dt/{id}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] CreateScheduleTimeTable(@PathVariable("id") String id) {
 
 		Schedule schedule = scheduleService.findById(id);
@@ -82,7 +82,7 @@ public class ScheduleApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/schedule_table/set_cancellation/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/schedule_table/set_cancellation/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> SetCancellation(@RequestBody Cancellation new_cancellation, @PathVariable("id") String id) {
 
 		/* Authorize Cancellation */
@@ -99,7 +99,7 @@ public class ScheduleApi {
 		return new ResponseEntity<>("", HttpStatus.ACCEPTED);
 	}
 
-	@RequestMapping(value = "/api/v1/schedule_table/unset_cancellation/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/schedule_table/unset_cancellation/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> UnsetCancellation(@RequestBody Cancellation rm_cancellation, @PathVariable("id") String id) {
 
 		Schedule schedule = scheduleService.findById(id);
@@ -130,7 +130,7 @@ public class ScheduleApi {
 		return new ResponseEntity<>("Η ακύρωση είναι δεν βρέθηκε", HttpStatus.BAD_REQUEST);
 	}
 
-	@RequestMapping(value = "/api/v1/schedule_table/cancel_remaining/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/schedule_table/cancel_remaining/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> CancelRemainingDates(@RequestBody String reason, @PathVariable("id") String id) {
 
 		try {
@@ -142,7 +142,7 @@ public class ScheduleApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/schedule_table/unset_remaining/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/schedule_table/unset_remaining/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> UnsetRemainingDates(@PathVariable("id") String id) {
 
 		try {
@@ -154,7 +154,7 @@ public class ScheduleApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/schedule_table/stream_cancellation/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/schedule_table/stream_cancellation/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> CancelLiveStream(@RequestBody Cancellation new_cancellation, @PathVariable("id") String id) {
 
 		Resource resource = resourceService.findByIdInCollection(id, "Scheduler.Live");
@@ -173,7 +173,7 @@ public class ScheduleApi {
 
 		String live_server = app_host + streamingProperties.getLive_server_url();
 		RestTemplate restTemplate = new RestTemplate();
-		String postUrl = live_server + "/api/v1/live/" + id + "/stop/" + new_cancellation.isKeepFile();
+		String postUrl = live_server + "/apiw/v1/live/" + id + "/stop/" + new_cancellation.isKeepFile();
 		try {
 			restTemplate.exchange(postUrl, HttpMethod.POST, null, String.class);
 		}
@@ -184,7 +184,7 @@ public class ScheduleApi {
 		return new ResponseEntity<>("", HttpStatus.ACCEPTED);
 	}
 
-	@RequestMapping(value = "/api/v1/schedule_table/confirm_password/{id}/cd/{cd}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/schedule_table/confirm_password/{id}/cd/{cd}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> DeleteScheduleEntry(@PathVariable("id") String id, @PathVariable("cd") String code) {
 
 		String result = "-1";

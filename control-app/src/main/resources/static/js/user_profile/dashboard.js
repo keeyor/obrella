@@ -51,9 +51,14 @@
         if (user_authorities.includes("STAFFMEMBER")) {
             $("#edit_staff_link").show();
             dashboard.staffmembers.assignedCoursesDT();
+            dashboard.staffmembers.assignedScheduledEventsDT();
         }
         if (user_authorities.includes("MANAGER") || user_authorities.includes("SUPPORT")) {
             $("#edit_manager_link").show();
+            if (user_authorities.includes("SUPPORT")) {
+                dashboard.users.assignedStaffCoursesDT();
+                dashboard.users.assignedStaffEventsDT();
+            }
         }
 
         alertify.defaults.transition = "slide";

@@ -16,6 +16,7 @@ public interface OpUserRepository extends MongoRepository<OpUser, String>, OpUse
 	OpUser findByIdentity(String identity);
 	OpUser findByUid(String uid);
 	OpUser findByEmail(String email);
+	OpUser findByToken(String token);
 	List<OpUser> findAllByDepartmentIdOrderByName(String departmentId);
 	List<OpUser> findAllByAuthoritiesContains(UserAccess.UserAuthority userAuthority);
 	List<OpUser> findByEduPersonPrimaryAffiliation(String primary_affiliation);

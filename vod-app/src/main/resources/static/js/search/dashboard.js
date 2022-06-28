@@ -78,7 +78,7 @@
 
         function getReportQueryStatus() {
             $.ajax({
-                url: dashboard.siteUrl + '/api/v1/queryReportStatus',
+                url: dashboard.siteUrl + '/apiw/v1/queryReportStatus',
                 cache: false
             })
                 .done(function (data) {
@@ -87,7 +87,7 @@
         }
         function getReportQueryTime() {
             $.ajax({
-                url: dashboard.siteUrl + '/api/v1/queryReportTime',
+                url: dashboard.siteUrl + '/apiw/v1/queryReportTime',
                 cache: false
             })
                 .done(function (data) {

@@ -15,4 +15,5 @@ public class Select2GenChild implements Serializable {
 	private String id;
 	private String text;
 	private String subheader;
+	private String info; //can be used for varius reason e.g. active classrooms
 }

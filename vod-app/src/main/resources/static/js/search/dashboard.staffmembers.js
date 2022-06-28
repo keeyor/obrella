@@ -5,7 +5,7 @@
 
     dashboard.staffmembers.loadStaffByReport = function () {
 
-        let url = dashboard.siteUrl + '/api/v1/getStaffOfReport';
+        let url = dashboard.siteUrl + '/apiw/v1/getStaffOfReport';
 
         $.ajax({
             type: 'GET',
@@ -17,7 +17,7 @@
                     let queryParams = new URLSearchParams(window.location.search);
                     queryParams.set("s", staffDtId);
                     queryParams.delete("skip");
-                    let html = '<a class="list-group-item list-group-item-action text-dark text-decoration-none" href="search?' + queryParams + '">' + element.name +' (' + element.counter + ')<br/>' +
+                    let html = '<a class="list-group-item list-group-item-action text-dark text-decoration-none" href="search?' + queryParams + '">' + element.name + '<br/>' +
                         '<div class="font-sm text-medium-emphasis"> Τμήμα ' + element.department.title + '</div></a>';
                     $("#stFilters").append(html);
                 });

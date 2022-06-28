@@ -73,15 +73,13 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/programs}">Προγράμματα Σπουδών</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/acalendar}">Ακαδημαϊκό Ημερολόγιο</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active"><span>Μαθήματα</span></li>
                 </ol>
             </nav>
@@ -187,14 +185,14 @@
                                                   <!-- DEPARTMENT -->
                                                   <div class="form-group row mt-3">
                                                       <label for="course_department" class="col-sm-2 col-form-label emph-label">Τμήμα*</label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <input type="hidden" id="course_department" disabled class="form-control"/>
                                                           <input type="text" id="course_department_title" disabled class="form-control"/>
                                                       </div>
                                                   </div>
                                                   <div class="form-group row mt-3">
                                                       <label for="course_programId" class="col-sm-2 col-form-label emph-label">Πρόγραμμα Σπουδών*</label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <select id="course_programId" name="course_programId" style="width: 100%" class="form-control">
                                                           </select>
                                                       </div>
@@ -202,7 +200,7 @@
                                                   <!-- TITLE -->
                                                   <div class="form-group row  mt-3 title_change_warning">
                                                       <label class="col-sm-2 col-form-label">&nbsp;</label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <div style="font-size: 0.9em;color: red;font-weight: bold"><i style="color:red" class="fas fa-exclamation-triangle"></i> ΠΡΟΣΟΧΗ:<br/>
                                                               <span style="color:black;font-weight: normal">
                                                               Τυχόν τροποποίηση του τίτλου ενός Μαθήματος θα ενημερώσει τον τίτλο σε όλα τα σημεία που αναφέρεται το επιλεγμένο Μάθημα (Προσωπικό,                                                  Διαλέξεις κλπ). Η τροποποίηση του τίτλου ενός Μαθήματος προτείνεται <b>ΜΟΝΟ</b> για διορθώσεις τυπογραφικών λαθών. Αν το επιλεγμένο μάθημα άλλαξε την επίσημη ονομασία του τότε,  αντί της μετονομασίας, <b>ΔΗΜΙΟΥΡΓΉΣΤΕ ΕΝΑ ΝΕΟ ΜΑΘΗΜΑ ΜΕ ΤΟΝ ΝΕΟ ΤΙΤΛΟ</b>. Οι υπάρχουσες διαλέξεις θα κρατήσουν τον παλιό τίτλο και οι νέες θα καταχωρούν τον νέο.
@@ -211,20 +209,20 @@
                                                   </div>
                                                   <div class="form-group row  mt-3">
                                                       <label for="course_title" class="col-sm-2 col-form-label emph-label">Τίτλος*</label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <input type="text" name="course_title" id="course_title" class="form-control"/>
                                                       </div>
                                                   </div>
                                                   <!-- RELATED DEPARTMENTS (ΔΙΑΤΜΗΜΑΤΙΚΟ) -->
                                                   <div class="form-group row mt-3">
                                                       <label for="course_department" class="col-sm-2 col-form-label emph-label"><b>Διατμηματικό Μάθημα</b></label>
-                                                      <div class="col-sm-7" style="font-size: 0.9em">
+                                                      <div class="col-sm-4" style="font-size: 0.9em">
                                                           Για Διατμηματικό Μάθημα, επιλέξτε τα συμμετέχοντα τμήματα, αλλιώς αφήστε το πεδίο κενό
                                                       </div>
                                                   </div>
                                                   <div class="form-group row">
                                                       <label for="course_department" class="col-sm-2 col-form-label"></label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <select id="course_reldep" name="course_reldep" style="width: 100%" class="form-control" multiple="multiple">
                                                           </select>
                                                       </div>
@@ -232,7 +230,7 @@
                                                   <!--@thymesVar id="catList" type="java.util.HashMap<String, List<String>"-->
                                                   <div class="form-group row  mt-3">
                                                       <label for="course_categories" class="col-sm-2 col-form-label emph-label">Θεματικές Περιοχές</label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <select id="course_categories" name="course_categories" style="width: 100%" class="form-control js-category-tags" multiple="multiple">
                                                               <optgroup th:each="cheader:${catList}" th:label="${#strings.listSplit(cheader.key,'::')[1]}" label="">
                                                                   <option th:each="cat:${cheader.value}" th:value="${#strings.listSplit(cat,'::')[0]}" th:text="${#strings.listSplit(cat,'::')[1]}"></option>
@@ -251,12 +249,12 @@
                                                   <!-- Κωδικός LMS -->
                                                   <div class="form-group row  mt-3" style="">
                                                       <label class="col-sm-2 col-form-label emph-label">Κωδικοί LMS</label>
-                                                      <div class="col-sm-7 text-muted" style="font-size: 0.8em">
+                                                      <div class="col-sm-4 text-muted" style="font-size: 0.8em">
                                                       </div>
                                                   </div>
                                                   <div class="form-group row mt-3">
                                                       <label class="col-sm-2 col-form-label"></label>
-                                                      <div class="col-sm-7 text-high-emphasis" style="font-size: 0.9em">
+                                                      <div class="col-sm-4 text-high-emphasis" style="font-size: 0.9em">
                                                           <i class="far fa-question-circle"></i>
                                                           Μπορείτε να <b>εισάγεται</b> (προαιρετικά) έναν ή περισσότερους κωδικούς για κάθε LMS. Κάντε κλικ πάνω στο αντίστοιχο πεδίο και
                                                           πληκτρολογήστε τον κωδικό. <b>Για να καταχωρηθεί η επιλογή σας, πατήστε 'ENTER' μετά από κάθε κωδικό</b>.

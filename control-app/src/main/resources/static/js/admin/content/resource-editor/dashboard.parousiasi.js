@@ -77,6 +77,7 @@
         if (inclPresentation === "1") {
             dashboard.parousiasi.setMode("slides");
             dashboard.parousiasi.getResourceSlides(dashboard.rid,"details");
+            $("#pr_exportPp").attr("href",dashboard.siteUrl + "/admin/download-presentation?id=" + dashboard.rid);
         }
         else {
             if (dashboard.rid !== "") {
@@ -87,6 +88,71 @@
                 dashboard.parousiasi.setMode("disabled");
             }
         }
+
+        $(".delete_slide_button").on('click', function(e) {
+
+            if (nocs > 1) {
+                let img_pos_w = $("#inflated_slide_number").val();
+                let img_pos = parseInt(img_pos_w);
+                let slide_id = $("#inflated_slide_id").val();
+                alertify.confirm(language.u46, language.u30, function () {
+                    DeleteSlideFromDb(slide_id, img_pos);
+                }, function () {
+                });
+            }
+            else {
+                alertify.alert("Σφάλμα" , language.u57+ ". " + language.u58);
+            }
+            e.preventDefault();
+        });
+
+        $(".save_slide_button").on('click', function(e) {
+            let img_pos_w = $("#inflated_slide_number").val();
+            let img_pos = parseInt(img_pos_w);
+            let slide_title = $("#_edit_slide_title").val();
+            updateSlideTitle(img_pos,slide_title);
+            e.preventDefault();
+        });
+
+        $("#inflate_next_slide").on('click', function(e) {
+            let img_no  =  $("#inflated_slide_number").val();
+            let next_img = parseInt(img_no) + 1;
+            if (next_img < nocs) {
+                $("#inflated_slide_number").val(next_img);
+                let $next_element = $("#image_" + next_img);
+                OnSlideView($next_element);
+            }
+            e.preventDefault();
+        });
+
+        $("#inflate_first_slide").on('click', function(e) {
+            let prev_img = 0;
+            $("#inflated_slide_number").val(prev_img);
+            let $previous_element = $("#image_" + prev_img);
+            OnSlideView($previous_element);
+
+            e.preventDefault();
+        });
+        $("#inflate_last_slide").on('click', function(e) {
+            let prev_img = nocs-1;
+            $("#inflated_slide_number").val(prev_img);
+            let $previous_element = $("#image_" + prev_img);
+            OnSlideView($previous_element);
+
+            e.preventDefault();
+        });
+
+        $("#inflate_prev_slide").on('click', function(e) {
+            let img_no  =  $("#inflated_slide_number").val();
+            let prev_img = parseInt(img_no) - 1;
+            if (prev_img >= 0) {
+                $("#inflated_slide_number").val(prev_img);
+                let $previous_element = $("#image_" + prev_img);
+                OnSlideView($previous_element);
+            }
+            e.preventDefault();
+        });
+
     };
 
     dashboard.parousiasi.setMode = function (display) {
@@ -164,21 +230,8 @@
 
         $("#pr_slideContainer").show();
 
-        $(document).on('click','.delete_slide_button', function(e) {
-            e.preventDefault();
-            OnSlideDelete(this);
-        });
-        $(document).on('click', '.edit_slide_button', function(e) {
-            e.preventDefault();
-            OnSlideEdit(this);
-        });
         $(document).on('click', '.view_slide', function() {
             OnSlideView(this);
-        });
-        $(document).on('click','.hide_display_row' , function(e) {
-            e.preventDefault();
-            let ref_id = $(this).data("row");
-            $('#' + ref_id ).hide();
         });
 
         $(".prSlideActions").on("click", "button", function(event) {
@@ -189,7 +242,7 @@
                 let message = {msg: "remove slides file!"};
                 dashboard.broker.trigger('remove.ppEdit', [message])
             }
-            if (button_id === "pr_compactPp") {
+/*            if (button_id === "pr_compactPp") {
                 if (mode !== "compact") {
                     mode = "compact";
                     $(this).addClass("btn-info");
@@ -205,13 +258,14 @@
                     $("#pr_compactPp").removeClass("btn-info");
                     dashboard.parousiasi.getResourceSlides(id, "details");
                 }
-            }
+            }*/
             if (button_id === "pr_cancelButton") {
                 fileUploader.stop();
                 ClearPPUploadQueue(fileUploader,"cancel");
             }
             event.preventDefault();
         });
+
     };
 
     function  log() {
@@ -252,14 +306,20 @@
         $uploadLog.append(str + "\n");
         $uploadLog.scrollTop($uploadLog[0].scrollHeight);
     }
-    function OnSlideEdit(element){
 
-        let parent_row =  element.closest(".card"); //".parentNode.parentNode;
+    function OnSlideEdit(){
+
+/*        let parent_row =  element.closest(".card"); //".parentNode.parentNode;
         let img_node = parent_row.getElementsByTagName('img')[0];
 
         let img_pos_w = parent_row.id; // $(element).data('index');
         let res = img_pos_w.split(":");
-        let img_pos = parseInt(res[1]);
+        let img_pos = parseInt(res[1]);*/
+
+        let img_pos_w = $("#inflated_slide_number").val();
+        let img_pos = parseInt(img_pos_w);
+        let slide_title = $("#inflated_slide_title").val();
+        slide_title = slide_title.replace(/\n/g, " ");  //replace new line with space ( it happens from ppt title extraction )
 
         let title = language.u61;
         let message = language.u62;
@@ -268,49 +328,32 @@
             .setting ({
                 'title'  : title,
                 'message': message,
-                'value'  : img_node.title,
+                'value'  : slide_title, //img_node.title,
                 'onok'   : function(evt, value){ updateSlideTitle(img_pos, value);}
             }).show();
     }
+
     function OnSlideView(element) {
         let img_url =  $(element).data("url");
-        InflateSlide(element, img_url);
-    }
-    function InflateSlide(element, img_url) {
+        let img_no  =  $(element).data("no");
+        let slide_title = $(element).data("title");
+        let slide_id = $(element).data("id");
 
-        if (parseInt(nocs)>0)
-        {
-            let sfloat = nocs / 4;
-            let thumbs = sfloat - (sfloat % 1);
+        let current_slide_number = parseInt(img_no) + 1;
+        $(".current_slide_number_label").html(" (#" + current_slide_number + ")");
+        $("#_edit_slide_title").val(slide_title);
+        $("#inflated_slide_number").val(img_no);
+        $("#inflated_slide_id").val(slide_id);
+        $("#canvas_slide_image").attr("src", img_url);
 
-            let init_imgUrl = dashboard.siteUrl + "/public/images/dotWhite.png";
-
-            let parent_row = $(element).closest(".row");
-            let next_display_row = parent_row.next(".display_row");
-            let display_row_index = $(next_display_row[0]).data("index");
-
-            for (let dt=0;dt<thumbs; dt++) {
-                if (dt !== display_row_index ) {
-                    $("#display_row" + dt).hide();
-                }
-            }
-
-            let $display_pop = $("#pop" + display_row_index);
-            let $display_row = $("#display_row" + display_row_index );
-            let prev_imgUrl = $display_pop.prop("src");
-
-            if (prev_imgUrl === img_url) {
-                $display_row.hide();
-                $display_pop.attr("src", init_imgUrl);
-            }
-            else {
-                $display_row.show();
-                $display_pop.attr("src", img_url);
-            }
-
-        } //if
+        let $offcanvas = $("#offcanvasSlide");
+        if ( $offcanvas.css('display') === 'none' || $offcanvas.css("visibility") === "hidden"){
+            // 'element' is hidden
+            $offcanvas.offcanvas('show');
+        }
 
     }
+
     function updateSlideTitle(position, title) {
 
         jQuery.support.cors = true;
@@ -331,6 +374,7 @@
                 let div_node = document.getElementById("cnt:" + position);
                 let img_node = div_node.getElementsByTagName('img')[0];
                 img_node.setAttribute('title', title);
+                $("#image_" + position).data('title', title);
                 //If compact mode
                 img_node.innerHTML = (position + 1) + "." + title;
                 let title_node = document.getElementById("tlt:" + position);
@@ -338,6 +382,7 @@
                 if (title.length > 32) {
                     item_title_compact = title.substring(0, 29) + '...';
                 }
+                title_node.title = title;
                 title_node.innerHTML = '<small>' + (position+1) + '.' + item_title_compact + '</small>';
                 alertify.success("Ο τίτλος της διαφάνειας ενημερώθηκε");
             },
@@ -347,26 +392,6 @@
             }
         });
     }
-    function OnSlideDelete(element) {
-
-        let $msgline = $('#msgline');
-
-        if (nocs > 1){
-            let parent_row =  element.closest(".card"); //".parentNode.parentNode;
-            let img_node = parent_row.getElementsByTagName('img')[0];
-
-            let img_url =  $(img_node).data('id');
-            let img_index = parent_row.id;
-
-            alertify.confirm(language.u46, language.u30, function () {
-                DeleteSlideFromDb(img_url,img_index);
-            }, function(){});
-        }
-        else {
-            alertify.notify(language.u57 + ". " + language.u58, "error");
-        }
-    }
-
     function DeleteSlideFromDb(slideId,index) {
 
         jQuery.support.cors = true;
@@ -385,6 +410,7 @@
             processData:false,  //To avoid making query String instead of JSON
             success : function() {
                 dashboard.parousiasi.getResourceSlides(dashboard.rid,"details"); //DeleteSlideFromUi(index);
+                $("#offcanvasSlide").offcanvas('hide');
             },
             error: function (jqXHR, textStatus, errorThrown)  {
                 alert('error trapped in error: DeleteSlideFromDb');
@@ -394,102 +420,6 @@
 
     }
 
-    function DeleteSlideFromUi(index) {
-
-        var mv_img,mv_title,mv_time;
-        var from_thesi;
-
-        from_thesi = document.getElementById(index);
-        from_thesi.remove();
-/*
-
-        from_thesi.removeChild(from_thesi.getElementsByTagName('img')[0]);
-        from_thesi.removeChild(from_thesi.getElementsByTagName('div')[0]);
-        from_thesi.removeChild(from_thesi.getElementsByClassName('slidetag')[0]);
-
-*/
-        let res = from_thesi.id.split(":");
-        let startAt = parseInt(res[1]); // id dragged
-
-        let endAt = 99;
-
-        startAt = parseInt(startAt+1);
-        for (var thesi= startAt; thesi<=endAt;thesi++ )
-        {
-            let mv_node = document.getElementById("cnt:"+thesi);
-            if (mv_node !== null) {
-                mv_img = mv_node.getElementsByTagName('img')[0];
-                mv_title = mv_node.getElementsByTagName('div')[0];
-                var par = parseInt(thesi)-1;
-                let new_pos_node = document.getElementById("cnt:"+par);
-                new_pos_node.appendChild(mv_title);
-                new_pos_node.appendChild(mv_img);
-                new_pos_node.appendChild(mv_time);
-            }
-            else {break;}
-        }
-        let last_index = thesi-1;
-
-        let row_parent = document.getElementById("cnt:" + last_index).parentNode;
-        let c = row_parent.childNodes.length;
-        for (var ch=0; ch<=c-1;ch++) {
-            if (row_parent.childNodes[ch].id === "cnt:" + last_index) {
-                row_parent.removeChild(row_parent.childNodes[ch]);
-                break;
-            }
-        }
-        $("#pr_slideCount").html('<i class="fab fa-slideshare"></i> &centerdot;' + last_index + " slides");
-        alertify.success("Η Διαφάνεια διαγράφηκε");
-
-    }
-
-    function DeleteSlideFromUi_old(index) {
-
-        var mv_img,mv_title,mv_time;
-        var from_thesi;
-
-        from_thesi = document.getElementById(index);
-
-        from_thesi.removeChild(from_thesi.getElementsByTagName('img')[0]);
-        from_thesi.removeChild(from_thesi.getElementsByTagName('div')[0]);
-        from_thesi.removeChild(from_thesi.getElementsByClassName('slidetag')[0]);
-
-
-        let res = from_thesi.id.split(":");
-        let startAt = parseInt(res[1]); // id dragged
-
-        let endAt = 99;
-
-        startAt = parseInt(startAt+1);
-        for (var thesi= startAt; thesi<=endAt;thesi++ )
-        {
-            let mv_node = document.getElementById("cnt:"+thesi);
-            if (mv_node !== null) {
-                mv_img = mv_node.getElementsByTagName('img')[0];
-                mv_title = mv_node.getElementsByTagName('div')[0];
-                mv_time  = mv_node.getElementsByClassName('slidetag')[0];
-                var par = parseInt(thesi)-1;
-                let new_pos_node = document.getElementById("cnt:"+par);
-                new_pos_node.appendChild(mv_title);
-                new_pos_node.appendChild(mv_img);
-                new_pos_node.appendChild(mv_time);
-            }
-            else {break;}
-        }
-        let last_index = thesi-1;
-
-        let row_parent = document.getElementById("cnt:" + last_index).parentNode;
-        let c = row_parent.childNodes.length;
-        for (var ch=0; ch<=c-1;ch++) {
-            if (row_parent.childNodes[ch].id === "cnt:" + last_index) {
-                row_parent.removeChild(row_parent.childNodes[ch]);
-                break;
-            }
-        }
-        $("#pr_slideCount").html('<i class="fab fa-slideshare"></i> &centerdot;' + last_index + " slides");
-        alertify.success("Η Διαφάνεια διαγράφηκε");
-
-    }
     function InitializePPUploadControl(id) {
 
         InitUploadControls();
@@ -933,28 +863,20 @@
                     html= html + header_html;
                 html+= '</div>'; // card-header
                 html = html + '<div class="card-body">';
-                        html= html + '<img class="view_slide img-fluid" style="cursor: zoom-in; border:1px solid ' + bordercolor + '" ';
-                        html= html + 'ondrop="drop(event)" draggable="true" ondragstart="drag(event)"';
+                        html= html + '<img id="image_' + no + '" class="view_slide img-fluid" style="cursor: zoom-in; border:1px solid ' + bordercolor + '" ';
+                        //html= html + 'ondrop="drop(event)" draggable="true" ondragstart="drag(event)"';
                         html= html + 'title="' + item_title + '"';
                         html= html + 'data-id="' + item_url +'"';
+                        html= html + 'data-title="' + item_title +'"';
                         html= html + 'data-sync="' + _ftime +'"';
                         html= html + 'data-url="' + basepath + 'slides/' + item_url + '"';
+                        html= html + 'data-no="' + no + '"';
                         html= html + 'src="' +  basepath + 'slides/small/' + item_url + '"> ';
                 html+= '</div>'; // card-body
-                html = html + '<div class="card-footer">';
-                        html= html + '<div class="slidetag mt-1"> ';
-                            html= html + '<span class="delete_slide_button"> ';
-                            html= html + ' <a style="color: #517fa4" title="Διαγραφή διαφάνειας" href="#" ><i class="fas fa-ban" style="color: red"></i></a> ';
-                            html= html + '</span> ';
-                            html= html + '<span class="edit_slide_button" draggable="false"> ';
-                            html= html + ' <a  style="color: #517fa4" title="Επεξεργασία τίτλου" href="#" ><i class="fas fa-edit"></i></a> ';
-                            html= html + '</span> ';
-                        html= html + '</div>';
-                html+= '</div>'; // card-footer
-                html = html + '<div class="card-footer" style="background-color:  #d5f1de">';
+                html = html + '<div class="card-footer" style="background-color:  #d5f1de"  title="Χρόνος εμφάνισης (συγχρονισμός με βίντεο)">';
                         html= html + '<div class="slidetag mt-1"> ';
                             html= html + '<span class="slide_sync_time pl-3"> ';
-                            html= html + ' <a style="color:#39f" title="Χρόνος εμφάνισης (συγχρονισμός με βίντεο)"><i class="far fa-clock"></i> ' + _ftime + '</a>';
+                            html= html + ' <a style="color:#39f"><i class="far fa-clock"></i> ' + _ftime + '</a>';
                             html= html + '</span> ';
                         html= html + '</div>';
                 html+= '</div>'; // card-footer
@@ -963,207 +885,9 @@
 
         html+= '</div>'; // row
 
-
-/*        for (let jk=0; jk<=thumbs; jk++) {
-
-            let rowId = "row:" + jk;
-
-            html = html + '<div class="row"  id="' + rowId + '" ondragover="return false;" ondrop="return false;" style="margin-bottom:0;"> ';
-            let cols=3;
-            runLast=1;
-            if (jk === thumbs) {
-                if (thumb_rem<1)
-                {runLast=0;}
-                else
-                {
-                    runLast=1;
-                    cols = nocs - (thumbs*4)-1;
-                }
-            }
-            if (runLast===1) {
-                for (let jk_row=0;jk_row<=cols;jk_row++) {
-                    let item = slides[(4*jk)+jk_row];
-                    let bordercolor = "#6CB33E";
-                    let _time = item.time;
-                    let _ftime;
-
-                    let header_html = "";
-                    let numbering_html = "";
-
-                    let item_title = item.title;
-                    let item_url = item.url;
-
-                    let item_title_compact = item_title;
-                    if (item_title === "") {
-                        item_title_compact = "- - -";
-                    }
-
-                    if (_time=== "-1") {
-                        bordercolor = "silver";
-                        _ftime = "--- : --- : ---";
-                        numbering_html = '<span class="numbering" id="num:' + parseInt((4*jk)+jk_row) + '">' + parseInt((4*jk)+jk_row+1) + '. </span>';
-                        header_html =  '<div id="tlt:' + parseInt((4*jk)+jk_row) + '" class="slide_header text-truncate">';
-                        header_html +=  '<small>' + numbering_html + item_title_compact + '</small>';
-                        header_html += '</div>';
-                    }
-                    else {
-                        _ftime = secondsTimeSpanToHMS(_time);
-                        numbering_html = '<span class="numbering" id="num:' + parseInt((4*jk)+jk_row) + '">' + parseInt((4*jk)+jk_row+1) + '. </span>';
-                        header_html =  '<div id="tlt:' + parseInt((4*jk)+jk_row) + '" class="slide_header_sync text-truncate">';
-                        header_html +=  '<small>' + numbering_html + item_title_compact + '</small>';
-                        header_html += '</div>';
-                    }
-
-                    html= html + '<div style="font-size: 1.0em" class="col-sm-3 slide_frame mb-2" id="cnt:' + parseInt((4*jk)+jk_row) + '"> ';
-                    html= html + header_html;
-                    html= html + '<img id="img:' + parseInt((4*jk)+jk_row) + '" class="view_slide draggable_image img-fluid" style="cursor: zoom-in; border:1px solid ' + bordercolor + '" ';
-                    html= html + 'ondrop="drop(event)" draggable="true" ondragstart="drag(event)"';
-                    html= html + 'alt="Slide.' + parseInt((4*jk)+jk_row) + '"';
-                    html= html + 'data-index="' + parseInt((4*jk)+jk_row+1) + '"';
-                    html= html + 'title="' + item_title + '"';
-                    html= html + 'data-id="' + item_url +'"';
-                    html= html + 'data-sync="' + _ftime +'"';
-                    html= html + 'data-url="' + basepath + 'slides/' + item_url + '"';
-                    html= html + 'src="' +  basepath + 'slides/small/' + item_url + '"> ';
-
-                    html= html + '<div class="slidetag mt-1" id="slide_footer:' + parseInt((4*jk)+jk_row) + '"> ';
-                    html= html + '<span data-index="cnt:' + parseInt((4*jk)+jk_row) + '" class="delete_slide_button"> ';
-                    html= html + ' <a style="color: #517fa4" title="Διαγραφή διαφάνειας" href="#" ><i class="fas fa-ban"></i></a> ';
-                    html= html + '</span> ';
-                    html= html + '<span data-index="cnt:' + parseInt((4*jk)+jk_row) + '" class="edit_slide_button" draggable="false"> ';
-                    html= html + ' <a  style="color: #517fa4" title="Επεξεργασία τίτλου" href="#" ><i class="fas fa-edit"></i></a> ';
-                    html= html + '</span> ';
-                    html= html + '<span class="slide_sync_time pl-3"> ';
-                    html= html + ' <a style="color:#39f" title="Χρόνος συγχρονισμός"><i class="far fa-clock"></i> ' + _ftime + '</a>';
-                    html= html + '</span> ';
-                    html= html + '</div>';
-
-                    html+= '</div>';
-
-                }
-
-            }
-            html = html + '</div>';
-
-            let hide_row_id = "display_row" + jk;
-            let pop_row = "pop" + jk;
-
-            html = html + '<div class="row display_row" data-index="' + jk + '" style="display:none" id="' + hide_row_id + '">' +
-                '<div class="col-sm-12 text-center inflated_image">' +
-                '<span class="float-right"><a href="#" class="hide_display_row" data-row="' + hide_row_id + '"><i class="far fa-window-close"></i></a></span>' +
-                '<img class="img-fluid " alt="pop" id="' + pop_row + '" src="' + dashboard.siteUrl +  '/public/images/dotWhite.png"/>' +
-                '</div>' +
-
-                '</div>';
-
-        }*/
         return html;
     }
 
-
-    function imageGrid_old(slides, basepath) {
-        let html="";
-        nocs = slides.length;
-        let sfloat = nocs / 4;
-        let thumbs = sfloat - (sfloat % 1);
-        let thumb_rem = nocs % 4;
-        let runLast=0;
-
-        for (let jk=0; jk<=thumbs; jk++) {
-
-            let rowId = "row:" + jk;
-
-            html = html + '<div class="row"  id="' + rowId + '" ondragover="return false;" ondrop="return false;" style="margin-bottom:0;"> ';
-            let cols=3;
-            runLast=1;
-            if (jk === thumbs) {
-                if (thumb_rem<1)
-                {runLast=0;}
-                else
-                {
-                    runLast=1;
-                    cols = nocs - (thumbs*4)-1;
-                }
-            }
-            if (runLast===1) {
-                for (let jk_row=0;jk_row<=cols;jk_row++) {
-                    let item = slides[(4*jk)+jk_row];
-                    let bordercolor = "#6CB33E";
-                    let _time = item.time;
-                    let _ftime;
-
-                    let header_html = "";
-                    let numbering_html = "";
-
-                    let item_title = item.title;
-                    let item_url = item.url;
-
-                    let item_title_compact = item_title;
-                    if (item_title === "") {
-                        item_title_compact = "- - -";
-                    }
-
-                    if (_time=== "-1") {
-                        bordercolor = "silver";
-                        _ftime = "--- : --- : ---";
-                        numbering_html = '<span class="numbering" id="num:' + parseInt((4*jk)+jk_row) + '">' + parseInt((4*jk)+jk_row+1) + '. </span>';
-                        header_html =  '<div id="tlt:' + parseInt((4*jk)+jk_row) + '" class="slide_header text-truncate">';
-                        header_html +=  '<small>' + numbering_html + item_title_compact + '</small>';
-                        header_html += '</div>';
-                    }
-                    else {
-                        _ftime = secondsTimeSpanToHMS(_time);
-                        numbering_html = '<span class="numbering" id="num:' + parseInt((4*jk)+jk_row) + '">' + parseInt((4*jk)+jk_row+1) + '. </span>';
-                        header_html =  '<div id="tlt:' + parseInt((4*jk)+jk_row) + '" class="slide_header_sync text-truncate">';
-                        header_html +=  '<small>' + numbering_html + item_title_compact + '</small>';
-                        header_html += '</div>';
-                    }
-
-                    html= html + '<div style="font-size: 1.0em" class="col-sm-3 slide_frame mb-2" id="cnt:' + parseInt((4*jk)+jk_row) + '"> ';
-                    html= html + header_html;
-                    html= html + '<img id="img:' + parseInt((4*jk)+jk_row) + '" class="view_slide draggable_image img-fluid" style="cursor: zoom-in; border:1px solid ' + bordercolor + '" ';
-                    html= html + 'ondrop="drop(event)" draggable="true" ondragstart="drag(event)"';
-                    html= html + 'alt="Slide.' + parseInt((4*jk)+jk_row) + '"';
-                    html= html + 'data-index="' + parseInt((4*jk)+jk_row+1) + '"';
-                    html= html + 'title="' + item_title + '"';
-                    html= html + 'data-id="' + item_url +'"';
-                    html= html + 'data-sync="' + _ftime +'"';
-                    html= html + 'data-url="' + basepath + 'slides/' + item_url + '"';
-                    html= html + 'src="' +  basepath + 'slides/small/' + item_url + '"> ';
-
-                    html= html + '<div class="slidetag mt-1" id="slide_footer:' + parseInt((4*jk)+jk_row) + '"> ';
-                    html= html + '<span data-index="cnt:' + parseInt((4*jk)+jk_row) + '" class="delete_slide_button"> ';
-                    html= html + ' <a style="color: #517fa4" title="Διαγραφή διαφάνειας" href="#" ><i class="fas fa-ban"></i></a> ';
-                    html= html + '</span> ';
-                    html= html + '<span data-index="cnt:' + parseInt((4*jk)+jk_row) + '" class="edit_slide_button" draggable="false"> ';
-                    html= html + ' <a  style="color: #517fa4" title="Επεξεργασία τίτλου" href="#" ><i class="fas fa-edit"></i></a> ';
-                    html= html + '</span> ';
-                    html= html + '<span class="slide_sync_time pl-3"> ';
-                    html= html + ' <a style="color:#39f" title="Χρόνος συγχρονισμός"><i class="far fa-clock"></i> ' + _ftime + '</a>';
-                    html= html + '</span> ';
-                    html= html + '</div>';
-
-                    html+= '</div>';
-
-                }
-
-            }
-            html = html + '</div>';
-
-            let hide_row_id = "display_row" + jk;
-            let pop_row = "pop" + jk;
-
-            html = html + '<div class="row display_row" data-index="' + jk + '" style="display:none" id="' + hide_row_id + '">' +
-                '<div class="col-sm-12 text-center inflated_image">' +
-                '<span class="float-right"><a href="#" class="hide_display_row" data-row="' + hide_row_id + '"><i class="far fa-window-close"></i></a></span>' +
-                '<img class="img-fluid " alt="pop" id="' + pop_row + '" src="' + dashboard.siteUrl +  '/public/images/dotWhite.png"/>' +
-                '</div>' +
-
-                '</div>';
-
-        }
-        return html;
-    }
     function imageGridCompact(slides, basepath) {
 
         let  html="";

@@ -4,6 +4,7 @@
 */
 package org.opendelos.control.api.system;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.opendelos.control.api.common.ApiUtils;
@@ -46,9 +47,11 @@ public class SystemMessagesApi {
 		try {
 			if (systemMessage.getId() == null || systemMessage.getId().equals("")) {
 				systemMessage.setId(null);
+				systemMessage.setStartDate(Instant.now());
 				_id = systemMessageService.create(systemMessage);
 			}
 			else {
+				systemMessage.setStartDate(Instant.now());
 				systemMessageService.update(systemMessage);
 				_id = systemMessage.getId();
 			}

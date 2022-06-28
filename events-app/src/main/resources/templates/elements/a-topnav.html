@@ -6,10 +6,10 @@
 <header th:fragment="a-topnav">
     <nav class="navbar fixed-top navbar-expand-md navbar-dark" style="background-color: black;color:white">
         <div class="container-fluid mt-0">
-                <a class="navbar-brand" th:href="@{/}">
+                <a title="collapse" class="navbar-brand" th:href="@{/}">
                     <th:block th:if="${page != 'home'}" style="font-weight:400;font-size: 1.5em">
                         <img th:src="@{/public/images/logos/uoa_sm_ts.png}" alt="" class="pt-0 d-inline-block" src=""/>
-                            <small><span style="color: whitesmoke" th:text="${'ΕΚΠΑ '}"></span></small>
+                            <small><span style="color: whitesmoke" th:text="#{site.initials}"></span><span style="color: whitesmoke" th:text="${' '}"></span></small>
                             <span class="font-weight-bold text-white" th:text="#{site.head.main.label}"></span>
                     </th:block>
                 </a>

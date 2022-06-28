@@ -40,7 +40,7 @@ public class RealEditingRestController {
 	/**
 	 * Handles the command of user to fire the real editing on a resource
 	 */
-	@RequestMapping(value = "/api/v1/realediting/do/{rid}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
+	@RequestMapping(value = "/apiw/v1/realediting/do/{rid}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
 	public @ResponseBody
 	String doRealEditing(HttpServletRequest request, @PathVariable String rid) {
 
@@ -72,7 +72,7 @@ public class RealEditingRestController {
 		return "1";
 	}
 
-	@RequestMapping(value = "/api/v1/realediting/cancel/{rid}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
+	@RequestMapping(value = "/apiw/v1/realediting/cancel/{rid}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
 	public @ResponseBody
 	String cancelRealEditing() {
 		real_editing_task.cancel(true);
@@ -84,7 +84,7 @@ public class RealEditingRestController {
 	/**
 	 * Handles the authorization of user to accept the real editing result
 	 */
-	@RequestMapping(value = "/api/v1/realediting/approve/{rid}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
+	@RequestMapping(value = "/apiw/v1/realediting/approve/{rid}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
 	public @ResponseBody
 	String approveRealEditing(@PathVariable String rid) {
 
@@ -107,7 +107,7 @@ public class RealEditingRestController {
 	/**
 	 * Handles the authorization of user to reject the real editing result
 	 */
-	@RequestMapping(value = "/api/v1/realediting/reject/{rid}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
+	@RequestMapping(value = "/apiw/v1/realediting/reject/{rid}", method = RequestMethod.POST, headers = {"Accept=text/html, text/xml, application/json"})
 	public @ResponseBody
 	String rejectRealEditing(@PathVariable String rid) {
 
@@ -126,7 +126,7 @@ public class RealEditingRestController {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/realediting/status")
+	@RequestMapping(value = "/apiw/v1/realediting/status")
 	public String getRealEditingStatus() {
 		return realEditingFutureService.getStatus();
 	}

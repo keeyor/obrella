@@ -19,14 +19,16 @@
         SetupAssignUnitsDataTable();
         SetupUnitsSelectModal();
         RegisterEvents();
-        setupEventEditPanel ();
+        setupEventEditPanel();
+
+
     };
 
-    function DisplayStaffMembersSelectModal(departmentId) {
-        if (departmentId === "") { departmentId = "dummy";}
+    function DisplayStaffMembersSelectModal() {
+        //if (departmentId === "") { departmentId = "dummy";}
         let $institutionStaffMembersDtElem = $("#rPersonSelectDataTable");
         StaffMembersDT = $institutionStaffMembersDtElem.DataTable({
-            "ajax": dashboard.siteurl + '/api/v1/dt/staff.web/department/' + departmentId,
+            "ajax": dashboard.siteurl + '/api/v1/dt/staff.web/sevents/authorized', //dashboard.siteurl + '/api/v1/dt/staff.web/department/' + departmentId,
             "columns": [
                 {"data": "id"},
                 {"data": "name"},
@@ -40,6 +42,7 @@
             },
             order: [[1, 'asc']],
             "pageLength": 10,
+            "pagingType": "full_numbers",
             "aoColumnDefs": [
                 {
                     "aTargets": [0,2],
@@ -66,6 +69,7 @@
             dom: "ftp",
             order: [[1, 'asc']],
             "pageLength": 10,
+            "pagingType": "full_numbers",
             "aoColumnDefs": [
                 {
                     "aTargets": [0],
@@ -240,8 +244,10 @@
         //Categories
         $(".js-category-tags").select2({
             placeholder: "Επιλέξτε Θεματικές Ενότητες",
-            maximumSelectionLength: 3
+            maximumSelectionLength: 3,
+            multiple: true
         });
+
     }
 
     function RegisterEvents() {
@@ -320,7 +326,7 @@
             }
         });
 
-         $(".selectRunitBt").on('click',function(e){
+        $(".selectRunitBt").on('click',function(e){
             LoadAllUnitsModal();
             e.preventDefault();
         })
@@ -347,7 +353,7 @@
                /* let media_body = "<h6 class='mt-1'>" + node[0].name + " / " + "Τμήμα " + node[0].department.title + "</h6>"
                 $("#sevent_rperson_text").html(media_body);*/
                 let media_body = node[0].name + " / " + "Τμήμα " + node[0].department.title
-                $("#sevent_rperson_text").val(media_body);
+                $("#sevent_rperson_text").html(media_body);
                 $("#sevent_rpersonId").val(node[0].id);
                 $("#rPersonSelectModal").modal('hide');
             }
@@ -376,7 +382,7 @@
                 }
             }
             else {
-                html_units += "<div class=\"h6 text-muted\">κάντε κλικ εδώ για να επιλέξτε διοργανωτές</div>"
+                html_units += "<div class=\"text-high-emphasis\"> -- δεν έχετε επιλέξει διοργανωτές -- </div>";
             }
             $("#sevent_unitsText").html(html_units);
             $("#sevent_runits_ids").val(assigned_units_ids);
@@ -388,16 +394,16 @@
     function loadInstitutionStaffMembersModal(departmentId) {
         let $rperson_assign_department = $("#rperson_assign_department");
         //department filter on Institution's StaffMembers Modal
-        dashboard.departments.initializeDepartmentsList(departmentId, $rperson_assign_department);
+        //dashboard.departments.initializeDepartmentsList(departmentId, $rperson_assign_department);
 
         //departmentId = $("#default_dp_id").val();
-        if (departmentId === "") { departmentId = "dummy";}
+       // if (departmentId === "") { departmentId = "dummy";}
         // initialize datatable if not initialized yet! else reload ajax
         if ( ! $.fn.DataTable.isDataTable( '#rPersonSelectDataTable' ) ) {
-            DisplayStaffMembersSelectModal(departmentId);
+            DisplayStaffMembersSelectModal();
         }
         else {
-            let ajax_url = dashboard.siteurl + '/api/v1/dt/staff.web/department/' + departmentId
+            let ajax_url = dashboard.siteurl + '/api/v1/dt/staff.web/sevents/authorized'; //'/api/v1/dt/staff.web/department/' + departmentId
             StaffMembersDT.ajax.url(ajax_url);
             StaffMembersDT.ajax.reload();
         }
@@ -415,10 +421,11 @@
             /*let media_body = "<h6 class='mt-1'>" + data.name + " / " + "Τμήμα " + data.department.title + "</h6>"
             $("#sevent_rperson_text").html(media_body);*/
             let media_body = data.name + " / " + "Τμήμα " + data.department.title;
-            $("#sevent_rperson_text").val(media_body);
+            $("#sevent_rperson_text").html(media_body);
             $("#sevent_rpersonId").val(data.id);
         });
     }
+
     function setupEventEditPanel () {
         AssignedUnitsDT.clear().draw();
         $("#newSeventBt").hide();
@@ -502,25 +509,31 @@
                 }
          }
          else {
-             html_units += "<div class=\"h6 text-muted\"> -- κάντε κλικ εδώ για να επιλέξτε διοργανωτές -- </div>"
+             html_units += "<div class=\"text-high-emphasis\"> -- δεν έχετε επιλέξει διοργανωτές -- </div>";
          }
          $("#sevent_unitsText").html(html_units);
 
-         //Set Responsible Person from Database (get values from ScheduledEventsDT - row)
+        //Set Responsible Person from Database (get values from ScheduledEventsDT - row)
         let rPerson_id = $("#sevent_rpersonId").val();
         let media_body = "";
         if (rPerson_id !== "") {
             let rPersonName = $("#sevent_rPersonName").val();
             let rPersonDepartmentName = $("#sevent_rpersonDepartmentName").val();
-            //media_body += "<h6 class='mt-1'>" + rPersonName + " / " + "Τμήμα " + rPersonDepartmentName + "</h6>"
             media_body += rPersonName + " / " + "Τμήμα " + rPersonDepartmentName;
         }
         else {
-          // media_body +=  "<div class=\"h6 text-muted\">  -- επιλέξτε επιστημονικό υπεύθυνο -- </div>";
-            media_body +=  "-- κάντε κλικ εδώ για να επιλέξτε επιστημονικό υπεύθυνο -- ";
+                let userIsStaffMemberOnly = $("#userIsStaffMemberOnly").val();
+                if (userIsStaffMemberOnly === "false") {
+                    media_body += "<div class=\"text-high-emphasis\"> -- δεν έχετε επιλέξει Επ. Υπεύθυνο -- </div>";
+                }
+                else {
+                    setMySelfAsRP();
+                }
         }
+
+
        // $("#sevent_rperson_text").html(media_body);
-        $("#sevent_rperson_text").val(media_body);
+        $("#sevent_rperson_text").html(media_body);
         // PHOTO HANDLE
         if (event_id !== "") {
             handlePhotoPanel(event_id);
@@ -535,12 +548,12 @@
 
         let area = $("#sevent_area").val();
         if (area !== "ea_uas") {
-            $("#sevent_cat").select2({placeholder: "- δεν εφαρμόζεται -"});
-            $("#sevent_cat").attr("disabled", true);
+           // $("#sevent_cat").select2({placeholder: "- δεν εφαρμόζεται -"});
+            $("#sevent_cat").prop("disabled", true);
         }
         else {
-            $("#sevent_cat").select2({ placeholder: "Επιλέξτε Θεματικές Περιοχές" });
-            $("#sevent_cat").attr("disabled",false);
+           // $("#sevent_cat").select2({ placeholder: "Επιλέξτε Θεματικές Περιοχές" });
+            $("#sevent_cat").prop("disabled",false);
         }
         let event_type = $("#event_type").val();
         let $s2_element = $("#sevent_type");
@@ -549,6 +562,11 @@
         if (area !== null && area !== "") { //for all scheduledEvents that have no area
             dashboard.sevents.getAndSetEventTypesByArea(area, $s2_element, event_type);
         }
+
+            //Serialize form to check for changes on submit
+            serialize_form = $("#sevent_form").serialize();
+            console.log(serialize_form);
+
 
     }
     function setPhotoUploadState(state) {
@@ -610,17 +628,14 @@
                     $sel2_element.val("").trigger("change");
                 }
                 if (area === "ea_uas") {
-                    $("#sevent_cat").select2({ placeholder: "Επιλέξτε Θεματικές Περιοχές" });
-                    $("#sevent_cat").attr("disabled",false);
+                    //$("#sevent_cat").select2({ placeholder: "Επιλέξτε Θεματικές Περιοχές" });
+                    $("#sevent_cat").prop("disabled",false);
                 }
                 else {
                     $("#sevent_cat").val("").trigger("change");
-                    $("#sevent_cat").select2({ placeholder: "- δεν εφαρμόζεται -" });
-                    $("#sevent_cat").attr("disabled",true);
+                  //  $("#sevent_cat").select2({ placeholder: "- δεν εφαρμόζεται -" });
+                    $("#sevent_cat").prop("disabled",true);
                 }
-
-                //Serialize form to check for changes on submit
-                serialize_form = $("#sevent_form").serialize();
             });
     }
 

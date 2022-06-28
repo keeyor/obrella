@@ -50,12 +50,14 @@ public class AcademicCalendarSeDAOImpl implements AcademicCalendarSeDAO {
 	@Value("${default.institution.identity}")
 	private String dilos_institution;
 
+	@Value("${main_col}")
+	String main_col;
 
 	@Override
 	public AcademicCalendarSe getCalendarByYear(String academicYear) throws Exception {
 		
 		AcademicCalendarSe academicCalendarSe = null;
-		String dbSchedulerConfigCollection = "/db/apps/delos-uoa/Scheduler/Config/";
+		String dbSchedulerConfigCollection = main_col + "Scheduler/Config/";
 
 		String xQuery = academicCalendarSeQueries.getAcademicCalendar(academicYear);
 		
@@ -233,7 +235,7 @@ public class AcademicCalendarSeDAOImpl implements AcademicCalendarSeDAO {
 		 
 		List<String> year_list = new ArrayList<>();
 		
-		String dbSchedulerConfigCollection = "/db/apps/delos-uoa/Scheduler/Config/";
+		String dbSchedulerConfigCollection = main_col + "/Scheduler/Config/";
 
 		String xQuery = academicCalendarSeQueries.getAvailableAcademicCalendarYears();
 		

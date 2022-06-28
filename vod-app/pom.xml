@@ -61,6 +61,23 @@
 			<version>3.0.4.RELEASE</version>
 		</dependency>
 
+		<!-- CAS Dependencies -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>3.3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml</artifactId>
+			<version>2.6.4</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<!-- Apache StringUtils & FileUtils-->
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>

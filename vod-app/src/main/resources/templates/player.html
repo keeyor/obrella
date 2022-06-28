@@ -7,13 +7,13 @@
     <link rel="stylesheet" th:href="@{/css/global.css}"/>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/checkbox-css/checkbox.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/navbar.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
 
+    <link rel="stylesheet" type="text/css" th:href="@{/css/checkbox-css/checkbox.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch/bootstrap-switch.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/css/delos/navbar.css}"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/player/player.css}"/>
 </head>
 <body style="font-size: 0.88em">
@@ -24,6 +24,7 @@
 <input type="hidden" id="hasSlides"    th:value="${hasSlides}"/>
 <input type="hidden" id="slidesSynced" th:value="${slidesSynced}"/>
 <input type="hidden" id="duration"     th:value="${resource.resourceAccess.duration}"/>
+<input type="hidden" id="real_duration"     th:value="${resource.realDuration}"/>
 <input type="hidden" id="showOverlay"  th:value="${resource.playerOptions.overlay}"/>
 <input type="hidden" id="resourceId"   th:value="${resource.id}"/>
 
@@ -33,6 +34,22 @@
         <div class="container-fluid" style="margin-top: 60px">
                 <div class="row">
                     <div class="offset-lg-1 col-lg-10 col-md-12">
+                        <!-- Trim Start -->
+                        <th:block th:if="${resource.presentation != null}">
+                            <th:block th:if="${resource.presentation.cuts != null && resource.presentation.cuts.trims != null && resource.presentation.cuts.trims.start != null}">
+                                <input type="hidden" id="trim_start" th:attr="data-trim=${resource.presentation.cuts.trims.start.begin + '#' + resource.presentation.cuts.trims.start.end}"/>
+                            </th:block>
+                            <!-- Trim End -->
+                            <th:block  th:if="${resource.presentation.cuts != null &&  resource.presentation.cuts.trims != null && resource.presentation.cuts.trims.finish != null}">
+                                <input type="hidden" id="trim_end" th:attr="data-trim=${resource.presentation.cuts.trims.finish.begin + '#' + resource.presentation.cuts.trims.finish.end}"/>
+                            </th:block>
+                            <!-- Cuts -->
+                            <th:block th:if="${resource.presentation.cuts != null && resource.presentation.cuts.clips != null && resource.presentation.cuts.clips.cuts != null}">
+                                <th:block class="cut_space" th:each="cut, iStat: ${resource.presentation.cuts.clips.cuts}">
+                                    <input type="hidden" th:attr="data-cut=${cut.begin + '-' + cut.end}"/>
+                                </th:block>
+                            </th:block>
+                        </th:block>
                             <th:block th:if="${hasSlides}">
                                 <!-- HEADER -->
                                 <div class="row">
@@ -157,6 +174,17 @@
                                                 <div id="overlay_1" style="visibility:hidden" th:if="${resource.course != null}" th:text="${resource.supervisor.name}"></div>
                                                 <div id="overlay_2" style="visibility:hidden" th:if="${resource.getEvent != null}" th:text="${resource.classroomName}"></div>
                                             </div>
+                                            <div id="no_video_wrapper" style="width: 100%;margin: 0 auto; display: none;background-color: #fdf59a" class="text-center py-2">
+                                                 <div>
+                                                     <i class="fas fa-video-slash fa-4x"></i>
+                                                 </div>
+                                                  <div>
+                                                      <div style="color: red;font-weight: 400">Παρουσιάστηκε πρόβλημα κατά την αναπαραγωγή του βίντεο</div>
+                                                      Περιγραφή προβλήματος: Το αρχείο βίντεο δεν βρέθηκε <br/>
+                                                      Παρακαλώ, επικοινωνήσετε με τον διαχειριστή, χρησιμοποιώντας τη φόρμα στη σελίδα επικοινωνίας <i class="fas fa-phone mx-1"></i> αναφέροντας τον κωδικό της καταχώρησης<br/>
+                                                      <span style="font-weight: 500" th:text="${'Κωδικός Καταχώρησης (id) = ' + resource.id}"></span>
+                                                  </div>
+                                            </div>
                                         </div>
                                         <th:block th:if="${resource.parts && related_parts.size > 1}">
                                                 <div class="colp-4 mt-0 pt-0" id="right-box-s">
@@ -199,11 +227,13 @@
                                                     </div>
                                                 </div>
                                         </th:block>
-
                                     </div>
                             </th:block>
+
                     </div>
                 </div>
+
+
             </div>
     </div>
     <div th:replace="~{fragments/footer41 :: footer}">Footer</div>
@@ -215,6 +245,8 @@
 
 <script th:src="@{/js/player/dashboard.js}" type="application/javascript"></script>
 <script th:src="@{/js/player/dashboard.player.js}" type="application/javascript"></script>
+
+<script th:src="@{/css/bootstrap-switch/bootstrap-switch.min.js}" type="application/javascript"></script>
 
 <script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
 <script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>

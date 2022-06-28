@@ -16,15 +16,12 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="text-high-emphasis mb-3">
-                        1. Επιλέξτε Τμήμα, Υπ. Καθηγητή και Μάθημα.
+                        1. Επιλέξτε Τμήμα, Διδάσκοντα και Μάθημα.
                         2. Σημειώστε <i class="fas fa-check"></i> τα δικαιώματα που θέλετε να παραχωρήσετε στον επιλεγμένο διαχειριστή.
                         3. Πατήστε 'Ανάθεση Δικαιώματος'
                     </div>
-                    <div class="card">
-                        <div class="card-header">
-                            Επιλογή
-                        </div>
-                        <div class="card-body">
+
+                    <div class="card" style="border: none">
                             <div class="form-group row">
                                 <label for="departments_s2" class="col-sm-3 col-form-label emph-label">Τμήμα*</label>
                                 <div class="col-sm-7">
@@ -35,7 +32,7 @@
                             </div>
                             <div class="form-group row mt-3">
                                 <label for="supervisor_s2" class="col-sm-3 col-form-label emph-label">Διδάσκων*</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-8">
                                     <select id="supervisor_s2" style="width: 100%"  class="form-control js-staffMembers-tags reset_control">
                                         <option value=""></option>
                                     </select>
@@ -43,22 +40,15 @@
                             </div>
                             <div class="form-group row mt-3">
                                 <label for="courses_s2" class="col-sm-3 col-form-label emph-label">Μάθημα*</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-8">
                                     <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            Δικαιώματα
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="staff_content_toggle" class="col-sm-3 col-form-label emph-label">Περιεχόμενο*</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-8">
                                     <div class="form-check">
                                         <input class="form-check-input" id="staff_content_toggle" name="staff_content_toggle" type="checkbox" />
                                         <label class="form-check-label">Παραχώρηση δικαιώματος ανάρτησης και επεξεργασίας περιεχομένου</label>
@@ -67,7 +57,7 @@
                             </div>
                             <div class="form-group row mt-3">
                                 <label for="staff_schedule_toggle" class="col-sm-3 col-form-label emph-label">Προγραμματισμός*</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-8">
                                     <div class="form-check">
                                         <input class="form-check-input"  id="staff_schedule_toggle" name="staff_schedule_toggle" type="checkbox" />
                                         <label class="form-check-label">Παραχώρηση δικαιώματος προγραμματισμού μεταδόσεων</label>
@@ -75,7 +65,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">

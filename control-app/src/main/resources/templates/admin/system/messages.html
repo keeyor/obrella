@@ -49,15 +49,13 @@
                 <li class="nav-item"><a class="nav-link active" th:href="@{/admin/system/messages}">Μηνύματα Χρηστών</a></li>
                 <li class="nav-item"><a class="nav-link" target="_blank" href="http://localhost:5601">Αρχεία Καταγραφής</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active"><span>Μηνύματα Χρηστών</span></li>
                 </ol>
             </nav>

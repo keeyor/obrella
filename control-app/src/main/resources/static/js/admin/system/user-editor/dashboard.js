@@ -49,7 +49,14 @@
             $(".js-staffMembers-tags").empty();
             $("#courses_s2").empty();
             $("#events_s2").empty();
-            dashboard.staffmembers.getStaffMembersOfDepartmentId(sel_department_id);
+            let $s2;
+            if (msg.el_id === "departments_s2") {
+                 $s2 = $("#supervisor_s2");
+            }
+            else {
+                $s2 = $("#supervisor_s21");
+            }
+            dashboard.staffmembers.getStaffMembersOfDepartmentId( $s2, sel_department_id);
         });
 
         dashboard.broker.on("afterSelect.staffmember afterInit.staffmember", function (event, msg) {
@@ -65,6 +72,7 @@
                 }
             }
         });
+
 
         setEvents();
     };

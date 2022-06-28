@@ -103,7 +103,7 @@ public class WowzaRestService {
 		streamRecorderConfig.setSegmentDuration(segmentationDuration);
 		streamRecorderConfig.setFileTemplate(resource.getId() + "_${SegmentNumber}_${SegmentTime}");
 		streamRecorderConfig.setFileFormat("mp4");
-
+		logger.info("Segmentation Duration:" + segmentationDuration);
 		try {
 			this.CreateRecorderForStream(streamingServer, recorder_name, streamRecorderConfig);
 		}

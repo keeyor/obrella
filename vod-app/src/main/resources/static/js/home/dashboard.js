@@ -12,8 +12,8 @@
 
         dashboard.siteUrl = dashboard.broker.getRootSitePath();
 
-        dashboard.departments.init();
-        dashboard.categories.init();
+       // dashboard.departments.init();
+       // dashboard.categories.init();
     };
 
     $(document).ready(function () {

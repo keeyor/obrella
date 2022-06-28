@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"  th:lang="${localeCode}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -107,7 +107,7 @@
                                 <h3 th:text="#{label.broadcasts}">Μεταδόσεις</h3>
                             </div>
                             <div class="card-body pb-0 pt-2">
-                                <div class="text-muted " th:text="#{broadcasts.header.text}"></div>
+                                <div  th:text="#{broadcasts.header.text}"></div>
                                 <div class="row">
                                     <div class="col-lg-6 col-md-12">
                                         <header style="margin-top: 30px">
@@ -190,7 +190,7 @@
                                                                 <h6 class="card-title" th:title="${ScEvent.getEvent.title}" th:text="${#strings.abbreviate(ScEvent.getEvent.title,40)}" style="color: black; font-weight: 600">
 
                                                                 </h6>
-                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="text-muted card-text" style="color: #3c4b64; font-weight: 600"></p>
+                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="card-text" style="color: #3c4b64; font-weight: 600"></p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -220,7 +220,7 @@
                                                                 <h6 class="card-title" th:title="${ScEvent.getEvent.title}" th:text="${#strings.abbreviate(ScEvent.getEvent.title,40)}" style="color: black; font-weight: 600">
 
                                                                 </h6>
-                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="text-muted card-text" style="color: #3c4b64; font-weight: 600"></p>
+                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="card-text" style="color: #3c4b64; font-weight: 600"></p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -251,7 +251,7 @@
                                                                 <h6 class="card-title" th:title="${ScEvent.getEvent.title}" th:text="${#strings.abbreviate(ScEvent.getEvent.title,40)}" style="color: black; font-weight: 600">
 
                                                                 </h6>
-                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="text-muted card-text" style="color: #3c4b64; font-weight: 600"></p>
+                                                                <p  th:text="${ScEvent.statistics + ' views'}" class="card-text" style="color: #3c4b64; font-weight: 600"></p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -271,7 +271,7 @@
 </div>
 
 <div th:replace="~{modals/about-modal :: #about_modal}"></div>
-<div th:replace="~{modals/contact-modal :: #contact_modal}"></div>
+
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
 
 <script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>

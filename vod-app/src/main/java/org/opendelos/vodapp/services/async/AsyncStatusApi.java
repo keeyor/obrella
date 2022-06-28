@@ -34,17 +34,17 @@ public class AsyncStatusApi {
 		this.asyncQueryComponent = asyncQueryComponent;
 	}
 
-	@RequestMapping(value= "/api/v1/queryReportStatus", method = RequestMethod.GET, produces =  "text/html")
+	@RequestMapping(value= "/apiw/v1/queryReportStatus", method = RequestMethod.GET, produces =  "text/html")
 	public String getQueryReportStatus() {
 		return asyncQueryComponent.getStatus();
 	}
 
-	@RequestMapping(value= "/api/v1/queryReportTime", method = RequestMethod.GET, produces =  "text/html")
+	@RequestMapping(value= "/apiw/v1/queryReportTime", method = RequestMethod.GET, produces =  "text/html")
 	public String getQueryReportTime() {
 		return String.valueOf(asyncQueryComponent.getTime_elapsed());
 	}
 
-	@RequestMapping(value= "/api/v1/getCoursesOfReport", method = RequestMethod.GET, produces =  "application/json")
+	@RequestMapping(value= "/apiw/v1/getCoursesOfReport", method = RequestMethod.GET, produces =  "application/json")
 	public byte[] getCoursesQueryReport() {
 
 		List<Course> courseList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class AsyncStatusApi {
 		return ApiUtils.TransformResultsForDataTable(courseList);
 
 	}
-	@RequestMapping(value= "/api/v1/getStaffOfReport", method = RequestMethod.GET, produces =  "application/json")
+	@RequestMapping(value= "/apiw/v1/getStaffOfReport", method = RequestMethod.GET, produces =  "application/json")
 	public byte[] getStaffMembersQueryReport() {
 
 		List<Person> staffList = new ArrayList<>();
@@ -72,7 +72,7 @@ public class AsyncStatusApi {
 		return ApiUtils.TransformResultsForDataTable(staffList);
 	}
 
-	@RequestMapping(value= "/api/v1/getEventsOfReport", method = RequestMethod.GET, produces =  "application/json")
+	@RequestMapping(value= "/apiw/v1/getEventsOfReport", method = RequestMethod.GET, produces =  "application/json")
 	public byte[] getEventsQueryReport(HttpServletRequest request) {
 
 		List<ScheduledEvent> eventList = new ArrayList<>();
@@ -84,7 +84,7 @@ public class AsyncStatusApi {
 		return ApiUtils.TransformResultsForDataTable(eventList);
 	}
 
-	@RequestMapping(value= "/api/v1/getDepartmentsOfReport", method = RequestMethod.GET, produces =  "application/json")
+	@RequestMapping(value= "/apiw/v1/getDepartmentsOfReport", method = RequestMethod.GET, produces =  "application/json")
 	public byte[] getDepartmentsQueryReport() {
 
 		List<Unit> unitList = new ArrayList<>();
@@ -98,7 +98,7 @@ public class AsyncStatusApi {
 		return ApiUtils.TransformResultsForDataTable(unitList);
 	}
 
- 	@RequestMapping(value= "/api/v1/getAccessPolicyOfReport", method = RequestMethod.GET, produces =  "application/json")
+ 	@RequestMapping(value= "/apiw/v1/getAccessPolicyOfReport", method = RequestMethod.GET, produces =  "application/json")
 	public byte[] getAccessPolicyQueryReport() {
 
 		List<AccessPolicy> apList = new ArrayList<>();
@@ -109,7 +109,7 @@ public class AsyncStatusApi {
 		return ApiUtils.TransformResultsForDataTable(apList);
 	}
 
-/*	@RequestMapping(value= "/api/v1/getAdminFiltersOfReport", method = RequestMethod.GET, produces =  "application/json")
+/*	@RequestMapping(value= "/apiw/v1/getAdminFiltersOfReport", method = RequestMethod.GET, produces =  "application/json")
 	public byte[] getAccessPolicyQueryReport(HttpServletRequest request) {
 
 		AdminFilterResults adminFilterResults = asyncQueryComponent.getAsyncQueryReport().getAdminFilterResults();

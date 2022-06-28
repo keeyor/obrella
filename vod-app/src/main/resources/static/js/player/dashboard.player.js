@@ -5,7 +5,7 @@ $(function () {
 
     dashboard.player.actions;
 
-    let debug = 0;
+    let debug = 1;
     let playlist_array;
     let global_vid_duration;
     let intro_url;
@@ -57,6 +57,8 @@ $(function () {
         loadPlayerContent();
         go_to_time_func()
         dashboard.player.initializePlayer(0);
+
+
     };
 
     dashboard.player.initializePlayer = function(index) {
@@ -85,6 +87,8 @@ $(function () {
         define_actions();
         init_events("events", media_events);
         getVideo().load();
+
+
     }
 
     dashboard.player.play = function() {
@@ -112,6 +116,8 @@ $(function () {
 
     function capture(event) {
         media_events[event.type]++;
+
+        if (debug) console.log(event.type);
 
         let curr_time;
         if (event.type === "play") {
@@ -177,6 +183,9 @@ $(function () {
             else {
                 $('.player_mute').html('<i class="fas fa-volume-off"></i>');
             }
+        }
+        else if (event.type === "error") {
+            console.log(event.type);
         }
     }
 
@@ -275,7 +284,14 @@ $(function () {
                 let time_now = getVideo().currentTime;
                 let hms = secondsTimeSpanToHMS(Math.round(time_now))
                 if (!introPlaying()) {
-                    $(".show_current_time").html(hms + " / " + secondsTimeSpanToHMS(global_vid_duration));
+                    let duration = secondsTimeSpanToHMS(Math.round(global_vid_duration));
+                    let real_duration = $("#real_duration").val();
+                    if (real_duration !== undefined && real_duration !== duration) {
+                        $(".show_current_time").html(hms + " / " + duration + " (" + real_duration + ")");
+                    }
+                    else {
+                        $(".show_current_time").html(hms + " / " + duration);
+                    }
                 }
                 else {
                     $(".show_current_time").html(hms + " / " + getVideo().duration + " <span class='text-muted'> - CC License</span>");

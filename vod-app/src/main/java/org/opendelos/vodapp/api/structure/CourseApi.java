@@ -65,7 +65,7 @@ public class CourseApi {
 		this.scheduleUtils = scheduleUtils;
 	}
 
-	@RequestMapping(value = "/api/v1/s2/courses.web/department/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/courses.web/department/{id}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getCoursesByDepartmentIds2(@PathVariable String id) {
 
 		List<Course> courses;
@@ -91,7 +91,7 @@ public class CourseApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/dt/courses.web/department/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/courses.web/department/{id}", method = RequestMethod.GET)
 	public byte[] findByIdDt(@PathVariable("id") String id) {
 
 		List<Course> courses;
@@ -106,7 +106,7 @@ public class CourseApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/courses.web/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/courses.web/all", method = RequestMethod.GET)
 	public byte[] findAllCoursesDt(Locale locale) {
 
 		List<CourseDto> courseDtoList = new ArrayList<>();
@@ -140,7 +140,7 @@ public class CourseApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/courses.web/staff/{sid}/department/{did}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/courses.web/staff/{sid}/department/{did}", method = RequestMethod.GET)
 	public byte[] getCoursesByStaffIdDt(@PathVariable("sid") String sid, @PathVariable("did") String did) {
 
 		List<Course> courses = new ArrayList<>();
@@ -155,7 +155,7 @@ public class CourseApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/s2/courses.web/staff/{sid}/user/{uid}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/courses.web/staff/{sid}/user/{uid}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAuthorizedCoursesByStaffIdDt(@PathVariable("sid") String sid, @PathVariable("uid") String uid) {
 
 		List<Course> courses = courseService.getAuthorizedCoursesByStaffIdAndUserId(sid, uid);
@@ -179,7 +179,7 @@ public class CourseApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/s2/courses.web/staff/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/courses.web/staff/{id}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getCoursesByStaffId(@PathVariable("id") String id) {
 
 		List<String> courseIds = opUserService.findStaffMembersAssignedCourseIds(id);
@@ -204,7 +204,7 @@ public class CourseApi {
 	}
 
 
-	@RequestMapping(value = "/api/v2/dt/courses.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v2/dt/courses.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getAuthorizedCoursesOfEditorDT(@PathVariable String access) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -215,7 +215,7 @@ public class CourseApi {
 		return ApiUtils.TransformResultsForDataTable(courses);
 	}
 
-	@RequestMapping(value = "/api/v2/dt/courses.web/authorized/{access}/d/{departmentId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v2/dt/courses.web/authorized/{access}/d/{departmentId}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getAuthorizedCoursesOfEditorAndDepartmentIdDT(@PathVariable String access, @PathVariable String departmentId) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -236,7 +236,7 @@ public class CourseApi {
 		return ApiUtils.TransformResultsForDataTable(courses);
 	}
 
-	@RequestMapping(value = "/api/v1/s2/courses.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/courses.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAuthorizedCoursesOfEditor(@PathVariable String access) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -267,7 +267,7 @@ public class CourseApi {
 		return list.stream().anyMatch(o -> o.getId().equals(id));
 	}
 
-	@RequestMapping(value = "/api/v1/dt/courses.web/school/{schoolId}/department/{departmentId}/study/{study}/program/{programId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/courses.web/school/{schoolId}/department/{departmentId}/study/{study}/program/{programId}", method = RequestMethod.GET)
 	public byte[] findProgramsWithCriteria(@PathVariable("schoolId") String schoolId,
 			@PathVariable("departmentId") String departmentId,
 			@PathVariable("study") String study, @PathVariable("programId") String program, Locale locale) {
@@ -309,7 +309,7 @@ public class CourseApi {
 
 	}
 
-	@RequestMapping(value = "/api/v1/courses/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/courses/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveCourse(@RequestBody Course course) {
 
 		String _id = null;
@@ -343,7 +343,7 @@ public class CourseApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/courses/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/courses/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteCourse(@PathVariable("id") String id) {
 
 		try {
@@ -355,7 +355,7 @@ public class CourseApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/course/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/course/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Course> getCourseById(@PathVariable("id") String id) {
 
 		try {
@@ -368,7 +368,7 @@ public class CourseApi {
 	}
 
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/course/{id}/period/{period_name}/year/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/course/{id}/period/{period_name}/year/{year}")
 	public Period getPeriodBoundariesByCourseAndYear(@PathVariable("id") String id, @PathVariable("period_name") String period_name, @PathVariable("year") String year) {
 
 		//Note: We only need the course to get department and/or studyProgram
@@ -389,7 +389,7 @@ public class CourseApi {
 	}
 
 
-	@RequestMapping(method = RequestMethod.GET, value = "/api/v1/course/{id}/date/{date}/year/{year}")
+	@RequestMapping(method = RequestMethod.GET, value = "/apiw/v1/course/{id}/date/{date}/year/{year}")
 	public String getPeriodNameByCourseAndYear(@PathVariable("id") String id, @PathVariable("date") long date, @PathVariable("year") String year) {
 
 		Period period = null;

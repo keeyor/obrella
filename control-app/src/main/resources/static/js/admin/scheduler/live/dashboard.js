@@ -817,11 +817,12 @@
                 {
                     "aTargets": [13],
                     "mData": "access",
-                    responsivePriority: 1,
                     "className" : "dt-center",
                     "mRender": function (data) {
-                        if (data != null) {
-                            if (data !== "closed") {
+                        if (data == null) {
+                            return 'NA';
+                        }
+                        if (data !== "closed") {
                                 if (data === 'open') {
                                     return '<i class="fas fa-lock-open"></i>';
                                 } else if (data === 'sso') {
@@ -829,9 +830,8 @@
                                 } else if (data === 'password') {
                                     return '<i class="fas fa-lock"></i>';
                                 }
-                            }
                         }
-                        else return 'NA';
+                        else { return 'NA'; }
                     }
                 },
                 {

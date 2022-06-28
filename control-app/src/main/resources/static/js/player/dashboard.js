@@ -5,7 +5,7 @@ $(function () {
     dashboard.broker = $({});
     dashboard.siteUrl   = "";
 
-    let debug = 1;
+    let debug = 0;
     let hasSlides;
     let showSlides = "true";
     let mode;

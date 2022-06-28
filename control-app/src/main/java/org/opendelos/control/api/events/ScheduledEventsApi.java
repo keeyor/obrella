@@ -130,12 +130,12 @@ public class ScheduledEventsApi {
 
 		List<Select2GenChild> children = new ArrayList<>();
 		for (ScheduledEvent  scheduledEvent: scheduledEvents) {
-			for (Unit unit: scheduledEvent.getResponsibleUnit()) {
+			//for (Unit unit: scheduledEvent.getResponsibleUnit()) {
 					Select2GenChild child = new Select2GenChild();
 					child.setId(scheduledEvent.getId());
 					child.setText(scheduledEvent.getTitle());
 					children.add(child);
-			}
+			//}
 		}
 		try {
 			String s2events = ApiUtils.FormatResultsForSelect2(children);

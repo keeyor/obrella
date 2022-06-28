@@ -28,6 +28,7 @@ import org.opendelos.model.structure.Course;
 import org.opendelos.model.structure.Department;
 import org.opendelos.model.structure.Institution;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.model.users.UserAccess;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,6 +101,12 @@ public class SchedulerCalendarController {
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user",editor);
 
+		boolean userIsStaffMemberOnly = false;
+		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER) && editor.getUserAuthorities().size() == 1) {
+			userIsStaffMemberOnly= true;
+		}
+		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
+
 		model.addAttribute("institution_identity", institution_identity);
 		model.addAttribute("institutionName", multilingualServices.getValue("default.institution.title", locale));
 
@@ -141,10 +148,7 @@ public class SchedulerCalendarController {
 
 		model.addAttribute("view", view);
 
-		boolean isStaffMember = false;
-		if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER"))) {
-			isStaffMember = true;
-		}
+		boolean isStaffMember = editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER"));
 		model.addAttribute("isStaffMember",isStaffMember);
 
 		return "admin/scheduler/calendar";

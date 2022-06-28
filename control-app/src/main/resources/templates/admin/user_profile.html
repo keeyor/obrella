@@ -27,139 +27,189 @@
 <!-- @thymesVar id="user" type="org.opendelos.model.delos.OpUser" -->
 <!-- @thymesVar id="staffAsSupervisorInResources" type="java.lang.Long" -->
 <input type="hidden" id="msg_value" th:value="${msg}"/>
+<input type="hidden" id="userId" th:value="${user.id}"/>
+<input id="userIsStaffMemberOnly" type="hidden" th:value="${userIsStaffMemberOnly}"/>
+<input id="userIsStaffMember" type="hidden" th:value="${userIsStaffMember}"/>
 
 <div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
-<div class="wrapper d-flex flex-column min-vh-100 bg-light" >
+<div class="wrapper d-flex flex-column min-vh-100" >
 
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <ul class="header-nav d-none d-md-flex">
                 <li class="nav-item"><a class="nav-link active" th:href="@{/admin/user_profile}">Προφίλ Χρήστη</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-                <div class="nav-item dropdown">
-                    <a class="nav-link text-decoration-none" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <i class="far fa-user-circle me-1"></i><span th:text="${user.name}"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right pt-0">
-                        <a class="dropdown-item" th:href="@{/admin/user_profile}">
-                            <span class="fas fa-user me-1"></span> Προφίλ
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a sec:authorize="isAuthenticated()" class="dropdown-item" href="#" title="logout" data-coreui-toggle="modal" data-coreui-target="#logout_modal" >
-                            <i class="fas fa-sign-out-alt me-1"></i> Αποσύνδεση
-                        </a>
-                        <a sec:authorize="isAnonymous()" class="dropdown-item" th:href="@{/admin}">
-                            <i class="fas fa-sign-in-alt me-1"></i> Σύνδεση
-                        </a>
-                    </div>
-                </div>
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active"><span>Προφίλ Χρήστη</span></li>
                 </ol>
             </nav>
         </div>
     </header>
 
-    <div class="container">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 th:text="${user.name}"></h5>
-                        <div class="text-medium-emphasis">
-                            Προφίλ & Στατιστικά
+    <div class="body flex-grow-1 px-3">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-9 col-md-12">
+                    <div style="font-size: 1.2em; font-weight: 500" class="mb-3 text-center">
+                        <i class="far fa-user fa-2x me-1"></i>
+                        <div th:text="${user.name}"></div>
+                        <div class="ms-2 text-muted-wcag" style="font-size: 0.9em" th:unless="${user.department.title == 'ASK'}"
+                             th:text="${'Τμήμα | Υπηρεσία: ' + user.department.title}">
+
                         </div>
                     </div>
-                </div>
+                    <!-- TABS -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link my-nav active" id="id-tab" data-coreui-toggle="tab" href="#t-id" role="tab" aria-controls="t-id" aria-selected="true">
+                                <i class="far fa-address-card me-1"></i>Τα Στοιχεία μου
+                            </a>
+                        </li>
 
+                        <li class="nav-item" th:if="${userIsStaffMember}">
+                                <a class="nav-link my-nav" id="actions-tab" data-coreui-toggle="tab" href="#t-actions" role="tab" aria-controls="t-actions" aria-selected="false">
+                                    <i class="icon-on-demand me-1"></i>Μαθήματα & Εκδηλώσεις
+                                </a>
+                        </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link my-nav" id="security-tab" data-coreui-toggle="tab" href="#t-security" role="tab" aria-controls="t-security" aria-selected="false">
+                                <i class="fas fa-shield-alt me-1"></i>Ασφάλεια & Δικαιώματα
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link my-nav" id="stats-tab" data-coreui-toggle="tab" href="#t-stats" role="tab" aria-controls="t-stats" aria-selected="false">
+                                <i class="fas fa-chart-pie me-1"></i>Στατιστικά & Χρήση
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="t-id" role="tabpanel" aria-labelledby="id-tab">
 
-                        <div class="card mt-2">
-                            <div class="card-header bg-dark text-light">
-                                <span style="font-weight: 500">Ταυτότητα</span>
-                            </div>
                             <div class="card-body">
                                 <div id="msg" class="font-weight-bolder" style="color: red;display: none">
                                     ΠΡΟΣΟΧΗ: Για την ανανέωση του προφίλ σας, θα πρέπει να αποσυνδεθείτε και συνδεθείτε ξανά στο σύστημα
                                 </div>
                                 <dl class="row my-0">
-                                            <dt class="col-3">Όνομα</dt><dd class="col-9" th:text="${user.name}"></dd>
-                                            <dt class="col-3">Όνομα (en)</dt><dd class="col-9" th:text="${user.altName}"></dd>
-                                            <dt class="col-3">Μοναδικός Κωδικός (uid)</dt><dd class="col-9" th:text="${user.uid}"></dd>
-                                            <th:block th:if="${user_type != 'STUDENT'}">
-                                                <dt class="col-3">Διεύθυνση e-mail</dt><dd class="col-9" th:text="${user.email}"></dd>
-                                                <dt class="col-3">Τμήμα | Υπηρεσία</dt>
-                                                <dd class="col-9">
-                                                    <th:block th:if="${user.department.title == 'ASK'}">
-                                                        <form name="user_profile_form" method="post" action="user_profile">
-                                                            <div class="form-group row">
-                                                                <div class="col-6">
-                                                                    <select id="_assign_department" style="width: 100%" class="form-control" name="departmentId">
-                                                                        <option value=""></option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-2">
-                                                                    <button class="btn blue-btn-wcag-bgnd-color btn-sm text-white" type="submit" id="submit_bt">Αποθήκευση</button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </th:block>
-                                                    <span th:unless="${user.department.title == 'ASK'}" th:text="${user.department.title}"></span>
-                                                </dd>
-                                                <dt class="col-3">Κατηγορία Χρήστη</dt>
-                                                <dd class="col-9">
-                                                    <span th:if="${user.eduPersonPrimaryAffiliation == 'faculty'}" th:text="${'Μέλος ΔΕΠ'}"></span>
-                                                    <span th:if="${user.eduPersonPrimaryAffiliation == 'staff'}" th:text="${'Μόνιμος Υπάλληλος (Διοικητικό Προσωπικό, ΕΔΙΠ, ΕΤΕΠ κτλ)'}"></span>
-                                                    <span th:if="${user.eduPersonPrimaryAffiliation == 'employees'}" th:text="${'Συνεργάτης'}"></span>
-                                                    <span th:if="${user.eduPersonPrimaryAffiliation == 'affiliate'}" th:text="${'Εξωτερικός Συνεργάτης'}"></span>
-                                                    <span th:if="${user.eduPersonPrimaryAffiliation == 'student'}" th:text="${'Φοιτητής (-ήτρια)'}"></span>
-                                                </dd>
+                                    <dt class="col-3">Όνομα</dt><dd class="col-9" th:text="${user.name}"></dd>
+                                    <dt class="col-3">Όνομα (en)</dt><dd class="col-9" th:text="${user.altName}"></dd>
+                                    <dt class="col-3">Username (uid)</dt><dd class="col-9" th:text="${user.uid}"></dd>
+                                    <th:block th:if="${user_type != 'STUDENT'}">
+                                        <dt class="col-3">Διεύθυνση e-mail</dt><dd class="col-9" th:text="${user.email}"></dd>
+                                        <dt class="col-3">Τμήμα | Υπηρεσία</dt>
+                                        <dd class="col-9">
+                                            <th:block th:if="${user.department.title == 'ASK'}">
+                                                <form name="user_profile_form" method="post" action="user_profile">
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <select id="_assign_department" style="width: 100%" class="form-control" name="departmentId">
+                                                                <option value=""></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button class="btn blue-btn-wcag-bgnd-color btn-sm text-white" type="submit" id="submit_bt">Αποθήκευση</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </th:block>
-                                            <dt class="col-3">Τύπος Χρήστη</dt><dd class="col-9" th:text="${user.eduPersonPrimaryAffiliation}"></dd>
-                                        </dl>
+                                            <span th:unless="${user.department.title == 'ASK'}" th:text="${user.department.title}"></span>
+                                        </dd>
+                                        <dt class="col-3">Κατηγορία Χρήστη</dt>
+                                        <dd class="col-9">
+                                            <span th:if="${user.eduPersonPrimaryAffiliation == 'faculty'}" th:text="${'Μέλος ΔΕΠ'}"></span>
+                                            <span th:if="${user.eduPersonPrimaryAffiliation == 'staff'}" th:text="${'Μόνιμος Υπάλληλος (Διοικητικό Προσωπικό, ΕΔΙΠ, ΕΤΕΠ κτλ)'}"></span>
+                                            <span th:if="${user.eduPersonPrimaryAffiliation == 'employees'}" th:text="${'Συνεργάτης'}"></span>
+                                            <span th:if="${user.eduPersonPrimaryAffiliation == 'affiliate'}" th:text="${'Εξωτερικός Συνεργάτης'}"></span>
+                                            <span th:if="${user.eduPersonPrimaryAffiliation == 'student'}" th:text="${'Φοιτητής (-ήτρια)'}"></span>
+                                        </dd>
+                                    </th:block>
+                                    <dt class="col-3">Τύπος Χρήστη</dt><dd class="col-9" th:text="${user.eduPersonPrimaryAffiliation}"></dd>
+                                </dl>
                             </div>
-                        </div>
 
-
-                        <div class="card">
+                            <div class="card">
                                 <div class="row">
                                     <div class="col-12">
-                                        <span style="color:red" th:if="${user.department.title == 'ASK'}">
-                                            Τα στοιχεία σας είναι ελλειπή.
-                                        </span>
+                                            <span style="color:red" th:if="${user.department.title == 'ASK'}">
+                                                Τα στοιχεία σας είναι ελλειπή.
+                                            </span>
                                         <p th:if="${user.department.title == 'ASK'}">
                                             Συμπληρώστε το Τμήμα σας στην καρτέλα "Ταυτότητα Χρήστη", για να λάβετε όλα τα δικαιώματα που απορρέουν από την ιδιότητά σας
                                         </p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-
-
-                        <div class="card mt-2">
-                                <div class="card-header bg-dark text-white">
-                                    <span style="font-weight: 500">Ασφάλεια & Πρόσβαση</span>
+                        <div class="tab-pane fade" id="t-actions" role="tabpanel" aria-labelledby="actions-tab">
+                            <th:block sec:authorize="hasRole('ROLE_STAFFMEMBER')">
+                                <input type="hidden" id="staff_id" th:value="${user.id}"/>
+                                <div class="card mt-4">
+                                    <div class="card-header btn-ghost-secondary">
+                                        <span style="font-weight: 500">
+                                            <i class="icon-lecture-lesson me-1"></i>Τα Μαθήματά μου
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive" style="font-size: 0.95em">
+                                            <table id="staffCoursesDataTable" style="width:100%" class="display compact row-border stripe">
+                                                <thead>
+                                                <tr style="font-weight: 400">
+                                                    <th></th>
+                                                    <th>Τίτλος</th>
+                                                    <th>Τμήμα</th>
+                                                    <th>Πρόγραμμα</th>
+                                                    <th>Κωδ. LMS</th>
+                                                    <th>Υποστήριξη</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="card mt-4">
+                                    <div class="card-header btn-ghost-secondary">
+                                        <span style="font-weight: 500">
+                                            <i class="icon-lecture-event me-1"></i>Οι Εκδηλώσεις μου
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive" style="font-size: 0.95em">
+                                            <table id="staffEventsDataTable" style="width:100%" class="display compact">
+                                                <thead>
+                                                <tr style="font-weight: 400">
+                                                    <th></th>
+                                                    <th>Τίτλος</th>
+                                                    <th>Έναρξη</th>
+                                                    <th>Λήξη</th>
+                                                    <th>Ημερολόγιο</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+
+                        <div class="tab-pane fade" id="t-security" role="tabpanel" aria-labelledby="security-tab">
                                 <div class="card-body">
                                     <dl class="row my-0">
                                         <dt class="col-3">Ενεργός Χρήστης</dt>
                                         <dd  th:if="${user.active}" class="col-sm-9"><span th:text="${'Ναί'}"></span>
                                         <dd  th:unless="${user.active}" class="col-sm-9"><span th:text="${'Όχι'}"></span>
                                         </dd>
-
-
                                         <dt class="col-3">Ρόλος, Ιδιότητα</dt>
                                         <dd class="col-9">
                                             <th:block th:each="auth, iStat: ${user.authorities}">
                                                 <span th:text="${iStat.first}? '' : ', '"></span>
-                                                <span th:if="${auth == T(org.opendelos.model.users.UserAccess.UserAuthority).STAFFMEMBER}" th:text="${'Δημιουργός Περιεχομένου  '}">
-
-                                                                            </span>
+                                                <span th:if="${auth == T(org.opendelos.model.users.UserAccess.UserAuthority).STAFFMEMBER}" th:text="${'Δημιουργός Περιεχομένου  '}"></span>
                                                 <span th:if="${auth == T(org.opendelos.model.users.UserAccess.UserAuthority).MANAGER}"  th:text="${'Διαχειριστής   '}"></span>
                                                 <span th:if="${auth == T(org.opendelos.model.users.UserAccess.UserAuthority).SUPPORT}"  th:text="${'Προσωπικό Υποστήριξης   '}"></span>
                                                 <span th:if="${auth == T(org.opendelos.model.users.UserAccess.UserAuthority).USER}"  th:text="${'Χρήστης   '}"></span>
@@ -177,9 +227,9 @@
                                         </dd>
                                     </dl>
                                     <div th:if="${User_UnitRights != null}">
-                                        <div class="card">
-                                            <div class="card-header py-1" style="background-color: #ebedef">
-                                                <h6 class="my-1"><i class="fas fa-user-shield"></i> Δικαιώματα Διαχείρισης | ΔΙΑΧΕΙΡΙΣΤΙΚΕΣ ΜΟΝΑΔΕΣ </h6>
+                                        <div class="card mt-4">
+                                            <div class="card-header btn-ghost-secondary">
+                                                <i class="fas fa-user-shield me-1"></i>Δικαιώματα Διαχείρισης | ΔΙΑΧΕΙΡΙΣΤΙΚΕΣ ΜΟΝΑΔΕΣ
                                             </div>
                                             <div class="card-body">
                                                 <table id="userUnitPermissionsTable" style="width:100%" class="display">
@@ -216,9 +266,9 @@
                                         </div>
                                     </div>
                                     <div th:if="${User_CourseRights != null}">
-                                        <div class="card">
-                                            <div class="card-header py-1" style="background-color: #ebedef">
-                                                <h6 class="my-1"><i class="fas fa-user-shield"></i> Δικαιώματα Διαχείρισης | ΚΑΘΗΓΗΤΗΣ+ΜΑΘΗΜΑΤΑ </h6>
+                                        <div class="card mt-4">
+                                            <div class="card-header bg-ghost-secondary">
+                                                <i class="fas fa-user-shield me-1"></i>Δικαιώματα Διαχείρισης Μαθημάτων
                                             </div>
                                             <div class="card-body">
                                                 <table id="userCoursePermissionsTable" style="width:100%" class="display">
@@ -253,69 +303,92 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-
-
-                        <th:block sec:authorize="hasRole('ROLE_STAFFMEMBER')">
-                            <input type="hidden" id="staff_id" th:value="${user.id}"/>
-                            <div class="card mt-2">
-                                <div class="card-header bg-info">
-                                    <span style="font-weight: 500">Μαθήματα - Διδάσκων - Υπ. Καθηγητής</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive" style="font-size: 0.95em">
-                                        <table id="staffCoursesDataTable" style="width:100%" class="display compact">
-                                            <thead>
-                                            <tr style="font-weight: 400">
-                                                <th></th>
-                                                <th>Τίτλος</th>
-                                                <th>Τμήμα</th>
-                                                <th>Πρόγραμμα</th>
-                                                <th>Κωδ. LMS</th>
-                                                <th>Υποστήριξη</th>
-                                            </tr>
-                                            </thead>
-                                        </table>
+                                    <div th:if="${User_EventRights != null}">
+                                        <div class="card mt-4">
+                                            <div class="card-header bg-ghost-secondary">
+                                                <i class="fas fa-user-shield me-1"></i>Δικαιώματα Διαχείρισης Εκδηλώσεων
+                                            </div>
+                                            <div class="card-body">
+                                                <table id="userEventPermissionsTable" style="width:100%" class="display">
+                                                    <thead>
+                                                    <tr style="height: 30px;border-bottom: #C0CCDA 1px solid">
+                                                        <th scope="row" rowspan="2">#.</th>
+                                                        <th scope="row" rowspan="2">Καθηγητής</th>
+                                                        <th scope="row" rowspan="2">Εκδήλωση</th>
+                                                        <th scope="row" colspan="2">Δικαιώματα (υποσυστήματα)</th>
+                                                    </tr>
+                                                    <tr style="height: 30px;border-top: #C0CCDA 1px solid;border-bottom: #C0CCDA 1px solid">
+                                                        <th style="text-align: center" ><i class="icon-on-demand"></i> Περιεχόμενο</th>
+                                                        <th style="text-align: center" ><i class="icon-main-menu-scheduler" style="font-size: 20px"></i> Προγραμματισμός</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <th:block th:each="estaff, iStat: ${User_EventRights}">
+                                                        <tr class="even">
+                                                            <td th:text="${iStat.count}"></td>
+                                                            <td th:text="${estaff.staffMemberName}" style="color: #003476;font-weight: 500"></td>
+                                                            <td th:text="${estaff.eventTitle}"></td>
+                                                            <td style="text-align: center" th:if="${estaff.contentManager == true}"><i style="color:green" class="fas fa-check-circle"></i></td>
+                                                            <td style="text-align: center" th:unless="${estaff.contentManager == true}"><i style="color:red" class="fas fa-minus-circle"></i></td>
+                                                            <td style="text-align: center" th:if="${estaff.scheduleManager == true}"><i style="color:green" class="fas fa-check-circle"></i></td>
+                                                            <td style="text-align: center" th:unless="${estaff.scheduleManager == true}"><i style="color:red" class="fas fa-minus-circle"></i></td>
+                                                        </tr>
+                                                    </th:block>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card mt-2">
-                                <div class="card-header bg-info">
-                                    <span style="font-weight: 500">Στατιστικά</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <dt class="col-6">Περιεχόμενο - <span style="font-weight: normal">[Υπ.Καθηγητής/Διδάσκων]</span></dt>
-                                        <dd class="col-6"><strong   th:text="${StaffAsSupervisorInResources}">num_of_lectures</strong></dd>
-                                        <dt class="col-6">Προγραμματισμένες Μεταδόσεις - <span style="font-weight: normal">[Υπ.Καθηγητής/Διδάσκων]</span></dt>
-                                        <dd class="col-6"><strong   th:text="${StaffAsSupervisorInScheduled}">num_of_lectures</strong></dd>
-                                        <dt class="col-6">Εκδηλώσεις - <span style="font-weight: normal">[Επιστ. Υπεύθυνος]</span></dt>
-                                        <dd class="col-6"><strong   th:text="${StaffAsSupervisorInEvents}">num_of_lectures</strong></dd>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="t-stats" role="tabpanel" aria-labelledby="stats-tab">
+                            <th:block sec:authorize="hasRole('ROLE_STAFFMEMBER')">
+                                <div class="card mt-4">
+                                    <div class="card-header bg-ghost-secondary">
+                                        <span style="font-weight: 500">
+                                            <i class="fas fa-chart-line me-1"></i>Στατιστικά (Δημιουργός)
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <dt class="col-6">Διαλέξεις & Πολυμέσα Εκδηλώσεων</dt>
+                                            <dd class="col-6"><strong   th:text="${StaffAsSupervisorInResources}">num_of_lectures</strong></dd>
+                                            <dt class="col-6">Προγραμματισμένες Μεταδόσεις (όλα τα εξάμηνα)</dt>
+                                            <dd class="col-6"><strong   th:text="${StaffAsSupervisorInScheduled}">num_of_lectures</strong></dd>
+                                            <dt class="col-6">Εκδηλώσεις</dt>
+                                            <dd class="col-6"><strong   th:text="${StaffAsSupervisorInEvents}">num_of_lectures</strong></dd>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </th:block>
+                            </th:block>
 
-                        <th:block sec:authorize="hasAnyRole('ROLE_SA','ROLE_MANAGER','ROLE_SUPPORT')">
-                            <div class="card mt-2">
-                                <div class="card-header">
-                                    <span style="font-weight: 500">Στατιστικά</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <dt class="col-6">Περιεχόμενο - <span style="font-weight: normal">[Διαχειριστής]</span></dt>
-                                        <dd class="col-6"><strong   th:text="${ManagerAsEditorInResources}">num_of_lectures</strong></dd>
-                                        <dt class="col-6">Προγραμματισμένες Μεταδόσεις - <span style="font-weight: normal">[Διαχειριστής]</span></dt>
-                                        <dd class="col-6"><strong   th:text="${ManagerAsEditorInScheduled}">num_of_lectures</strong></dd>
-                                        <dt class="col-6">Εκδηλώσεις - <span style="font-weight: normal">[Διαχειριστής]</span></dt>
-                                        <dd class="col-6"><strong   th:text="${ManagerAsEditorInEvents}">num_of_lectures</strong></dd>
+                            <th:block sec:authorize="hasAnyRole('ROLE_SA','ROLE_MANAGER','ROLE_SUPPORT')">
+                                <div class="card mt-4">
+                                    <div class="card-header bg-ghost-secondary">
+                                        <span style="font-weight: 500">
+                                            <i class="fas fa-chart-line me-1"></i>Στατιστικά (Διαχειριστής, Editor)
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <dt class="col-6">Περιεχόμενο</dt>
+                                            <dd class="col-6"><strong   th:text="${ManagerAsEditorInResources}">num_of_lectures</strong></dd>
+                                            <dt class="col-6">Προγραμματισμένες Μεταδόσεις</dt>
+                                            <dd class="col-6"><strong   th:text="${ManagerAsEditorInScheduled}">num_of_lectures</strong></dd>
+                                            <dt class="col-6">Εκδηλώσεις</dt>
+                                            <dd class="col-6"><strong   th:text="${ManagerAsEditorInEvents}">num_of_lectures</strong></dd>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </th:block>
-
+                            </th:block>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
@@ -334,6 +407,8 @@
 <script th:src="@{/js/user_profile/dashboard.js}" type="application/javascript"></script>
 <script th:src="@{/js/user_profile/dashboard.departments.js}" type="application/javascript"></script>
 <script th:src="@{/js/user_profile/dashboard.staffmembers.js}" type="application/javascript"></script>
+<script th:src="@{/js/user_profile/dashboard.users.js}" type="application/javascript"></script>
+
 <script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
 <script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
 <script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>

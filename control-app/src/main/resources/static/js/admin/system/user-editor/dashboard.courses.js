@@ -7,7 +7,8 @@
     dashboard.courses.init = function() {
         $course_el = $("#courses_s2");
         $course_el.select2({
-            placeholder: "Επιλέξτε Τμήμα -> Καθηγητή -> Μάθημα"
+            placeholder: "Επιλέξτε Τμήμα -> Διδάσκοντα -> Μάθημα",
+            allowClear: true
         });
         $course_el.on('select2:select', function (e) {
             let data = e.params.data;
@@ -25,9 +26,11 @@
         })
             .done(function( data ) {
                 $course_el.select2({
-                    placeholder: 'Επιλέξτε Μάθημα',
+                    placeholder: '-- Επιλέξτε Μάθημα ή αφήστε κενό για όλα τα Μαθήματα --',
+                    allowClear: true,
                     width: 'style', // need to override the changed default
                     data : data.results,
+                    dropdownParent: $("#staffCourseSelectModal"),
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                     templateResult: formatRepo,
                     templateSelection: formatRepoSelection
@@ -42,7 +45,7 @@
 
             let markup = "<div class='select2-result-repository clearfix'>" +
                 "<div class='select2-result-repository__meta'>" +
-                "<div class='select2-result-repository__title'><i class=\"fas fa-user-tie\"></i> " + repo.text + "</div>";
+                "<div class='select2-result-repository__title'> " + repo.text + "</div>";
 
             return markup;
         }

@@ -102,7 +102,7 @@ public class SecurityConfiguration  {
 
 			http
 					.formLogin()
-					.loginPage("/login")
+					.loginPage("/")
 					.successHandler(databaseAuthenticationSuccessHandlerDB())
 					.failureHandler(databaseAuthenticationFailureHandlerDB())
 					.and()

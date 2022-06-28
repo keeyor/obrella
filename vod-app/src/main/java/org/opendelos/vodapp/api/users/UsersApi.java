@@ -36,7 +36,7 @@ public class UsersApi {
 		this.opUserService = opUserService;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/managers.web", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/managers.web", method = RequestMethod.GET)
 	public byte[] getAllManagers() {
 
 		List<OpUser> managers;
@@ -47,7 +47,7 @@ public class UsersApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/managers.web/type/{type}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/managers.web/type/{type}", method = RequestMethod.GET)
 	public byte[] getAllManagersOfType(@PathVariable("type") String type) {
 
 		List<OpUser> managers;
@@ -58,7 +58,7 @@ public class UsersApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/managers/assigned_units/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/dt/managers/assigned_units/{id}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getManagerAssignedUnits(@PathVariable("id") String id) {
 
 		List<UserAccess.UserRights.UnitPermission> unitPermissions = opUserService.getManagersUnitPermissions(id);
@@ -67,7 +67,7 @@ public class UsersApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/managers/assigned_courses/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/dt/managers/assigned_courses/{id}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getManagerAssignedCourses(@PathVariable("id") String id) {
 
 		List<UserAccess.UserRights.CoursePermission> coursePermissions = opUserService.getManagersCoursePermissionsByAccessType(id, "IGNORE_ACCESS_TYPE");
@@ -76,7 +76,7 @@ public class UsersApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/managers/assigned_events/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/dt/managers/assigned_events/{id}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getManagerAssignedEvents(@PathVariable("id") String id) {
 
 		List<UserAccess.UserRights.EventPermission> eventPermissions = opUserService.getManagersEventPermissionsByAccessType(id, "IGNORE_ACCESS_TYPE");
@@ -85,57 +85,57 @@ public class UsersApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/managers/assign_unit/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/assign_unit/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void AssignUnitToStaffMember(@RequestBody UserAccess.UserRights.UnitPermission unitPermission, @PathVariable("id") String id) {
 		opUserService.assignUnitPermissionToManagerById(id, unitPermission);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/assign_unit_update/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/assign_unit_update/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UpdateAssignUnitToStaffMember(@RequestBody UserAccess.UserRights.UnitPermission unitPermission, @PathVariable("id") String id) {
 		opUserService.assignUpdateUnitPermissionToManagerById(id, unitPermission);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/change_role/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/change_role/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void ChangeRoleForStaffMember(@RequestBody String new_role, @PathVariable("id") String id) {
 		opUserService.changeRoleOfManagerById(id, new_role);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/unassign_unit/{id}/unit/{unit_id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/unassign_unit/{id}/unit/{unit_id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UnAssignUnitFromStaffMember(@PathVariable("id") String id, @PathVariable("unit_id") String unit_id) {
 		opUserService.unassignUnitPermissionFromManagerById(id, unit_id);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/assign_course/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/assign_course/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void AssignCourseToStaffMember(@RequestBody UserAccess.UserRights.CoursePermission coursePermission, @PathVariable("id") String id) {
 		opUserService.assignCoursePermissionToManagerById(id, coursePermission);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/assign_course_update/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/assign_course_update/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UpdateAssignCourseToStaffMember(@RequestBody UserAccess.UserRights.CoursePermission coursePermission, @PathVariable("id") String id) {
 		opUserService.assignUpdateCoursePermissionToManagerById(id, coursePermission);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/unassign_course/{id}/course/{course_id}/sm/{staffMemberId}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/unassign_course/{id}/course/{course_id}/sm/{staffMemberId}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UnAssignCourseFromStaffMember(@PathVariable("id") String id, @PathVariable("course_id") String course_id, @PathVariable("staffMemberId") String staffMemberId) {
 		opUserService.unassignCoursePermissionFromManagerById(id, staffMemberId, course_id);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/assign_event/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/assign_event/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void AssignEventToStaffMember(@RequestBody UserAccess.UserRights.EventPermission eventPermission, @PathVariable("id") String id) {
 		opUserService.assignEventPermissionToManagerById(id, eventPermission);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/assign_event_update/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/assign_event_update/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UpdateAssignEventToStaffMember(@RequestBody UserAccess.UserRights.EventPermission eventPermission, @PathVariable("id") String id) {
 		opUserService.assignUpdateEventPermissionToManagerById(id, eventPermission);
 	}
 
-	@RequestMapping(value = "/api/v1/managers/unassign_event/{id}/event/{event_id}/sm/{staffMemberId}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/managers/unassign_event/{id}/event/{event_id}/sm/{staffMemberId}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UnAssignEventFromStaffMember(@PathVariable("id") String id, @PathVariable("event_id") String event_id, @PathVariable("staffMemberId") String staffMemberId) {
 		opUserService.unassignEventPermissionFromManagerById(id, staffMemberId, event_id);
 	}
 
-	@RequestMapping(value = "/api/v1/manager/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/manager/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteManager(@PathVariable("id") String id) {
 		try {
 			OpUser manager = opUserService.findById(id);
@@ -165,7 +165,7 @@ public class UsersApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/user/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/user/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	OpUser findUserById(@PathVariable("id") String id) {
 		try {

@@ -22,7 +22,7 @@
         dashboard.hosturl = dashboard.broker.getHostURL();
         dashboard.app_path = "";
 
-        let   msg_val   = $("#msg_val").val();
+         let   msg_val   = $("#msg_val").val();
         let   msg_type  =$("#msg_type").val();
 
         if (msg_val !== '') {

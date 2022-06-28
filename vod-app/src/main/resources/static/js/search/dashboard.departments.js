@@ -18,7 +18,7 @@
         $department_list = $('#department-columns');
         let queryParams = new URLSearchParams(window.location.search);
 
-        let url = dashboard.siteUrl + '/api/v1/s2/departments.web/school/dummy';
+        let url = dashboard.siteUrl + '/apiw/v1/s2/departments.web/school/dummy';
         let html = '';
         $.ajax({
             type: 'GET',
@@ -48,7 +48,7 @@
 
     dashboard.departments.loadDepartmentsByReport = function () {
 
-        let url = dashboard.siteUrl + '/api/v1/getDepartmentsOfReport';
+        let url = dashboard.siteUrl + '/apiw/v1/getDepartmentsOfReport';
         $.ajax({
             type: 'GET',
             url: url,
@@ -59,7 +59,7 @@
                     let queryParams = new URLSearchParams(window.location.search);
                     queryParams.set("d", depDtId);
                     queryParams.delete("skip");
-                    let html = '<a class="list-group-item list-group-item-action text-dark text-decoration-none" href="search?' + queryParams + '">' + element.title +' (' + element.counter + ')</a>';
+                    let html = '<a class="list-group-item list-group-item-action text-dark text-decoration-none" href="search?' + queryParams + '">' + element.title + '</a>';
                     $("#dpFilters").append(html);
                 });
                 if (data.data.length < 1) {

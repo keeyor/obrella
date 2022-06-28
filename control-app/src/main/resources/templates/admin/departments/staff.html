@@ -72,15 +72,13 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/programs}">Προγράμματα Σπουδών</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/acalendar}">Ακαδημαϊκό Ημερολόγιο</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active"><span>Προσωπικό</span></li>
                 </ol>
             </nav>
@@ -159,19 +157,19 @@
                                                   <input type="hidden" id="staff_id" value=""/>
                                                   <div class="form-group row mt-3">
                                                       <label for="staff_name" class="col-sm-2 col-form-label"><b>Όνομα*</b></label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <input type="text" id="staff_name" name="staff_name" class="form-control"/>
                                                       </div>
                                                   </div>
                                                   <div class="form-group row mt-3">
                                                       <label for="staff_altname" class="col-sm-2 col-form-label">Όνομα (en)</label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <input type="text" id="staff_altname"  name="staff_altname" class="form-control"/>
                                                       </div>
                                                   </div>
                                                   <div class="form-group row mt-3">
                                                       <label for="staff_aff" class="col-sm-2 col-form-label"><b>Ιδιότητα*</b></label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <input type="text" id="staff_aff"  name="staff_aff" class="form-control"/>
                                                       </div>
                                                   </div>
@@ -184,7 +182,7 @@
                                                   <!-- Διαχειριστής -->
                                                   <div class="form-group row mt-3">
                                                       <label for="staff_department" class="col-sm-2 col-form-label"><b>Διαχειριστής*</b></label>
-                                                      <div class="col-sm-7 text-high-emphasis">
+                                                      <div class="col-sm-4 text-high-emphasis">
                                                           <div class="no_manager_info mb-2">
                                                               <i class="fas fa-info-circle"></i>
                                                               Μπορείτε να παραχωρήσετε στο χρήστη ρόλο Διαχειριστή.
@@ -199,7 +197,7 @@
                                                   </div>
                                                   <div class="form-group  mt-3 row title_change_warning">
                                                       <label class="col-sm-2 col-form-label">&nbsp;</label>
-                                                      <div class="col-sm-7 text-high-emphasis">
+                                                      <div class="col-sm-4 text-high-emphasis">
                                                                   <i style="color:red" class="fas fa-exclamation-triangle me-1"></i>
                                                                 Ο κωδικός ταυτοποίησης <b>uid</b> του μέλους είναι το username του χρήστη στην υπηρεσία. Η καταχώρηση πρέπει να ακριβώς ίδια με αυτή που υπάρχει στη βάση δεδομένων του Ιδρύματος (SSO), αλλιώς η είσοδος στο σύστημα θα αποτύχει.
                                                                 Η Τροποποίηση του uid συνιστάται <b>ΜΟΝΟ</b> για τη διόρθωση τυπογραφικών λαθών ή αν αυτό έχει αλλάξει σε προγενέστερο χρόνο στη βάση δεδομένων του Ιδρύματος.
@@ -221,7 +219,7 @@
                                                   <!-- Ανάθεση Μαθημάτων -->
                                                   <div class="form-group row mt-3">
                                                       <label class="col-sm-2 col-form-label"><b>Διδασκόμενα Μαθήματα</b></label>
-                                                      <div class="col-sm-7 text-medium-emphasis">
+                                                      <div class="col-sm-4 text-medium-emphasis">
                                                           Στο πίνακα που ακολουθεί, εμφανίζονται τα μαθήματα που διδάσκει το επιλεγμένο μέλος του προσωπικού. Μπορείτε να αφαιρέσετε μαθήματα
                                                           κάνοντας κλικ στο αντίστοιχο κουμπί αφαίρεσης <i class="fas fa-minus-circle"></i>. Για να προσθέσετε μαθήματα, κάντε κλικ στο κουμπί
                                                           'Προσθήκη'΄. Μπορείτε να επιλέξετε μαθήματα από όλα τα τμήματα του ιδρύματος.
@@ -237,7 +235,7 @@
                                                   </div>
                                                   <div class="form-group row  mt-3 course_assign">
                                                       <label for="staff_email" class="col-sm-2 col-form-label"></label>
-                                                      <div class="col-sm-7">
+                                                      <div class="col-sm-4">
                                                           <div class="table-responsive">
                                                               <table id="staffCoursesDataTable" style="width:100%" class=" compact">
                                                                   <thead>

@@ -173,7 +173,7 @@ public class ScheduleApi {
 		int result = this.setNewCancellation(schedule_id,new_cancellation); //careful:: no auto schedule update. We will delete it ourselves
 		/*if (result == -1) { Stream seems to be cancelled already. Ignore and continue...}*/
 
- 		String live_server = app_host + streamingProperties.getLive_server_url();
+ 		String live_server = streamingProperties.getLive_server_url();
 		RestTemplate restTemplate = new RestTemplate();
 		String postUrl = live_server + "/api/v1/live/" + id + "/stop/" + new_cancellation.isKeepFile();
 		try {

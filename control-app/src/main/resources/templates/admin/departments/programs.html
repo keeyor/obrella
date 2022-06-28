@@ -75,15 +75,13 @@
                 <li class="nav-item"><a class="nav-link active" th:href="@{/admin/department/programs}">Προγράμματα Σπουδών</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/department/acalendar}">Ακαδημαϊκό Ημερολόγιο</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active"><span>Προγράμματα Σπουδών</span></li>
                 </ol>
             </nav>
@@ -184,7 +182,7 @@
                                                 <!-- DEPARTMENT -->
                                                 <div class="form-group row mt-3">
                                                     <label for="program_department" class="col-sm-2 col-form-label"><b>Τμήμα*</b></label>
-                                                    <div class="col-sm-7">
+                                                    <div class="col-sm-4">
                                                         <select id="program_department" name="program_department" style="width: 100%" class="form-control">
                                                             <option value=""></option>
                                                         </select>
@@ -193,7 +191,7 @@
                                                 <!-- Studies -->
                                                 <div class="form-group row mt-3">
                                                     <label for="program_study" class="col-sm-2 col-form-label"><b>Σπουδές*</b></label>
-                                                    <div class="col-sm-7">
+                                                    <div class="col-sm-4">
                                                         <select id="program_study" name="program_study" style="width: 100%" class="form-control">
                                                             <option value="post" th:text="#{post}"></option>
                                                             <option value="master" th:text="#{master}"></option>
@@ -204,7 +202,7 @@
                                                 <!-- TITLE -->
                                                 <div class="form-group row mt-3">
                                                     <label for="program_title" class="col-sm-2 col-form-label"><b>Τίτλος*</b></label>
-                                                    <div class="col-sm-7">
+                                                    <div class="col-sm-4">
                                                         <input type="text" id="program_title" name="program_title" class="form-control"/>
                                                     </div>
                                                 </div>

@@ -38,20 +38,18 @@
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <ul class="header-nav d-none d-md-flex">
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/timetable}">Πρόγραμμα Μεταδόσεων</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/schedule}"> Νέα Μετάδοση</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/timetable}">Πρόγραμμα</a></li>
-                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/scheduler/calendar}">Ημερολόγιο</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/live}">Ζωντανές Μεταδόσεις</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/calendar}">Ημερολόγιο Μεταδόσεων</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/scheduler/live}">Ζωντανές Μεταδόσεις</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active"><span>Ζωντανές Μεταδόσεις</span></li>
                 </ol>
             </nav>

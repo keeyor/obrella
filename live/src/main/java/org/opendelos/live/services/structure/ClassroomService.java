@@ -23,7 +23,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
-@CacheConfig(cacheNames = "classrooms")
+//@CacheConfig(cacheNames = "classrooms")
 public class ClassroomService {
 
     private final Logger logger = LoggerFactory.getLogger(ClassroomService.class);
@@ -47,7 +47,7 @@ public class ClassroomService {
         logger.trace("Classroom.findAll");
         return classroomRepository.findAll();
     }
-    @CacheEvict(allEntries = true)
+  //  @CacheEvict(allEntries = true)
     public void deleteAll() {
         logger.trace("Classroom.deleteAll");
         try {
@@ -76,7 +76,7 @@ public class ClassroomService {
         }
         return generatedId;
     }
-    @Cacheable(key = "#id",unless="#result == null")
+  //  @Cacheable(key = "#id",unless="#result == null")
     public Classroom findById(String id) {
         logger.trace(String.format("Classroom.findById(%s)", id));
         return  classroomRepository.findById(id).orElse(null);
@@ -98,7 +98,7 @@ public class ClassroomService {
             logger.error("error: Classroom.update:" + e.getMessage());
         }
     }
-    @CacheEvict(key = "#classroom.id")
+  //  @CacheEvict(key = "#classroom.id")
     public void update(Classroom classroom) {
         logger.info(String.format("Classroom.update: %s", classroom.getName()));
         try {
@@ -108,7 +108,7 @@ public class ClassroomService {
             logger.error("error: Classroom.update:" + e.getMessage());
         }
     }
-    @CacheEvict(key = "#id")
+  //  @CacheEvict(key = "#id")
     public void delete(String id) throws Exception {
         logger.trace(String.format("Classroom.delete: %s", id));
         Classroom classroom = classroomRepository.findById(id).orElse(null);

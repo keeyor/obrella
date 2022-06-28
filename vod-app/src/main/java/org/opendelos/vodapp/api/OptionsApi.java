@@ -35,7 +35,7 @@ public class OptionsApi {
 		this.multilingualServices = multilingualServices;
 	}
 
-	@RequestMapping(value = "/api/v1/s2/categories.web", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/categories.web", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getCategories(Locale locale) {
 
 		LinkedHashMap<String, List<String>> lhm = optionServices.getSortedCategories(locale);
@@ -48,7 +48,7 @@ public class OptionsApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/s2/categoriesAlt.web", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/categoriesAlt.web", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getSortedCategoriesAlt(Locale locale) {
 
 		String mainCategoriesKeys = multilingualServices.getValue("Categories.keys", null, locale);

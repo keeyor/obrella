@@ -70,22 +70,30 @@
 
             let markup = "<div class='select2-result-repository clearfix'>" +
                 "<div class='select2-result-repository__meta'>" +
-                "<div class='select2-result-repository__title'><i class=\"fas fa-user-tie\"></i> " + repo.text + "</div>";
+                "<div class='select2-result-repository__title'><i class=\"fas fa-user-tie\"></i> " + repo.text;
+                if (repo.info === "active") {
+                    markup += "</div>";
+                }
+                else {
+                    markup += " <span style='color: indianred'> (Ανενεργό Ημερολόγιο)" + "</span></div>";
+                }
 
             if (repo.children) {
 
             }
             else {
                 markup += "<div class='select2-result-repository__statistics'>" +
-                    "<div class='select2-result-repository__stargazers' style='font-size: 0.9em'>" + repo.subheader + " </div>" +
-                    "</div>" +
-                    "</div></div>";
+                                "<div class='select2-result-repository__stargazers' style='font-size: 0.9em'>" + repo.subheader;
+                markup += "</div></div></div>";
             }
             return markup;
-        }``
+        }
 
         function formatRepoSelection (repo) {
+            if (repo.id === "" || repo.info === "active")
                 return "<span  style=\"font-weight: 500\">" + repo.text + "</span>";
+            else if (repo.info === "inactive")
+                return "<span  style=\"font-weight: 500\">" + repo.text + " (Ανενεργό Ημερολόγιο)</span>";
         }
     }
 

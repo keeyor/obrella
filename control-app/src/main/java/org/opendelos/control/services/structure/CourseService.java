@@ -246,7 +246,8 @@ public class CourseService {
             }
             else if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SUPPORT"))) {
                 OpUser opUser = opUserService.findById(editor.getId());
-                List<UserAccess.UserRights.CoursePermission> coursePermissions = opUser.getRights().getCoursePermissions();
+                List<UserAccess.UserRights.CoursePermission> coursePermissions = opUserService.getManagersCoursePermissionsByAccessType(editor.getId(),ACCESS_TYPE);
+                //opUser.getRights().getCoursePermissions();
 
                 if (coursePermissions != null && coursePermissions.size() > 0) {    // user is Support Personnel
                       for (UserAccess.UserRights.CoursePermission coursePermission : coursePermissions) {
@@ -316,8 +317,8 @@ public class CourseService {
                 }
             }
             else if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SUPPORT"))) {
-                OpUser opUser = opUserService.findById(editor.getId());
-                List<UserAccess.UserRights.CoursePermission> coursePermissions = opUser.getRights().getCoursePermissions();
+                List<UserAccess.UserRights.CoursePermission> coursePermissions = opUserService.getManagersCoursePermissionsByAccessType(editor.getId(), "content");
+                //opUser.getRights().getCoursePermissions();
 
                 if (coursePermissions != null && coursePermissions.size() > 0) {    // user is Support Personnel
                     for (UserAccess.UserRights.CoursePermission coursePermission : coursePermissions) {

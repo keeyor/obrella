@@ -13,24 +13,9 @@
             <div class="card-body px-0">
                 <div class="mb-2">
                         <div class="text-muted" id="none_filter">κανένα επιλεγμένο κριτήριο</div>
-                        <button id="ft-filter" style="display: none"  class="my-2 mx-1 btn   btn-info btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ft-filter">
-                                <span id="ft-dd-header"></span>
-                            </a>
-                        </button>
-                        <button id="category-filter" style="display: none"  class="my-2 mx-1 btn   btn-info  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ca-filter">
-                                <span id="category-dd-header"></span>
-                            </a>
-                        </button>
                         <button id="department-filter" style="display: none"  class="my-2 mx-1 btn blue-btn-wcag-bgnd-color btn-sm">
                             <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-dt-filter">
                                 <span id="department-dd-header"></span>
-                            </a>
-                        </button>
-                        <button id="period-filter-applied" style="display: none"  class="my-2 mx-1 btn blue-btn-wcag-bgnd-color btn-sm clear-filter">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" data-target="period">
-                                <span id="period-dd-header"></span>
                             </a>
                         </button>
                         <button  id="course-filter" style="display: none"  class="my-2 mx-1 btn   blue-btn-wcag-bgnd-color  btn-sm">
@@ -48,40 +33,18 @@
                                 <span id="class-dd-header"></span>
                             </a>
                         </button>
-                        <button id="ap-filter"  style="display: none"  class="my-2 mx-1  btn   blue-btn-wcag-bgnd-color  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ap-filter">
-                                <span id="ap-dd-header"></span>
-                            </a>
-                        </button>
-                        <button  id="tags-filter"  style="display: none" class="my-2 mx-1  btn   blue-btn-wcag-bgnd-color  btn-sm">
-                            <a href="#" role="button" title="αφαίρεση φίλτρου" style="color: #ffffff;text-decoration: none" id="clear-tag-filter">
-                                <span id="ap-tag-header"  class="mb-2" style="font-weight: 500;white-space: break-spaces"></span>
-                            </a>
-                        </button>
                 </div>
                 <div id="AllFilters">
                     <div class="row pt-3" style="border-top: #006A9B solid 3px">
                                 <div class="col-12">
-                                    <a id="depCanvasLink" style="display: none"  class="btn btn-sm btn-secondary text-white mb-1" data-coreui-toggle="offcanvas" href="#offcanvasDep" role="button" aria-controls="offcanvasDep" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε τμήμα">
+                                    <a id="depCanvasLink" style="display: none;color: #0b6da8"  class="btn btn-sm btn-light mb-1" data-coreui-toggle="offcanvas" href="#offcanvasDep" role="button" aria-controls="offcanvasDep" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε τμήμα">
                                         <i class="fas fa-plus-circle"></i> | Τμήμα
                                     </a>
-                                    <a id="staffCanvasLink" style="display: none"   class="btn btn-sm btn-secondary text-white mb-1" data-coreui-toggle="offcanvas" href="#offcanvasStaff" role="button" aria-controls="offcanvasStaff" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε διδάσκοντα">
+                                    <a id="staffCanvasLink" style="display: none;color: #0b6da8"   class="btn btn-sm btn-light mb-1" data-coreui-toggle="offcanvas" href="#offcanvasStaff" role="button" aria-controls="offcanvasStaff" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε διδάσκοντα">
                                         <i class="fas fa-plus-circle"></i> | Διδάσκων ή Υπ. Καθηγητής
                                     </a>
-                                    <a  id="courseCanvasLink" style="display: none"  class="btn btn-sm btn-secondary text-white mb-1" data-coreui-toggle="offcanvas" href="#offcanvasCourse" role="button" aria-controls="offcanvasCourse"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε μάθημα">
+                                    <a  id="courseCanvasLink" style="display: none;color: #0b6da8"  class="btn btn-sm btn-light mb-1" data-coreui-toggle="offcanvas" href="#offcanvasCourse" role="button" aria-controls="offcanvasCourse"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε μάθημα">
                                         <i class="fas fa-plus-circle"></i> | Μάθημα
-                                    </a>
-                                    <a  id="classCanvasLink" style="display: none"  class="btn btn-sm btn-secondary text-white mb-1" data-coreui-toggle="offcanvas" href="#offcanvasClass" role="button" aria-controls="offcanvasClass"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε εκδήλωση">
-                                        <i class="fas fa-plus-circle"></i> | Αίθουσα
-                                    </a>
-                                    <a  id="apCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white mb-1" data-coreui-toggle="offcanvas" href="#offcanvasAccess" role="button" aria-controls="offcanvasAccess"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε εκδήλωση">
-                                        <i class="fas fa-plus-circle"></i> | Κατάσταση
-                                    </a>
-                                    <a  id="tagCanvasLink" style="display: none" class="btn btn-sm btn-secondary text-white mb-1" data-coreui-toggle="offcanvas" href="#offcanvasTags" role="button" aria-controls="offcanvasAccess"  title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε εκδήλωση">
-                                        <i class="fas fa-plus-circle"></i> | Ετικέτες Διαχειριστή
-                                    </a>
-                                    <a id="periodCanvasLink" style="display: none"  class="btn btn-sm btn-secondary text-white mb-1" data-coreui-toggle="offcanvas" href="#offcanvasPeriod" role="button" aria-controls="offcanvasPeriod" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε περίοδο">
-                                        <i class="fas fa-plus-circle"></i> | Περίοδο
                                     </a>
                                     <div class="text-muted" id="no_dyna_filters"></div>
                                 </div>
@@ -93,7 +56,7 @@
         <!-- OffCanvas Dep -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasDep" aria-labelledby="offcanvasDepLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasDepLabel">Τμήμα</h5>
+                <div style="font-size: 1.3em;font-weight: 500" class="offcanvas-title" id="offcanvasDepLabel">Τμήμα</div>
                 <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -104,33 +67,20 @@
                     </p>
                 </div>
                 <div class="mt-2 mb-3">
+                    <label for="dp-search">αναζήτηση</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control short-list" data-target="dpFilters" placeholder="αναζήτηση στη λίστα"/>
+                        <input type="text" id="dp-search" class="form-control short-list" data-target="dpFilters" placeholder="αναζήτηση στη λίστα"/>
                     </div>
                 </div>
                 <ul class="mt-3 list-group" id="dpFilters"></ul>
             </div>
         </div>
 
-        <!-- OffCanvas Period -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasPeriod" aria-labelledby="offcanvasPeriodLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasPeriodLabel">Περίοδος</h5>
-                <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Περίοδο</b> από την παρακάτω λίστα.
-                </div>
-                <ul class="mt-3 list-group" id="periodFilters"></ul>
-            </div>
-        </div>
-
         <!-- OffCanvas Staff -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStaff" aria-labelledby="offcanvasStaffLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasStaffLabel">Διδάσκων ή Υπ. Καθηγητής</h5>
+                <div style="font-size: 1.3em;font-weight: 500" class="offcanvas-title" id="offcanvasStaffLabel">Διδάσκων ή Υπ. Καθηγητής</div>
                 <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -141,9 +91,10 @@
                     </p>
                 </div>
                 <div class="mt-2 mb-3">
+                    <label for="st-search">αναζήτηση</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control short-list" data-target="stFilters" placeholder="αναζήτηση"/>
+                        <input type="text" id="st-search" class="form-control short-list" data-target="stFilters" placeholder="αναζήτηση"/>
                     </div>
                 </div>
                 <ul  class="mt-3 list-group"  id="stFilters"></ul>
@@ -153,7 +104,7 @@
         <!-- OffCanvas Course -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasCourse" aria-labelledby="offcanvasCourseLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasCourseLabel">Μάθημα</h5>
+                <div style="font-size: 1.3em;font-weight: 500" class="offcanvas-title" id="offcanvasCourseLabel">Μάθημα</div>
                 <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -164,79 +115,16 @@
                     </p>
                 </div>
                 <div class="mt-2 mb-3">
+                    <label for="co-search">αναζήτηση</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control short-list" data-target="coFilters" placeholder="αναζήτηση"/>
+                        <input type="text" id="co-search" class="form-control short-list" data-target="coFilters" placeholder="αναζήτηση"/>
                     </div>
                 </div>
                 <ul class="mt-3 list-group" id="coFilters"></ul>
             </div>
         </div>
 
-        <!-- OffCanvas Event -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEvent" aria-labelledby="offcanvasEventLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasEventLabel">Εκδήλωση</h5>
-                <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Εκδήλωση</b> από την παρακάτω λίστα
-                </div>
-                <div class="mt-2 mb-3">
-                    <input type="text" class="form-control short-list" data-target="evFilters" placeholder="αναζήτηση"/>
-                </div>
-                <ul class="mt-3 list-group" id="evFilters"></ul>
-            </div>
-        </div>
-
-        <!-- OffCanvas Event -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasClass" aria-labelledby="offcanvasClassLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasClassLabel">Αίθουσα</h5>
-                <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Άιθουσα</b> από την παρακάτω λίστα
-                </div>
-                <div class="mt-2 mb-3">
-                    <input type="text" class="form-control short-list" data-target="clFilters" placeholder="αναζήτηση"/>
-                </div>
-                <ul class="mt-3 list-group" id="crFilters"></ul>
-            </div>
-        </div>
-
-        <!-- OffCanvas Admin Filters-->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasAccess" aria-labelledby="offcanvasAccessLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasAccessLabel">Κατάσταση</h5>
-                <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Διαχειριστικό Φίλτρο</b> από την παρακάτω λίστα
-                </div>
-                <ul class="mt-3 list-group" id="apFilters">
-
-                </ul>
-            </div>
-        </div>
-
-        <!-- OffCanvas Admin Filters-->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTags" aria-labelledby="offcanvasTagsLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasTagsLabel">Ετικέτες Διαχειριστή</h5>
-                <button type="button" class="btn-close text-reset" data-coreui-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div>
-                    Περιορίστε τα αποτελέσματα της αναζήτησης, επιλέγοντας <b>Διαχειριστικό Φίλτρο</b> από την παρακάτω λίστα
-                </div>
-                <ul class="mt-3 list-group" id="tagFilters">
-                </ul>
-            </div>
-        </div>
 
     </div>
 </body>

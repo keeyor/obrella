@@ -19,7 +19,7 @@
         siteUrl          = dashboard.siteUrl;
         let queryParams = new URLSearchParams(window.location.search);
 
-        let url = siteUrl + '/api/v1/s2/departments.web/school/dummy';
+        let url = siteUrl + '/apiw/v1/s2/departments.web/school/dummy';
         let html_content = '';
         let html_live = '';
         $.ajax({

@@ -47,6 +47,8 @@ public class SyncService {
 	boolean restore_events;
 	@Value("${enable.classrooms}")
 	boolean enable_classrooms;
+	@Value("${main_col}")
+	String main_col;
 
 	private final Logger logger = Logger.getLogger(SyncService.class.getName());
 
@@ -77,7 +79,7 @@ public class SyncService {
 			in_process = true;
 				logger.info("Running import...");
 				org.opendelos.legacydomain.institution.Institution legacyInstitution =
-						elegacyRepository.getLegacyInstitution(import_url, "guest", "guest", "/db/apps/delos-uoa/institutions", "uoa");
+						elegacyRepository.getLegacyInstitution(import_url, "guest", "guest", main_col + "institutions", institution_identity);
 				updateService.ReCreatedSAUser();
 				boolean res = importLegacyService.ImportEverything(institution,legacyInstitution);
 				if (res) { logger.info("Import Finished...");

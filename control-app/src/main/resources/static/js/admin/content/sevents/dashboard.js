@@ -56,7 +56,8 @@
                 getReportQueryTime();
                 clearInterval(ajaxRefreshInterval);
 
-                if (staffId === '') {
+                let userIsStaffMemberOnly = $("#userIsStaffMemberOnly").val();
+                if (staffId === '' && userIsStaffMemberOnly === "false") {
                     dashboard.staffmembers.loadStaffByReport();
                     $("#stFilters").show();
                 }

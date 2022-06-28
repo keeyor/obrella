@@ -8,7 +8,7 @@
     dashboard.staffmembers.init = function () {
         $staff_el = $(".js-staffMembers-tags");
         $staff_el.select2({
-            placeholder: 'Επιλέξτε Τμήμα -> Καθηγητή'
+            placeholder: 'Επιλέξτε Τμήμα -> Διδάσκοντα ή Επ. Υπεύθυνο'
         });
 
         $staff_el.on('select2:select', function (e) {
@@ -19,23 +19,24 @@
         });
     };
 
-    dashboard.staffmembers.getStaffMembersOfDepartmentId = function (departmentId) {
+    dashboard.staffmembers.getStaffMembersOfDepartmentId = function ($s2,departmentId) {
 
         $.ajax({
             url:  dashboard.siteurl + '/api/v1/s2/staff.web/department/' + departmentId,
             cache: false
         })
             .done(function( data ) {
-                $staff_el.select2({
-                    placeholder: 'Επιλέξτε τον Υπεύθυνο Καθηγητή',
+                $s2.select2({
+                    placeholder: 'Επιλέξτε Διδάσκοντα ή Επ. Υπεύθυνο',
                     width: 'style', // need to override the changed default
                     data : data.results,
+                    dropdownParent: $s2.parent(),
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                     templateResult: formatRepo,
                     templateSelection: formatRepoSelection
                 });
 
-                $staff_el.val("").trigger("change");
+                $s2.val("").trigger("change");
             });
 
         function formatRepo (repo) {
@@ -45,7 +46,7 @@
 
             let markup = "<div class='select2-result-repository clearfix'>" +
                 "<div class='select2-result-repository__meta'>" +
-                "<div class='select2-result-repository__title'><i class=\"fas fa-user-tie\"></i> " + repo.text + "</div>";
+                "<div class='select2-result-repository__title'> " + repo.text + "</div>";
 
             return markup;
         }

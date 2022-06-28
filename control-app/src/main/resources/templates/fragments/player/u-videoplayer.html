@@ -41,10 +41,10 @@
                 <span style="float:right" class="show_current_vol"></span>
                 <i class="fas fa-volume-up"  style="float: right;top:3px;margin-right: 3px" aria-hidden="true"></i>
             </div>
-            <div class="mt-3" style="font-style:italic;font-size: 0.9em">
+            <div class="mt-4" style="font-style:italic;font-size: 0.9em" title="άδεια χρήσης">
                 <a class="text-muted" th:href="${ccLicense.getUrl()}" target="_blank" style="text-decoration: none">
-                    <img th:src="${ccLicense.image_url}" alt=""  class="mr-2"/>
-                    <div th:text="${' Άδεια Χρήσης: ' + ccLicense.title}" style="color: #0b6da8"></div>
+                    <img th:src="${ccLicense.image_url}" alt="creative commons"  class="mε-2" src=""/>
+                    <div th:text="${ccLicense.title}" style="color: #0b6da8"></div>
                 </a>
             </div>
         </div>

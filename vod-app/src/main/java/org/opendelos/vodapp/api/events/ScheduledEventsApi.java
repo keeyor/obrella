@@ -35,7 +35,7 @@ public class ScheduledEventsApi {
 		this.scheduledEventService = scheduledEventService;
 	}
 
-	@RequestMapping(value = "/api/v1/s2/scheduledEvents.web", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/scheduledEvents.web", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAll() {
 		List<ScheduledEvent> scheduledEvents = scheduledEventService.findAll();
 		List<Select2GenChild> children = new ArrayList<>();
@@ -54,7 +54,7 @@ public class ScheduledEventsApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v2/s2/scheduledEvents.web/authorized/{access}/{security}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v2/s2/scheduledEvents.web/authorized/{access}/{security}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAuthorizedScheduledEvents(@PathVariable String access, @PathVariable String security) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -100,7 +100,7 @@ public class ScheduledEventsApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v2/dt/scheduledEvents.web/authorized/{access}/{security}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v2/dt/scheduledEvents.web/authorized/{access}/{security}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getAuthorizedScheduledEventsDT(@PathVariable String access, @PathVariable String security) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -117,7 +117,7 @@ public class ScheduledEventsApi {
 		return ApiUtils.TransformResultsForDataTable(scheduledEvents);
 	}
 
-	@RequestMapping(value = "/api/v1/s2/scheduledEvents.web/staffmember/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/scheduledEvents.web/staffmember/{id}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAllByResponsiblePerson(@PathVariable("id") String id) {
 
 		List<ScheduledEvent> scheduledEvents = scheduledEventService.findAllByResponsiblePersonId(id);
@@ -140,7 +140,7 @@ public class ScheduledEventsApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/dt/scheduledEvents.web", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/dt/scheduledEvents.web", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getAllEventsDt() {
 
 		List<ScheduledEvent> scheduledEvents = scheduledEventService.findAll();

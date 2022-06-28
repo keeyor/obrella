@@ -21,7 +21,7 @@
                     return jsonObj.data.results;
                 },
             },
-            pageLength : 25,
+            pageLength : 10,
             fixedHeader: true,
             "ordering": false,
             language: dtLanguageGr,
@@ -431,7 +431,7 @@
                 }
             });
             if (all_in_the_past) {
-                let msg = "Ο επιλεγμένος Προγραμματισμός Μετάδοσης αφορά ημερομηνίες παρελθόντος χρόνου. Η επεξεργασία έχει απενεργοποιηθεί!";
+                let msg = "Η Μετάδοση αφορά ημερομηνίες παρελθόντος χρόνου. Η επεξεργασία έχει απενεργοποιηθεί!";
                 let allow_delete = true;
                 disableEditing(msg,allow_delete);
             }

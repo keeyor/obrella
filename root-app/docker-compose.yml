@@ -55,22 +55,22 @@ services:
       - elasticsearch
 
   live:
-    image: michaelgatzonis/opendelos-liverunner-service:0.1
+    image: michaelgatzonis/opendelos-liverunner-service:0.3
     container_name: opendelos-liverunner-service
     restart: on-failure
     volumes:
       - F:/delos-etc:/delos-etc
     extra_hosts:
-      - "dimos.med.uoa.gr:88.197.126.20"
+      - "dimos.med.uoa.gr:172.22.80.1"
     ports:
-      - "8069:8069"
+      - "8075:8075"
     networks:
       - elk
     depends_on:
       - logstash
 
   control:
-    image: michaelgatzonis/opendelos-control-app:0.1
+    image: michaelgatzonis/opendelos-control-app:0.3
     container_name: opendelos-control-app
     restart: on-failure
     volumes:
@@ -88,52 +88,58 @@ services:
       - logstash
 
   vod:
-    image: michaelgatzonis/opendelos-vod-app:0.1
+    image: michaelgatzonis/opendelos-vod-app:0.3
     container_name: opendelos-vod-app
     restart: on-failure
     volumes:
       - F:/delos-etc:/delos-etc
+    extra_hosts:
+    - "dimos.med.uoa.gr:172.22.80.1"
     ports:
-      - "8050:8050"
+      - "8072:8072"
     networks:
       - elk
     depends_on:
       - logstash
 
   live-app:
-    image: michaelgatzonis/opendelos-live-app:0.1
+    image: michaelgatzonis/opendelos-live-app:0.3
     container_name: opendelos-live-app
     restart: on-failure
     volumes:
       - F:/delos-etc:/delos-etc
+    extra_hosts:
+      - "dimos.med.uoa.gr:172.22.80.1"
     ports:
-      - "8070:8070"
+      - "8073:8073"
     networks:
       - elk
     depends_on:
       - logstash
 
   events:
-    image: michaelgatzonis/opendelos-events-app:0.1
+    image: michaelgatzonis/opendelos-events-app:0.3
     container_name: opendelos-events-app
     restart: on-failure
     volumes:
       - F:/delos-etc:/delos-etc
+    extra_hosts:
+      - "dimos.med.uoa.gr:172.22.80.1"
     ports:
-      - "8060:8060"
+      - "8074:8074"
     networks:
       - elk
     depends_on:
       - logstash
 
-  root:
-    image: michaelgatzonis/opendelos-root-app:0.1
-    container_name: opendelos-root-app
-    restart: on-failure
-    ports:
-      - "8085:8085"
-    networks:
-      - elk
+#  root:
+#    image: michaelgatzonis/opendelos-root-app:0.1
+#    container_name: opendelos-root-app
+#    restart: on-failure
+#    ports:
+#      - "8075:8075"
+#    networks:
+#      - elk
 
 volumes:
   elasticsearch:

@@ -96,15 +96,17 @@ public class UserEditController {
 				if (rights.getIsSa()) {
 					role = "SA";
 				}
-				if ((rights.getUnitPermissions() != null)
-						&& (rights.getUnitPermissions().size() > 0)
-						&& (rights.getUnitPermissions().get(0).getUnitType().equals(UserAccess.UnitType.INSTITUTION))) {
-					role = "INSTITUTION_MANAGER";
+				else {
+					if (adminUser.getAuthorities().contains(UserAccess.UserAuthority.MANAGER)) {
+						role = " MANAGER";
+						if ((rights.getUnitPermissions() != null)
+								&& (rights.getUnitPermissions().size() > 0)
+								&& (rights.getUnitPermissions().get(0).getUnitType().equals(UserAccess.UnitType.INSTITUTION))) {
+							role = "INSTITUTION_MANAGER";
+						}
+					}
 				}
-				else if (rights.getUnitPermissions() != null && rights.getUnitPermissions().size() > 0) {
-					role = "MANAGER";
-				}
-				else if (rights.getCoursePermissions() != null && rights.getCoursePermissions().size() > 0) {
+				if (adminUser.getAuthorities() != null && adminUser.getAuthorities().contains(UserAccess.UserAuthority.SUPPORT)) {
 					role = "SUPPORT";
 				}
 				//Authorities
@@ -229,6 +231,7 @@ public class UserEditController {
 				userRights.setCoursePermissions(null);
 				userRights.setUnitPermissions(null);
 				opUser.setRights(userRights);
+				opUser.setActive(true);
 
 				BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 				String encoded_pass = bCryptPasswordEncoder.encode(opUser.getPassword());

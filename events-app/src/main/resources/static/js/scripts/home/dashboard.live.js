@@ -109,8 +109,8 @@
                     '  <div class=" mr-3 mb-2" style="width: 32px;height: 32px"><span class="icon-scheduled" style="font-size: 2em"></span></div>' +
                     '\n' +
                     '  <div class="media-body">\n' +
-                    '    <h6 class="mt-0 mb-1">' +
-                    '    <a target="_blank" href="calendar"  class="blue-link-wcag-color">Ημερολόγιο Μεταδόσεων</a></h6>\n' +
+                    '    <h5 class="mt-0 mb-1">' +
+                    '    <a href="calendar"  class="blue-link-wcag-color">Ημερολόγιο Μεταδόσεων</a></h5>\n' +
                     '    Συμβουλευτείτε το αναλυτικό ημερολόγιο μεταδόσεων '  + '\n' +
                     '  </div>\n' +
                     '</li>'

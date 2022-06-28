@@ -12,24 +12,24 @@
                                     <nav class="pagination justify-content-center" th:with="page_index=${(QR.skip/QR.limit)}">
                                         <ul class="pagination mb-0">
                                              <li th:if="${(page_index) >= 1}" class="page-item">
-                                                <a th:href="${#strings.replace(nSkip,'skip=N','skip=0')}" class="page-link">
-                                                    <i th:title="#{pager.first.title}" class="fas fa-home" style="color: #005cbf"></i>
+                                                <a th:title="#{pager.first.title}" th:href="${#strings.replace(nSkip,'skip=N','skip=0')}" class="page-link blue-link-wcag-color">
+                                                    <i  class="fas fa-home" style="color: #005cbf"></i>
                                                 </a>
                                              </li>
                                             <li th:unless="${(page_index) >= 1}" class="page-item disabled">
-                                                <a href="#" class="page-link">
-                                                    <i th:title="#{pager.first.title}" class="fas fa-home" aria-disabled="true"></i>
+                                                <a th:title="#{pager.first.title}" title="Μετάβαση στην πρώτη σελίδα αποτελεσμάτων" href="#" class="page-link">
+                                                    <i  class="fas fa-home" aria-disabled="true"  style="color: #2C384A"></i>
                                                 </a>
                                             </li>
                                         <!-- Previous Page -->
                                          <li th:if="${(page_index) >= 1}"  class="page-item">
-                                                <a th:href="${#strings.replace(nSkip,'skip=N','skip=' + (page_index - 1) * QR.limit)}" class="page-link">
+                                                <a th:href="${#strings.replace(nSkip,'skip=N','skip=' + (page_index - 1) * QR.limit)}" class="page-link blue-link-wcag-color">
                                                     <span th:title="#{pager.previous.title}" th:text="#{pager.previous}"  style="color: #005cbf"></span>
                                                 </a>
                                          </li>
                                          <li th:unless="${(page_index) >= 1}" class="page-item disabled">
                                                 <a href="#" class="page-link">
-                                                    <span th:title="#{pager.previous.title}" th:text="#{pager.previous}" aria-disabled="true"></span>
+                                                    <span th:title="#{pager.previous.title}" th:text="#{pager.previous}" aria-disabled="true" style="color: #2C384A" ></span>
                                                 </a>
                                          </li>
                                         <!-- Previous Page Numbers -->

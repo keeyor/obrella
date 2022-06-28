@@ -20,6 +20,7 @@ import org.opendelos.vodapp.services.resource.ResourceService;
 import org.opendelos.vodapp.services.structure.CourseService;
 import org.opendelos.vodapp.services.structure.DepartmentService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
+
+	@Value("${app.live.url}")
+	String app_live_url;
+	@Value("${app.events.url}")
+	String app_events_url;
 
 	private final ResourceService resourceService;
 	private final OptionServices optionServices;
@@ -62,17 +68,12 @@ public class HomeController {
 
 		model.addAttribute("page", "home");
 
+		model.addAttribute("app_live_url", app_live_url);
+		model.addAttribute("app_events_url",app_events_url);
+
 		return "home";
 	}
 
-	@RequestMapping(value = {"/login"})
-	public String signIn(final Model model, @RequestParam(value = "error", required = false) String error) {
-
-		if (error != null) {
-			model.addAttribute("error", "Bad_Credentials_Message");
-		}
-		return "login";
-	}
 
 	@RequestMapping(value = {"/themareas"})
 	public String getThematicAreaList(final Model model, Locale locale) {
@@ -89,7 +90,7 @@ public class HomeController {
 	@RequestMapping(value = {"/departments"})
 	public String getDepartmentList(final Model model, Locale locale) {
 
-		List<Select2GenGroup> departmentList = departmentService.getAllDepartmentsGroupedBySchool("dummy");
+		List<Select2GenGroup> departmentList = departmentService.getAllDepartmentsGroupedBySchool("dummy", locale);
 		model.addAttribute("departmentList",departmentList);
 		//Locale
 		model.addAttribute("localeData", locale.getDisplayName());

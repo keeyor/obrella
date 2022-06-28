@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>OpenDelos Live</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="stylesheet" th:href="@{/css/front-page.css}"/>
+    <link rel="shortcut icon" th:href="@{/public/images/icons/delos.ico}">
+    <link rel="stylesheet" th:href="@{/lib/coreui/coreui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
+    <!-- alertify -->
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
+</head>
+
+<body>
+<div class="wrapper d-flex flex-column min-vh-100" style="background-color: white">
+
+    <!-- Content -->
+    <div class="row mt-3">
+        <div class="col-12" id="content">
+            <!-- Upper Logo -->
+            <div class="row justify-content-center">
+                <div class="col-5 text-right main-logo" style="border-right: #ccc 1px solid">
+                    <div th:with="uid=#{institution.identity}">
+                        <img th:alt="#{default.institution.title}" th:src="@{'/public/images/logos/' + ${uid} + '.png'}" alt="" src="" style="height: 120px">
+                    </div>
+                </div>
+                <div class="col-6" id="main-title">
+                    <div>Πιστοποίηση χρήστη</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center mt-5" style="background-color: white;">
+
+            <!-- USERNAME+PASSWORD LOGIN -->
+            <div class="card" id="alt_login_panel">
+                <div class="card-header text-center" style="font-weight: 500;font-size: 1.2em">
+                    Είσοδος με λογαριασμό Υπηρεσίας
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <form  th:action="@{rlogin}" method="POST">
+                                <label for="username">Όνομα Χρήστη:</label>
+                                <div class="input-group">
+                                    <div class="input-group-text"><i class="fas fa-user"></i></div>
+                                    <input type="text" class="form-control" id="username" name="username">
+                                </div>
+                                <label class="mt-1" for="password">Κωδικός Πρόσβασης:</label>
+                                <div class="input-group">
+                                    <div class="input-group-text"><i class="fas fa-key"></i></div>
+                                    <input type="password" class="form-control" id="password" name="password">
+                                </div>
+                                <div class="form-check text-left my-3" style="padding-left: 0!important;">
+                                    <input type="checkbox" class="form-check-inline" name="remember-me" id="remember-me">
+                                    <label class="form-check-label" for="remember-me">
+                                        Να με θυμάσαι
+                                    </label>
+                                </div>
+
+                                <div>
+                                    <button class="btn btn-outline-primary blue-link-wcag-color" type="submit">
+                                        <span class="fas fa-sign-in-alt"></span> Είσοδος
+                                    </button>
+                                </div>
+                                <div th:if="${login_error == 't'}" class="alert-danger mt-2">
+                                    Άγνωστος χρήστης. Ελέξτε το όνομα και τον κωδικό πρόσβασης και προσπαθήστε ξανά
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+    <div class="container" style="margin-top: 30px">
+        <div class="row justify-content-center">
+            <img   alt="opendelos" th:src="@{'/public/images/logos/byOpenDelos.png'}" src="">
+        </div>
+    </div>
+
+
+</div>
+
+
+<div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
+
+<div th:replace="~{modals/about-modal :: #about_modal}"></div>
+<div th:replace="~{modals/terms-modal :: #terms_modal}"></div>
+<div th:replace="~{modals/faq-modal :: #faq_modal}"></div>
+<div th:replace="~{modals/contact-modal :: #contact_modal}"></div>
+
+
+<script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
+<script th:src="@{/lib/coreui/coreui.bundle.min.js}"></script>
+<script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script>
+
+<script>
+    $("#alt_login").on('click',function(e){
+        $("#main_login_panel").hide();
+        $("#alt_login_panel").show();
+        e.preventDefault();
+    });
+    $("#main_login").on('click',function(e){
+        $("#main_login_panel").show();
+        $("#alt_login_panel").hide();
+        e.preventDefault();
+    });
+</script>
+
+</body>
+</html>

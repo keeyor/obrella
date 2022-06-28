@@ -1,9 +1,19 @@
+
+body {
+    font-size: 0.82em!important;
+}
+
+.sidebar-nav .nav-link {
+    color:white!important;
+}
+
 html:not([dir=rtl]) .wrapper {
     padding-left: var(--cui-sidebar-occupy-start,0);
 }
 
 .hover_button_warn {
     border-color: darkorange!important;
+    border-width: 3px!important;
 }
 .hover_button_warn:hover {
     background-color: darkorange!important;
@@ -30,9 +40,6 @@ html:not([dir=rtl]) .wrapper {
 @media (max-width: 768px) {
     .hide-md {
         display: none;
-    }
-    .dynlink {
-        margin-top: 2px;
     }
 }
 
@@ -125,4 +132,28 @@ html:not([dir=rtl]) .wrapper {
 .breadcrumb-item a {
     text-decoration: none;
     color: #006A9B !important;
+}
+.alertify .ajs-dialog {
+    max-width: 25%!important;
+}
+
+.select2-container .select2-selection--single {
+    height: 36px!important;
+    padding-top: 0.175rem!important;
+    padding-bottom: 0.75rem!important;
+    padding-left: 0.2rem!important;
+    font-size: 1em;
+}
+.select2-container .select2-selection--multiple {
+    font-size: 1em;
+}
+.select2-selection__arrow {
+    padding-top: 2rem!important;
+}
+
+.my-nav{
+    color: #006A9B!important;
+}
+.my-nav.active {
+    color: grey!important;
 }

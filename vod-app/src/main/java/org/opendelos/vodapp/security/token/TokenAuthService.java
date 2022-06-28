@@ -58,10 +58,12 @@ public class TokenAuthService {
 
 					//#Mandatory if access == PRIVATE
 					String tokenUserId = null;
-					if (access.equals("PRIVATE")) {
-						String tokenSsoUserUId = decodedPayload.get("user_id").toString();
-						OpUser tokenUser = opUserService.findByUid(tokenSsoUserUId);
-						tokenUserId = tokenUser.getId();
+					//token may be null on first call on private end-point
+					if (access.equals("PRIVATE") && token != null) {
+						OpUser tokenUser = opUserService.findByToken(token);
+						if (tokenUser != null && tokenUser.getId() != null) {
+							tokenUserId = tokenUser.getId();
+						}
 					}
 					//# Not sure if it is used!!!
 					String tokenRedirectUrl = null;

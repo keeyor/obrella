@@ -89,6 +89,23 @@ public class ResourceUtils {
 		return stringBuilder;
 	}
 
+	public StringBuilder getStreamingFolder(Resource resource) {
+
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(streamingProperties.getAbsDir());
+		stringBuilder.append(resource.getResourceAccess().getFolder()).append("/");
+
+		return stringBuilder;
+	}
+	public StringBuilder getMultimediaFolder(Resource resource) {
+
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(multimediaProperties.getAbsDir());
+		stringBuilder.append(resource.getResourceAccess().getFolder()).append("/");
+
+		return stringBuilder;
+	}
+
 	public StringBuilder getSupportFilesBaseWebPath() {
 
 		StringBuilder stringBuilder = new StringBuilder();

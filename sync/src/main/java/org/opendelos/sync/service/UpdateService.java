@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
@@ -90,11 +91,14 @@ public class UpdateService {
 
 	private final Logger logger = Logger.getLogger(UpdateService.class.getName());
 
+	@Value("${default.institution.identity}")
+	String institution_identity;
 	@Value("${import_url}")
 	String import_url;
 	@Value("${app.zone}")
 	String app_zone;
-
+	@Value("${main_col}")
+	String main_col;
 
 	@Value("${current_year_only}")
 	boolean current_year_only;
@@ -225,7 +229,7 @@ public class UpdateService {
 			if (xDepartment != null && xDepartment.getDepartment() != null) {
 				org.opendelos.legacydomain.institution.Department odepartment = xDepartment.getDepartment();
 				Department new_department = new Department();
-				new_department.setIdentity(odepartment.getId());
+				new_department.setIdentity(odepartment.getId().toLowerCase(Locale.getDefault()));
 				new_department.setTitle(odepartment.getName());
 				new_department.setInstitutionId(institution_id);
 				School school1 = schoolService.findByIdentity(schoolIdentity);
@@ -403,7 +407,7 @@ public class UpdateService {
 				//# get ACTIVE status and Last Login from DlmUser if exists
 				DlmUser dlmUser_as_staff = null;
 				try {
-					Collection col = elegacyRepository.getDatabaseCollection(import_url, "guest", "guest", "/db/apps/delos-uoa/Users");
+					Collection col = elegacyRepository.getDatabaseCollection(import_url, "guest", "guest", main_col + "Users");
 					dlmUser_as_staff = (DlmUser) elegacyRepository.GetDataBaseObject(col, oStaff.getSId(), DlmUser.class);
 				}
 				catch (Exception ignored) {}
@@ -453,7 +457,7 @@ public class UpdateService {
 						//# get ACTIVE status and Last Login from additional DlmUser if exists
 						DlmUser dlmUser_as_staff = null;
 						try {
-							Collection col = elegacyRepository.getDatabaseCollection(import_url, "guest", "guest", "/db/apps/delos-uoa/Users");
+							Collection col = elegacyRepository.getDatabaseCollection(import_url, "guest", "guest", main_col + "Users");
 							dlmUser_as_staff = (DlmUser) elegacyRepository.GetDataBaseObject(col, oStaff.getSId(), DlmUser.class);
 						}
 						catch (Exception ignored) {}
@@ -932,7 +936,7 @@ public class UpdateService {
 		}
 
 		boolean create_new = false;
-		resourceV4 = resourceService.findByIdentity(videoLecture.getIdentifier());
+		resourceV4 = null;//resourceService.findByIdentity(videoLecture.getIdentifier());
 		if (resourceV4 == null) {
 			resourceV4 = new Resource();
 			create_new = true;
@@ -978,9 +982,16 @@ public class UpdateService {
 
 			//# Classroom
 			if (videoLecture.getRoom() != null && videoLecture.getRoom().getId() != null && !videoLecture.getRoom().getId().equals("")) {
-				Classroom classroom = classroomService.findByIdentity(videoLecture.getRoom().getId());
-				if (classroom != null) {
-					resourceV4.setClassroom(classroom.getId());
+				
+				Classroom classroom = null;
+				try {
+					classroom = classroomService.findByIdentity(videoLecture.getRoom().getId());
+					if (classroom != null) {
+						resourceV4.setClassroom(classroom.getId());
+					}
+				}
+				catch (Exception classe) {
+					logger.severe("CLASS:" + classe.getMessage());
 				}
 			}
  			if (!videoLecture.getSortOrder().getDescription().equals("not-applicable")) {
@@ -996,7 +1007,13 @@ public class UpdateService {
 			resourceV4.setInstitution(institution_id);
 			//# editor
 			String editorIdentity = videoLecture.getRights().getEditor().getIdentity();
-			OpUser editor = opUserService.findByIdentity(editorIdentity);
+			OpUser editor = null;
+			try {
+				editor = opUserService.findByIdentity(editorIdentity);
+			}
+			catch (Exception editore) {
+				logger.severe("EDITOR:" + editore.getMessage());
+			}
 			if (editor != null) {
 				resourceV4.setEditor(new Person(editor.getId(), editor.getName(), editor.getAffiliation(), editor.getDepartment()));
 			}
@@ -1070,24 +1087,47 @@ public class UpdateService {
 				resourceV4.setType("COURSE");
 				//Course
 				String courseIdentity = videoLecture.getRelation().getCourse().getIdentity();
-				Course course = courseService.findByIdentity(courseIdentity);
-				if (course == null) {
-					logger.fine(String.format("LECTURES> Warning. (d) Course (%s) of Lecture (%s) not found. Skipping import!", courseIdentity, videoLecture.getIdentifier()));
-					return -1;
+				if (courseIdentity != null && !courseIdentity.trim().equals("")) {
+					Course course = null;
+					try {
+						course = courseService.findByIdentity(courseIdentity);
+					}
+					catch (Exception coursee ) {
+						logger.severe("COURSE:" + coursee.getMessage());
+					}
+					if (course == null) {
+						logger.warning(String.format("LECTURES> Warning. (d) Course (%s) of Lecture (%s) not found. Skipping import!", courseIdentity, videoLecture.getIdentifier()));
+						return -1;
+					}
+					else {
+						resourceV4.setCourse(course);
+						// Do not use PublicCounters for now! until you find a clever way to update the counters
+						if (videoLecture.getRights().getSecurity().equalsIgnoreCase("public")) {
+							course.setResourcePublicCounter(course.getResourcePublicCounter() + 1);
+							try {
+								courseService.update(course);
+							}
+							catch (Exception updatec) {
+								logger.severe("UPDATEC:" + updatec.getMessage());
+							}
+						}
+						//course.setResourceCounter(course.getResourceCounter() + 1);
+						//courseService.update(course);
+					}
 				}
 				else {
-					resourceV4.setCourse(course);
-					// Do not use PublicCounters for now! until you find a clever way to update the counters
-					 if (videoLecture.getRights().getSecurity().equalsIgnoreCase("public")) {
-						course.setResourcePublicCounter(course.getResourcePublicCounter() + 1);
-						courseService.update(course);
-					}
-					//course.setResourceCounter(course.getResourceCounter() + 1);
-					//courseService.update(course);
+					logger.warning(String.format("LECTURES> Warning. (d) Course Identity of Lecture (%s) is null. Skipping import!", videoLecture.getIdentifier()));
+					return -1;
 				}
 				//Department
-				String departmentIdentity = videoLecture.getUnit().getIdentity();
-				Department department = departmentService.findByIdentity(departmentIdentity);
+				String departmentIdentity = videoLecture.getUnit().getIdentity().toLowerCase(Locale.getDefault());
+				Department department = null;
+				try {
+					department = departmentService.findByIdentity(departmentIdentity);
+				}
+				catch (Exception departmente) {
+					logger.severe("DEPARTMENT:" + departmente.getMessage());
+				}
 				Unit department_as_unit;
 				if (department != null) {
 					logger.fine("Create-Update Resource for Department:" + department.getTitle());
@@ -1096,7 +1136,7 @@ public class UpdateService {
 					resourceV4.setSchool(department.getSchoolId());
 				}
 				else {
-					logger.fine("No Department found with identity:" + departmentIdentity);
+					logger.warning("No Department found with identity:" + departmentIdentity);
 					return -1;
 				}
 				resourceV4.setSchool(department.getSchoolId());
@@ -1104,7 +1144,7 @@ public class UpdateService {
 				String creatorIdentity = videoLecture.getRights().getCreator().getIdentity();
 				OpUser creator = opUserService.findByIdentity(creatorIdentity);
 				if (creator == null) {
-					logger.fine(String.format("LECTURES> Warning. (d) Creator (%s) of Lecture (%s) not found. Skipping import!", creatorIdentity, videoLecture.getIdentifier()));
+					logger.warning(String.format("LECTURES> Warning. (d) Creator (%s) of Lecture (%s) not found. Skipping import!", creatorIdentity, videoLecture.getIdentifier()));
 					return -1;
 				} else {
 					resourceV4.setSupervisor(new Person(creator.getId(), creator.getName(), creator.getAffiliation(), creator.getDepartment()));
@@ -1119,9 +1159,6 @@ public class UpdateService {
 				//Period and Academic Year
 				CustomPeriod department_periods = departmentService.getDepartmentCalendar(department.getId(),institution_id,Integer.toString(academicYear));
 				Instant resource_date = resourceV4.getDate();
-				if (resourceV4.getIdentity().startsWith("213af88f")) {
-					logger.warning("period error");
-				}
 				Instant period_startDate = null;
 				Instant period_endDate = null;
 				logger.fine("year:" + academicYear);
@@ -1154,7 +1191,7 @@ public class UpdateService {
 				String eventIdentity = videoLecture.getRelation().getEvent().getIdentity();
 				ScheduledEvent scheduledEvent = scheduledEventService.findByIdentity(eventIdentity);
 				if (scheduledEvent == null) {
-					logger.fine(String.format("LECTURES> Warning. (d) EVENT (%s) of Lecture  not found. Skipping import!", eventIdentity));
+					logger.warning(String.format("LECTURES> Warning. (d) EVENT (%s) of Lecture  not found. Skipping import!", eventIdentity));
 					return -1;
 				}
 				else {
@@ -1173,7 +1210,7 @@ public class UpdateService {
 					String creatorIdentity = videoLecture.getRights().getCreator().getIdentity();
 					OpUser supervisor = opUserService.findByIdentity(creatorIdentity);
 					if (supervisor == null) {
-						logger.fine(String.format("LECTURES> Warning. (d) Creator (%s) of Lecture (%s) not found. Skipping import!", creatorIdentity, videoLecture.getIdentifier()));
+						logger.warning(String.format("LECTURES> Warning. (d) Creator (%s) of Lecture (%s) not found. Skipping import!", creatorIdentity, videoLecture.getIdentifier()));
 						return -1;
 					} else {
 						resourceV4.setSupervisor(new Person(supervisor.getId(), supervisor.getName(), supervisor.getAffiliation(), supervisor.getDepartment()));
@@ -1360,6 +1397,9 @@ public class UpdateService {
 		String dlmUserDepartmentIdentity = dlmUser.getDepartment().getIdentity();
 		Department department = departmentService.findByIdentity(dlmUserDepartmentIdentity);
 
+		if (department == null) {
+			return false;
+		}
 		OpUser opUser = opUserService.findByIdentity(dlmUser.getSid());
 		if (opUser == null) {
 			//Duplicates
@@ -1467,7 +1507,7 @@ public class UpdateService {
 
 	public void CreateLiveEntry(String triggerCollection, String triggerDocument, org.opendelos.legacydomain.institution.Institution legacyInstitution, Institution institution) {
 
-		Collection col = elegacyRepository.getDatabaseCollection(import_url, "guest", "guest", "/db/apps/delos-uoa/Scheduler/Calendar/");
+		Collection col = elegacyRepository.getDatabaseCollection(import_url, "guest", "guest", main_col + "Scheduler/Calendar/");
 		DsmCalendarXml oLiveEntry = null;
 		try {
 			XMLResource xmlResource= elegacyRepository.GetDatabaseResourceById(col, triggerDocument);
@@ -1609,7 +1649,7 @@ public class UpdateService {
 
 		org.opendelos.legacydomain.institution.Institution legacyInstitution = null;
 		try {
-			legacyInstitution = elegacyRepository.getLegacyInstitution(import_url, "guest", "guest", "/db/apps/delos-uoa/institutions", "uoa");
+			legacyInstitution = elegacyRepository.getLegacyInstitution(import_url, "guest", "guest", main_col + "institutions", institution_identity);
 		}
 		catch (Exception e) {
 			logger.severe("FAILED: legacy institution");

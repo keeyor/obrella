@@ -144,7 +144,7 @@ html {
 
 #overlay_1 {
     position: relative;
-    bottom: 215px;
+    bottom: 255px;
     color: #FFF;
     text-align: left;
     font-size: 20px;
@@ -155,7 +155,7 @@ html {
 }
 #overlay_2 {
     position: relative;
-    bottom: 215px;
+    bottom: 255px;
     color: #FFF;
     text-align: left;
     font-size: 20px;

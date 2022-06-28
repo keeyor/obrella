@@ -5,7 +5,7 @@ $(function () {
 
     dashboard.player.actions;
 
-    let debug = 0;
+    let debug = 1;
     let playlist_array;
     let global_vid_duration;
     let intro_url;
@@ -230,6 +230,10 @@ $(function () {
             else {
                 $('.player_mute').html('<i class="fas fa-volume-off"></i>');
             }
+        }
+        else if (event.type === "error") {
+            if (debug)
+            console.log("Stream Error");
         }
     }
 

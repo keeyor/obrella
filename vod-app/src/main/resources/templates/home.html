@@ -1,24 +1,20 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" th:lang="${localeCode}">
 <head>
     <meta charset="UTF-8">
     <title>ΕΚΠΑ :: Διαλέξεις</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" th:href="@{/public/images/icons/delos.ico}">
+
     <link rel="stylesheet" th:href="@{/css/global.css}"/>
     <link rel="stylesheet" th:href="@{/css/front-page.css}"/>
-    <link rel="shortcut icon" th:href="@{/public/images/icons/delos.ico}">
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/coreui/free.min.css}"/>
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/wcag/wcag.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/font-css/delos.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/delos/search.css}"/>
+
     <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/css/all.min.css}"/>
 
-    <link rel="stylesheet" type="text/css" th:href="@{/css/select2/css/select2.min.css}"/>
-    <!-- alertify -->
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
-    <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/bootstrap.min.css}"/>
     <style>
         a {
             text-decoration: none;
@@ -35,14 +31,17 @@
             <!-- Upper Logo -->
             <div class="row">
                 <div class="col-12 text-center">
-                    <span class="icon-on-demand" style="color: #006A9B;font-size: 2.2em"></span>
-                        <span style="font-size: 2em">ΕΚΠΑ <b>ΔΙΑΛΕΞΕΙΣ</b></span><br/>
-                        <div class="float-end" style="font-weight: 450;font-style: italic">video-on-demand</div>
+                    <h1 style="font-size: 1.2em">
+                        <span class="icon-on-demand" style="color: #006A9B;font-size: 2.2em"></span>
+                        <span class="me-2" style="font-size:2em;font-weight: 300" th:text="#{ekpa_initials}"></span>
+                        <span style="font-size:2em;font-weight: 600" th:text="#{lectures_cap}">ΔΙΑΛΕΞΕΙΣ</span>
+                    </h1>
+                    <div class="float-end" style="font-weight: 450;font-style: italic">video-on-demand</div>
                 </div>
             </div>
             <hr class="float-left my-1" style="border-top: #005cbf 3px solid;width: 100%"/>
             <div style="font-weight: 500">
-                Αναζητήστε & προβάλετε μαγνητοσκοπημένες διαλέξεις, καταγεγραμμένες από την εκπαιδευτική διαδικασία του Εθνικού & Καποδιστριακού Πανεπιστημίου Αθηνών. Το περιεχόμενο του ιστότοπου είναι δημόσιο και η πρόσβαση είναι ελεύθερη σε όλους.
+                <span th:text="#{home_head_text}"></span>
             </div>
 
             <!-- Search Menu -->
@@ -50,28 +49,28 @@
                 <div class="col-12">
                                 <div class="row pb-2 pt-3">
                                     <div class="col-12">
-                                        Ξεκινήστε την αναζήτησή σας επιλέγοντας Τμήμα, Καθηγητή, Μάθημα ή Θεματική Περιοχή
+                                        <span th:text="#{start_search_msg}"></span>
                                     </div>
                                 </div>
                                 <div class="row py-2" style="font-size: 1em">
                                     <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
                                             <a role="button"  title="Αναζήτηση με Τμήμα" style="width: 80%" class="blue-link-wcag-color me-1  py-2  btn btn-secondary" th:href="@{departments}">
-                                               <i class="fas fa-building"></i> Τμήμα
+                                                <i class="fas fa-building me-1"></i><span th:text="#{department}">Τμήμα</span>
                                             </a>
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
                                             <a  role="button" title="Αναζήτηση με Τμήμα" style="width: 80%" class="blue-link-wcag-color me-1  py-2  btn btn-secondary" th:href="@{staffmembers}">
-                                                <i class="fas fa-graduation-cap"></i> Διδάσκων
+                                                <i class="fas fa-graduation-cap me-1"></i><span th:text="#{teacher}">Διδάσκων</span>
                                             </a>
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
                                             <a  role="button" title="Αναζήτηση με Τμήμα" style="width: 80%" class="blue-link-wcag-color me-1   py-2 btn btn-secondary" th:href="@{courses}">
-                                                 <i class="fa fa-book"></i> Μάθημα
+                                                <i class="fa fa-book me-1"></i><span th:text="#{course}">Μάθημα</span>
                                             </a>
                                      </div>
                                     <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
                                         <a role="button" title="Αναζήτηση με Θεματική Περιοχή"  style="width: 80%" class="blue-link-wcag-color me-1  py-2 btn btn-secondary" th:href="@{themareas}">
-                                            <i class="fas fa-share-alt"></i> Θεματική Περιοχή
+                                            <i class="fas fa-share-alt me-1"></i><span th:text="#{area}">Θεματική Περιοχή</span>
                                         </a>
                                     </div>
                                 </div>
@@ -82,38 +81,38 @@
             <div class="row mt-3 py-2" style="background-color: whitesmoke">
                 <div class="col-lg-4 col-md-12 text-center">
                     <div style="font-size: 3em"><span class="text-dark" th:text="${no_lectures}"></span></div>
-                    <div style="font-size: 1.2em"><span class="text-dark">Διαλέξεις*</span></div>
+                    <div style="font-size: 1.2em"><span th:text="#{lectures_sc}" class="text-dark">Διαλέξεις*</span></div>
                 </div>
                 <div class="col-lg-4 col-md-12 text-center">
                     <div style="font-size: 3em"><span class="text-dark" th:text="${no_staff}"></span></div>
-                    <div style="font-size: 1.2em"><span class="text-dark">Διδάσκοντες</span></div>
+                    <div style="font-size: 1.2em"><span th:text="#{teachers}" class="text-dark">Διδάσκοντες</span></div>
                 </div>
                 <div class="col-lg-4 col-md-12 text-center">
                     <div style="font-size: 3em"><span class="text-dark" th:text="${no_courses}"></span></div>
-                    <div style="font-size: 1.2em"><span class="text-dark">Μαθήματα</span></div>
+                    <div style="font-size: 1.2em"><span th:text="#{courses}" class="text-dark">Μαθήματα</span></div>
                 </div>
             </div>
-            <div class="pl-0" style="margin-top: 10px;font-style: italic;font-size: smaller">
-                * Ο συνολικός αριθμός διαλέξεων δημόσιας πρόσβασης
+            <div class="pl-0" style="margin-top: 10px;font-style: italic;font-size: small">
+                <span th:text="#{lectures_sum_note}"></span>
             </div>
 
             <div class="pl-0" style="margin-top: 50px">
-                <strong>Επισκεφτείτε επίσης...</strong>
+                <span style="font-weight: 500" th:text="#{also_visit}"></span>
             </div>
             <div class="row mt-3">
                 <div class="col-lg-6 col-md-12">
                     <div class="card mb-3">
                         <div class="card-body p-0">
                             <div style="font-size: 1.2em">
-                                <a href="https://dimos.med.uoa.gr/live" style="color: #006A9B" target="_blank">
-                                    <span class="icon-live-lecture" style="color: red"></span> ΕΚΠΑ
-                                    <b>ΜΕΤΑΔΟΣΕΙΣ ΔΙΑΛΕΞΕΩΝ</b>
+                                <a th:href="${app_live_url}" style="color: #006A9B" target="_blank">
+                                    <span class="icon-live-lecture" style="color: red"></span>
+                                    <span  th:text="#{ekpa_initials}">ΕΚΠΑ</span>
+                                    <span style="font-weight: 600" th:text="#{live_cap}">ΜΕΤΑΔΟΣΕΙΣ ΔΙΑΛΕΞΕΩΝ</span>
                                 </a>
                             </div>
                         </div>
                         <div class="card-footer" style="background-color: white">
-                            Παρακολουθείστε ζωντανά διαλέξεις από τις αίθουσες διδασκαλίας του ιδρύματος<br/>
-                            Μικτό περιεχόμενο. Ελεύθερο αλλά και περιορισμένης πρόσβασης. Η υπηρεσία απευθύνεται πρωτίστως στους φοιτητές του Ιδρύματος
+                            <span th:text="#{site_live_text}"></span>
                         </div>
                     </div>
                 </div>
@@ -121,15 +120,15 @@
                     <div class="card mb-3">
                         <div class="card-body p-0">
                             <div style="font-size: 1.2em">
-                                <a href="https://dimos.med.uoa.gr/events" style="color: #006A9B" target="_blank">
-                                    <span class="fas fa-circle" style="color: darkorange"></span> ΕΚΠΑ
-                                    <b>ΕΚΔΗΛΩΣΕΙΣ</b>
+                                <a th:href="${app_events_url}" style="color: #006A9B" target="_blank">
+                                    <span class="fas fa-circle" style="color: darkorange"></span>
+                                    <span  th:text="#{ekpa_initials}">ΕΚΠΑ</span>
+                                    <span style="font-weight: 600" th:text="#{events_cap}">ΔΡΑΣΕΙΣ</span>
                                 </a>
                             </div>
                         </div>
                         <div class="card-footer" style="background-color: white">
-                            Παρακολουθείστε ζωντανά & προβάλετε μαγνητοσκοπημένο περιεχόμενο από τις δράσεις και τις εκδηλώσεις του Ιδρύματος<br/>
-                            Το περιεχόμενο είναι δημόσιο και η πρόσβαση είναι ελεύθερη σε όλους
+                            <span th:text="#{site_events_text}"></span>
                         </div>
                     </div>
                 </div>
@@ -141,30 +140,15 @@
     <div th:replace="~{fragments/footer-411 :: footer}">Footer</div>
 </div>
 
-
-
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
 
 <div th:replace="~{modals/about-modal :: #about_modal}"></div>
 <div th:replace="~{modals/terms-modal :: #terms_modal}"></div>
 <div th:replace="~{modals/faq-modal :: #faq_modal}"></div>
 
-
-
 <script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>
 <script th:src="@{/lib/coreui41/coreui.bundle.min.js}"></script>
-<!--<script th:src="@{/lib/coreui/coreui-utilities.min.js}"></script> -->
 
-<script th:src="@{/css/select2/js/select2.js}" type="application/javascript"></script>
-<!-- alertify -->
-<script th:src="@{/lib/alertify/alertify.min.js}"></script>
-
-<script th:src="@{/js/home/dashboard.js}" type="application/javascript"></script>
-<script th:src="@{/js/home/dashboard.departments.js}" type="application/javascript"></script>
-<script th:src="@{/js/home/dashboard.categories.js}" type="application/javascript"></script>
-
-<script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
-<script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
-<script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>
-</body>
+<script th:src="@{/js/i18n/locale.js}"></script>
+ </body>
 </html>

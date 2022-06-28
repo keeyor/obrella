@@ -170,7 +170,7 @@ public class LiveService {
                             String ss_min = this.getStreamingHostWithMinimumUtilization(ssUtilizationMap);
                             updateStreamingServerUtilization(ss_min,ssUtilizationMap);
                             logger.trace("LiveService: assign to Streaming Server:" + ss_min);
-                            Resource liveEntry = createLiveResourceFromScheduleDTO(scheduleDTO, ss_min);
+                            Resource liveEntry = createLiveResourceFromScheduleDTO(scheduleDTO);
                             if (liveEntry != null) {
                                 existingTodaySchedule.add(liveEntry);
                             }
@@ -265,7 +265,7 @@ public class LiveService {
                 }
             }
             else {
-                Resource liveEntry = this.createLiveResourceFromScheduleDTO(scheduleDTO, ss_id);
+                Resource liveEntry = this.createLiveResourceFromScheduleDTO(scheduleDTO);
                 if (liveEntry != null) {
                     resourceRepository.saveToCollection(liveEntry, "Scheduler.Live");
                     logger.info("A. New OneTime Entry:  update LIVE schedule with new regular entry");
@@ -296,7 +296,7 @@ public class LiveService {
                 }
             }
             else {
-                Resource liveEntry = this.createLiveResourceFromScheduleDTO(scheduleDTO, ss_id);
+                Resource liveEntry = this.createLiveResourceFromScheduleDTO(scheduleDTO);
                 if (liveEntry != null) {
                     resourceRepository.saveToCollection(liveEntry, "Scheduler.Live");
                     logger.info("B. New OneTime Entry:  update LIVE schedule with new onetime entry");
@@ -382,10 +382,99 @@ public class LiveService {
         return liveResources;
     }
 
+    public Resource createLiveResourceFromScheduleDTO(ScheduleDTO scheduleDTO) {
+
+        Resource liveEntry = new Resource();
+        //STREAMID
+        String streamId = this.generateLiveStreamId(scheduleDTO);
+        liveEntry.setStreamId(streamId);
+
+        liveEntry.setId(null);
+        liveEntry.setStreamName(scheduleDTO.getClassroom().getCode());
+        liveEntry.setScheduleId(scheduleDTO.getId());
+        if (scheduleDTO.getType().equals("lecture")) {
+            Course course = courseService.findById(scheduleDTO.getCourse().getId());
+            liveEntry.setTitle(course.getTitle());
+            if (scheduleDTO.getRepeat().equals("regular")) {
+                liveEntry.setDescription("Προγραμματισμένη Μετάδοση Μαθήματος");
+            }
+            else if (scheduleDTO.getRepeat().equals("onetime")) {
+                liveEntry.setDescription("Έκτακτη Μετάδοση Μαθήματος");
+            }
+            Department department = departmentService.findById(scheduleDTO.getDepartment().getId());
+            liveEntry.setInstitution(defaultInstitution.getId());
+            liveEntry.setSchool(department.getSchoolId());
+            liveEntry.setDepartment(scheduleDTO.getDepartment());
+            Person supervisor = scheduleDTO.getSupervisor();
+            supervisor.setDepartment(scheduleDTO.getDepartment());
+            liveEntry.setSupervisor(supervisor);
+            liveEntry.setCourse(course);
+            liveEntry.setType("COURSE");
+            liveEntry.setPeriod(scheduleDTO.getPeriod());
+        }
+        else if (scheduleDTO.getType().equals("event")) {
+            ScheduledEvent scheduledEvent = scheduledEventService.findById(scheduleDTO.getScheduledEvent().getId());
+            liveEntry.setTitle(scheduledEvent.getTitle());
+            liveEntry.setDescription("Προγραμματισμένη Μετάδοση Εκδήλωσης");
+            liveEntry.setSchool(null);
+            liveEntry.setDepartment(null);
+            if (scheduledEvent.getResponsiblePerson() != null) {
+                liveEntry.setSupervisor(scheduledEvent.getResponsiblePerson());
+            }
+            liveEntry.setEvent(scheduledEvent);
+            liveEntry.setType("EVENT");
+        }
+        //COMMON PROPERTIES
+        liveEntry.setAcademicYear(scheduleDTO.getAcademicYear());
+        liveEntry.setPartNumber(0);
+        liveEntry.setEditor(scheduleDTO.getEditor());
+        liveEntry.setSpeakers("");
+        liveEntry.setExt_speakers("");
+        liveEntry.setLanguage("el");
+        //>Date & Time
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        int broadcast_hour = Integer.parseInt(scheduleDTO.getStartTime().substring(0,2));
+        int broadcast_min = Integer.parseInt(scheduleDTO.getStartTime().substring(3,5));
+        LocalDateTime broadcast_datetime = LocalDate.parse(scheduleDTO.getDate(), f).atTime(broadcast_hour,broadcast_min);
+        //LocalDateTime broadcast_datetime = scheduleDTO.getDate().atTime(broadcast_hour,broadcast_min);
+        Instant instant = broadcast_datetime.atZone(ZoneId.of(app_zone)).toInstant();
+        liveEntry.setDate(instant);
+        liveEntry.setDateModified(Instant.now());
+        //others
+        liveEntry.setTopics(null);
+        liveEntry.setCategories(null);
+        liveEntry.setAccessPolicy(scheduleDTO.getAccess());
+        liveEntry.setLicense(defaultInstitution.getOrganizationLicense());
+        liveEntry.setStatistics(0);
+        liveEntry.setStatus(new ResourceStatus(-1,-1,"SCHEDULER"));
+        liveEntry.setPlayerOptions(new PlayerOptions(true,false));
+        //Real Duration
+        DecimalFormat df = new DecimalFormat("00");
+        String h = df.format(scheduleDTO.getDurationHours());
+        String m = df.format(scheduleDTO.getDurationMinutes());
+        liveEntry.setRealDuration(h + ":" + m); //should re-set at recording end
+        liveEntry.setResourceAccess(null);
+        liveEntry.setPresentation(null);
+        liveEntry.setClassroom(scheduleDTO.getClassroom().getId());
+
+        //LIVE ENTRIES
+        liveEntry.setBroadcast(scheduleDTO.isBroadcast());
+        liveEntry.setAccess(scheduleDTO.getAccess());
+        if (scheduleDTO.getBroadcastCode() != null) {
+            liveEntry.setBroadcastCode(scheduleDTO.getBroadcastCode());
+        }
+        liveEntry.setRecording(scheduleDTO.isRecording());
+        liveEntry.setPublication(scheduleDTO.getPublication());
+
+        return  liveEntry;
+    }
+
     public Resource createLiveResourceFromScheduleDTO(ScheduleDTO scheduleDTO, String streamingServerId) {
         Resource liveEntry = new Resource();
         //STREAMID
         String streamId = this.generateLiveStreamId(scheduleDTO);
+        liveEntry.setStreamId(streamId);
+
         liveEntry.setId(null);
         liveEntry.setBroadcastToChannel(false); //!Important : do not broadcast to channel by default
         liveEntry.setStreamName(scheduleDTO.getClassroom().getCode());
@@ -408,7 +497,6 @@ public class LiveService {
             liveEntry.setSupervisor(supervisor);
             liveEntry.setCourse(course);
             liveEntry.setType("COURSE");
-
             liveEntry.setPeriod(scheduleDTO.getPeriod());
         }
         else if (scheduleDTO.getType().equals("event")) {
@@ -461,10 +549,12 @@ public class LiveService {
         //LIVE ENTRIES
         liveEntry.setBroadcast(scheduleDTO.isBroadcast());
         liveEntry.setAccess(scheduleDTO.getAccess());
+        if (scheduleDTO.getBroadcastCode() != null) {
+            liveEntry.setBroadcastCode(scheduleDTO.getBroadcastCode());
+        }
         liveEntry.setRecording(scheduleDTO.isRecording());
         liveEntry.setPublication(scheduleDTO.getPublication());
         liveEntry.setStreamingServerId(streamingServerId);
-        liveEntry.setBroadcastCode(scheduleDTO.getBroadcastCode());
 
         if (streamingServerId != null) {        //to re-use in WeekController
             StreamingServer streamingServer = streamingServerService.findById(streamingServerId);

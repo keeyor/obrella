@@ -2,6 +2,7 @@ package org.opendelos.vodapp.services.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.opendelos.model.calendar.Period;
 import org.opendelos.model.common.Select2GenChild;
@@ -285,7 +286,7 @@ public class DepartmentService {
         return pauses;
     }
 
-    public List<Select2GenGroup> getAllDepartmentsGroupedBySchool(String schoolId) {
+    public List<Select2GenGroup> getAllDepartmentsGroupedBySchool(String schoolId, Locale locale) {
 
         List<School> schools = new ArrayList<>();
         if (schoolId.trim().equals("dummy") || schoolId.trim().equals("")) {
@@ -300,14 +301,14 @@ public class DepartmentService {
             //set group properties
             Select2GenGroup select2GenGroup = new Select2GenGroup();
             select2GenGroup.setId(school.getId());
-            select2GenGroup.setText(school.getTitle());
+            select2GenGroup.setText(school.getTitle(locale));
             //set children properties
             List<Select2GenChild> groupChildren = new ArrayList<>();
             List<Department> schoolDepartments = this.findBySchoolId(school.getId());
             for (Department department: schoolDepartments) {
                 Select2GenChild select2GenChild = new Select2GenChild();
                 select2GenChild.setId(department.getId());
-                select2GenChild.setText(department.getTitle());
+                select2GenChild.setText(department.getTitle(locale));
                 groupChildren.add(select2GenChild);
             }
             select2GenGroup.setChildren(groupChildren);

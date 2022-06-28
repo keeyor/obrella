@@ -12,6 +12,17 @@
         </div>
     </div>
     <ul class="sidebar-nav"  style=" ">
+        <li class="nav-item mb-3"><a class="nav-link active" th:href="@{/admin}">
+            <i class="nav-icon fas fa-home"></i> ΑΡΧΙΚΗ</a>
+        </li>
+        <li class="nav-item">
+            <a  class="nav-link" th:href="@{/admin/user_profile}">
+                <i class="nav-icon fas fa-address-card"></i> Το Προφίλ μου
+            </a>
+            <a class="nav-link" title="logout" href="#" data-coreui-toggle="modal" data-coreui-target="#logout_modal">
+                <i class="nav-icon fas fa-sign-out-alt"></i> Αποσύνδεση
+            </a>
+        </li>
         <th:block sec:authorize="hasAnyRole('ROLE_SA')">
             <li class="nav-title">ΙΔΡΥΜΑ</li>
             <li class="nav-item">
@@ -75,15 +86,11 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" target="_blank" href="localhost:5601">
+            <a class="nav-link" target="_blank" href="http://localhost:5601">
                 <i class="nav-icon fas fa-record-vinyl"></i> Αρχεία Καταγραφής
             </a>
         </li>
    </th:block>
-
-        <li class="nav-item mt-5"><a class="nav-link active" th:href="@{/admin}">
-            <i class="nav-icon fas fa-home"></i> ΑΡΧΙΚΗ</a>
-        </li>
 
     </ul>
 

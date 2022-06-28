@@ -12,6 +12,19 @@
 
     dashboard.init = function () {
 
+        //PRESERVE TAB AFTER RELOAD
+        // use HTML5 localStorage object to save some parameter for the current tab locally in the browser and get it back to make the last active tab selected on page reload.
+        //ON CHANGE TAB EVENT
+        $('a[data-coreui-toggle="tab"]').on('show.coreui.tab', function(e) {
+            localStorage.setItem('activeTab', $(e.target).attr('href'));
+            //console.log($(e.target).attr('href'));
+        });
+        //LOAD ACTIVE TAB
+        var activeTab = localStorage.getItem('activeTab');
+        if(activeTab){
+            $('#myTab a[href="' + activeTab + '"]').tab('show');
+        }
+
         //display post errors
         let  msg_val = $("#msg_val").val();
         if (msg_val !== '') {

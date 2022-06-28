@@ -62,7 +62,7 @@ public class StaffMemberApi {
 		this.multilingualServices = multilingualServices;
 	}
 
-	@RequestMapping(value = "/api/v1/s2/staff.web/department/{departmentId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/staff.web/department/{departmentId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getStaffByDepartmentIds2(@PathVariable String departmentId) {
 
 		List<OpUser> staffMembers;
@@ -88,7 +88,7 @@ public class StaffMemberApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/dt/staff.web/department/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/staff.web/department/{id}", method = RequestMethod.GET)
 	public byte[] getStaffByDepartmentIdDt(@PathVariable("id") String id) {
 
 		List<OpUser> staffMembers;
@@ -103,7 +103,7 @@ public class StaffMemberApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/staff.web/course/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/dt/staff.web/course/{id}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getStaffByCourseIdDt(@PathVariable("id") String id) {
 
 		List<OpUser> staffMembers;
@@ -114,7 +114,7 @@ public class StaffMemberApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v2/dt/staff.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v2/dt/staff.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getAuthorizedStaffMembersOfEditorDT(@PathVariable String access) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -127,7 +127,7 @@ public class StaffMemberApi {
 
 	}
 
-	@RequestMapping(value = "/api/v2/dt/staff.web/authorized/{access}/d/{departmentId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v2/dt/staff.web/authorized/{access}/d/{departmentId}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getAuthorizedStaffMembersOfEditorAndDepartmentIdDT(@PathVariable String access, @PathVariable String departmentId) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -151,7 +151,7 @@ public class StaffMemberApi {
 
 	}
 
-	@RequestMapping(value = "/api/v1/s2/staff.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/staff.web/authorized/{access}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAuthorizedStaffMembersOfEditor(@PathVariable String access, @RequestParam(value = "term", required = false) String term,
 			@RequestParam(value = "department", required = false) String departmentId) {
 
@@ -195,7 +195,7 @@ public class StaffMemberApi {
 		return list.stream().anyMatch(o -> o.getId().equals(id));
 	}
 
-	@RequestMapping(value = "/api/v1/s2/staff.web/authorized/course/{id}/{access}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/staff.web/authorized/course/{id}/{access}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getAuthorizedStaffMembersTeachingCourse(@PathVariable("id") String courseId, @PathVariable String access) {
 
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -220,7 +220,7 @@ public class StaffMemberApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/s2/staff.web/course/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/s2/staff.web/course/{id}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<String> getStaffMembersTeachingCourse(@PathVariable("id") String courseId) {
 
 		List<OpUser> staffMembers;
@@ -243,7 +243,7 @@ public class StaffMemberApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/dt/staff.web/teaching/department/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/dt/staff.web/teaching/department/{id}", method = RequestMethod.GET)
 	public byte[] getStaffTeachingInDepartmentDt(@PathVariable("id") String id) {
 
 		List<OpUser> staffMembers;
@@ -255,7 +255,7 @@ public class StaffMemberApi {
 	}
 
 
-	@RequestMapping(value = "/api/v1/dt/courses.web/staff/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/dt/courses.web/staff/{id}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getAssignedCoursesByStaffId(@PathVariable("id") String id, Locale locale) {
 
 		List<Course> courses;
@@ -306,7 +306,7 @@ public class StaffMemberApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/dt/courses.web/staff/u/{id}/dp/{did}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/dt/courses.web/staff/u/{id}/dp/{did}", method = RequestMethod.GET, produces = "application/json")
 	public byte[] getUnAssignedCoursesByStaffId(@PathVariable("id") String id, @PathVariable("did") String did, Locale locale) {
 
 		List<Course> courses;
@@ -343,19 +343,19 @@ public class StaffMemberApi {
 		return b;
 	}
 
-	@RequestMapping(value = "/api/v1/staff/assign_courses/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/staff/assign_courses/{id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void AssignCoursesToStaffMember(@RequestBody String[] ids, @PathVariable("id") String id) {
 
 		opUserService.assignCoursesToStaffMemberById(id, ids);
 	}
 
-	@RequestMapping(value = "/api/v1/staff/unassign_course/{staff_id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/staff/unassign_course/{staff_id}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public void UnAssignCourseFromStaffMember(@RequestBody String id, @PathVariable("staff_id") String staff_id) {
 
 		opUserService.unassignCourseFromStaffMemberById(staff_id, id);
 	}
 
-	@RequestMapping(value = "/api/v1/staff/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/apiw/v1/staff/save", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> saveStaffMember(@RequestBody OpUser staffMember) {
 
 		String _id;
@@ -425,7 +425,7 @@ public class StaffMemberApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/staff/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/apiw/v1/staff/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteStaffMember(@PathVariable("id") String id) {
 		try {
 			opUserService.delete(id);
@@ -436,7 +436,7 @@ public class StaffMemberApi {
 		}
 	}
 
-	@RequestMapping(value = "/api/v1/staff/get/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/staff/get/{id}", method = RequestMethod.GET)
 	public OpUser getStaffMember(@PathVariable("id") String id) {
 		try {
 			return opUserService.findById(id);

@@ -32,11 +32,13 @@ import org.opendelos.model.structure.Course;
 import org.opendelos.model.structure.Department;
 import org.opendelos.model.structure.School;
 import org.opendelos.model.users.OoUserDetails;
+import org.opendelos.model.users.UserAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -211,6 +213,34 @@ public class TimeTableApi {
 		if (s != null && !s.equals("") && !s.equals("_")) {
 			scheduleQuery.setSupervisorId(s);
 		}
+
+		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		// #ADD THIS INFO IF YOU WANT TO LIMIT CALENDAR BASED ON ROLE
+		//# -->>> START
+		scheduleQuery.setManagerId(editor.getId());
+		if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER"))) {
+			scheduleQuery.setStaffMember(true);
+		}
+		if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SA"))) {
+			scheduleQuery.setSA(true);
+		}
+		else if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
+			scheduleQuery.setManager(true);
+			List<String> authorizedUnits = opUserService.getManagersAuthorizedDepartmentIdsByAccessType(editor.getId(),"scheduler");
+			scheduleQuery.setAuthorizedUnitIds(authorizedUnits);
+		}
+		else if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SUPPORT"))) {
+			scheduleQuery.setSupport(true);
+			List<UserAccess.UserRights.CoursePermission> editors_course_support;
+			List<UserAccess.UserRights.EventPermission> editors_event_support;
+
+			editors_course_support = opUserService.getManagersCoursePermissionsByAccessType(editor.getId(),"scheduler");
+			editors_event_support = opUserService.getManagersEventPermissionsByAccessType(editor.getId(),"scheduler");
+			scheduleQuery.setAuthorized_courses(editors_course_support);
+			scheduleQuery.setAuthorized_events(editors_event_support);
+		}
+		//# <-- END
+
 		if (cr != null && !cr.equals("") && !cr.equals("_")) {
 			scheduleQuery.setClassroomId(cr);
 		}

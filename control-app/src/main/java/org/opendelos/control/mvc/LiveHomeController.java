@@ -35,74 +35,13 @@ public class LiveHomeController {
 
 	private final LiveService liveService;
 	private final ResourceService resourceService;
-	private final AsyncQueryComponent asyncQueryComponent;
 	private final ClassroomService classroomService;
 
 	@Autowired
-	public LiveHomeController(LiveService liveService, ResourceService resourceService, AsyncQueryComponent asyncQueryComponent, ClassroomService classroomService) {
+	public LiveHomeController(LiveService liveService, ResourceService resourceService, ClassroomService classroomService) {
 		this.liveService = liveService;
 		this.resourceService = resourceService;
-		this.asyncQueryComponent = asyncQueryComponent;
 		this.classroomService = classroomService;
-	}
-
-	@GetMapping(value = "/live")
-	public String getLivePage(final Model model, HttpServletRequest request,
-			@RequestParam(value = "d", required = false) String d,     // Department
-			@RequestParam(value = "rt", required = false) String rt,   // ResourceType
-			@RequestParam(value = "c", required = false) String c,     // Course
-			@RequestParam(value = "e", required = false) String e,     // Event
-			@RequestParam(value = "s", required = false) String s     // Staff Member
-	) throws ExecutionException, InterruptedException, UnsupportedEncodingException {
-
-		Calendar time_start = Calendar.getInstance();
-		Date startTime = time_start.getTime();
-
-		/*//Messages
-		List<SystemMessage> messageList = systemMessageService.getAllByVisibleIs(true);
-		model.addAttribute("messageList", messageList);
-
-		String urlString   = request.getRequestURL().toString();
-		if (request.getQueryString() != null) {
-			urlString += "?" + request.getQueryString();
-		}
-		prepareLinkReplacements(model,urlString);
-
-		ResourceQuery resourceQuery = new ResourceQuery();
-		resourceQuery.setCollectionName("Scheduler.Live");
-		resourceQuery.setResourceType(rt);
-		resourceQuery.setDepartmentId(d);
-		resourceQuery.setCourseId(c);
-		resourceQuery.setEventId(e);
-		resourceQuery.setStaffMemberId(s);
-		resourceQuery.setSort("date");
-		resourceQuery.setDirection("asc");
-
-		String queryString = request.getQueryString();
-		resourceQuery.setQueryString(queryString);
-		model.addAttribute("queryString",queryString );
-
-		//> Get Live List
-		QueryResourceResults liveResources = liveService.getLiveResourcesByQuery(resourceQuery);
-		resourceQuery.setTotalResults(liveResources.getTotalResults());
-		model.addAttribute("QR", liveResources);
-
-		asyncQueryComponent.setStatus("Pending");
-		asyncQueryComponent.RunLiveQueryReport(resourceQuery, request);
-
-		setFilterDetails(model,resourceQuery);
-		//< Get Today's Schedule
-
-		model.addAttribute("resourceQuery", resourceQuery);*/
-		model.addAttribute("landing_page", "live");
-		model.addAttribute("color", "red");
-
-		Calendar time_now = Calendar.getInstance();
-		Date endTime = time_now.getTime();
-		long diff = endTime.getTime() - startTime.getTime();
-		model.addAttribute("PageLoadTime", diff);
-
-		return "live";
 	}
 
 	@GetMapping(value = "liveLectures")
@@ -182,41 +121,4 @@ public class LiveHomeController {
 
 		return b1;
 	}
-
-
-	private void prepareLinkReplacements (Model model, String urlString) throws UnsupportedEncodingException {
-
-		String urlSkip= SearchUtils.prepareSearchLinksForParam(urlString,"skip","N");
-		model.addAttribute("nSkip",urlSkip);
-	}
-
-	private void setFilterDetails(Model model, ResourceQuery resourceQuery) throws ExecutionException, InterruptedException {
-
-		CompletableFuture<QueryFilter> departmentFilter = new CompletableFuture<>();
-		CompletableFuture<QueryFilter> courseFilter = new CompletableFuture<>();
-		CompletableFuture<QueryFilter> staffMemberFilter = new CompletableFuture<>();
-		CompletableFuture<QueryFilter> scheduledEventFilter = new CompletableFuture<>();
-
-		departmentFilter = asyncQueryComponent
-				.findDepartmentTitleById(resourceQuery.getDepartmentId());
-
-		courseFilter = asyncQueryComponent
-				.findCourseTitleById(resourceQuery.getCourseId());
-
-		staffMemberFilter = asyncQueryComponent
-				.findStaffMemberNameById(resourceQuery.getStaffMemberId());
-
-		scheduledEventFilter = asyncQueryComponent
-				.findScheduledEventNameById(resourceQuery.getEventId());
-
-		//Wait for all async processes to complete
-		CompletableFuture.allOf(departmentFilter, courseFilter, staffMemberFilter, scheduledEventFilter).join();
-
-		model.addAttribute("departmentFilter", departmentFilter.get());
-		model.addAttribute("courseFilter", courseFilter.get());
-		model.addAttribute("staffMemberFilter", staffMemberFilter.get());
-		model.addAttribute("scheduledEventFilter", scheduledEventFilter.get());
-
-	}
-
 }

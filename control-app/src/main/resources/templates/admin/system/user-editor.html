@@ -61,15 +61,13 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/messages}">Μηνύματα Χρηστών</a></li>
                 <li class="nav-item"><a class="nav-link" target="_blank" href="http://localhost:5601">Αρχεία Καταγραφής</a></li>
             </ul>
-            <ul class="header-nav ms-auto">
-
-            </ul>
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <li class="breadcrumb-item active"><span>Επεξεργασία Διαχειριστή</span></li>
                 </ol>
             </nav>
@@ -255,155 +253,142 @@
                                                     </div>
                                                 </div>
                                                 <div class="card pt-2" id="staff_rights_card"  style="display: none">
-                                                    <div class="card-body">
-                                                        <form id="r_staff_form">
-                                                            <input type="hidden" id="r_staff_edit_mode" value=""/>
-                                                            <input type="hidden" id="r_manager_type" />
-                                                            <input type="hidden" id="r_isStaffMember" />
-                                                            <div class="card-header">
-                                                                Διαχειριστικός Ρόλος
-                                                            </div>
-                                                            <div class="form-group row mb-3 pb-2">
-                                                                <label class="col-2 col-form-label emph-label"></label>
-                                                                <div class="col-10 pt-2 text-medium-emphasis">
-                                                                    <div>Υπενθύμιση</div>
-                                                                    <ul>
-                                                                        <li>Διαχειριστής Συστήματος: αποκτά απεριόριστη πρόσβαση σε όλα τα υποσυστήματα</li>
-                                                                        <li>Διαχειριστής Μονάδων: αποκτά πρόσβαση στο Ίδρυμα ή σε επιλεγμένες Σχολές/Τμήματα και σε επιλεγμένα υποσυστήματα</li>
-                                                                        <li>Προσωπικό Υποστήριξης: αποκτά πρόσβαση επιλεγμένα Μαθήματα και Εκδηλώσεις Καθηγητών σε επιλεγμένα υποσυστήματα</li>
-                                                                    </ul>
-                                                                    <form id="manager_type_radiobox">
-                                                                        <div class="form-check form-check-inline">
-                                                                            <input class="btn-check" type="radio" name="managerOptions" id="saRadio" value="SA">
-                                                                            <label class="btn btn-outline-primary" for="saRadio">Διαχειριστής Συστήματος</label>
-                                                                        </div>
-                                                                        <div class="form-check form-check-inline">
-                                                                            <input class="btn-check" type="radio" name="managerOptions" id="managerRadio" value="MANAGER">
-                                                                            <label class="btn btn-outline-primary" for="managerRadio">Διαχειριστής Μονάδων</label>
-                                                                        </div>
-                                                                        <div class="form-check form-check-inline">
-                                                                            <input class="btn-check" type="radio" name="managerOptions" id="supportRadio" value="SUPPORT">
-                                                                            <label class="btn btn-outline-primary" for="supportRadio">Προσωπικό Υποστήριξης</label>
-                                                                        </div>
-                                                                    </form>
+                                                        <div class="card-body">
+                                                            <form id="r_staff_form">
+                                                                <input type="hidden" id="r_staff_edit_mode" value=""/>
+                                                                <input type="hidden" id="r_manager_type" />
+                                                                <input type="hidden" id="r_isStaffMember" />
+
+
+                                                                <div class="form-group row mt-3">
+                                                                            <label for="user_role_sel" class="col-2 col-form-label emph-label">Διαχειριστικός Ρόλος</label>
+                                                                           <div class="col-3">
+                                                                                <select id="user_role_sel" style="width: 100%"  aria-label="αλλαγή ρόλου χρήστη">
+                                                                                    <option></option>
+                                                                                    <option value="SA">Διαχειριστής Συστήματος</option>
+                                                                                    <option value="MANAGER">Διαχειριστής Μονάδων</option>
+                                                                                    <option value="SUPPORT">Προσωπικό Υποστήριξης</option>
+                                                                                </select>
+                                                                           </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="card-header">
-                                                                Ανάθεση Δικαιωμάτων
-                                                            </div>
-                                                            <!-- Ανάθεση Tμημάτων -->
-                                                            <div class="form-group row unit_panel">
-                                                                <label class="col-2 col-form-label emph-label"></label>
-                                                                <div class="col-8 pt-2 text-medium-emphasis">
-                                                                    <div>Στον πίνακα που ακολουθεί, εμφανίζονται οι μονάδες στις οποίες έχει πρόσβαση ο επιλεγμένος χρήστης</div>
-                                                                    <ul>
-                                                                        <li>Αναθέστε μονάδα, πατώντας 'Ανάθεση Μονάδας'</li>
-                                                                        <li>Αφαιρέστε μονάδα πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
-                                                                        <li>Για κάθε μονάδα, ορίζονται 3 δικαιώματα στα υποσυστήματα: Περιεχόμενο, Στοιχεία Μονάδας και Προγραμματισμός<br/>
-                                                                         Ενεργοποιήστε/Απενεργοποιήστε ένα δικαίωμα πατώντας τα αντίστοιχα μεταβαλλόμενα κουμπιά</li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row unit_panel">
-                                                                <label for="unitRightsDataTable" class="col-2 col-form-label"></label>
-                                                                <div class="col-8">
-                                                                    <div class="table-responsive">
-                                                                        <table id="unitRightsDataTable"  style="width:100%" class="row-border stripe">
-                                                                            <thead>
-                                                                            <tr style="font-weight: 700">
-                                                                                <td>#</td>
-                                                                                <td>Τύπος</td>
-                                                                                <td>[id]</td>
-                                                                                <td style="width:50%">Όνομα</td>
-                                                                                <td>Περιεχόμενο</td>
-                                                                                <td>Στοιχεία Μονάδας</td>
-                                                                                <td>Προγραμματισμός</td>
-                                                                                <td></td>
-                                                                            </tr>
-                                                                            </thead>
-                                                                        </table>
+
+
+    <!--                                                                    <div class="mt-2">Υπενθύμιση</div>
+                                                                        <ul>
+                                                                            <li>Διαχειριστής Συστήματος: αποκτά απεριόριστη πρόσβαση σε όλα τα υποσυστήματα</li>
+                                                                            <li>Διαχειριστής Μονάδων: αποκτά πρόσβαση στο Ίδρυμα ή σε επιλεγμένες Σχολές/Τμήματα και σε επιλεγμένα υποσυστήματα</li>
+                                                                            <li>Προσωπικό Υποστήριξης: αποκτά πρόσβαση επιλεγμένα Μαθήματα και Εκδηλώσεις Καθηγητών σε επιλεγμένα υποσυστήματα</li>
+                                                                        </ul>-->
+<!--                                                                     <form id="manager_type_radiobox">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="btn-check" type="radio" name="managerOptions" id="saRadio" value="SA">
+                                                                                <label class="btn btn-outline-primary" for="saRadio">Διαχειριστής Συστήματος</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="btn-check" type="radio" name="managerOptions" id="managerRadio" value="MANAGER">
+                                                                                <label class="btn btn-outline-primary" for="managerRadio">Διαχειριστής Μονάδων</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="btn-check" type="radio" name="managerOptions" id="supportRadio" value="SUPPORT">
+                                                                                <label class="btn btn-outline-primary" for="supportRadio">Προσωπικό Υποστήριξης</label>
+                                                                            </div>
+                                                                        </form>-->
+
+                                                                <!-- Ανάθεση Tμημάτων -->
+                                                                <div class="form-group row unit_panel">
+                                                                    <label class="col-2 col-form-label emph-label"></label>
+                                                                    <div class="col-8 pt-2 text-medium-emphasis">
+                                                                        <div>Στον πίνακα που ακολουθεί, εμφανίζονται οι μονάδες στις οποίες έχει πρόσβαση ο επιλεγμένος χρήστης</div>
+                                                                        <ul>
+                                                                            <li>Αναθέστε μονάδα, πατώντας 'Ανάθεση Μονάδας'</li>
+                                                                            <li>Αφαιρέστε μονάδα πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
+                                                                            <li>Για κάθε μονάδα, ορίζονται 3 δικαιώματα στα υποσυστήματα: Περιεχόμενο, Στοιχεία Μονάδας και Προγραμματισμός<br/>
+                                                                             Ενεργοποιήστε/Απενεργοποιήστε ένα δικαίωμα πατώντας τα αντίστοιχα μεταβαλλόμενα κουμπιά</li>
+                                                                        </ul>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-
-                                                            <!-- Ανάθεση Καθηγητών+Μαθημάτων -->
-                                                            <div class="form-group row course_panel">
-                                                                <label class="col-2 col-form-label emph-label"></label>
-                                                                <div class="col-8 pt-2 text-medium-emphasis">
-                                                                    <div>Στον πίνακα που ακολουθεί, εμφανίζονται τα ζεύγη Καθηγητής-Μάθημα που διαχειρίζεται ο επιλεγμένος χρήστης</div>
-                                                                    <ul>
-                                                                        <li>Αναθέστε Καθηγητή+Μάθημα, πατώντας 'Ανάθεση Μαθήματος'</li>
-                                                                        <li>Αφαιρέστε μάθημα πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
-                                                                        <li>Για κάθε ζεύγος, ορίζονται 2 δικαιώματα στα υποσυστήματα: Περιεχόμενο και Προγραμματισμός<br/>
-                                                                            Ενεργοποιήστε/Απενεργοποιήστε ένα δικαίωμα πατώντας τα αντίστοιχα μεταβαλλόμενα κουμπιά</li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row course_panel">
-                                                                <label for="staffRightsDataTable" class="col-2 col-form-label"></label>
-                                                                <div class="col-8">
-                                                                    <div class="table-responsive">
-                                                                        <table id="staffRightsDataTable" style="width:100%" class="row-border stripe">
-                                                                            <thead>
-                                                                            <tr style="font-weight: 700">
-                                                                                <td>#</td>
-                                                                                <td>[sid]</td>
-                                                                                <td>Καθηγητής</td>
-                                                                                <td>[cid]</td>
-                                                                                <td>Μάθημα</td>
-                                                                                <td>Περιεχόμενο</td>
-                                                                                <td>Προγραμματισμός</td>
-                                                                                <td></td>
-                                                                            </tr>
-                                                                            </thead>
-                                                                        </table>
+                                                                <div class="form-group row unit_panel">
+                                                                    <label for="unitRightsDataTable" class="col-2 col-form-label"></label>
+                                                                    <div class="col-8">
+                                                                        <div class="table-responsive">
+                                                                            <table id="unitRightsDataTable"  style="width:100%" class="row-border stripe">
+                                                                                <thead>
+                                                                                <tr style="font-weight: 700">
+                                                                                    <td>#</td>
+                                                                                    <td>Τύπος</td>
+                                                                                    <td>[id]</td>
+                                                                                    <td style="width:50%">Όνομα</td>
+                                                                                    <td>Περιεχόμενο</td>
+                                                                                    <td>Στοιχεία Μονάδας</td>
+                                                                                    <td>Προγραμματισμός</td>
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                                </thead>
+                                                                            </table>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <!-- Ανάθεση Καθηγητών+Εκδηλώσεων -->
-                                                            <div class="form-group row event_panel">
-                                                                <label class="col-2 col-form-label emph-label"></label>
-                                                                <div class="col-8 pt-2 text-medium-emphasis">
-                                                                    <div>Στον πίνακα που ακολουθεί, εμφανίζονται τα ζεύγη Καθηγητής+Εκδήλωση που διαχειρίζεται ο επιλεγμένος χρήστης</div>
-                                                                    <ul>
-                                                                        <li>Αναθέστε Καθηγητή+Εκδήλωση, πατώντας 'Ανάθεση Εκδήλωσης'</li>
-                                                                        <li>Αφαιρέστε Εκδήλωση πατώντας στο αντίστοιχο κουμπί διαγραφής</li>
-                                                                        <li>Για κάθε ζεύγος, ορίζονται 2 δικαιώματα στα υποσυστήματα: Περιεχόμενο και Προγραμματισμός<br/>
-                                                                            Ενεργοποιήστε/Απενεργοποιήστε ένα δικαίωμα πατώντας τα αντίστοιχα μεταβαλλόμενα κουμπιά</li>
-                                                                    </ul>
+
+                                                                <!-- Ανάθεση Καθηγητών+Μαθημάτων -->
+                                                                <div class="form-group row course_panel">
+                                                                    <label class="col-2 col-form-label emph-label"></label>
                                                                 </div>
-                                                            </div>
-                                                            <div class="form-group row  event_panel">
-                                                                <label for="staffEventRightsDataTable" class="col-2 col-form-label"></label>
-                                                                <div class="col-8">
-                                                                    <div class="table-responsive">
-                                                                        <table id="staffEventRightsDataTable" style="width:100%" class="row-border stripe">
-                                                                            <thead>
-                                                                            <tr style="font-weight: 700">
-                                                                                <td>#</td>
-                                                                                <td>[sid]</td>
-                                                                                <td>Καθηγητής</td>
-                                                                                <td>[eid]</td>
-                                                                                <td>Εκδήλωση</td>
-                                                                                <td>Περιεχόμενο</td>
-                                                                                <td>Προγραμματισμός</td>
-                                                                                <td></td>
-                                                                            </tr>
-                                                                            </thead>
-                                                                        </table>
+                                                                <div class="form-group row course_panel">
+                                                                    <label for="staffRightsDataTable" class="col-2 col-form-label emph-label">Ανάθεση Μαθημάτων</label>
+                                                                    <div class="col-7">
+                                                                        <div class="table-responsive">
+                                                                            <table id="staffRightsDataTable" style="width:100%" class="row-border stripe">
+                                                                                <thead>
+                                                                                <tr style="font-weight: 700">
+                                                                                    <td>#</td>
+                                                                                    <td>[sid]</td>
+                                                                                    <td>Καθηγητής</td>
+                                                                                    <td>[cid]</td>
+                                                                                    <td>Μάθημα</td>
+                                                                                    <td>Περιεχόμενο</td>
+                                                                                    <td>Προγραμματισμός</td>
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                                </thead>
+                                                                            </table>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-
-                                                            <div class="form-group row admin_panel">
-                                                                <div class="col-8 pt-2 offset-2 text-medium-emphasis">
-                                                                    <i class="fas fa-info-circle"></i>
-                                                                    Όλα τα διαθέσιμα δικαιώματα έχουν εκχωρηθεί!
+                                                                <!-- Ανάθεση Καθηγητών+Εκδηλώσεων -->
+                                                                <div class="form-group row event_panel">
+                                                                    <label class="col-2 col-form-label emph-label"></label>
                                                                 </div>
-                                                            </div>
-                                                        </form>
+                                                                <div class="form-group row  event_panel">
+                                                                    <label for="staffEventRightsDataTable" class="col-2 col-form-label emph-label">Ανάθεση Εκδηλώσεων</label>
+                                                                    <div class="col-7">
+                                                                        <div class="table-responsive">
+                                                                            <table id="staffEventRightsDataTable" style="width:100%" class="row-border stripe">
+                                                                                <thead>
+                                                                                <tr style="font-weight: 700">
+                                                                                    <td>#</td>
+                                                                                    <td>[sid]</td>
+                                                                                    <td>Καθηγητής</td>
+                                                                                    <td>[eid]</td>
+                                                                                    <td>Εκδήλωση</td>
+                                                                                    <td>Περιεχόμενο</td>
+                                                                                    <td>Προγραμματισμός</td>
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                                </thead>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-                                                    </div>
+                                                                <div class="form-group row admin_panel">
+                                                                    <div class="col-8 pt-2 offset-2 text-medium-emphasis">
+                                                                        <i class="fas fa-info-circle"></i>
+                                                                        Όλα τα διαθέσιμα δικαιώματα έχουν εκχωρηθεί!
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+
+                                                        </div>
                                                 </div>
                                             </div>
                                         </div>

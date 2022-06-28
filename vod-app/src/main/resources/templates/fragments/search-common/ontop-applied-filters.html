@@ -13,42 +13,39 @@
             <div class="card-body">
                 <div class="mb-2">
                         <div class="text-muted" id="none_filter">κανένα επιλεγμένο κριτήριο</div>
-                        <button id="ft-filter" style="display: none;background-color: #006A9B !important"  class="my-2 mx-1 btn btn-info btn-sm">
-                            <a href="#" role="button" data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ft-filter">
-                                <span id="ft-dd-header"></span>
-                            </a>
-                        </button>
                         <button id="category-filter" style="display: none;background-color: #006A9B !important"  class="my-2 mx-1 btn   btn-info  btn-sm">
-                            <a href="#" role="button" data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ca-filter">
+                            <a href="#" role="button" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-ca-filter">
                                 <span id="category-dd-header"></span>
                             </a>
                         </button>
-                        <button id="department-filter" style="display: none;background-color: #006A9B !important"  class="my-2 mx-1 btn  btn-info btn-sm">
-                            <a href="#" role="button" data-toggle="tooltip"title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-dt-filter">
+                        <button  title="αφαίρεση κριτηρίου" id="department-filter" style="display: none;background-color: #006A9B !important"  class="my-2 mx-1 btn  btn-info btn-sm">
+                            <a href="#" data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-dt-filter">
                                 <span id="department-dd-header"></span>
                             </a>
                         </button>
-                        <button  id="course-filter" style="display: none;background-color: #006A9B !important"  class="my-2 mx-1 btn   btn-info  btn-sm">
-                            <a href="#" role="button" data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-co-filter">
+                        <button  title="αφαίρεση κριτηρίου" id="course-filter" style="display: none;background-color: #006A9B !important"  class="my-2 mx-1 btn   btn-info  btn-sm">
+                            <a href="#" data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-co-filter">
                                 <span id="course-dd-header"></span>
+                                αφαίρεση
                             </a>
                         </button>
-                        <button id="staff-filter"  style="display: none;background-color: #006A9B !important"  class="my-2 mx-1  btn   btn-info  btn-sm">
-                            <a href="#" role="button" data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-sm-filter">
+                        <button title="αφαίρεση κριτηρίου" id="staff-filter"  style="display: none;background-color: #006A9B !important"  class="my-2 mx-1  btn   btn-info  btn-sm">
+                            <a href="#" data-toggle="tooltip" title="αφαίρεση κριτηρίου" style="color: #ffffff;text-decoration: none" id="clear-sm-filter">
                                 <span id="staff-dd-header"></span>
+                                αφαίρεση
                             </a>
                         </button>
                 </div>
                 <div id="AllFilters">
                     <div class="row pt-3" style="border-top: #006A9B solid 3px">
                         <div class="col-12">
-                            <a id="depCanvasLink" style="display: none" data-toggle="tooltip" class="btn btn-sm btn-secondary text-white dynlink" data-coreui-toggle="offcanvas" href="#offcanvasDep" role="button" aria-controls="offcanvasDep" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Τμήμα">
+                            <a id="depCanvasLink" style="display: none;color: #006A9B" data-toggle="tooltip" class="btn btn-sm btn-light dynlink" data-coreui-toggle="offcanvas" href="#offcanvasDep" role="button" aria-controls="offcanvasDep" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Τμήμα">
                                 <i class="fas fa-plus-circle"></i> | Τμήμα
                             </a>
-                            <a id="staffCanvasLink" style="display: none"  data-toggle="tooltip" class="btn btn-sm btn-secondary text-white dynlink" data-coreui-toggle="offcanvas" href="#offcanvasStaff" role="button" aria-controls="offcanvasStaff" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Διδάσκοντα (-ουσα) ή Υπ. Καθηγητή">
+                            <a id="staffCanvasLink" style="display: none;color: #006A9B"  data-toggle="tooltip" class="btn btn-sm btn-light dynlink" data-coreui-toggle="offcanvas" href="#offcanvasStaff" role="button" aria-controls="offcanvasStaff" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Διδάσκοντα (-ουσα) ή Υπ. Καθηγητή">
                                 <i class="fas fa-plus-circle"></i> | Διδάσκων ή Υπ. Καθηγητής
                             </a>
-                            <a  id="courseCanvasLink" style="display: none"  data-toggle="tooltip" class="btn btn-sm btn-secondary text-white dynlink" data-coreui-toggle="offcanvas" href="#offcanvasCourse" role="button" aria-controls="offcanvasCourse" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Μάθημα">
+                            <a  id="courseCanvasLink" style="display: none;color: #006A9B"  data-toggle="tooltip" class="btn btn-sm btn-light dynlink" data-coreui-toggle="offcanvas" href="#offcanvasCourse" role="button" aria-controls="offcanvasCourse" title="Περιορίστε τα αποτελέσματα επιλέγοντας: Μάθημα">
                                 <i class="fas fa-plus-circle"></i> | Μάθημα
                             </a>
                             <div class="text-muted" id="no_dyna_filters"></div>
@@ -72,9 +69,10 @@
                     </p>
                 </div>
                 <div class="mt-2 mb-3">
+                    <label for="dp-search">αναζήτηση</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control short-list" data-target="dpFilters" placeholder="αναζήτηση στη λίστα"/>
+                        <input type="text" id="dp-search" class="form-control short-list" data-target="dpFilters" placeholder="αναζήτηση στη λίστα"/>
                     </div>
                 </div>
                 <div class="mt-3 list-group" id="dpFilters"></div>
@@ -95,9 +93,10 @@
                     </p>
                 </div>
                 <div class="mt-2 mb-3">
+                    <label for="st-search">αναζήτηση</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control short-list" data-target="stFilters" placeholder="αναζήτηση"/>
+                        <input type="text" id="st-search" class="form-control short-list" data-target="stFilters" placeholder="αναζήτηση"/>
                     </div>
                 </div>
                 <ul  class="mt-3 list-group"  id="stFilters"></ul>
@@ -118,9 +117,10 @@
                     </p>
                 </div>
                 <div class="mt-2 mb-3">
+                    <label for="co-search">αναζήτηση</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control short-list" data-target="coFilters" placeholder="αναζήτηση"/>
+                        <input type="text" id="co-search" class="form-control short-list" data-target="coFilters" placeholder="αναζήτηση"/>
                     </div>
                 </div>
                 <ul class="mt-3 list-group" id="coFilters"></ul>

@@ -20,6 +20,16 @@
         let today = moment().format("LL");
         $("#daily_date_now").html(today);
 
+        // replace thumbnails on Error with default
+        $('img').each(function() {
+            if ( !this.complete
+                ||   typeof this.naturalWidth == "undefined"
+                ||   this.naturalWidth === 0 ) {
+                // image was broken, replace with your new image
+                this.src = dashboard.siteUrl + '/public/images/default/default_event_thumb.jpg';
+            }
+        });
+
     });
 
     dashboard.broker.getRootSitePath = function () {

@@ -76,7 +76,10 @@
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <ul class="header-nav d-none d-md-flex">
-                <li class="nav-item"><a class="nav-link" th:href="@{/admin/search}">Διαχείριση Περιεχομένου</a></li>
+                <li class="nav-item">
+                    <a th:unless="${userIsStaffMemberOnly}" class="nav-link" th:href="@{/admin/search}">Διαχείριση Περιεχομένου</a>
+                    <a th:if="${userIsStaffMemberOnly}" class="nav-link" th:href="@{/admin/search}">Διαλέξεις & Πολυμέσα</a>
+                </li>
                 <th:block th:if="${Resource.type == 'COURSE'}">
                     <li class="nav-item"><a class="nav-link active" th:if="${Resource.id == null || Resource.id == ''}" th:href="@{/admin/lecture-editor}">Νέα Διάλεξη</a></li>
                     <li class="nav-item"><a class="nav-link active" th:unless="${Resource.id == null || Resource.id == ''}" th:href="@{/admin/lecture-editor}">Επεξεργασία Διάλεξης</a></li>
@@ -88,31 +91,15 @@
                     <li class="nav-item"><a class="nav-link active" th:unless="${Resource.id == null || Resource.id == ''}"  th:href="@{/admin/event-editor}">Επεξεργασία Πολυμέσου Εκδήλωσης</a></li>
                 </th:block>
             </ul>
-            <ul class="header-nav ms-auto">
-                <div class="nav-item dropdown">
-                    <a class="nav-link text-decoration-none" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <i class="far fa-user-circle me-1"></i><span th:text="${user.name}"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right pt-0">
-                        <a class="dropdown-item" th:href="@{/admin/user_profile}">
-                            <span class="fas fa-user me-1"></span> Προφίλ
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a sec:authorize="isAuthenticated()" class="dropdown-item" href="#" title="logout" data-coreui-toggle="modal" data-coreui-target="#logout_modal" >
-                            <i class="fas fa-sign-out-alt me-1"></i> Αποσύνδεση
-                        </a>
-                        <a sec:authorize="isAnonymous()" class="dropdown-item" th:href="@{/admin}">
-                            <i class="fas fa-sign-in-alt me-1"></i> Σύνδεση
-                        </a>
-                    </div>
-                </div>
-            </ul>
+
+            <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
+
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
-                    <li class="breadcrumb-item"><a th:href="@{/admin}">Αρχική</a></li>
+                    <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
                     <th:block th:if="${Resource.type == 'COURSE'}">
                         <li class="breadcrumb-item active" th:if="${Resource.id == null || Resource.id == ''}" ><span>Νέα Διάλεξη</span></li>
                         <li class="breadcrumb-item active" th:unless="${Resource.id == null || Resource.id == ''}" ><span>Επεξεργασία Διάλεξης</span></li>
@@ -140,6 +127,10 @@
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
 <div th:replace="~{modals/course_info_modal::course_info_modal}"></div>
 <div th:replace="~{modals/scheduledevent_info_modal::scheduledEvent_info_modal}"></div>
+
+<div th:replace="~{/admin/content/resource/slide_edit/slide_edit_canvas :: slide_edit_canvas}"></div>
+
+
 <!-- Optional JavaScript -->
 <script th:src="@{/js/i18n/el.js}" type="application/javascript"></script>
 <script th:src="@{/css/jquery-3.5.1/jquery-3.5.1.js}" type="application/javascript"></script>

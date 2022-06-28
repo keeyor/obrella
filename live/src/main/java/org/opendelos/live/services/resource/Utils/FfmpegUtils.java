@@ -37,7 +37,7 @@ public class FfmpegUtils
        
         try
         {
-            logger.info("ffmpegCommand:" + ffmpegCommand);
+            logger.trace("ffmpegCommand:" + ffmpegCommand);
             // Build the command line
             String[] cmd = {ffmpegCommand, "-i",filename};
             File dir  = new File(workingdir);

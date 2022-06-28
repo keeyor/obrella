@@ -93,9 +93,9 @@ public class ClassroomOoRepositoryImpl implements ClassroomOoRepository {
 			Expression.add(expression);
 
 			//# Get only classrooms with enabled calendar
-			expression = new Criteria();
-			expression.and("calendar").is("true");
-			Expression.add(expression);
+			//expression = new Criteria();
+			//expression.and("calendar").is("true");
+			//Expression.add(expression);
 
 			if (!Expression.isEmpty()) {
 				query.addCriteria(andCriteria.andOperator(Expression.toArray(new Criteria[Expression.size()])));

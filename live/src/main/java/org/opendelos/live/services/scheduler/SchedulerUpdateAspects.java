@@ -7,8 +7,7 @@ package org.opendelos.live.services.scheduler;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -60,18 +59,19 @@ public class SchedulerUpdateAspects {
 	@AfterReturning(value = "afterStreamStop(resource, streamingServer)", argNames = "resource,streamingServer")
 	public void createVodAndCleanup(Resource resource, StreamingServer streamingServer) {
 
-		String parentId = null;
-
 		//SKIP getFiles if Using RECORDER SERVER AND THIS IS NOT A RECORDER
 		boolean actualGet = true;
-		boolean useRecorder = streamingProperties.isUse_recorder();
-		StreamingServer recorderServer = liveService.getRecorderServer();
-		if (recorderServer == null) {
-			useRecorder = false;
+		boolean useRecorderServer = streamingProperties.isUse_recorder();
+		Map<String, StreamingServer> recordingServersMap = liveService.getStreamingServersHM("true","recorder");
+
+		if (useRecorderServer && recordingServersMap.isEmpty()) {
+			logger.trace("No valid Recorders found. Disabling RS use!");
+			useRecorderServer = false;
 		}
-		if (useRecorder && !streamingServer.getType().equals("recorder")) {
+
+		if (useRecorderServer && !streamingServer.getType().equals("recorder")) {
 			actualGet = false;
-			logger.info(" Abort VoD process. Using RECORDER SERVER. This is:" + streamingServer.getType());
+			logger.trace(" Abort VoD process. Using RECORDER SERVER. This is:" + streamingServer.getType());
 		}
 
 		if (actualGet && resource.isRecording()) {
@@ -80,7 +80,7 @@ public class SchedulerUpdateAspects {
 			if (recorded_files != null) {
 				boolean multipleParts = recorded_files.length > 1;
 				int v_SegmentNumber = 0;
-				List<String> relatedParts = new ArrayList<>();
+
 				for (File vFile : recorded_files) {
 
 					ObjectId newResourceId = new ObjectId(); //Generates unique id
@@ -141,10 +141,6 @@ public class SchedulerUpdateAspects {
 					if (multipleParts) {
 						vod_resource.setParts(true);
 						vod_resource.setPartNumber(v_SegmentNumber);
-						//### NOT NEEDED :: FIND RELATED PARTES ON THE FLY IN PLAYER CONTROLLER
-/*					if (v_SegmentNumber > 1 && parentId != null) {
-						vod_resource.setParentId(parentId);
-					}*/
 					}
 					if (resource.getPublication().equals("public")) {
 						vod_resource.setAccessPolicy("public");
@@ -152,16 +148,13 @@ public class SchedulerUpdateAspects {
 					else {
 						vod_resource.setAccessPolicy("private");
 					}
-
 					resourceService.update(vod_resource);
-					if (multipleParts && v_SegmentNumber == 1) {
-						parentId = vod_resource.getId();
-					}
-					logger.info(" New Resource created from Live with id " + vod_resource.getId());
+					logger.trace("New VoD for Broadcast: " + vod_resource.getStreamName());
 				} //For each video file
+				logger.info("#VoDs for Room: " + resource.getStreamName() + " :: " + recorded_files.length);
 			}
 			else {
-				logger.info(" No Files Recorded for resourceId:" + resource.getId());
+				logger.info("No VoD created for Broadcast: " + resource.getStreamName());
 			}
 		}
 	}

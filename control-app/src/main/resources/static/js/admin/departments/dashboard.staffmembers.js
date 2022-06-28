@@ -189,7 +189,7 @@
 
             $("#addOrUpdateStaff").on("click", function() {
 
-                loader.showLoader();
+
                 let staff_id        = $("#staff_id").val();
                 let staff_uid       = $("#staff_uid").val();
                 let staff_name      = $("#staff_name").val();
@@ -207,6 +207,7 @@
                 if (staff_name == null || staff_name === "" || staff_uid == null || staff_uid === "" || staff_email == null || staff_email === "" || staff_aff === "") {
                     alertify.alert("<i style='color:red' class='fas fa-exclamation-triangle'></i> Πρόβλημα", "Υπάρχουν παραλείψεις στη φόρμα. Διορθώστε τα κενά και προσπαθήστε πάλι");
                 } else {
+                    loader.showLoader();
                     let staffData = {
                         "id": staff_id,
                         "uid" : staff_uid,

@@ -26,11 +26,16 @@ public class School {
     private String title_en;
 
     public String getTitle(Locale locale) {
-        if (locale.getLanguage().equals("en")) {
-            return this.getTitle_en();
+        if (locale.getLanguage().equals("el")) {
+            return this.getTitle();
         }
         else {
-            return this.getTitle();
+            if (this.getTitle_en() != null && !this.getTitle_en().equals("")) {
+                return this.getTitle_en();
+            }
+            else {
+                return this.getTitle();
+            }
         }
     }
 }

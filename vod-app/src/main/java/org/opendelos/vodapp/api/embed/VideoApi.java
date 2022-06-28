@@ -47,7 +47,7 @@ public class VideoApi {
 		this.resourceService = resourceService;
 	}
 
-	@RequestMapping(value = "/api/v1/embed/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/apiw/v1/embed/{id}", method = RequestMethod.GET)
 	public String CreateEmbedCodeForVideoPlayer(@PathVariable("id") String id) {
 
 		StringBuilder return_html = new StringBuilder();
@@ -72,7 +72,7 @@ public class VideoApi {
 	}
 
 	/** gets called from embed.js in order to created embeded content **/
-	@RequestMapping(value = "/api/v1/emurl/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/apiw/v1/emurl/{id}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<EmdedResponse> getUrlForResourceId(@PathVariable("id") String id, Locale locale) {
 
 		DateTimeFormatter formatter =
