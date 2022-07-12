@@ -5,6 +5,8 @@
 package org.opendelos.control.mvc;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -116,6 +118,7 @@ public class AdminController {
 			adminUsersMessages = systemMessageService.findAllByVisibleIsAndTarget(true, "admins-users");
 			adminAllMessages.addAll(adminUsersMessages);
 		}
+		adminAllMessages.sort((u1, u2) -> u2.getStartDate().compareTo(u1.getStartDate()));
 		model.addAttribute("adminAllMessages", adminAllMessages);
 
 		//Logged on Users

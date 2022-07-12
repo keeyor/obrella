@@ -82,6 +82,10 @@
                 postUpdate(active_site, active_code,quillHtml);
             }
         });
+
+        $('#about_modal').on('show.coreui.modal', function (e) {
+             let contentHTML = fetchHTMLBySiteAndCodeFromDB("admin","about");
+        })
     }
 
     function loadText(text_id) {
@@ -159,6 +163,22 @@
             },
             error: function ()  {
                 alertify.alert('Error-Update-Message');
+            }
+        });
+    }
+
+    function fetchHTMLBySiteAndCodeFromDB(site, code) {
+        $.ajax({
+            type:        "GET",
+            url: 		  dashboard.siteurl + '/api/v1/text/' + site + '/code/' + code,
+            contentType: "application/json; charset=utf-8",
+            async:		  true,
+            success: function(data){
+                $("#" + code + "-modal-html").html(data.content);
+            },
+            error: function ()  {
+                return "error";
+                alertify.alert('Error-FETCH-TEXT');
             }
         });
     }
