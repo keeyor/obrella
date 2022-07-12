@@ -96,6 +96,40 @@
                 <span th:text="#{lectures_sum_note}"></span>
             </div>
 
+
+            <!-- NEWS & Announcements -->
+            <!-- @thymesVar id="uMsg" type="org.opendelos.model.system.SystemMessage" -->
+            <div class="row" style="margin-top: 50px">
+                <div class="col-lg-3">
+                    <div class="card-header blue-btn-wcag-bgnd-color text-white" style="font-weight: 500">
+                        <i class="fas fa-scroll me-1 text-white"></i>Νέα & Ανακοινώσεις
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-12" style="font-size: 1em">
+                    <th:block th:each="uMsg, iStat: ${VisitorMessages}" th:style="${iStat.odd}? ''">
+                        <div class="row">
+                            <div class="col-1 text-center" style="min-width: 10px">
+                                <i th:if="${uMsg.status == 'info'}" class="fas fa-info" style="padding: 2px;color:lightskyblue"></i>
+                                <i th:if="${uMsg.status == 'success'}" class="fas fa-check" style="padding: 2px;color:green"></i>
+                                <i th:if="${uMsg.status == 'warning'}" class="fas fa-exclamation" style="padding: 2px;color: orange"></i>
+                                <i th:if="${uMsg.status == 'danger'}" class="fas fa-exclamation-triangle" style="padding: 2px;color:red"></i>
+                            </div>
+                            <div class="vr"></div>
+                            <div class="col-10">
+                                <span style="font-weight: 500" th:text="${uMsg.text}"></span>
+                                <br/>
+                                <span style="font-size: 0.9em" class="text-medium-emphasis">
+                                    <span th:replace="fragments/format-resource-date.html:: formatDate (field=${uMsg.startDate})"></span>
+                                    <span th:replace="fragments/format-resource-date.html:: formatDateTime (field=${uMsg.startDate})"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div th:unless="${iStat.last}" class="my-1" style="border-bottom: 1px #ccc solid;line-height: 2em"></div>
+                    </th:block>
+                </div>
+            </div>
+
+
             <div class="pl-0" style="margin-top: 50px">
                 <span style="font-weight: 500" th:text="#{also_visit}"></span>
             </div>
@@ -133,6 +167,8 @@
                     </div>
                 </div>
             </div>
+
+
 
        </div>
 

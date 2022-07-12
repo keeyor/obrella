@@ -49,6 +49,8 @@ import org.opendelos.model.structure.Institution;
 import org.opendelos.model.structure.School;
 import org.opendelos.model.users.OoUserDetails;
 import org.opendelos.model.users.UserAccess;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +74,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
 public class ScheduledEventsController {
+
+	private final Logger logger = LoggerFactory.getLogger(ScheduledEventsController.class);
 
 	@ModelAttribute("section")
 	public String getAdminSection() {
@@ -225,23 +229,78 @@ public class ScheduledEventsController {
 		return "admin/content/scheduled_events/sevents";
 	}
 
-	@RequestMapping(value = { "admin/sevents", "admin/sevents/"}, method = RequestMethod.POST)
-	public String SearchPost(@ModelAttribute("resourceQuery") final ResourceQuery resourceQuery,
-			@RequestParam("ft") String ft, HttpServletRequest request) throws UnsupportedEncodingException {
+	@RequestMapping(value = { "admin/sevents"}, method = RequestMethod.POST)
+	public String SearchPost(@RequestParam("action") String action,
+			@RequestParam("marked_resources") String marked_resources, HttpServletRequest request, HttpServletResponse response) {
 
 
-		final String view;
-		StringBuilder builder = new StringBuilder();
+		String[] marked_resources_ids = marked_resources.split(",");
+		String str_action;
+		String action_code = action.trim();
+		int executed_actions = 0;
+		int failed_actions = 0;
 
-		if (ft != null && !ft.isEmpty() && !ft.trim().equals("a")) {
-			builder.append("?ft=").append(URLEncoder.encode(ft, "UTF-8"));
+
+		switch (action_code) {
+		case "delete":
+			str_action = "Διαγραφή Επιλεγμένων";
+			for (String marked_id : marked_resources_ids) {
+				try {
+					scheduledEventService.delete(marked_id);
+					executed_actions++;
+				}
+				catch (Exception marked_exception) {
+					logger.warn("Resource-id {}. Error {}", marked_id, marked_exception.getMessage());
+					failed_actions++;
+				}
+			}
+			break;
+		case "activate":
+			str_action = "Ενεργοποίηση Ημερολογίου Επιλεγμένων";
+			for (String marked_id : marked_resources_ids) {
+				try {
+					scheduledEventService.updateEventIsActiveThrowingException(marked_id,action_code);
+					executed_actions++;
+				}
+				catch (Exception marked_exception) {
+					logger.warn("Resource-id {}. Error {}", marked_id, marked_exception.getMessage());
+					failed_actions++;
+				}
+			}
+			break;
+		case "deactivate":
+			str_action = "Απενεργοποίηση Ημερολογίου Επιλεγμένων";
+			for (String marked_id : marked_resources_ids) {
+				try {
+					scheduledEventService.updateEventIsActiveThrowingException(marked_id,action_code);
+					executed_actions++;
+				}
+				catch (Exception marked_exception) {
+					logger.warn("Resource-id {}. Error {}", marked_id, marked_exception.getMessage());
+					failed_actions++;
+				}
+			}
+			break;
+		default:
+			str_action = "Άγνωστη Ενέργεια";
+			for (String marked_id : marked_resources_ids) {
+				logger.warn("Resource-id {}. Error {}", marked_id, str_action);
+				failed_actions++;
+			}
+			break;
 		}
-		else if (resourceQuery.getFt() != null  && !resourceQuery.getFt().isEmpty() && !resourceQuery.getFt().trim().equals("a"))  {
-			builder.append("?ft=").append(URLEncoder.encode(resourceQuery.getFt(), "UTF-8"));
+		logger.info("Μαζική Ενέργεια Εκδηλώσεων:" + str_action + ". Μεταβλήθηκαν: " + executed_actions + " καταχωρήσεις. Αμετάβλητες: " + failed_actions + "]");
+
+		String[] attr = {"msg_type", "msg_val"};
+		String[] values = {"alert-success", "Η " + str_action + " ολοκληρώθηκε! <br/> [Μεταβλήθηκαν: " + executed_actions + " καταχωρήσεις. Αμετάβλητες: " + failed_actions + "]"};
+		setFlashAttributes(request, response, attr, values);
+
+		String user_events_history = "sevents";
+		if (request.getSession().getAttribute("user_events_history") != null) {
+			user_events_history = (String) request.getSession().getAttribute("user_events_history");
 		}
-		String params = builder.toString();
-		view = "redirect:" + ServletUriComponentsBuilder.fromCurrentRequestUri().replacePath(request.getContextPath() +  request.getServletPath()).path(params).build().toUriString();
-		return view;
+
+		return "redirect:" + user_events_history;
 	}
 
 	@GetMapping(value = {"admin/sevent-editor", "admin/sevent-editor/"})
@@ -423,7 +482,7 @@ public class ScheduledEventsController {
 			// create a flashmap
 			FlashMap flashMap = new FlashMap();
 			// store the message
-			flashMap.put("msg_val", "Η αποθήκευση απέτυχε! Υπάρχουν ελλείψεις στη φόρμα εισαγωγής");
+			flashMap.put("msg_val", "Η αποθήκευση απέτυχε! Βρέθηκαν ελλείψεις στη φόρμα εισαγωγής");
 			flashMap.put("msg_type", "alert-danger");
 			flashMap.put(BINDING_RESULT_NAME, bindingResult);
 			flashMap.put(ATTRIBUTE_NAME, scheduledEventDto);

@@ -13,6 +13,8 @@ import java.util.concurrent.ExecutionException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.opendelos.liveapp.services.i18n.OptionServices;
+import org.opendelos.liveapp.services.scheduler.ScheduleService;
+import org.opendelos.model.scheduler.Schedule;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LiveHomeController {
 
 	private final OptionServices optionServices;
+	private final ScheduleService scheduleService;
 
-	public LiveHomeController(OptionServices optionServices) {
+	public LiveHomeController(OptionServices optionServices, ScheduleService scheduleService) {
 		this.optionServices = optionServices;
+		this.scheduleService = scheduleService;
 	}
 
 	@GetMapping(value = "/list")
@@ -56,7 +60,11 @@ public class LiveHomeController {
 		long diff = endTime.getTime() - startTime.getTime();
 		model.addAttribute("PageLoadTime", diff);
 
-		return "list";
+		if (scheduleService.read_liveDaemonStatus())
+			return "list";
+		else
+			return "offline";
+
 	}
 
 	@GetMapping(value = "/listDay")
@@ -86,7 +94,10 @@ public class LiveHomeController {
 		long diff = endTime.getTime() - startTime.getTime();
 		model.addAttribute("PageLoadTime", diff);
 
-		return "listDay";
+		if (scheduleService.read_liveDaemonStatus())
+			return "listDay";
+		else
+			return "offline";
 	}
 
 }

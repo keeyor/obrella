@@ -7,22 +7,22 @@ package org.opendelos.liveapp.mvc;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.opendelos.liveapp.services.i18n.MultilingualServices;
 import org.opendelos.liveapp.services.i18n.OptionServices;
 import org.opendelos.liveapp.services.opUser.OpUserService;
-import org.opendelos.liveapp.services.scheduledEvent.ScheduledEventService;
-import org.opendelos.liveapp.services.structure.ClassroomService;
+import org.opendelos.liveapp.services.scheduler.ScheduleService;
 import org.opendelos.liveapp.services.structure.CourseService;
 import org.opendelos.liveapp.services.structure.DepartmentService;
 import org.opendelos.model.common.QueryFilter;
+import org.opendelos.model.common.Select2GenGroup;
 import org.opendelos.model.delos.OpUser;
-import org.opendelos.model.resources.ScheduledEvent;
-import org.opendelos.model.structure.Classroom;
 import org.opendelos.model.structure.Course;
 import org.opendelos.model.structure.Department;
 import org.opendelos.model.structure.Institution;
@@ -60,33 +60,27 @@ public class CalendarController {
 	private final DepartmentService departmentService;
 	private final CourseService courseService;
 	private final OpUserService opUserService;
-	private final ScheduledEventService scheduledEventService;
-	private final ClassroomService classroomService;
 	private final OptionServices optionServices;
+	private final ScheduleService scheduleService;
 
 	@Autowired
-	public CalendarController(MultilingualServices multilingualServices, DepartmentService departmentService, CourseService courseService, OpUserService opUserService, ScheduledEventService scheduledEventService, ClassroomService classroomService, OptionServices optionServices) {
+	public CalendarController(MultilingualServices multilingualServices, DepartmentService departmentService, CourseService courseService, OpUserService opUserService, OptionServices optionServices, ScheduleService scheduleService) {
 		this.courseService = courseService;
 		this.multilingualServices = multilingualServices;
 		this.departmentService = departmentService;
 		this.opUserService = opUserService;
-		this.scheduledEventService = scheduledEventService;
-		this.classroomService = classroomService;
 		this.optionServices = optionServices;
+		this.scheduleService = scheduleService;
 	}
 	@GetMapping(value = {"calendar"})
 	public String getWeekSchedule(final Model model, Locale locale, HttpServletRequest request,
 			@RequestParam(value = "d", required = false) String d,     // Department
-			@RequestParam(value = "rt", required = false) String rt,   // ResourceType
 			@RequestParam(value = "c", required = false) String c,     // Course
-			@RequestParam(value = "cr", required = false) String cr,     // Classroom
-			@RequestParam(value = "e", required = false) String e,     // Event
 			@RequestParam(value = "s", required = false) String s,     // Staff Member
-			@RequestParam(value = "p", required = false) String p,     // Period  (semester)
-			@RequestParam(value = "y", required = false) String y,    // Academic Year
-			@RequestParam(value = "cv", required = false) String cv,   // View
+			@RequestParam(value = "view", required = false, defaultValue = "listMonth") String cv,   // View
 			@RequestParam(value = "sd", required = false) String sd,   // View
-			@RequestParam(value = "ed", required = false) String ed   // View
+			@RequestParam(value = "ed", required = false) String ed,   // View
+			@RequestParam(value = "cld", required = false) String cld  // Clear Department Filter - from session too
 			) throws ExecutionException, InterruptedException, UnsupportedEncodingException {
 
 		String queryString = request.getQueryString();
@@ -95,12 +89,26 @@ public class CalendarController {
 		model.addAttribute("institution_identity",institution_identity);
 		model.addAttribute("institutionName", multilingualServices.getValue("default.institution.title",locale));
 
+		HttpSession session = request.getSession();
 		QueryFilter departmentFilter = new QueryFilter();
 		if (d != null && !d.equals("")) {
 			Department department = departmentService.findById(d);
 			departmentFilter.setId(department.getId());
 			departmentFilter.setText(department.getTitle());
+			session.setAttribute("user_dp", department.getId());
 		}
+		else if (cld == null){
+			String user_dp = (String) session.getAttribute("user_dp");
+			if (user_dp != null) {
+				Department department = departmentService.findById(user_dp);
+				departmentFilter.setId(user_dp);
+				departmentFilter.setText(department.getTitle());
+			}
+		}
+		else {
+			session.removeAttribute("user_dp");
+		}
+
 		QueryFilter courseFilter = new QueryFilter();
 		if (c != null && !c.equals("")) {
 			Course course = courseService.findById(c);
@@ -113,25 +121,10 @@ public class CalendarController {
 			staffMemberFilter.setId(opUser.getId());
 			staffMemberFilter.setText(opUser.getName());
 		}
-		QueryFilter scheduledEventFilter = new QueryFilter();
-		if (e != null && !e.equals("")) {
-			ScheduledEvent scheduledEvent = scheduledEventService.findById(e);
-			scheduledEventFilter.setId(scheduledEvent.getId());
-			scheduledEventFilter.setText(scheduledEvent.getTitle());
-		}
-		QueryFilter classroomFilter = new QueryFilter();
-		if (cr != null && !cr.equals("")) {
-			Classroom classroom = classroomService.findById(cr);
-			classroomFilter.setId(classroom.getId());
-			classroomFilter.setText(classroom.getName());
-		}
 
-
-		model.addAttribute("classRoomFilter", classroomFilter);
 		model.addAttribute("departmentFilter", departmentFilter);
 		model.addAttribute("courseFilter", courseFilter);
 		model.addAttribute("staffMemberFilter", staffMemberFilter);
-		model.addAttribute("scheduledEventFilter", scheduledEventFilter);
 
 		model.addAttribute("currentAcademicYear" , currentAcademicYear);
 
@@ -155,6 +148,12 @@ public class CalendarController {
 		model.addAttribute("sd",sd);
 		model.addAttribute("ed",ed);
 
-		return "calendar";
+		List<Select2GenGroup> departmentList = departmentService.getAllDepartmentsGroupedBySchool("dummy", locale);
+		model.addAttribute("departmentList",departmentList);
+
+		if (scheduleService.read_liveDaemonStatus())
+			return "calendar";
+		else
+			return "offline";
 	}
 }

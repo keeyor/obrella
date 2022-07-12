@@ -91,10 +91,6 @@
 <input id="courseFilterText"           type="hidden" th:value="${courseFilter.text}"/>
 <input id="staffMemberFilterId"        type="hidden" th:value="${staffMemberFilter.id}"/>
 <input id="staffMemberFilterText"      type="hidden" th:value="${staffMemberFilter.text}"/>
-<input id="scheduledEventFilterId"     type="hidden" th:value="${scheduledEventFilter.id}"/>
-<input id="scheduledEventFilterText"   type="hidden" th:value="${scheduledEventFilter.text}"/>
-<input id="classRoomFilterId"          type="hidden" th:value="${classRoomFilter.id}"/>
-<input id="classRoomFilterText"        type="hidden" th:value="${classRoomFilter.text}"/>
 <input id="start_date"                 type="hidden" th:value="${sd}"/>
 <input id="end_date"                   type="hidden"  th:value="${ed}"/>
 
@@ -138,31 +134,31 @@
                 <div class="row mt-0">
                         <!-- Results+Refresh Row -->
                         <div class="card mb-0" style="border: none">
-                            <div class="container mt-3" style="display: none">
-                                <div th:insert="~{fragments/calendar/calendar-search-bar :: calendar-search-bar}">Search Bar</div>
-                            </div>
+
                             <div class="card-body pb-0 px-0">
                                 <div class="row my-1">
                                     <div th:replace="~{offsets/ontop-applied-filters :: ontop-applied-filters}">Applied Filters</div>
                                 </div>
-                                <div class="row mt-0">
-                                    <div class="col-12">
-                                            <span class="float-end" style="font-size: 0.8em">
-                                                    <i class="fas fa-circle" style="color:royalblue"></i> Προγραμματισμένη Διάλεξη
-                                                    <i class="fas fa-circle" style="color:rgb(255, 178, 102)"></i> Έκτακτη Διάλεξη
-                                            </span>
+                                <panel id="showCalendar" style="display: none">
+                                    <div class="row mt-0">
+                                        <div class="col-12">
+                                                <span class="float-end" style="font-size: 0.8em">
+                                                        <i class="fas fa-circle" style="color:royalblue"></i> Προγραμματισμένη Διάλεξη
+                                                        <i class="fas fa-circle" style="color:rgb(255, 178, 102)"></i> Έκτακτη Διάλεξη
+                                                </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row my-1">
-                                    <div class="col-12 mb-3">
-                                        <div id='calendar'></div>
+                                    <div class="row my-1">
+                                        <div class="col-12 mb-3">
+                                            <div id='calendar'></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row my-1">
-                                    <div class="col-12 mb-3">
-                                       * σύρετε το δείκτη του ποντικιού πάνω από κάθε καταχώρηση για να εμφανίσετε περισσότερες λεπτομέρειες
+                                    <div class="row my-1">
+                                        <div class="col-12 mb-3">
+                                           * σύρετε το δείκτη του ποντικιού πάνω από κάθε καταχώρηση για να εμφανίσετε περισσότερες λεπτομέρειες
+                                        </div>
                                     </div>
-                                </div>
+                                </panel>
                             </div>
                         </div>
                     </div>

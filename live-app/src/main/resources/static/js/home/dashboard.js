@@ -10,8 +10,6 @@
     dashboard.init = function () {
 
         dashboard.siteUrl = dashboard.broker.getRootSitePath();
-//        dashboard.departments.init();
-
         $("#refresh_table").on('click',function(e){
             dashboard.broker.getLiveNowLectures();
             dashboard.broker.getScheduledForTodayLectures();
@@ -37,7 +35,9 @@
         moment.locale(localeCode);
         let today = moment().format("LL");
         $("#daily_date_now").html(today);
+
         dashboard.init();
+
     });
 
     dashboard.broker.getLiveNowLectures = function() {

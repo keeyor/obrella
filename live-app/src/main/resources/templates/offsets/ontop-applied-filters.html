@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"  th:lang="${localeCode}">
 
 <body>
     <div th:fragment="ontop-applied-filters">
@@ -40,6 +40,14 @@
                                     <a id="depCanvasLink" style="display: none;color: #0b6da8"  class="btn btn-sm btn-light mb-1" data-coreui-toggle="offcanvas" href="#offcanvasDep" role="button" aria-controls="offcanvasDep" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε τμήμα">
                                         <i class="fas fa-plus-circle"></i> | Τμήμα
                                     </a>
+                                    <panel id="showFilterWarning" style="display: none">
+                                        <div>
+                                            <i class="far fa-hand-pointer"></i>
+                                        </div>
+                                        <div style="background-color: #fdf59a" class="p-2">
+                                            Επιλέξτε <b>Τμήμα</b>. Αργότερα, μπορείτε να περιορίσετε περαιτέρω τη λίστα επιλέγοντας <b>Διδάσκοντα ή/και Μάθημα</b>
+                                        </div>
+                                    </panel>
                                     <a id="staffCanvasLink" style="display: none;color: #0b6da8"   class="btn btn-sm btn-light mb-1" data-coreui-toggle="offcanvas" href="#offcanvasStaff" role="button" aria-controls="offcanvasStaff" title="προσθήκη κριτηρίου αναζήτησης: επιλέξτε διδάσκοντα">
                                         <i class="fas fa-plus-circle"></i> | Διδάσκων ή Υπ. Καθηγητής
                                     </a>
@@ -73,7 +81,22 @@
                         <input type="text" id="dp-search" class="form-control short-list" data-target="dpFilters" placeholder="αναζήτηση στη λίστα"/>
                     </div>
                 </div>
-                <ul class="mt-3 list-group" id="dpFilters"></ul>
+
+                <!-- @thymesVar id="departmentList" type="java.util.List<org.opendelos.model.common.Select2GenGroup>" -->
+                <!-- @thymesVar id="school" type="org.opendelos.model.common.Select2GenGroup" -->
+                <!-- @thymesVar id="dep" type="org.opendelos.model.common.Select2GenChild" -->
+                <!-- @thymesVar id="view" type="java.lang.String" -->
+                <ul class="mt-3 list-group" id="dpFilters">
+                    <th:block th:each="school, iStat: ${departmentList}">
+                        <div class="my-2" th:text="${school.text}" style="font-weight: 500"></div>
+                            <th:block th:each="dep, iStats: ${school.children}">
+                                <li class="list-group-item">
+                                    <a th:if="${view != ''}" class="text-dark text-decoration-none" th:href="@{calendar(d=${dep.id},view=${view})}" th:text="${dep.text}"></a>
+                                    <a th:unless="${view != ''}" class="text-dark text-decoration-none" th:href="@{calendar(d=${dep.id})}" th:text="${dep.text}"></a>
+                                </li>
+                            </th:block>
+                    </th:block>
+                </ul>
             </div>
         </div>
 

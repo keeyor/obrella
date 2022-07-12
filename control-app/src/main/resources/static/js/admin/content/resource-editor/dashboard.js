@@ -375,8 +375,8 @@
             e.preventDefault();
             let end_serialize = $("#lecture-form").serialize();
             if (serialize_form !== end_serialize) {
-                let msg = '<div class="font-weight-bold">Οι αλλαγές θα χαθούν! Είστε σίγουρος?</div>';
-                alertify.confirm('Προειδοποίηση', msg,
+                let msg = '<div style="font-weight: 500">Έχετε προβεί σε τροποποιήσεις, που δεν έχουν αποθηκευτεί! Αν συνεχίσετε, όλες οι αλλαγές θα χαθούν! Είστε σίγουρος?</div>';
+                alertify.confirm('<i class="fas fa-exclamation-triangle" style="color:orangered"></i> Προειδοποίηση', msg,
                     function () {
                         window.location.href = e.currentTarget.href;
                     },

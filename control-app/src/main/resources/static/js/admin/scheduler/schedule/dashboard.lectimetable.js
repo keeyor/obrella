@@ -57,7 +57,7 @@
             ],
             "aoColumnDefs": [
                 {
-                    "aTargets": [2,3,4,7,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25],
+                    "aTargets": [2,3,4,7,10,11,12,13,14,15,21,22,23,24,25],
                     "sortable": false,
                     "visible": false,
                     "sWidth": "0px"
@@ -83,7 +83,7 @@
                             }
                             else {
                                  return '<i class="fas fa-circle me-1" style="color:orangered" title="Ακύρωση"></i>' + 'ακύρωση';
-                             }
+                            }
                         }
                     }
                 },
@@ -116,7 +116,7 @@
                     "mData": "dayOfWeek" ,
                     "className" : "dt-center",
                     "mRender": function (data) {
-                        return dashboard.broker.selectDayOfWeek(data);
+                            return dashboard.broker.selectDayOfWeek(data);
                     }
                 },
                 {
@@ -152,7 +152,13 @@
                     "mData": "startTime",
                     "className" : "dt-center",
                     "mRender": function (data,type,row) {
+                        let _rd = _regularOrOtherDate(row);
+                        if (_rd === '') {
                             return data;
+                        }
+                        else {
+                            return '<span style="color:red">' + _rd + '</span>';
+                        }
                     }
                 },
                 {
@@ -160,11 +166,17 @@
                     "mData": "durationHours",
                     "className" : "dt-center",
                     "mRender": function (data,type,row) {
-                        let val = data + " Ώ ";
-                        if (row["durationMinutes"] !== 0) {
-                            val +=row["durationMinutes"] + " λ";
+                        let _rd = _regularOrOtherDate(row);
+                        if (_rd === '') {
+                            let val = data + " Ώ ";
+                            if (row["durationMinutes"] !== 0) {
+                                val +=row["durationMinutes"] + " λ";
+                            }
+                            return val;
                         }
-                        return val;
+                        else {
+                            return '<span style="color:red">' + _rd + '</span>';
+                        }
                     }
                 },
                 {
@@ -259,8 +271,7 @@
                     "mRender": function (data,type,row) {
                         let add_class = "";
                         if (_dateIsInThePast(row)) {
-                           // add_class = "disabled";
-                            return 'παρελθόν';
+                            return '<i class="fas fa-clock fa-2x" title="έχει ολοκληρωθεί" style="color: lightgrey"></i>';
                         }
                         if ( row["argia"] != null ) {
                             return 'αργία';
@@ -294,11 +305,11 @@
             buttons: [
                 {extend: 'pdf',
                     exportOptions: {
-                        columns: [ 5,7,8,9],
+                        columns: [ 1,5,7,8,9],
                         stripHtml: true,
                     },
                     title: LecturePDFHeader(),
-                    filename: 'openDelos-schedule',
+                    filename: $("#pdf_filename").val(),
                     customize: function (doc) {
                         doc.defaultStyle.fontSize = 8;
                         doc.styles.tableHeader.fontSize = 8;
@@ -315,11 +326,11 @@
                     orientation: 'portrait'
                 }
             ],
-            "rowCallback": function( row, data ) {
+/*            "rowCallback": function( row, data ) {
                 if (_dateIsInThePast(data)) {
                     dashboard.canDelete = false;
                 }
-            },
+            },*/
             "initComplete": function(settings, json) {
                 set_display_results(json);
             }
@@ -334,6 +345,24 @@
             set_display_results();
         } );
     };
+
+    function _regularOrOtherDate(row_data) {
+
+        if (row_data["enabled"]) {
+            return '';
+        }
+        else {
+            if (row_data["argia"] != null) {
+                return 'αργία';
+            } else if (row_data["cancellation"] !== null) {
+                return 'ακύρωση';
+            } else if (row_data["overlapInfo"] !== null) {
+                return 'Μή Διαθέσιμη Αίθουσα';
+            } else {
+                return 'ακύρωση';
+            }
+        }
+    }
 
     function _dateIsInThePast(row_data) {
         // returns true if row broadcast is in the PAST
@@ -380,21 +409,25 @@
         let _message_pauses_html = "";
         let _message_cancellations_html = "";
         let _message_overlaps_html = "";
-
+        let _message_roomInactive_html = "";
         //Set Messages if one or more Cancelled,Paused or Overlaps exist in data
         if (json !== undefined) {
             if (json.data.message_pauses !== "") {
-                _message_pauses_html = json.data.message_pauses;
+                _message_pauses_html = '<i class="fas fa-info-circle"></i> ' + json.data.message_pauses;
             }
             if (json.data.message_cancellations !== "") {
-                _message_cancellations_html += json.data.message_cancellations;
+                _message_cancellations_html += '<i class="fas fa-info-circle"></i> ' + json.data.message_cancellations;
             }
             if (json.data.message_overlaps !== "") {
-                _message_overlaps_html += json.data.message_overlaps;
+                _message_overlaps_html += '<i class="fas fa-exclamation-triangle"></i> ' + json.data.message_overlaps;
+            }
+            if (json.data.message_roomInactive !== "") {
+                _message_roomInactive_html += '<i class="fas fa-exclamation-triangle"></i> ' + json.data.message_roomInactive;
             }
             $("#timetable_msg_pauses").html( _message_pauses_html);
             $("#timetable_msg_cancellations").html( _message_cancellations_html);
             $("#timetable_msg_overlaps").html( _message_overlaps_html);
+            $("#timetable_msg_InactiveClassroom").html(_message_roomInactive_html);
         }
 
         //Set Period (Effective) Dates
@@ -420,9 +453,11 @@
 
                 let enabled = row_data["enabled"];
                 if (moment().isBetween(startDateTime, endDateTime, '[]') && enabled !== false) {
-                    let msg = "Είναι σε εξέλιξη ζωντανή μετάδοση για τον επιλεγμένο προγραμματισμό. Η επεξεργασία έχει προσωρινά απενεργοποιηθεί!";
-                    let allow_delete = false;
-                    disableEditing(msg,allow_delete);
+                    if (_message_roomInactive_html === "") {
+                        let msg = "Είναι σε εξέλιξη ζωντανή μετάδοση για τον επιλεγμένο προγραμματισμό. Η επεξεργασία έχει προσωρινά απενεργοποιηθεί!";
+                        let allow_delete = false;
+                        disableEditing(msg, allow_delete);
+                    }
                 }
                 if (all_in_the_past === true) {
                     if (!(_dateIsInThePast(row_data))) {
@@ -431,18 +466,23 @@
                 }
             });
             if (all_in_the_past) {
-                let msg = "Η Μετάδοση αφορά ημερομηνίες παρελθόντος χρόνου. Η επεξεργασία έχει απενεργοποιηθεί!";
+                let msg = "Ολοκληρωμένη Μετάδοση. Η επεξεργασία έχει απενεργοποιηθεί!";
                 let allow_delete = true;
                 disableEditing(msg,allow_delete);
+
+                //Hide warnings. It does not make sense!
+                $("#timetable_msg_cancellations").hide();
+                $("#timetable_msg_InactiveClassroom").hide();
+                $("#timetable_msg_InactiveScheduledEvent").hide();
             }
         }
         loader.hideLoader();
     }
 
     function disableEditing(msg, allow_delete) {
-        $(".cancel-scheduled").hide();
+        dashboard.canEdit = false;
         $("#save-button").attr('disabled', true);
-        $("._fixed_error_msg").html(msg);
+        $("._fixed_warn_msg").html(msg);
         if (allow_delete) {
             $("#deleteSchedule").prop("disabled", false);
         }
@@ -461,8 +501,9 @@
         let classroom =  $("#_classroom_name").text();
 
         html += "Πρόγραμμα Μεταδόσεων/Καταγραφών\n\n" +
-                "Μάθημα: " + $("#_course_title").text() + " , Τμήμα " + $("#_department_title").text() + "\n" +
                 "Υπεύθυνος Καθηγητής: " + $("#_staff_name").text() + "\n" +
+                "Μάθημα: " + $("#_course_title").text() + " , Τμήμα " + $("#_department_title").text() + "\n" +
+                $("#_repeat_type").text().replace(/\s+/g,' ').trim()  + "\n" +
                 "Περίοδος: " + period + " " + $("#_effective_dates").text() + " - Ακαδημαϊκό Έτος: " + academic_year.replace(/\s+/g,' ').trim() + "\n" +
                 "Αίθουσα: " + classroom + "\n" +
                 $("#_broadcast_info").text().replace(/\s+/g,' ').trim()  + "\n" +

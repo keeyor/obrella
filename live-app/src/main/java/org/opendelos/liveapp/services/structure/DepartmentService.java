@@ -2,6 +2,7 @@ package org.opendelos.liveapp.services.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.opendelos.liveapp.repository.delos.OpUserRepository;
 import org.opendelos.liveapp.repository.structure.CourseRepository;
@@ -283,6 +284,38 @@ public class DepartmentService {
             pauses.addAll(institutionPauses);
         }
         return pauses;
+    }
+
+    public List<Select2GenGroup> getAllDepartmentsGroupedBySchool(String schoolId, Locale locale) {
+
+        List<School> schools = new ArrayList<>();
+        if (schoolId.trim().equals("dummy") || schoolId.trim().equals("")) {
+            schools = schoolService.findAllSortedByTitle();
+        }
+        else {
+            School school = schoolService.findById(schoolId);
+            schools.add(school);
+        }
+        List<Select2GenGroup> select2GenGroupList = new ArrayList<>();
+        for (School school: schools) {
+            //set group properties
+            Select2GenGroup select2GenGroup = new Select2GenGroup();
+            select2GenGroup.setId(school.getId());
+            select2GenGroup.setText(school.getTitle(locale));
+            //set children properties
+            List<Select2GenChild> groupChildren = new ArrayList<>();
+            List<Department> schoolDepartments = this.findBySchoolId(school.getId());
+            for (Department department: schoolDepartments) {
+                Select2GenChild select2GenChild = new Select2GenChild();
+                select2GenChild.setId(department.getId());
+                select2GenChild.setText(department.getTitle(locale));
+                groupChildren.add(select2GenChild);
+            }
+            select2GenGroup.setChildren(groupChildren);
+            select2GenGroupList.add(select2GenGroup);
+        }
+
+        return select2GenGroupList;
     }
 
     public List<Select2GenGroup> getAllDepartmentsGroupedBySchool(String schoolId) {

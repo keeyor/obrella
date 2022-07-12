@@ -29,6 +29,15 @@
         dashboard.siteUrl = dashboard.broker.getRootSitePath();
         dashboard.hosturl = dashboard.broker.getHostURL();
 
+        let   msg_val   = $("#msg_val").val();
+        let   msg_type  = $("#msg_type").val();
+
+        if (msg_val !== '') {
+            let message = {msg: "instant message", type: msg_type, val: msg_val};
+            dashboard.broker.showInstantMessage(message.type ,message.val);
+        }
+
+
         $(".clear-filter").on("click", "a", function(event) {
             let target = $(this).data("target");
             dashboard.broker.initFilter(target);
@@ -44,6 +53,7 @@
         $("#no_dyna_filters").html("Δημιουργία δυναμικών φίλτρων σε εξέλιξη. Παρακαλώ περιμένετε...");
         $("#search-panel").hide();
         $("#results-panel").show();
+
         setFilterRemoveLinks();
 
         if (departmentId !== '' || staffId !== '' || event_area !== '' || event_type !== '') {
@@ -123,6 +133,28 @@
         }
 
         set_display_results();
+    };
+
+    dashboard.broker.showInstantMessage = function(type, val) {
+
+        //Override alertify defaults
+        alertify.set('notifier','position','top-center');
+        alertify.set('notifier','delay', 7);
+
+        switch (type) {
+            case "alert-success":
+                alertify.success(val);
+                break;
+            case "alert-danger":
+                alertify.error(val);
+                break;
+            case "alert-warning":
+                alertify.warning(val);
+                break;
+            case "alert-info":
+                alertify.info(val);
+                break;
+        }
     };
 
     function setFilterRemoveLinks() {
@@ -318,18 +350,23 @@
             let marked_items_no = marked_resources.length;
             $("#marked_items_no").html(" (" + marked_items_no + ")");
             if (marked_items_no >0) {
-                $("#remove_marked_resources").removeClass("disabled");
+                //enable actions here
+                $(".ms-action-delete").removeClass("disabled");
+                $(".ms-action-activate").removeClass("disabled");
+                $(".ms-action-deactivate").removeClass("disabled");
             }
             else {
-                $("#remove_marked_resources").addClass("disabled");
+                $(".ms-action-delete").addClass("disabled");
+                $(".ms-action-activate").addClass("disabled");
+                $(".ms-action-deactivate").addClass("disabled");
             }
             console.log("marked_resources:" + marked_resources);
             e1.preventDefault();
         });
 
-        $("#mark_all_resources").on('click',function(e1){
+        $("#mark_all_resources").on('click',function(e1) {
             marked_resources = [];
-            $(".mark-resource").each(function (index) {
+            $(".mark-resource").each(function () {
                 let target = $(this).data("target");
                 marked_resources.push(target);
                 $(this).addClass("blue-btn-wcag-bgnd-color").addClass("text-white");
@@ -339,15 +376,17 @@
             $("#marked_items_no").html(" (" + marked_items_no + ")");
 
             //enable actions here
-            $("#remove_marked_resources").removeClass("disabled");
+            $(".ms-action-delete").removeClass("disabled");
+            $(".ms-action-activate").removeClass("disabled");
+            $(".ms-action-deactivate").removeClass("disabled");
 
             console.log("marked_resources:" + marked_resources);
             e1.preventDefault();
         });
 
-        $("#unmark_all_resources").on('click',function(e1){
+        $("#unmark_all_resources").on('click',function(e1) {
             marked_resources.length = 0;
-            $(".mark-resource").each(function (index) {
+            $(".mark-resource").each(function () {
                 let target = $(this).data("target");
                 $(this).removeClass("blue-btn-wcag-bgnd-color").removeClass("text-white");
             });
@@ -356,11 +395,46 @@
             $("#marked_items_no").html(" (" + marked_items_no + ")");
 
             //disable actions here
-            $("#remove_marked_resources").addClass("disabled");
+            $(".ms-action-delete").addClass("disabled");
+            $(".ms-action-activate").addClass("disabled");
+            $(".ms-action-deactivate").addClass("disabled");
 
             console.log("marked_resources:" + marked_resources);
             e1.preventDefault();
         });
+
+        $(".ms-action").on('click',function(e1) {
+            let action = $(this).data("action");
+            let marked_items_no = marked_resources.length;
+            let msg = "";
+            if (action === "delete") {
+                msg = '<div style="color:darkslategrey">Έχετε επιλέξει <span style="font-size: 1.2em;font-weight: 500">' + marked_items_no + '</span> Εκδηλώσεις</div>';
+                msg +='<div class="mt-2 text-center" style="font-weight: 500;font-size: 1.2em">Όλες οι επιλεγμένες εκδηλώσεις θα <span style="color:red">διαγραφούν</span> ΟΡΙΣΤΙΚΑ!</div>';
+                msg +='<div class="mt-2 text-center" style="font-weight: 500;font-size: 1.2em">ΔΕΝ ΥΠΑΡΧΕΙ ΤΡΟΠΟΣ ΕΠΑΝΑΦΟΡΑΣ</div>';
+                msg +='<div class="mt-2" style="color:darkslategrey">ΔΕΝ θα διαγραφούν Εκδηλώσεις για τις οποίες έχουν δημιουργηθεί Πολυμέσα Εκδηλώσεων καθώς και ' +
+                    ' Εκδηλώσεις που αναφέρονται στο Πρόγραμμα Μεταδόσεων</div>';
+                msg +='<div class="mt-2" style="font-size:1.2em;color:red">ΕΙΣΤΕ ΣΙΓΟΥΡΟΣ?</div>';
+            }
+            if (action === "activate") {
+                msg = '<div style="color:darkslategrey">Έχετε επιλέξει <span style="font-size: 1.2em;font-weight: 500">' + marked_items_no + '</span> Εκδηλώσεις</div>';
+                msg += '<div class="mt-2" style="font-weight: 500;font-size: 1.2em">Θα ενεργοποιηθεί το ημερολόγιο σε όλες τις επιλεγμένες Εκδηλώσεις! Είστε σίγουρος?</div>';
+            }
+            if (action === "deactivate") {
+                msg = '<div style="color:darkslategrey">Έχετε επιλέξει <span style="font-size: 1.2em;font-weight: 500">' + marked_items_no + '</span> Εκδηλώσεις</div>';
+                msg += '<div class="mt-2" style="font-weight: 500;font-size: 1.2em">Θα <span style="color:red">απενεργοποιηθεί</span> το ημερολόγιο σε όλες τις επιλεγμένες Εκδηλώσεις! Όλες οι μελλοντικές προγραμματισμένες μεταδόσεις/καταγραφές που αφορούν τις επιλεγμένες Εκδηλώσεις θα ακυρωθούν!</div>';
+                msg +='<div class="mt-2" style="font-size:1.2em;color:red">ΕΙΣΤΕ ΣΙΓΟΥΡΟΣ?</div>';
+            }
+            alertify.confirm('<i class="fas fa-exclamation-triangle" style="color:orangered"></i> Προειδοποίηση', msg,
+                function () {
+                    let $form_ms = $("#form-ms");
+                    $form_ms.attr("action", "sevents?action=" + action);
+                    $form_ms.submit();
+                },
+                function () {
+                }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
+
+        });
+
 
 
         $(".help_info").hover(
@@ -425,7 +499,7 @@
         alertify.defaults.theme.ok = "btn blue-btn-wcag-bgnd-color text-white";
         alertify.defaults.theme.cancel = "btn red-btn-wcag-bgnd-color text-white";
         alertify.defaults.theme.input = "form-control";
-        alertify.set('notifier','position', 'top-right');
+        alertify.set('notifier','position', 'top-center');
 
     }
 })();

@@ -6,6 +6,7 @@ package org.opendelos.control.services.structure;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -99,6 +100,8 @@ public class InstitutionService {
 		for (CustomPeriod customPeriod:  customPeriods) {
 			year_list.add(customPeriod.getYear());
 		}
+		year_list.sort(Collections.reverseOrder());
+
 		return year_list;
 	}
 	public String getCurrentAcademicYear() {

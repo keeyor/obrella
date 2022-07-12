@@ -37,7 +37,7 @@
     dashboard.events.fillEventSelect = function(eventId) {
         $events_s2.empty();
         $.ajax({
-            url:  dashboard.siteurl + '/api/v2/s2/scheduledEvents.web/authorized/scheduler/active',
+            url:  dashboard.siteurl + '/api/v2/s2/scheduledEvents.web/authorized/scheduler/ALL', //+ '/api/v2/s2/scheduledEvents.web/authorized/scheduler/active',
             cache: false
         })
             .done(function( data ) {
@@ -59,27 +59,31 @@
                 return repo.text;
             }
 
-            let markup = "<div class='select2-result-repository clearfix'>" +
-                "<div class='select2-result-repository__meta'>" +
-                "<div class='select2-result-repository__title'><i class=\"fas fa-user-tie\"></i> " + repo.text + "</div>";
+                let markup = "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-result-repository__meta'>" +
+                    "<div class='select2-result-repository__title' style='font-weight: 500'>" + repo.text;
+                if (repo.info === "active") {
+                    markup += "</div>";
+                }
+                else {
+                    markup += " <span style='color: indianred'> (Ανενεργό Ημερολόγιο)" + "</span></div>";
+                }
+                if (repo.children) {
 
-            if (repo.children) {
-
-            }
-            else {
-                markup += "<div class='select2-result-repository__statistics'>" +
-                    "<div class='select2-result-repository__stargazers' style='font-size: 0.9em'>" + repo.subheader + " </div>" +
-                    "</div>" +
-                    "</div></div>";
-            }
-            return markup;
+                }
+                else {
+                    markup += "<div class='select2-result-repository__statistics'>" +
+                        "<div class='select2-result-repository__stargazers'>" + repo.subheader;
+                    markup += "</div></div></div>";
+                }
+                return markup;
         }
 
         function formatRepoSelection (repo) {
-            if (!repo.text.startsWith("Επιλέξτε"))
-                return "<b>" + repo.text + "</b>";
-            else
-                return repo.text;
+            if (repo.id === "" || repo.info === "active")
+                return "<span  style=\"font-weight: 500\">" + repo.text + "</span>";
+            else if (repo.info === "inactive")
+                return "<span  style=\"font-weight: 500\">" + repo.text + " (Ανενεργό Ημερολόγιο)</span>";
         }
     }
 

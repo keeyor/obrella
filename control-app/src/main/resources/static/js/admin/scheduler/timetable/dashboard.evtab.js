@@ -80,15 +80,10 @@
                     "mData": "date",
                     "className" : "dt-center",
                     "mRender": function (data,type,row) {
-                        let cancellations = row["cancellations"];
                         if (data != null && data !== "") {
                             let display_date = moment(data).format('ll');
                             let hiddenDataForSorting = '<span style="display:none">' + data + "-" + row.startTime + '</span>';
-                            let cancellation_mark = "";
-                            if (cancellations != null && cancellations.length >0) {
-                                cancellation_mark = '<i class="fas fa-exclamation font-weight-bolder ml-1" style="color: red" title="Ακύρωση"></i>';
-                            }
-                            return hiddenDataForSorting + '<span>' + display_date + '</span>' + cancellation_mark;
+                            return hiddenDataForSorting + '<span>' + display_date + '</span>';
                         }
                         else {
                             return "";

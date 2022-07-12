@@ -59,22 +59,13 @@ public class SchedulerUpdateAspects {
 	@AfterReturning(value = "afterStreamStop(resource, streamingServer)", argNames = "resource,streamingServer")
 	public void createVodAndCleanup(Resource resource, StreamingServer streamingServer) {
 
-		//SKIP getFiles if Using RECORDER SERVER AND THIS IS NOT A RECORDER
-		boolean actualGet = true;
-		boolean useRecorderServer = streamingProperties.isUse_recorder();
-		Map<String, StreamingServer> recordingServersMap = liveService.getStreamingServersHM("true","recorder");
+		boolean getRecordedFiles = false;
 
-		if (useRecorderServer && recordingServersMap.isEmpty()) {
-			logger.trace("No valid Recorders found. Disabling RS use!");
-			useRecorderServer = false;
+		if (resource.isRecording() && resource.getRecorderServerId().equals(streamingServer.getId())) {
+			getRecordedFiles = true;
 		}
-
-		if (useRecorderServer && !streamingServer.getType().equals("recorder")) {
-			actualGet = false;
-			logger.trace(" Abort VoD process. Using RECORDER SERVER. This is:" + streamingServer.getType());
-		}
-
-		if (actualGet && resource.isRecording()) {
+		if (getRecordedFiles) {
+			logger.info("Create VOD File(s) for Stream: " + resource.getStreamName() + " on server:" + streamingServer.getCode());
 			//1. Get Video files
 			File[] recorded_files =  liveUtils.getRecordedVideoFiles(resource.getId());
 			if (recorded_files != null) {
@@ -100,7 +91,7 @@ public class SchedulerUpdateAspects {
 						FileUtils.moveFileToDirectory(videoFile, videoDstFolder, true);
 					}
 					catch (IOException ioe) {
-						logger.error("Error moving recorded file: " + videoFileName + " to destination folder");
+						logger.error("Error moving recorded file: " + videoFileName + " to destination folder:" + videoDstFolder);
 						continue;
 					}
 					//process video

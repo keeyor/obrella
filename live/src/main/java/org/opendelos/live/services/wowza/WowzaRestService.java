@@ -1,5 +1,7 @@
 package org.opendelos.live.services.wowza;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +20,7 @@ import org.opendelos.live.services.structure.StreamingServerService;
 import org.opendelos.model.properties.StreamingProperties;
 import org.opendelos.model.resources.Resource;
 import org.opendelos.model.scheduler.wowza.HttpComponentsClientHttpRequestFactoryDigestAuth;
+import org.opendelos.model.scheduler.wowza.StreamStatus;
 import org.opendelos.model.scheduler.wowza.config.StreamFileAppConfig;
 import org.opendelos.model.scheduler.wowza.config.StreamRecorderConfig;
 import org.opendelos.model.scheduler.wowza.responses.IncomingStreamConfig;
@@ -34,6 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -43,6 +47,10 @@ import org.springframework.web.client.RestTemplate;
 public class WowzaRestService {
 
 	private static final Logger logger = LoggerFactory.getLogger("schedulerLogger");
+	private static final int INVALID_STREAM_ID = -5;
+	private static final int STREAM_OK = 0;
+	private static final int INVALID_STREAMINGSERVER = -1;
+
 
 	private final ClassroomService classroomService;
 	private final StreamingProperties streamingProperties;
@@ -103,7 +111,6 @@ public class WowzaRestService {
 		streamRecorderConfig.setSegmentDuration(segmentationDuration);
 		streamRecorderConfig.setFileTemplate(resource.getId() + "_${SegmentNumber}_${SegmentTime}");
 		streamRecorderConfig.setFileFormat("mp4");
-		logger.info("Segmentation Duration:" + segmentationDuration);
 		try {
 			this.CreateRecorderForStream(streamingServer, recorder_name, streamRecorderConfig);
 		}
@@ -119,7 +126,7 @@ public class WowzaRestService {
 		if (streamingServer.getType().equals("recorder")) {
 			streamId = streamId + "-rec";
 		}
-		if (resource.isRecording()) {
+		if (resource.isRecording() && resource.getRecorderServerId().equals(streamingServer.getId())) {
 			try {
 				this.StopRecorderForStream(streamingServer, streamId + ".stream");
 			}
@@ -140,35 +147,182 @@ public class WowzaRestService {
 		return true;
 	}
 
+	public StreamStatus getStreamStatus(Resource resource,
+			Map<String, StreamingServer> streamingServersMap, Map<String, StreamingServer> recordingServersMap) {
+
+		StreamStatus streamStatus = new StreamStatus();
+		String res_stream_id = resource.getStreamId();
+		if (res_stream_id == null || res_stream_id.trim().equals("")) {
+			streamStatus.setFatalError("INVALID_STREAM");
+			return streamStatus;
+		}
+		streamStatus.setStreamAlive(true);
+		streamStatus.setRecAlive(true);
+		if (resource.isBroadcast() && !resource.isRecording()) {
+			streamStatus.setScheduled2Stream(true);
+			String ss_id = resource.getStreamingServerId();
+			StreamingServer streamingServer = streamingServersMap.get(ss_id);
+			streamStatus.setStreamingServerId(ss_id);
+			if (streamingServer == null) {
+				streamStatus.setStreamAlive(false);
+				streamStatus.setStreamingError("INVALID/INACTIVE STREAMING_SERVER");
+				streamStatus.setStreamingErrorCode(-4);
+			}
+			else {
+				   int status = this.STREAM_STATUS(resource,streamingServer,false);
+				   if (status == 0) {
+				   		streamStatus.setStreamAlive(true);
+				   }
+				   else {
+				   		streamStatus.setStreamAlive(false);
+					    streamStatus.setStreamingError(this.getStreamStatusMsg(status));
+					    streamStatus.setStreamingErrorCode(status);
+				   }
+			}
+		}
+		else if (resource.isRecording() && !resource.isBroadcast()) {
+			streamStatus.setScheduled2Record(true);
+			String rs_id = resource.getRecorderServerId();
+			StreamingServer recordingServer = recordingServersMap.get(rs_id);
+			streamStatus.setRecordingServerId(rs_id);
+			if (recordingServer == null) {
+				streamStatus.setRecAlive(false);
+				streamStatus.setRecordingError("INVALID/INACTIVE RECORDING_SERVER");
+				streamStatus.setRecordingErrorCode(-4);
+			}
+			else {
+					int status = this.STREAM_STATUS(resource,recordingServer,true);
+					if (status == 0) {
+						streamStatus.setRecAlive(true);
+					}
+					else {
+						streamStatus.setRecAlive(false);
+						streamStatus.setRecordingError(this.getStreamStatusMsg(status));
+						streamStatus.setRecordingErrorCode(status);
+					}
+			}
+		}
+		else if (resource.isBroadcast() && resource.isRecording()){
+			//SAME SERVER
+			if (resource.getStreamingServerId().equals(resource.getRecorderServerId())) {
+				streamStatus.setScheduled2Stream(true);
+				streamStatus.setScheduled2Record(true);
+				String s_id = resource.getStreamingServerId();
+				StreamingServer streamingServer = streamingServersMap.get(s_id);
+				streamStatus.setStreamingServerId(s_id);
+				streamStatus.setRecordingServerId(s_id);
+				if (streamingServer == null) {
+					streamStatus.setStreamAlive(false);
+					streamStatus.setRecAlive(false);
+					streamStatus.setStreamingError("INVALID/INACTIVE STREAMING+RECORDING SERVER");
+					streamStatus.setStreamingErrorCode(-4);
+				}
+				else {
+					int status = this.STREAM_STATUS(resource,streamingServer,true);
+					if (status == 0) {
+						streamStatus.setStreamAlive(true);
+					}
+					else {
+						streamStatus.setStreamAlive(false);
+						streamStatus.setStreamingError(this.getStreamStatusMsg(status));
+						streamStatus.setStreamingErrorCode(status);
+					}
+				}
+			}
+			//DIFFERENT SERVERS
+			else {
+				streamStatus.setScheduled2Stream(true);
+				String ss_id = resource.getStreamingServerId();
+				StreamingServer streamingServer = streamingServersMap.get(ss_id);
+				streamStatus.setStreamingServerId(ss_id);
+				if (streamingServer == null) {
+					streamStatus.setStreamAlive(false);
+					streamStatus.setStreamingError("INVALID/INACTIVE STREAMING SERVER");
+					streamStatus.setStreamingErrorCode(-4);
+				}
+				else {
+					int live_status = this.STREAM_STATUS(resource,streamingServer,false);
+					if (live_status == 0) {
+						streamStatus.setStreamAlive(true);
+					}
+					else {
+						streamStatus.setStreamAlive(false);
+						streamStatus.setStreamingError(this.getStreamStatusMsg(live_status));
+						streamStatus.setStreamingErrorCode(live_status);
+					}
+				}
+				streamStatus.setScheduled2Record(true);
+				String rs_id = resource.getRecorderServerId();
+				StreamingServer recordingServer = recordingServersMap.get(rs_id);
+				streamStatus.setRecordingServerId(rs_id);
+				if (recordingServer == null) {
+					streamStatus.setRecAlive(false);
+					streamStatus.setRecordingError("INVALID/INACTIVE RECORDING_SERVER");
+					streamStatus.setStreamingErrorCode(-4);
+				}
+				else {
+					int rec_status = this.STREAM_STATUS(resource,recordingServer,true);
+					if (rec_status == 0) {
+						streamStatus.setRecAlive(true);
+					}
+					else {
+						streamStatus.setRecAlive(false);
+						streamStatus.setRecordingError(this.getStreamStatusMsg(rec_status));
+						streamStatus.setRecordingErrorCode(rec_status);
+					}
+				}
+			}
+		}
+		return streamStatus;
+	}
+
+	private String getStreamStatusMsg(int status) {
+
+		String msg = "STREAM_OK";
+		if (status == -1) {
+				msg = "NOT_CONNECTED";
+		}
+		else if (status == -2) {
+				msg = "NOT_RECORDING";
+		}
+		else if (status == -3) {
+				msg = "UKNOWN_ERROR";
+		}
+		return msg;
+	}
+
 	//# Check Live,REC status on same server
-	public int STREAM_STATUS(Resource resource, StreamingServer streamingServer) {
+	public int STREAM_STATUS(Resource resource, StreamingServer streamingServer, boolean checkRecording) {
 
 		int status = 0;
 		String streamId = resource.getStreamId();
+
 		if (streamingServer.getType().equals("recorder")) {
-			streamId = streamId + "-rec";
+					streamId = streamId + "-rec";
 		}
 		IncomingStreamConfig incomingStreamConfig = this.getIncomingStreamInformation(streamingServer,streamId + ".stream");
 		if (incomingStreamConfig != null) {
-			if (incomingStreamConfig.isConnected()) {
+			if (incomingStreamConfig.isConnected() && checkRecording) {
 				if (resource.isRecording() && !incomingStreamConfig.isRecordingSet()) {
 					status = -2; // connected but NOT recording
 				}
 			}
-			else {
+			else if (!incomingStreamConfig.isConnected()){
 				status = -1; // not connected
 			}
 		}
 		else {
 			status = -3; // unknown error >> invalid stream returned from wowza
 		}
+
 		return status;
 	}
 
-    public int STREAM_LIVE_STATUS(Resource resource, StreamingServer streamingServer) {
+/*    public int STREAM_LIVE_STATUS(Resource resource, StreamingServer streamingServer) {
 
 		int status = 0;
 		String streamId = resource.getStreamId();
+
 		IncomingStreamConfig incomingStreamConfig = this.getIncomingStreamInformation(streamingServer, streamId + ".stream");
 		if (incomingStreamConfig != null) {
 			if (!incomingStreamConfig.isConnected()) {
@@ -179,7 +333,7 @@ public class WowzaRestService {
 			status = -3; // unknown error >> invalid stream returned from wowza
 		}
 		return status;
-	}
+	}*/
 
 	public void STREAM_CLEAN(Resource resource, StreamingServer streamingServer) {
 

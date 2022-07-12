@@ -16,15 +16,18 @@ public class ScheduledEventInfo implements Serializable  {
 	private String id;
 	private String title;
 	private String supervisor;
+	private boolean active;
 
-	public ScheduledEventInfo(String id, String title, String supervisor) {
+	public ScheduledEventInfo(String id, String title, String supervisor, boolean active) {
 		this.id = id;
 		this.title = title;
 		this.supervisor = supervisor;
+		this.setActive(active);
 	}
-	public ScheduledEventInfo(String id, String title) {
+	public ScheduledEventInfo(String id, String title, boolean active) {
 		this.id = id;
 		this.title = title;
+		this.setActive(active);
 	}
 	public ScheduledEventInfo() {
 		this.id = "";

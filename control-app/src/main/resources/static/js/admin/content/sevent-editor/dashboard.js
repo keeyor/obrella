@@ -22,8 +22,8 @@
         dashboard.hosturl = dashboard.broker.getHostURL();
         dashboard.app_path = "";
 
-         let   msg_val   = $("#msg_val").val();
-        let   msg_type  =$("#msg_type").val();
+        let   msg_val   = $("#msg_val").val();
+        let   msg_type  = $("#msg_type").val();
 
         if (msg_val !== '') {
             let message = {msg: "instant message", type: msg_type, val: msg_val};
@@ -75,9 +75,7 @@
 
         let _location = document.location.toString();
         let applicationNameIndex = _location.indexOf('/', _location.indexOf('://') + 3);
-        let hostUrl= _location.substring(0, applicationNameIndex);
-
-        return hostUrl;
+        return _location.substring(0, applicationNameIndex);
     };
 
 
@@ -94,7 +92,7 @@
                 //alertify.error(val);
                 alertify.alert()
                     .setting({
-                        'title' : 'Αποτυχία',
+                        'title' : '<i class="fas fa-exclamation-circle me-1" style="color: red"></i>Αποτυχία',
                         'label':'OK',
                         'message': val
                     }).show();

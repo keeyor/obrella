@@ -256,18 +256,18 @@ public class ScheduleService {
             ScheduledEvent scheduledEvent = scheduledEventService.findById(schedule.getEvent());
             if (scheduledEvent != null) {
                 if (scheduledEvent.getResponsiblePerson() != null && scheduledEvent.getResponsiblePerson().getName() != null) {
-                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(), scheduledEvent.getResponsiblePerson().getName()));
+                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(), scheduledEvent.getResponsiblePerson().getName(), scheduledEvent.getIsActive()));
                 }
                 else {
-                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle()));
+                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(), scheduledEvent.getIsActive()));
                 }
             }
             else {
-                scheduleDTO.setScheduledEvent(new ScheduledEventInfo("-1","Άγνωστη Εκδήλωση"));
+                scheduleDTO.setScheduledEvent(new ScheduledEventInfo("-1","Άγνωστη Εκδήλωση",false));
             }
         }
         else {
-            scheduleDTO.setScheduledEvent(new ScheduledEventInfo("",""));
+            scheduleDTO.setScheduledEvent(new ScheduledEventInfo("","",false));
         }
         if (schedule.getSupervisor() != null && !schedule.getSupervisor().equals("")) {
             OpUser opuser = opUserService.findById(schedule.getSupervisor());
@@ -289,14 +289,14 @@ public class ScheduleService {
         if (schedule.getClassroom() != null) {
             Classroom classroom = classroomService.findById(schedule.getClassroom());
             if (classroom != null) {
-                scheduleDTO.setClassroom(new ClassroomInfo(classroom.getId(), classroom.getName(), classroom.getCode()));
+                scheduleDTO.setClassroom(new ClassroomInfo(classroom.getId(), classroom.getName(), classroom.getCode(), classroom.getCalendar().equals("true")));
             }
             else {
                 logger.error("Classroom with id:" + schedule.getClassroom() + " not found");
             }
         }
         else {
-            scheduleDTO.setClassroom(new ClassroomInfo("","",""));
+            scheduleDTO.setClassroom(new ClassroomInfo("","","", false));
         }
         if (schedule.getDate() != null) {
             LocalDate localDate = schedule.getDate();
@@ -388,6 +388,8 @@ public class ScheduleService {
         StringBuilder message_pauses = new StringBuilder();
         StringBuilder message_cancellations = new StringBuilder();
         StringBuilder message_overlaps = new StringBuilder();
+        String message_roomIsInactive="";
+        String message_scheduleEventInactive = "";
 
         List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
 
@@ -397,6 +399,12 @@ public class ScheduleService {
                     DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     LocalDate validateDate = LocalDate.parse(scheduleDTO.getDate(), f);
 
+                    if (!scheduleDTO.getScheduledEvent().isActive()) {
+                        message_scheduleEventInactive = "Εκδήλωση με Ανενεργό Ημερολόγιο. Οι προγραμματισμένες μεταδόσεις ΔΕΝ θα πραγματοποιηθούν";
+                    }
+                    if (!scheduleDTO.getClassroom().isActive()) {
+                        message_roomIsInactive = "Αίθουσα με Ανενεργό Ημερολόγιο. Οι προγραμματισμένες μεταδόσεις ΔΕΝ θα πραγματοποιηθούν";
+                    }
                     Cancellation isCanceled = this.DateIsCanceled(validateDate, schedule.getCancellations());
                     if (isCanceled != null) {
                         this.setCancellationInfo(scheduleDTO, isCanceled);
@@ -418,7 +426,7 @@ public class ScheduleService {
                     }
                     scheduleDTOS.add(scheduleDTO);
                 }
-            }
+        }
         else { //* REGULAR: Compute DAyS in Period
                 String academicYear = schedule.getAcademicYear();
                 String departmentId = schedule.getDepartment();
@@ -455,7 +463,13 @@ public class ScheduleService {
                         while (validateDate.isBefore(_end_date.plus(1, ChronoUnit.DAYS))) {
                             Argia isArgia = this.DateInPauses(validateDate, departmentPauses);
                             ScheduleDTO scheduleDTO = this.getScheduleDTO(schedule);
+
                             if (scheduleDTO != null) {
+
+                                if (!scheduleDTO.getClassroom().isActive()) {
+                                    message_roomIsInactive = "Αίθουσα με Ανενεργό Ημερολόγιο. Οι προγραμματισμένες μεταδόσεις ΔΕΝ θα πραγματοποιηθούν";
+                                }
+
                                 scheduleDTO.setRepeat("regular");
                                 scheduleDTO.setDate(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(validateDate));
                                 scheduleDTO.setFromDate(schedulePeriod.getStartDate());
@@ -512,6 +526,8 @@ public class ScheduleService {
         timeTableResults.setMessage_pauses(message_pauses.toString());
         timeTableResults.setMessage_cancellations(message_cancellations.toString());
         timeTableResults.setMessage_overlaps(message_overlaps.toString());
+        timeTableResults.setMessage_roomInactive(message_roomIsInactive);
+        timeTableResults.setMessage_scheduleEventInactive(message_scheduleEventInactive);
 
         return timeTableResults;
     }
@@ -588,7 +604,7 @@ public class ScheduleService {
                     if (!range_out_of_period) {
                         LocalDate _start_date = RS;
                         LocalDate _end_date = RE;
-                      logger.trace("Calculate Regular Within range:" + _start_date + " to: " + _end_date + " . WHEN period start is: " + _start_period_date + " and period end: " +  _end_period_date);
+                        logger.trace("Calculate Regular Within range:" + _start_date + " to: " + _end_date + " . WHEN period start is: " + _start_period_date + " and period end: " +  _end_period_date);
 
                         DayOfWeek rDayOfWeek = schedule.getDayOfWeek();
                         while (!_start_date.getDayOfWeek().equals(rDayOfWeek)) {
@@ -822,6 +838,31 @@ public class ScheduleService {
         //> try using other query criteria to minimize  the size of searchSchedule query results...
         long startAt = System.currentTimeMillis();
         List<Schedule> searchResults = this.searchSchedule(scheduleQuery);
+
+       // CODE11 : Remove From searchResults, schedules that are assigned to disabled or unknown classrooms and to de-activated ScheduledEvents
+       List<Schedule> invalidList = new ArrayList<>();
+       for (Schedule schedule: searchResults) {
+           String classroomId = schedule.getClassroom();
+           int classroom_status = classroomService.getClassroomStatus(classroomId);
+           if (classroom_status == 1) {
+               invalidList.add(schedule);
+           }
+           else if (classroom_status == 2) {
+               invalidList.add(schedule);
+           }
+           else {
+               if (schedule.getType().equals("event")) {
+                   ScheduledEvent scheduledEvent = scheduledEventService.findById(schedule.getEvent());
+                   if (scheduledEvent == null || !scheduledEvent.getIsActive()) {
+                       invalidList.add(schedule);
+                   }
+               }
+           }
+       }
+       logger.warn("Removing " + invalidList.size() + " schedules, due to invalid or de-activated rooms and events");
+       searchResults.removeAll(invalidList);
+
+
         //> add schedules in date range, ignore others
         boolean cancelLive = false;
         for (Schedule schedule: searchResults) {
@@ -865,24 +906,7 @@ public class ScheduleService {
             }  // < else regular
         }  //< for schedule in search results
 
-       //Remove From inRangeResults, scheduleDTOs that are assigned to disabled room
-       List<ScheduleDTO> disabledClassroomList = new ArrayList<>();
-       for (ScheduleDTO scheduleDTO: inRangeResults) {
-           String classroomId = scheduleDTO.getClassroom().getId();
-           int classroom_status = classroomService.getClassroomStatus(classroomId);
-           if (classroom_status == 1) {
-               disabledClassroomList.add(scheduleDTO);
-               removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Ανύπαρκτη αίθουσα:"  + classroomId);
-           }
-           else if (classroom_status == 2) {
-               disabledClassroomList.add(scheduleDTO);
-               removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Απενεργοποιημένη αίθουσα:"  + classroomId);
-           }
-       }
-       inRangeResults.removeAll(disabledClassroomList);
-
         long endAllAt   = System.currentTimeMillis();
-        logger.trace("Time:" + (endAllAt - startAt));
         return inRangeResults;
     }
 
@@ -898,6 +922,30 @@ public class ScheduleService {
         //> try using other query criteria to minimize  the size of searchSchedule query results...
         long startAt = System.currentTimeMillis();
         List<Schedule> searchResults = this.searchScheduleByEditor(scheduleQuery, editor,access);
+
+        // CODE11 : Remove From searchResults, schedules that are assigned to disabled or unknown classrooms and to de-activated ScheduledEvents
+        List<Schedule> invalidList = new ArrayList<>();
+        for (Schedule schedule: searchResults) {
+            String classroomId = schedule.getClassroom();
+            int classroom_status = classroomService.getClassroomStatus(classroomId);
+            if (classroom_status == 1) {
+                invalidList.add(schedule);
+            }
+            else if (classroom_status == 2) {
+                invalidList.add(schedule);
+            }
+            else {
+                if (schedule.getType().equals("event")) {
+                    ScheduledEvent scheduledEvent = scheduledEventService.findById(schedule.getEvent());
+                    if (scheduledEvent == null || !scheduledEvent.getIsActive()) {
+                        invalidList.add(schedule);
+                    }
+                }
+            }
+        }
+        logger.warn("Removing " + invalidList.size() + " schedules, due to invalid or de-activated rooms and events");
+        searchResults.removeAll(invalidList);
+
         //> add schedules in date range, ignore others
         boolean cancelLive = false;
         for (Schedule schedule: searchResults) {
@@ -938,22 +986,6 @@ public class ScheduleService {
                 }
             }  // < else regular
         }  //< for schedule in search results
-
-        //Remove From inRangeResults, scheduleDTOs that are assigned to disabled room
-        List<ScheduleDTO> disabledClassroomList = new ArrayList<>();
-        for (ScheduleDTO scheduleDTO: inRangeResults) {
-            String classroomId = scheduleDTO.getClassroom().getId();
-            int classroom_status = classroomService.getClassroomStatus(classroomId);
-            if (classroom_status == 1) {
-                disabledClassroomList.add(scheduleDTO);
-                removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Ανύπαρκτη αίθουσα:"  + classroomId);
-            }
-            else if (classroom_status == 2) {
-                disabledClassroomList.add(scheduleDTO);
-                removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Απενεργοποιημένη αίθουσα:"  + classroomId);
-            }
-        }
-        inRangeResults.removeAll(disabledClassroomList);
 
         long endAllAt   = System.currentTimeMillis();
         logger.debug("Time:" + (endAllAt - startAt));
@@ -1015,7 +1047,7 @@ public class ScheduleService {
             }
             if (cancellations.size() > 0) {
                 schedule.setCancellations(cancellations);
-                schedule.setEnabled(false);
+                //schedule.setEnabled(false);
                 //As of now (25-02-21) I don't have Cache on schedules. So this call does not matter. If you create cache this is unacceptable. move somewhere else or clean cache manually
                 this.update(schedule);
             }
@@ -1028,7 +1060,7 @@ public class ScheduleService {
 
         if (schedule != null) {
             cancellations = schedule.getCancellations();
-            if (!schedule.isEnabled() && cancellations != null && cancellations.size()>0) {
+            if (cancellations != null && cancellations.size()>0) {
                 List<Cancellation> remove_list = new ArrayList<>();
                 for (Cancellation cancellation: schedule.getCancellations()) {
                         LocalDate cancellation_date = cancellation.getDate();
@@ -1044,7 +1076,7 @@ public class ScheduleService {
                 if (remove_list.size() > 0) {
                     cancellations.removeAll(remove_list);
                     schedule.setCancellations(cancellations);
-                    schedule.setEnabled(true);
+                //    schedule.setEnabled(true);
                     //As of now (25-02-21) I don't have Cache on schedules. So this call does not matter. If you create cache this is unacceptable. move somewhere else or clean cache manually
                     this.update(schedule);
                 }

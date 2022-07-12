@@ -8,6 +8,7 @@ import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,6 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -24,8 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.google.api.client.auth.oauth2.Credential;
+import org.apache.commons.io.FilenameUtils;
 import org.opendelos.control.services.i18n.MultilingualServices;
 import org.opendelos.control.services.opUser.OpUserService;
+import org.opendelos.control.services.resource.FileNameCleaner;
+import org.opendelos.control.services.resource.GreekChar;
 import org.opendelos.control.services.scheduledEvent.ScheduledEventService;
 import org.opendelos.control.services.scheduler.ScheduleService;
 import org.opendelos.control.services.scheduler.ScheduleUtils;
@@ -208,6 +213,8 @@ public class ScheduleController {
 				schedule = this.createClonedResource(cloneId);
 			}
 			ScheduleDTO scheduleDTO = scheduleService.getScheduleDTO(schedule);
+
+			model.addAttribute("PDF_Filename",genSchedulePDFFileName(scheduleDTO));
 			model.addAttribute("ScheduleDTO", scheduleDTO);
 		}
 		model.addAttribute("id", id);
@@ -215,6 +222,7 @@ public class ScheduleController {
 		SetModelAttributes(model,locale, currentAcademicYear);
 		model.addAttribute("page", "schedule");
 		model.addAttribute("future_task", future_task);
+
 
 
 		return "admin/scheduler/schedule";
@@ -394,6 +402,7 @@ public class ScheduleController {
 			int next_ay = Integer.parseInt(at) + 1;
 			ayListText.add(at + " - " + next_ay);
 		}
+
 		model.addAttribute("ayCurr", currentAcademicYear);
 		model.addAttribute("ayList", ayList);
 		model.addAttribute("ayListText", ayListText);
@@ -513,5 +522,26 @@ public class ScheduleController {
 			}
 		}
 		return ShouldBeLive;
+	}
+
+	private String genSchedulePDFFileName(ScheduleDTO scheduleDTO) {
+
+		LocalDate ldt = LocalDate.now(ZoneId.of(app_zone));
+		String gen_filename;
+		if (scheduleDTO.getType().equals("lecture")) {
+			gen_filename = "Schedule-" + scheduleDTO.getCourse().getTitle() + "-";
+		}
+		else {
+			gen_filename = "Schedule-" + scheduleDTO.getScheduledEvent().getTitle() + "-";
+		}
+		if (scheduleDTO.getRepeat().equals("regular")) {
+			gen_filename += scheduleDTO.getPeriod();
+		}
+		gen_filename += "-" + ldt;
+
+		String latin_gen_filename = GreekChar.translate(gen_filename);
+		latin_gen_filename = FileNameCleaner.cleanFileName(latin_gen_filename);
+
+		return latin_gen_filename;
 	}
 }

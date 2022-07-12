@@ -93,7 +93,7 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/schedule}"> Νέα Μετάδοση</a></li>
                 <li class="nav-item"><a class="nav-link active" th:href="@{/admin/scheduler/calendar}">Ημερολόγιο Μεταδόσεων</a></li>
                 <th:block sec:authorize="hasAnyRole('ROLE_SA')">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/live}">Ζωντανές Μεταδόσεις</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/live}">Τρέχουσες Μεταδόσεις</a></li>
                 </th:block>
             </ul>
             <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>

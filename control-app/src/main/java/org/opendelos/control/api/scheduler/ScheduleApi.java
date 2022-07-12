@@ -93,7 +93,9 @@ public class ScheduleApi {
 		if (!authorize) {
 			return new ResponseEntity<>("Η ακύρωση απέτυχε. Δεν έχετε δικαίωμα ακύρωσης της μετάδοσης", HttpStatus.BAD_REQUEST);
 		}
-
+		if (new_cancellation.getTitle().trim().equals("")) {
+			new_cancellation.setTitle("Δεν ορίστηκε αιτία");
+		}
 		int result = this.setFutureCancellation(id,new_cancellation);
 		if (result == -1) {
 			return new ResponseEntity<>("Η ακύρωση είναι ήδη ενεργή", HttpStatus.BAD_REQUEST);

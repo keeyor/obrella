@@ -76,7 +76,7 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/schedule}"> Νέα Μετάδοση</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/calendar}">Ημερολόγιο Μεταδόσεων</a></li>
                 <th:block sec:authorize="hasAnyRole('ROLE_SA')">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/live}">Ζωντανές Μεταδόσεις</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/live}">Τρέχουσες Μεταδόσεις</a></li>
                 </th:block>
             </ul>
             <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
@@ -123,7 +123,7 @@
                             </div>
                             <div class="card-footer mb-4">
                                 <div class="row pt-2">
-                                    <div class="col-12" style="font-size: 0.8em">
+                                    <div class="col-12" style="font-size: 1em">
                                         <div class="mb-2">
                                             <i class="fas fa-circle" style="color:greenyellow"></i> Ενεργή Μετάδοση |
                                             <i class="fas fa-circle" style="color:red"></i> Ανεργή Μετάδοση

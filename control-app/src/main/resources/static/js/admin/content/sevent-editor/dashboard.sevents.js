@@ -20,8 +20,6 @@
         SetupUnitsSelectModal();
         RegisterEvents();
         setupEventEditPanel();
-
-
     };
 
     function DisplayStaffMembersSelectModal() {
@@ -140,8 +138,8 @@
                 },
             ]
         });
-
     }
+
     function LoadAllUnitsModal() {
         //reset DT page
         InstitutionUnitsDT.row(0).show().draw(false);
@@ -155,11 +153,11 @@
         //get already responsible units (ids)
         let nodes = AssignedUnitsDT.rows().data();
         let assignedIds =[];
-        for (let l = 0; l < nodes.length; l++) {
+        for (var l = 0; l < nodes.length; l++) {
             assignedIds.push(nodes[l].id);
         }
         InstitutionUnitsDT.rows().deselect();
-        //select already responsible units to InstitutionUnitsDT
+        //select already selected units to InstitutionUnitsDT
         InstitutionUnitsDT.column(0, {order: 'applied'}).nodes().each(function (cell, i) {
             let unitId = InstitutionUnitsDT.cell(i, 0).data();
             if (assignedIds.includes(unitId)) {
@@ -185,8 +183,8 @@
             offstyle: "danger",
             size: "small"
         });
-        var d = new Date();
-        var today = d.getDate()  + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
+        //let d = new Date();
+        //var today = d.getDate()  + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
         $("#daterange").daterangepicker({
             "showDropdowns": true,
             "locale": {
@@ -242,8 +240,8 @@
             placeholder: "Επιλέξτε Κατηγορία"
         });
         //Categories
-        $(".js-category-tags").select2({
-            placeholder: "Επιλέξτε Θεματικές Ενότητες",
+        $("#sevent_cat").select2({
+            placeholder: "Επιλέξτε από 1 έως 3 Θεματικές Ενότητες αν έχετε επιλέξει την Κατηγορία: 'Πανεπιστήμιο και Κοινωνία'",
             maximumSelectionLength: 3,
             multiple: true
         });
@@ -251,6 +249,16 @@
     }
 
     function RegisterEvents() {
+
+        $("#event_url_bt").on('click', function(e){
+            let event_rel_url = $("#event_url").val();
+            if (event_rel_url.trim() !== "") {
+                $("#event_url_bt").attr("href", event_rel_url);
+            }
+            else {
+                e.preventDefault();
+            }
+        })
 
         $("#deleteSevent").on("click", function (e) {
 
@@ -272,7 +280,7 @@
             let data = e.params.data;
             let area = data.id;
             let $element = $("#sevent_type");
-            dashboard.sevents.getAndSetEventTypesByArea(area,$element,"");
+            dashboard.sevents.getAndSetEventTypesByArea(area,$element,"","onChange");
         });
 
         $("#deletePhoto").on('click',function(e){
@@ -281,12 +289,6 @@
                 let msg = '<div class="font-weight-bold">Η Φωτογραφία θα διαγραφεί! Είστε σίγουρος?</div>';
                 alertify.confirm('Προειδοποίηση', msg,
                     function () {
-/*                        $("#event_photo_rurl").val("");
-                        $event_photo_url.attr("src", "");
-                        $("#_image_panel").hide();
-                        $("#default_photo").show();
-                        document.getElementById('file_select_label').innerHTML = "Η διαγραφή της φωτογραφίας, ολοκληρώθηκε";
-                        document.getElementById('filelist').innerHTML = '';*/
                         let $event_form = $("#sevent_form");
                         $event_form.attr("action", "sevent-editor?action=deletePhoto");
                         $event_form.submit();
@@ -311,9 +313,11 @@
         $("#closeUpdateSevent").on('click',function(e){
             e.preventDefault();
             let end_serialize = $("#sevent_form").serialize();
+            console.log(serialize_form);
+            console.log(end_serialize);
             if (serialize_form !== end_serialize) {
-                let msg = '<div class="font-weight-bold">Οι αλλαγές θα χαθούν! Είστε σίγουρος?</div>';
-                alertify.confirm('Προειδοποίηση', msg,
+                let msg = '<div style="font-weight: 500">Έχετε προβεί σε τροποποιήσεις, που δεν έχουν αποθηκευτεί! Αν συνεχίσετε, όλες οι αλλαγές θα χαθούν! Είστε σίγουρος?</div>';
+                alertify.confirm('<i class="fas fa-exclamation-triangle" style="color:orangered"></i> Προειδοποίηση', msg,
                     function () {
                         window.location.href = e.currentTarget.href;
                     },
@@ -331,12 +335,11 @@
             e.preventDefault();
         })
         $(".selectRpersonBt").on("click",function(e) {
-            loadInstitutionStaffMembersModal("");
+            loadInstitutionStaffMembersModal();
             e.preventDefault();
         });
         $("#rperson_assign_department").on('select2:select', function (e) {
             $("#default_dp_id").val(e.params.data.id);
-            //loadInstitutionStaffMembersModal(e.params.data.id);
             // initialize datatable if not initialized yet! else reload ajax
             if ( ! $.fn.DataTable.isDataTable( '#rPersonSelectDataTable' ) ) {
                 DisplayStaffMembersSelectModal(e.params.data.id);
@@ -370,7 +373,7 @@
             let nodes= InstitutionUnitsDT.rows( { selected: true } ).data();
             let html_units = '';
             if (nodes.length>0) {
-                for (let l = 0; l < nodes.length; l++) {
+                for (var l = 0; l < nodes.length; l++) {
                     let new_row = nodes[l];
                     AssignedUnitsDT.row.add( new_row ).draw();
                     let unit_line = "";
@@ -391,13 +394,7 @@
         });
     }
 
-    function loadInstitutionStaffMembersModal(departmentId) {
-        let $rperson_assign_department = $("#rperson_assign_department");
-        //department filter on Institution's StaffMembers Modal
-        //dashboard.departments.initializeDepartmentsList(departmentId, $rperson_assign_department);
-
-        //departmentId = $("#default_dp_id").val();
-       // if (departmentId === "") { departmentId = "dummy";}
+    function loadInstitutionStaffMembersModal() {
         // initialize datatable if not initialized yet! else reload ajax
         if ( ! $.fn.DataTable.isDataTable( '#rPersonSelectDataTable' ) ) {
             DisplayStaffMembersSelectModal();
@@ -427,6 +424,7 @@
     }
 
     function setupEventEditPanel () {
+
         AssignedUnitsDT.clear().draw();
         $("#newSeventBt").hide();
         $("#file_select_label").html("");
@@ -441,11 +439,13 @@
             event_title = "[Τίτλος]";
         }
         $("#seventModalLabel").html(event_title);
-        //type
-        let type = $("#sevent_type").val();
-        if (type === null || type === "") {
-            $("#sevent_type").val("other").trigger("change");
-        }
+
+        //event type
+        let $seventType_s2  = $("#sevent_type");
+        let event_type      = $seventType_s2.val();
+        //if (event_type === null || event_type === "") {
+        //    $seventType_s2.val("other").trigger("change");
+       // }
 
         if (event_id !== "") {
             setPhotoUploadState("enable");
@@ -454,19 +454,22 @@
             setPhotoUploadState("disable");
         }
         //Dates
-        let startDate = $("#startDate").val();
+        let $startDate_hf = $("#startDate");
+        let $endData_hf = $("#endDate");
+
+        let startDate = $startDate_hf.val();
+
         let $daterange = $("#daterange").data('daterangepicker');
         if (startDate == null || startDate === "") {
             let today = moment().format('YYYY-MM-DDTHH:mm:ss[Z]');
-            $("#startDate").val(today);
-            $("#endDate").val(today);
+            $startDate_hf.val(today);
+            $endData_hf.val(today);
             let formatted_today = moment(today).format('DD-MM-YYYY');
             $daterange.setStartDate(formatted_today);
             $daterange.setEndDate(formatted_today);
         }
         else {
-            //Start Date
-            let endDate = $("#endDate").val();
+            let endDate = $endData_hf.val();
             if (startDate != null && (endDate == null || endDate === "")) {
                 let formatted_date = moment(startDate).format('DD-MM-YYYY');
                 $daterange.setStartDate(formatted_date);
@@ -531,8 +534,6 @@
                 }
         }
 
-
-       // $("#sevent_rperson_text").html(media_body);
         $("#sevent_rperson_text").html(media_body);
         // PHOTO HANDLE
         if (event_id !== "") {
@@ -546,29 +547,26 @@
             $("#deleteSevent").attr("disabled",true);
         }
 
+        //disable event_cat if area != ea_uas
         let area = $("#sevent_area").val();
         if (area !== "ea_uas") {
-           // $("#sevent_cat").select2({placeholder: "- δεν εφαρμόζεται -"});
             $("#sevent_cat").prop("disabled", true);
         }
         else {
-           // $("#sevent_cat").select2({ placeholder: "Επιλέξτε Θεματικές Περιοχές" });
             $("#sevent_cat").prop("disabled",false);
         }
-        let event_type = $("#event_type").val();
-        let $s2_element = $("#sevent_type");
 
-
-        if (area !== null && area !== "") { //for all scheduledEvents that have no area
-            dashboard.sevents.getAndSetEventTypesByArea(area, $s2_element, event_type);
+        event_type = $("#event_type").val();
+        //set event_type options for selected area
+        if (area !== null && area !== "") {
+            dashboard.sevents.getAndSetEventTypesByArea(area, $seventType_s2, event_type, "init");
         }
-
+        else {
             //Serialize form to check for changes on submit
             serialize_form = $("#sevent_form").serialize();
-            console.log(serialize_form);
-
-
+        }
     }
+
     function setPhotoUploadState(state) {
         if (state === "enable") {
             $("#container").show();
@@ -607,9 +605,11 @@
         dashboard.upload.setEventId(event_id);
     }
 
-    dashboard.sevents.getAndSetEventTypesByArea = function(area, $sel2_element, selected_value) {
+    dashboard.sevents.getAndSetEventTypesByArea = function(area, $sel2_element, selected_value, e) {
 
         $sel2_element.empty();
+
+        let $event_cat_s2 =  $("#sevent_cat");
 
         $.ajax({
             url:  dashboard.siteurl + '/api/v1/s2/event_types/' + area,
@@ -628,13 +628,15 @@
                     $sel2_element.val("").trigger("change");
                 }
                 if (area === "ea_uas") {
-                    //$("#sevent_cat").select2({ placeholder: "Επιλέξτε Θεματικές Περιοχές" });
-                    $("#sevent_cat").prop("disabled",false);
+                    $event_cat_s2.prop("disabled",false);
                 }
                 else {
-                    $("#sevent_cat").val("").trigger("change");
-                  //  $("#sevent_cat").select2({ placeholder: "- δεν εφαρμόζεται -" });
-                    $("#sevent_cat").prop("disabled",true);
+                    $event_cat_s2.val("").trigger("change");
+                    $event_cat_s2.prop("disabled",true);
+                }
+                if (e === "init") {
+                    //Serialize form to check for changes on submit
+                    serialize_form = $("#sevent_form").serialize();
                 }
             });
     }

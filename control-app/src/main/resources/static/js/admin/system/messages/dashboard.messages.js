@@ -39,6 +39,15 @@
                         if (data === null || data === "visitors") {
                             return '<span style="color: #003476;font-weight: 500">Επισκέπτες</span>';
                         }
+                        else if (data === "visitors-vod") {
+                            return '<span style="color: #003476;font-weight: 500">Επισκέπτες (ΕΚΠΑ ΔΙΑΛΕΞΕΙΣ)</span>';
+                        }
+                        else if (data === "visitors-live") {
+                            return '<span style="color: #003476;font-weight: 500">Επισκέπτες (ΕΚΠΑ ΜΕΤΑΔΟΣΕΙΣ ΔΙΑΛΕΞΕΩΝ)</span>';
+                        }
+                        else if (data === "visitors-events") {
+                            return '<span style="color: #003476;font-weight: 500">Επισκέπτες (ΕΚΠΑ ΔΡΑΣΕΙΣ)</span>';
+                        }
                         else if (data === "admins-all") {
                             return '<span style="color: #003476;font-weight: 500">Διαχειριστές & Διδακτικό Προσωπικό</span>';
                         }

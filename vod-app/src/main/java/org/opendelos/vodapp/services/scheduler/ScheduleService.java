@@ -11,6 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.opendelos.model.calendar.Argia;
 import org.opendelos.model.calendar.Period;
@@ -249,18 +250,18 @@ public class ScheduleService {
             ScheduledEvent scheduledEvent = scheduledEventService.findById(schedule.getEvent());
             if (scheduledEvent != null) {
                 if (scheduledEvent.getResponsiblePerson() != null && scheduledEvent.getResponsiblePerson().getName() != null) {
-                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(), scheduledEvent.getResponsiblePerson().getName()));
+                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(), scheduledEvent.getResponsiblePerson().getName(), scheduledEvent.getIsActive()));
                 }
                 else {
-                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle()));
+                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(), scheduledEvent.getIsActive()));
                 }
             }
             else {
-                scheduleDTO.setScheduledEvent(new ScheduledEventInfo("-1","Άγνωστη Εκδήλωση"));
+                scheduleDTO.setScheduledEvent(new ScheduledEventInfo("-1","Άγνωστη Εκδήλωση", false));
             }
         }
         else {
-            scheduleDTO.setScheduledEvent(new ScheduledEventInfo("",""));
+            scheduleDTO.setScheduledEvent(new ScheduledEventInfo("","",false));
         }
         if (schedule.getSupervisor() != null && !schedule.getSupervisor().equals("")) {
             OpUser opuser = opUserService.findById(schedule.getSupervisor());
@@ -282,14 +283,14 @@ public class ScheduleService {
         if (schedule.getClassroom() != null) {
             Classroom classroom = classroomService.findById(schedule.getClassroom());
             if (classroom != null) {
-                scheduleDTO.setClassroom(new ClassroomInfo(classroom.getId(), classroom.getName(), classroom.getCode()));
+                scheduleDTO.setClassroom(new ClassroomInfo(classroom.getId(), classroom.getName(), classroom.getCode(), classroom.getCalendar().equals("true")));
             }
             else {
                 logger.error("Classroom with id:" + schedule.getClassroom() + " not found");
             }
         }
         else {
-            scheduleDTO.setClassroom(new ClassroomInfo("","",""));
+            scheduleDTO.setClassroom(new ClassroomInfo("","","", false));
         }
         if (schedule.getDate() != null) {
             LocalDate localDate = schedule.getDate();

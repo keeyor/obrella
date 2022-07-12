@@ -70,7 +70,7 @@
 
             let markup = "<div class='select2-result-repository clearfix'>" +
                 "<div class='select2-result-repository__meta'>" +
-                "<div class='select2-result-repository__title'><i class=\"fas fa-user-tie\"></i> " + repo.text;
+                "<div class='select2-result-repository__title' style='font-weight: 500'>" + repo.text;
                 if (repo.info === "active") {
                     markup += "</div>";
                 }
@@ -83,7 +83,7 @@
             }
             else {
                 markup += "<div class='select2-result-repository__statistics'>" +
-                                "<div class='select2-result-repository__stargazers' style='font-size: 0.9em'>" + repo.subheader;
+                                "<div class='select2-result-repository__stargazers'>" + repo.subheader;
                 markup += "</div></div></div>";
             }
             return markup;

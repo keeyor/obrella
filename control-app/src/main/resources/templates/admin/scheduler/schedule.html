@@ -51,6 +51,8 @@
 <input type="hidden" id="msg_val" th:value="${msg_val}"/>
 <!--@thymesVar id="msg_type" type="java.lang.String"-->
 <input type="hidden" id="msg_type" th:value="${msg_type}"/>
+<!--@thymesVar id="pdf_filename" type="java.lang.String"-->
+<input type="hidden" id="pdf_filename" th:value="${PDF_Filename}"/>
 
 <div th:replace="~{admin/sidebar-content :: sidebar-content}"></div>
 <div class="wrapper d-flex flex-column min-vh-100 bg-light" >
@@ -69,7 +71,7 @@
                 <li class="nav-item"><a class="nav-link active" th:unless="${ScheduleDTO.id != null && ScheduleDTO.id != ''}"  th:href="@{/admin/scheduler/schedule}"> Νέα Μετάδοση</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/calendar}">Ημερολόγιο Μεταδόσεων</a></li>
                 <th:block sec:authorize="hasAnyRole('ROLE_SA')">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/live}">Ζωντανές Μεταδόσεις</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/live}">Τρέχουσες Μεταδόσεις</a></li>
                 </th:block>
             </ul>
             <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
@@ -118,10 +120,25 @@
                                                                    <i class="fas fa-trash"></i>
                                                            </button>
                                     </span>
-                                    <div class="row">
-                                        <div class="col-12 mt-2 ps-0">
+                                    <div class="row p-1 mx-1" style="background-color: #f7f7f9">
+                                        <div class="col">
+                                            <div th:if="${ScheduleDTO.id != null && ScheduleDTO.id != ''}">
+                                                <div class="text-high-emphasis" th:if="${ScheduleDTO.dateModified != null}"
+                                                     th:text="${'Τελευταία Ενημέρωση: ' + ScheduleDTO.dateModified}">
+                                                </div>
+                                                <div class="text-high-emphasis" th:text="${'Επεξεργασία: ' + _s_last_editor}"></div>
+                                            </div>
+                                            <div th:if="${ScheduleDTO.id == null || ScheduleDTO.id == ''}">
+                                                <div class="text-high-emphasis" th:text="${'Επεξεργασία: ' + user.name}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row p-1 mx-1">
+                                        <div class="col-12">
                                             <span class="_fixed_error_msg" style="color:red;font-weight: 500"></span>
                                             <span class="_fixed_warn_msg" style="color:darkorange;font-weight: 500"></span>
+                                            <div style="color: red;font-weight: 500" id="timetable_msg_InactiveScheduledEvent"></div>
+                                            <div style="color: red;font-weight: 500" id="timetable_msg_InactiveClassroom"></div>
                                         </div>
                                     </div>
                             </div>
@@ -148,19 +165,7 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="schedule-form-tab" role="tabpanel" aria-labelledby="schedule-tab">
                                         <div class="card-body">
-                                            <div class="row p-2" style="background-color: #fdf59a;">
-                                                <div class="col">
-                                                    <div th:if="${ScheduleDTO.id != null && ScheduleDTO.id != ''}">
-                                                        <div class="text-high-emphasis" th:if="${ScheduleDTO.dateModified != null}"
-                                                             th:text="${'Τελευταία Ενημέρωση: ' + ScheduleDTO.dateModified}">
-                                                        </div>
-                                                        <div class="text-high-emphasis" th:text="${'Επεξεργασία: ' + _s_last_editor}"></div>
-                                                    </div>
-                                                    <div th:if="${ScheduleDTO.id == null || ScheduleDTO.id == ''}">
-                                                        <div class="text-high-emphasis" th:text="${'Επεξεργασία: ' + user.name}"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                             <!--@thymesVar id="Resource" type="org.opendelos.dashboard.model.resources.Resource"-->
                                             <form id="schedule-form" th:object="${ScheduleDTO}" th:action="@{schedule}" method="post">
                                                 <input type="hidden" id="id"  th:field="*{id}" />
@@ -200,7 +205,7 @@
                                                                 <label for="courses_s2" class="col-3 col-form-label emph-label">
                                                                     Μάθημα*</label>
                                                                 <div class="col-9">
-                                                                    <select id="courses_s2" style="width: 100%" class="form-control js-courses-tags reset_control">
+                                                                    <select id="courses_s2" style="width: 100%" class="form-select js-courses-tags reset_control">
                                                                         <option value=""></option>
                                                                     </select>
                                                                     <div class="form-error" th:if="${#fields.hasErrors('course.id')}" th:errors="*{course.id}"></div>
@@ -211,7 +216,7 @@
                                                                 <label for="supervisor_s2" class="col-3 col-form-label emph-label">
                                                                     Διδάσκων*</label>
                                                                 <div class="col-9">
-                                                                    <select id="supervisor_s2" style="width: 100%" class="form-control js-staffMembers-tags reset_control">
+                                                                    <select id="supervisor_s2" style="width: 100%" class="form-select js-staffMembers-tags reset_control">
                                                                         <option value=""></option>
                                                                     </select>
                                                                     <div class="form-error" th:if="${#fields.hasErrors('supervisor.id')}" th:errors="*{supervisor.id}"></div>
@@ -226,10 +231,9 @@
                                                                 <label for="events_s2" class="col-3 col-form-label emph-label">
                                                                     Επιλέξτε Εκδήλωση*</label>
                                                                 <div class="col-9">
-                                                                    <select id="events_s2" style="width: 100%" class="form-control js-courses-tags reset_control" >
+                                                                    <select id="events_s2" style="width: 100%" class="form-select js-courses-tags reset_control" >
                                                                         <option value=""></option>
                                                                     </select>
-                                                                    <small class="form-text text-muted">* Εμφανίζονται μόνο Εκδηλώσεις με ενεργό ημερολόγιο</small>
                                                                     <div class="form-error" th:if="${#fields.hasErrors('scheduledEvent.id')}" th:errors="*{scheduledEvent.id}"></div>
                                                                 </div>
                                                             </div>
@@ -243,7 +247,7 @@
                                                                 <label for="classrooms_s2" class="col-3 col-form-label emph-label">
                                                                     Χώρος/Αίθουσα*</label>
                                                                 <div class="col-9">
-                                                                    <select id="classrooms_s2" style="width: 100%" class="form-control js-classrooms-tags reset_control">
+                                                                    <select id="classrooms_s2" style="width: 100%" class="form-select js-classrooms-tags reset_control">
                                                                         <option value=""></option>
                                                                     </select>
                                                                     <div class="form-error" th:if="${#fields.hasErrors('classroom.id')}" th:errors="*{classroom.id}"></div>
@@ -284,7 +288,7 @@
                                                             <div class="form-group row dayOfWeek">
                                                                 <label for="_dayOfWeek" class="col-3  col-form-label emph-label">Ημέρα*</label>
                                                                 <div class="col-5">
-                                                                    <select id="_dayOfWeek" class="custom-select" th:field="*{dayOfWeek}"  style="width: 100%">
+                                                                    <select id="_dayOfWeek" class="form-select" th:field="*{dayOfWeek}"  style="width: 100%">
                                                                         <option value=""></option>
                                                                         <option th:value="MONDAY"> Δευτέρα</option>
                                                                         <option th:value="TUESDAY"> Τρίτη</option>
@@ -314,14 +318,14 @@
                                                                 <div class="col-9">
                                                                     <div class="input-group">
                                                                         <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                                                                        <select id="resource_hour" style="width: 75px">
+                                                                        <select id="resource_hour" style="width: 75px" class="form-select">
                                                                             <th:block th:each="i: ${#numbers.sequence(0, 23)}">"
                                                                                 <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
                                                                                 <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
                                                                             </th:block>
                                                                         </select>
                                                                         <span class="input-group-text"><i class="fas fa-ellipsis-v"></i></span>
-                                                                        <select id="resource_minutes" style="width: 75px">
+                                                                        <select id="resource_minutes" style="width: 75px" class="form-select">
                                                                             <th:block th:each="i: ${#numbers.sequence(0, 59)}">"
                                                                                 <option th:if="${i<10}" th:value="${i}" th:text="${'0' + i}"></option>
                                                                                 <option th:unless="${i<10}" th:value="${i}" th:text="${i}"></option>
@@ -335,11 +339,11 @@
                                                             <div class="form-group row mt-3">
                                                                 <label for="_duration_hours" class="col-3  col-form-label emph-label">Διάρκεια*</label>
                                                                 <div class="col-3 form-inline">
-                                                                    <input type="number" id="_duration_hours" value="0" min="0" max="12" step="1" th:field="*{durationHours}"/>
+                                                                    <input type="number" id="_duration_hours" class="form-control" value="0" min="0" max="12" step="1" th:field="*{durationHours}"/>
                                                                     <label for="_duration_hours" class="mσ-2">Ώρες </label>
                                                                 </div>
                                                                 <div class="col-3 form-inline">
-                                                                    <input type="number" id="_duration_minutes" value="0" min="0" max="59" step="1" th:field="*{durationMinutes}"/>
+                                                                    <input type="number" id="_duration_minutes" class="form-control" value="0" min="0" max="59" step="1" th:field="*{durationMinutes}"/>
                                                                     <label for="_duration_minutes"  class="mσ-2">Λεπτά </label>
                                                                 </div>
                                                             </div>
@@ -357,7 +361,7 @@
                                                                     Μετάδοση*
                                                                 </label>
                                                                 <div class="col-5">
-                                                                    <select id="_broadcast" class="custom-select" th:field="*{broadcast}"  style="width: 100%">
+                                                                    <select id="_broadcast" class="form-select" th:field="*{broadcast}"  style="width: 100%">
                                                                         <option th:value="1"> Μετάδοση</option>
                                                                         <option th:value="0"> Χωρίς Μετάδοση</option>
                                                                     </select>
@@ -369,7 +373,7 @@
                                                                     <img title="Επιλογές Πρόσβασης" th:src="@{/public/images/icons/IconMetadosiStatus.png}" alt="">
                                                                     Πρόσβαση*</label>
                                                                 <div class="col-5">
-                                                                    <select id="_access" class="custom-select" th:field="*{access}"  style="width: 100%">
+                                                                    <select id="_access" class="form-select" th:field="*{access}"  style="width: 100%">
                                                                         <option value="open"> Ανοιχτή</option>
                                                                         <option value="sso"> Με Ιδρυματικό Λογαριασμό</option>
                                                                         <option value="password"> Με Κωδικό Μετάδοσης</option>
@@ -400,7 +404,7 @@
                                                                     <img title="Επιλογές Καταγραφής" th:src="@{/public/images/icons/IconRec.png}" alt="">
                                                                     Καταγραφή*</label>
                                                                 <div class="col-5">
-                                                                    <select id="_record" class="custom-select" th:field="*{recording}"  style="width: 100%">
+                                                                    <select id="_record" class="form-select" th:field="*{recording}"  style="width: 100%">
                                                                         <option th:value="1"> Καταγραφή</option>
                                                                         <option th:value="0"> Χωρίς Καταγραφή</option>
                                                                     </select>
@@ -413,7 +417,7 @@
                                                                     Δημοσίευση*
                                                                 </label>
                                                                 <div class="col-5">
-                                                                    <select id="_publish" class="custom-select" th:field="*{publication}"  style="width: 100%">
+                                                                    <select id="_publish" class="form-select" th:field="*{publication}"  style="width: 100%">
                                                                         <option value="private"> Ιδιωτικό (απαιτείται έγκριση)</option>
                                                                         <option value="public"> Δημόσιο (άμεση δημοσίευση)</option>
                                                                     </select>
@@ -491,8 +495,8 @@
                                     </div>
 
                                     <div class="tab-pane" id="schedule-dates-tab" role="tabpanel" aria-labelledby="schedule-tab">
-                                           <div class="mt-2" style="font-weight: 500" th:if="${ScheduleDTO.id == null || ScheduleDTO.id == ''}">
-                                                Αποθηκεύστε τα Στοιχεία της Μετάδοσης για τη δημιουργία του Ημερολογίου Μεταδόσεων
+                                           <div class="mt-2 p-2 text-center" style="font-weight: 500; background-color: #fdf59a" th:if="${ScheduleDTO.id == null || ScheduleDTO.id == ''}">
+                                                Αποθηκεύστε τα στοιχεία της Μετάδοσης για τη δημιουργία του Ημερολογίου Μεταδόσεων
                                             </div>
                                         <div id="schedule_panel">
                                             <div class="card-body">
@@ -500,6 +504,10 @@
                                                 <div class="row p-2" style="background-color: #fdf59a;">
                                                     <div class="col">
                                                         <div class="lecture_panel">
+                                                            <div id="_repeat_type" class="p-0 m-0">Τύπος:
+                                                                <span th:if="${ScheduleDTO.repeat == 'onetime'}" style="font-style: italic" class="font-weight-bolder" th:text="${' Έκτακτη Μετάδοση'}"></span>
+                                                                <span th:unless="${ScheduleDTO.repeat == 'onetime'}" style="font-style: italic" class="font-weight-bolder" th:text="${' Τακτική Μετάδοση'}"></span>
+                                                            </div>
                                                             <div>
                                                                 <div>Μάθημα: <span  style="font-style: italic" class="font-weight-bolder" id="_course_title" th:text="${ScheduleDTO.course.title}"></span>
                                                                     - Τμήμα <span  id="_department_title" th:if="${ScheduleDTO.department != null}" style="font-style: italic"
@@ -526,34 +534,23 @@
                                                         <div>Αίθουσα: <span  style="font-style: italic" class="font-weight-bolder" id="_classroom_name"
                                                                              th:text="${ScheduleDTO.classroom.name}"></span>
                                                         </div>
-                                                        <div id="_broadcast_info" class="p-0 m-0">Μετάδοση:
-                                                            <span th:if="${ScheduleDTO.broadcast && ScheduleDTO.access == 'sso'}" style="font-style: italic" class="font-weight-bolder" th:text="${' Μετάδοση - Με Ιδρυματικό Λογαριασμό'}"></span>
-                                                            <span th:if="${ScheduleDTO.broadcast && ScheduleDTO.access == 'password'}" style="font-style: italic" class="font-weight-bolder" th:text="${' Μετάδοση - Με Κωδικό Πρόσβασης'}"></span>
-                                                            <span th:if="${ScheduleDTO.broadcast && ScheduleDTO.access == 'open'}" style="font-style: italic" class="font-weight-bolder" th:text="${' Μετάδοση - Ανοικτή'}"></span>
-                                                            <span th:unless="${ScheduleDTO.broadcast}" style="font-style: italic" class="font-weight-bolder" th:text="${'Χωρίς Μετάδοση'}"> </span>
-                                                        </div>
-                                                        <div id="_recording_info"  class="p-0 m-0">Καταγραφή:
-                                                            <span th:if="${ScheduleDTO.recording}" style="font-style: italic" class="font-weight-bolder" th:text="${'Με Καταγραφή'}"></span>
-                                                            <span th:unless="${ScheduleDTO.recording}" style="font-style: italic" class="font-weight-bolder" th:text="${'Χωρίς Καταγραφή'}"></span>
-                                                        </div>
-                                                        <div id="_publication_info"  class="p-0 m-0">Δημοσίευση:
-                                                            <span th:if="${ScheduleDTO.publication == 'public'}" style="font-style: italic" class="font-weight-bolder" th:text="${'Δημόσιο'}"></span>
-                                                            <span th:unless="${ScheduleDTO.publication == 'public'}" style="font-style: italic" class="font-weight-bolder" th:text="${'Ιδιωτικό'}"></span>
-                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
-                                                    <div class="col-6 ps-0">
-                                                        <div style="color: orangered" id="timetable_msg_pauses"></div>
-                                                        <div style="color: orangered" id="timetable_msg_cancellations"></div>
-                                                        <div style="color: orangered" id="timetable_msg_overlaps"></div>
+                                                    <div class="col-12 ps-0">
+
+                                                        <div style="color: orange" id="timetable_msg_pauses"></div>
+                                                        <div style="color: orange" id="timetable_msg_cancellations"></div>
+                                                        <div style="color: red" id="timetable_msg_overlaps"></div>
                                                     </div>
-                                                    <div class="col-6">
-                                                        <button type="submit" title="Απενεργοποίηση Προγράμματος" class="btn-sm btn btn-secondary float-end mr-2" id="disable-co-button">
-                                                            Απενεργοποίηση <i class="fas fa-ban"></i>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class="col-12">
+                                                        <button type="submit" title="Ακύρωση όλων των μελλοντικών ημερών μετάδοσης" class="btn-sm btn btn-secondary float-end mr-2" id="disable-co-button">
+                                                            Ακύρωση <i class="fas fa-ban" style="color: orangered"></i>
                                                         </button>
-                                                        <button type="submit" title="Ενεργοποίηση Προγράμματος" class="btn-sm btn btn-secondary float-end mr-2" id="enable-co-button">
-                                                            Ενεργοποίηση <i style="color:red" class="fas fa-circle-notch"></i>
+                                                        <button type="submit" title="Ενεργοποίηση όλων των μελλοντικών ημερών μετάδοσης" class="btn-sm btn btn-secondary float-end mr-2" id="enable-co-button">
+                                                            Ενεργοποίηση <i style="color:green" class="fas fa-circle-notch"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -616,7 +613,7 @@
                                                                 <td style="width: 15px">Πρόσβαση</td>
                                                                 <td style="width: 15px">Καταγραφή</td>
                                                                 <td style="width: 15px">Δημοσίευση</td>
-                                                                <td style="width: 15px">[edit]</td>
+                                                                <td style="width: 15px"></td>
                                                                 <td style="width:0">[cancellation]</td>
                                                             </tr>
                                                             </thead>

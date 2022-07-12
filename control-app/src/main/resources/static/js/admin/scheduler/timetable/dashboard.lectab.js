@@ -140,7 +140,7 @@
                     "sortable": false
                 },
                 {
-                    "aTargets": [2,3,9,10,22,23],
+                    "aTargets": [1,2,9,10,22,23],
                     "sortable": false,
                     "visible": false,
                     "sWidth": "0px"
@@ -410,7 +410,8 @@
                         stripHtml: true,
                     },
                     text:'<span data-toggle="tooltip" title="Εξαγωγή του προγράμματος μεταδόσεων σε αρχείο PDF"><i class="fas fa-download"></i> PDF</span>',
-                    className: 'ms-2 blue-btn-wcag-bgnd-color text-white'
+                    className: 'ms-2 blue-btn-wcag-bgnd-color text-white',
+                    orientation: 'landscape'
                 }
             ],
             "initComplete": set_display_results

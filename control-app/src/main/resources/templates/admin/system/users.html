@@ -57,6 +57,7 @@
                 <li class="nav-item"><a class="nav-link active" th:href="@{/admin/system/users}">Διαχειριστές</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/streamers}">Εξυπηρετητές</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/messages}">Μηνύματα Χρηστών</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/texts}">Κείμενα Ιστότοπου</a></li>
                 <li class="nav-item"><a class="nav-link" target="_blank" href="http://localhost:5601">Αρχεία Καταγραφής</a></li>
             </ul>
             <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
@@ -78,12 +79,11 @@
               <!--  <div class="row">
                     <div class="offset-1 col-lg-10" id="content">-->
                         <div class="card">
-                            <div class="card-header">
-                                <h5>Διαχειριστές</h5>
+                            <div class="card-header" style="background-color:white;border: none">
+                                <h5>Διαχειριστές [<span id="count_staff_results"></span>]</h5>
                                 <div class="text-medium-emphasis font-italic">
                                     Διαχειριστές Περιεχομένου
                                 </div>
-                                <hr/>
                                 <div class="row">
                                     <div class="col-12 text-end">
                                         <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white"  role="button" th:href="@{/admin/system/user-editor}">
@@ -92,35 +92,25 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card mt-3" id="staff_card">
-                            <div class="card-header">
+                            <div class="card-body">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <h6>Κατάλογος Διαχειριστών
-                                            <small><span class="text-medium-emphasis"> (<span id="count_staff_results"></span> χρήστες)</span></small>
-                                        </h6>
-                                    </div>
-                                    <div class="col-6">
-                                            <span class="float-end">
-                                                <div class="input-group">
+                                    <div class="col-12">
+                                        <label for="userType_select" class="form-label">Φίλτρο Διαχειριστών</label>
+                                        <div class="input-group mb-3">
                                                     <span class="input-group-addon input-group-text">
                                                         <i class="fas fa-filter me-2"></i>
                                                     </span>
-                                                    <select id="userType_select" class="form-control"  style="width: 400px">
-                                                        <option value="all"> -- όλοι οι Ρόλοι --</option>
-                                                        <option value="sa"> Διαχειριστές Συστήματος</option>
-                                                        <option value="im"> Διαχειριστές Μονάδων - Ιδρύματος</option>
-                                                        <option value="dm"> Διαχειριστές Μονάδων - Σχολών | Τμημάτων</option>
-                                                        <option value="sp"> Προσωπικό Υποστήριξης</option>
-                                                    </select>
-                                                </div>
-                                            </span>
+                                            <select id="userType_select" class="form-control"  style="width: 400px">
+                                                <option value="all"> -- όλοι οι Ρόλοι --</option>
+                                                <option value="sa"> Διαχειριστές Συστήματος</option>
+                                                <option value="im"> Διαχειριστές Μονάδων - Ιδρύματος</option>
+                                                <option value="dm"> Διαχειριστές Μονάδων - Σχολών | Τμημάτων</option>
+                                                <option value="sp"> Προσωπικό Υποστήριξης</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-body">
-                                                <table id="staffDataTable" style="width:100%" class="row-border stripe">
+                                <table id="staffDataTable" style="width:100%;padding-top: 20px" class="row-border stripe">
                                                      <thead>
                                                         <tr style="font-weight: 600">
                                                             <td style="height: 12px;max-width: 20px" title="παραχωρημένα δικαιώματα"></td>
@@ -143,8 +133,6 @@
                                                 </table>
                             </div>
                         </div>
-                  <!--  </div>
-                </div>-->
             </div>
 
     </div>

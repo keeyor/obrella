@@ -135,8 +135,8 @@ public class ScheduledEventService {
         try {
             scheduledEventRepository.save(scheduledEvent);
             updateResourcesScheduledEvent = scheduledEventRepository.updateResourcesScheduledEvent(scheduledEvent);
-            logger.info(String.format("ScheduledEvent.findAndUpdate: %s", scheduledEvent.getTitle()));
-            logger.info(String.format("ScheduledEvent.updated Resource ScheduledEvents updates: %s", updateResourcesScheduledEvent));
+            logger.trace(String.format("ScheduledEvent.findAndUpdate: %s", scheduledEvent.getTitle()));
+            logger.trace(String.format("ScheduledEvent.updated Resource ScheduledEvents updates: %s", updateResourcesScheduledEvent));
             Objects.requireNonNull(cacheManager.getCache("courses")).evict(scheduledEvent.getId());
         }
         catch (Exception e) {
@@ -144,6 +144,30 @@ public class ScheduledEventService {
         }
         return updateResourcesScheduledEvent;
     }
+
+    @CacheEvict(key = "#id")
+    public void updateEventIsActiveThrowingException(String id, String status) throws Exception {
+
+        ScheduledEvent scheduledEvent = scheduledEventRepository.findById(id).orElse(null);
+        if (scheduledEvent == null) {
+            throw new Exception("SEVENT_NOTFOUND_ERROR");
+        }
+        if (status.equals("activate") && scheduledEvent.getIsActive()) {
+            throw new Exception("SEVENT_ACTIVATE_IGNORE");
+        }
+        if (status.equals("deactivate") && !scheduledEvent.getIsActive()) {
+            throw new Exception("SEVENT_DEACTIVATE_IGNORE");
+        }
+        if (status.equals("activate")) {
+            scheduledEvent.setIsActive(true);
+        }
+        else {
+            scheduledEvent.setIsActive(false);
+        }
+        this.update(scheduledEvent);
+    }
+
+
     @CacheEvict(key = "#id")
     public void delete(String id) throws Exception {
         logger.trace(String.format("ScheduledEvent.delete: %s", id));
@@ -155,15 +179,13 @@ public class ScheduledEventService {
             resourceQuery.setEventId(id);
             resourceQuery.setLimit(1);
             List<Resource> resources = resourceRepository.searchLecturesOnFilters(resourceQuery);
-            if (resources.size() == 0) {
-                scheduledEventRepository.deleteById(id);
-            }
-            else {
+            if (resources.size() > 0) {
                 throw new Exception("_FORBIDDEN_LECTURES");
             }
             boolean RmRefInSc = this.isScheduledEventReferencedInScheduler(id);
             if (RmRefInSc) { throw new Exception("_FORBIDDEN_SCHEDULER"); }
 
+            scheduledEventRepository.deleteById(id);
         }
         else {
             throw new Exception("_NOT_FOUND");

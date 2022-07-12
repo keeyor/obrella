@@ -22,7 +22,7 @@
             },
             pageLength : 10,
             language: dtLanguageGr,
-            "dom": '<"top"fl>rti<"bottom">p<"clear">',
+            "dom": '<"top"l>rti<"bottom">p<"clear">',
             "columns": [
                 {"data": null},
                 {"data": "enabled"},
@@ -47,7 +47,7 @@
             ],
             "aoColumnDefs": [
                 {
-                    "aTargets": [2,6,9,10,11,13,14,15,16,17,19],
+                    "aTargets": [2,6,9,10,11,13,19],
                     "sortable": false,
                     "visible": false,
                     "sWidth": "0px"
@@ -62,6 +62,9 @@
                             return '<i class="fas fa-circle" style="color:greenyellow"   title="Ενεργοποιημένη μετάδοση"></i>';
                         }
                         else {
+                            if (row["argia"] != null)  {
+                                return '<i class="fas fa-circle" style="color:orangered"    title="Αργία/Παύση:' + row["argia"].name + '"></i>';
+                            }
                             if (row["argia"] != null)  {
                                 return '<i class="fas fa-circle" style="color:orangered"    title="Αργία/Παύση:' + row["argia"].name + '"></i>';
                             }
@@ -232,28 +235,60 @@
                     "mRender": function (data,type,row) {
                         let add_class = "";
                         if (_dateIsInThePast(row)) {
-                            add_class = "disabled";
+                            return '<i class="fas fa-clock fa-2x" title="έχει ολοκληρωθεί" style="color: lightgrey"></i>';
                         }
-                        if (row["cancellation"] == null) {
-                            return  '<a role="button" title="ακύρωση ημέρας" class="btn btn-secondary btn-sm cancel-scheduled ' + add_class + '" href="#" ' +
-                                'data-id="' + data + '" data-date="' + row["date"] + '" data-title="' + row["scheduledEvent"].title + '" data-type="event">' +
-                                '<i class="fas fa-ban" style="color:orangered"></i>' +
-                                '</a>';
+                        if (row["cancellation"] == null && row["overlapInfo"] == null) {
+                            if (_dateIsLive(row)) {
+                                return '<span class="icon-live-lecture" style="color: red;font-size: 1.3em"></span> Live!';
+                            }
+                            else {
+                                return '<a role="button" title="ακύρωση μετάδοσης" class="btn btn-secondary btn-sm cancel-scheduled ' + add_class + '" href="#" ' +
+                                    'data-id="' + data + '" data-date="' + row["date"] + '" data-title="' + row["scheduledEvent"].title + '" data-type="event">' +
+                                    '<i class="fas fa-ban" style="color:orangered"></i>' +
+                                    '</a>';
+                            }
                         }
-                        else  {
-                            return  '<a role="button" title="ενεργοποίηση ημέρας" class="btn btn-secondary btn-sm un-cancel-scheduled ' + add_class + '" href="#" ' +
+                        if ( row["cancellation"] != null) {
+                            return  '<a role="button" title="ενεργοποίηση μετάδοσης" class="btn btn-secondary btn-sm un-cancel-scheduled ' + add_class + '" href="#" ' +
                                 'data-id="' + data + '" data-date="' + row["date"]  + '" data-title="' + row["scheduledEvent"].title + '" data-type="event">' +
                                 '<i style="color:green" class="fas fa-circle-notch"></i>' +
                                 '</a>';
                         }
+                        else {
+                            return '';
+                        }
                     }
                 }
             ],
-            "rowCallback": function( row, data ) {
+            buttons: [
+                {extend: 'pdf',
+                    exportOptions: {
+                        columns: [ 1,5,7,8,9],
+                        stripHtml: true,
+                    },
+                    title: EventPDFHeader(),
+                    filename: $("#pdf_filename").val(),
+                    customize: function (doc) {
+                        doc.defaultStyle.fontSize = 8;
+                        doc.styles.tableHeader.fontSize = 8;
+                        doc.styles.title.fontSize = 9;
+                        // Remove spaces around page title
+                        doc.content[0].text = doc.content[0].text.trim();
+                        doc.pageMargins = [60, 10, 60,10 ];
+                        doc.content[1].table.widths =Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                        doc.defaultStyle.alignment = 'center';
+                        doc.styles.tableHeader.alignment = 'center';
+                    },
+                    text:'<span title="Εξαγωγή σε PDF" ><i class="fas fa-download"></i> PDF</span>',
+                    className: 'ms-2 blue-btn-wcag-bgnd-color text-white mb-4',
+                    orientation: 'portrait'
+                }
+            ],
+/*            "rowCallback": function( row, data ) {
                 if (_dateIsInThePast(data)) {
                     dashboard.canDelete = false;
                 }
-            },
+            },*/
             "initComplete": function(settings, json) {
                 set_display_results(json);
             }
@@ -267,6 +302,26 @@
             set_display_results();
         } );
     };
+
+    function _dateIsLive(row_data) {
+        let isLive = false;
+        let date = row_data["date"];
+        let startTime = row_data["startTime"];
+        let hour = parseInt(startTime.substring(0, 2));
+        let minute = parseInt(startTime.substring(3, 5));
+        let startDateTime = moment(date).add(hour, 'hours').add(minute, 'minutes');
+
+        let durationHours = parseInt(row_data["durationHours"]);
+        let durationMinutes = parseInt(row_data["durationMinutes"]);
+        let endDateTime = moment(date).add(hour, 'hours').add(minute, 'minutes').add(durationHours, 'hours').add(durationMinutes, 'minutes');
+
+        let enabled = row_data["enabled"];
+        if (moment().isBetween(startDateTime, endDateTime, '[]') && enabled !== false) {
+            isLive = true;
+        }
+        return isLive;
+    }
+
     function _dateIsInThePast(row_data) {
         let isInThePast = false;
         let row_date = row_data.date;
@@ -295,12 +350,22 @@
     function  set_display_results(json) {
 
         let _message_cancellations_html = "";
+        let _message_roomInactive_html = "";
+        let _message_scheduledEventInactive_html = ""
         if (json !== undefined) {
             if (json.data.message_cancellations !== "") {
-                _message_cancellations_html += '<i class="fas fa-exclamation-triangle"></i> ' + json.data.message_cancellations;
+                _message_cancellations_html += '<i class="fas fa-info"></i> ' + json.data.message_cancellations;
+            }
+            if (json.data.message_roomInactive !== "") {
+                _message_roomInactive_html += '<i class="fas fa-exclamation-triangle"></i> ' + json.data.message_roomInactive;
+            }
+            if (json.data.message_scheduleEventInactive !== "") {
+                _message_scheduledEventInactive_html += '<i class="fas fa-exclamation-triangle"></i> ' + json.data.message_scheduleEventInactive;
             }
         }
         $("#timetable_msg_cancellations").html( _message_cancellations_html);
+        $("#timetable_msg_InactiveClassroom").html(_message_roomInactive_html);
+        $("#timetable_msg_InactiveScheduledEvent").html(_message_scheduledEventInactive_html);
 
         let page = ScheduleTable_DT.page.len();
         let info = ScheduleTable_DT.page.info();
@@ -337,6 +402,7 @@
         }
         //Check and Mark Live.. ( if Live => disable edit )
         if ( json !== undefined) {
+            let all_in_the_past = true;
             json.data.results.forEach(function (row_data, index) {
                 let date = row_data["date"];
                 let startTime = row_data["startTime"];
@@ -350,13 +416,44 @@
 
                 let enabled = row_data["enabled"];
                 if (moment().isBetween(startDateTime, endDateTime, '[]') && enabled !== false) {
-                    $(".cancel-scheduled").hide();
-                    $("#save-button").attr('disabled', true);
-                    $("._fixed_error_msg").html("Είναι σε εξέλιξη ζωντανή μετάδοση για τον επιλεγμένο προγραμματισμό. Η επεξεργασία έχει προσωρινά απενεργοποιηθεί!");
+                    if (_message_roomInactive_html === "" && _message_scheduledEventInactive_html === "") {
+                        $("._fixed_error_msg").html("Είναι σε εξέλιξη ζωντανή μετάδοση για τον επιλεγμένο προγραμματισμό. Η επεξεργασία έχει προσωρινά απενεργοποιηθεί!");
+                        let allow_delete = false;
+                        disableEditing(msg,allow_delete);
+                    }
                 }
-            })
+                if (all_in_the_past === true) {
+                    if (!(_dateIsInThePast(row_data))) {
+                        all_in_the_past = false;
+                    }
+                }
+            });
+            if (all_in_the_past) {
+                let msg = "Ολοκληρωμένη Μετάδοση. Η επεξεργασία έχει απενεργοποιηθεί!";
+                let allow_delete = true;
+                disableEditing(msg,allow_delete);
+
+                //Hide warnings. It does not make sense!
+                $("#timetable_msg_cancellations").hide();
+                $("#timetable_msg_InactiveClassroom").hide();
+                $("#timetable_msg_InactiveScheduledEvent").hide();
+            }
         }
         loader.hideLoader();
+    }
+
+    function disableEditing(msg, allow_delete) {
+        dashboard.canEdit = false;
+        $("#save-button").attr('disabled', true);
+        $("._fixed_warn_msg").html(msg);
+        if (allow_delete) {
+            $("#deleteSchedule").prop("disabled", false);
+        }
+        else {
+            $("#deleteSchedule").prop("disabled", true);
+        }
+        $("#enable-co-button").prop("disabled",true);
+        $("#disable-co-button").prop("disabled",true);
     }
 
     function EventPDFHeader() {

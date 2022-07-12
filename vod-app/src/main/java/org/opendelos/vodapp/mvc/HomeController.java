@@ -14,11 +14,14 @@ import java.util.Map;
 import org.opendelos.model.common.Select2GenGroup;
 import org.opendelos.model.delos.OpUser;
 import org.opendelos.model.structure.Course;
+import org.opendelos.model.system.SystemMessage;
+import org.opendelos.model.users.UserAccess;
 import org.opendelos.vodapp.services.i18n.OptionServices;
 import org.opendelos.vodapp.services.opUser.OpUserService;
 import org.opendelos.vodapp.services.resource.ResourceService;
 import org.opendelos.vodapp.services.structure.CourseService;
 import org.opendelos.vodapp.services.structure.DepartmentService;
+import org.opendelos.vodapp.services.system.SystemMessageService;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -40,14 +43,16 @@ public class HomeController {
 	private final DepartmentService departmentService;
 	private final OpUserService opUserService;
 	private final CourseService courseService;
+	private final SystemMessageService systemMessageService;
 
 
-	public HomeController(ResourceService resourceService, OptionServices optionServices, DepartmentService departmentService, OpUserService opUserService, CourseService courseService) {
+	public HomeController(ResourceService resourceService, OptionServices optionServices, DepartmentService departmentService, OpUserService opUserService, CourseService courseService, SystemMessageService systemMessageService) {
 		this.resourceService = resourceService;
 		this.optionServices = optionServices;
 		this.departmentService = departmentService;
 		this.opUserService = opUserService;
 		this.courseService = courseService;
+		this.systemMessageService = systemMessageService;
 	}
 
 	@GetMapping(value = "/")
@@ -70,6 +75,12 @@ public class HomeController {
 
 		model.addAttribute("app_live_url", app_live_url);
 		model.addAttribute("app_events_url",app_events_url);
+
+		List<SystemMessage> visitorsMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"visitors");
+		List<SystemMessage> visitorsAllMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"visitors-vod");
+		visitorsMessages.addAll(visitorsAllMessages);
+
+		model.addAttribute("VisitorMessages", visitorsMessages);
 
 		return "home";
 	}

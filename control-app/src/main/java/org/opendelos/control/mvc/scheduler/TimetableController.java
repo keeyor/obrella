@@ -105,8 +105,6 @@ public class TimetableController {
 			periods_hash.put(period, multilingualServices.getValue(period, locale));
 		}
 
-
-
 		model.addAttribute("pdList", periods_hash);
 		model.addAttribute("page", "timetable");
 

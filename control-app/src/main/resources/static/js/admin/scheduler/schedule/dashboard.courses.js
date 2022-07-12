@@ -51,14 +51,14 @@
 
             let markup = "<div class='select2-result-repository clearfix'>" +
                 "<div class='select2-result-repository__meta'>" +
-                "<div class='select2-result-repository__title'><i class=\"fas fa-user-tie\"></i> " + repo.text + "</div>";
+                "<div class='select2-result-repository__title' style='font-weight: 500'>" + repo.text + "</div>";
 
             if (repo.children) {
 
             }
             else {
                 markup += "<div class='select2-result-repository__statistics'>" +
-                    "<div class='select2-result-repository__stargazers' style='font-size: 0.9em'>" + repo.subheader + " </div>" +
+                    "<div class='select2-result-repository__stargazers'>" + repo.subheader + " </div>" +
                     "</div>" +
                     "</div></div>";
             }
@@ -67,7 +67,7 @@
 
         function formatRepoSelection (repo) {
             if (!repo.text.startsWith("Επιλέξτε"))
-                return "<span  style=\"font-weight: 500\">" + repo.text + "</span>";
+                return "<span  style=\"font-weight: 500\">" + repo.text + " - " + repo.subheader + "</span>";
             else
                 return repo.text;
         }

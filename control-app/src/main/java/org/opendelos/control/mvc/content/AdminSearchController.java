@@ -6,7 +6,6 @@ package org.opendelos.control.mvc.content;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -16,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.opendelos.control.services.async.AsyncQueryComponent;
 import org.opendelos.control.services.async.QueryFilter;
@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -43,7 +42,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.FlashMapManager;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 
 @Controller
@@ -72,8 +73,7 @@ public class AdminSearchController {
 		this.asyncQueryComponent = asyncQueryComponent;
 	}
 
-	@GetMapping(value = { "admin/search", "admin/portfolio"})
-	@Async
+	@GetMapping(value = { "admin/search"})
 	public String getHomePage(final Model model,HttpServletRequest request,
 			@RequestParam(value = "ft", required = false, defaultValue = "") String ft,
 			@RequestParam(value = "d", required = false) String d,     // Department
@@ -214,24 +214,81 @@ public class AdminSearchController {
 		return "admin/content/search/admin-search";
 	}
 
-	@RequestMapping(value = { "admin/search", "admin/portfolio"}, method = RequestMethod.POST)
-	public String SearchPost(@ModelAttribute("resourceQuery") final ResourceQuery resourceQuery,
-							 @RequestParam("ft") String ft, HttpServletRequest request) throws UnsupportedEncodingException {
+	@RequestMapping(value = { "admin/search"}, method = RequestMethod.POST)
+	public String SearchPost(@RequestParam("action") String action,
+							 @RequestParam("marked_resources") String marked_resources, HttpServletRequest request, HttpServletResponse response) {
 
 
-		final String view;
-		StringBuilder builder = new StringBuilder();
+		String[] marked_resources_ids = marked_resources.split(",");
+		String str_action;
+		String action_code = action.trim();
+		int executed_actions = 0;
+		int failed_actions = 0;
 
-		if (ft != null && !ft.isEmpty() && !ft.trim().equals("a")) {
-			builder.append("?ft=").append(URLEncoder.encode(ft, "UTF-8"));
+
+		switch (action_code) {
+		case "delete":
+			str_action = "Διαγραφή Επιλεγμένων";
+			for (String marked_id : marked_resources_ids) {
+				try {
+					resourceService.deleteThrowingException(marked_id);
+					executed_actions++;
+				}
+				catch (Exception marked_exception) {
+					logger.warn("Resource-id {}. Error {}", marked_id, marked_exception.getMessage());
+					failed_actions++;
+				}
+			}
+			break;
+		case "publish":
+			str_action = "Δημοσίευση Επιλεγμένων";
+			for (String marked_id : marked_resources_ids) {
+				try {
+					resourceService.updateAccessPolicyThrowingError(marked_id,"public");
+					executed_actions++;
+				}
+				catch (Exception marked_exception) {
+					logger.warn("Resource-id {}. Error {}", marked_id, marked_exception.getMessage());
+					failed_actions++;
+				}
+			}
+			break;
+		case "unpublish":
+			str_action = "Απόσυρση Επιλεγμένων";
+			for (String marked_id : marked_resources_ids) {
+				try {
+					resourceService.updateAccessPolicyThrowingError(marked_id,"private");
+					executed_actions++;
+				}
+				catch (Exception marked_exception) {
+					logger.warn("Resource-id {}. Error {}", marked_id, marked_exception.getMessage());
+					failed_actions++;
+				}
+			}
+			break;
+		default:
+			str_action = "Άγνωστη Ενέργεια";
+			for (String marked_id : marked_resources_ids) {
+					logger.warn("Resource-id {}. Error {}", marked_id, str_action);
+					failed_actions++;
+			}
+			break;
 		}
-		else if (resourceQuery.getFt() != null  && !resourceQuery.getFt().isEmpty() && !resourceQuery.getFt().trim().equals("a"))  {
-			builder.append("?ft=").append(URLEncoder.encode(resourceQuery.getFt(), "UTF-8"));
-		}
-		String params = builder.toString();
-		view = "redirect:" + ServletUriComponentsBuilder.fromCurrentRequestUri().replacePath(request.getContextPath() +  request.getServletPath()).path(params).build().toUriString();
+		logger.info("Μαζική Ενέργεια Περιεχομένου:" + str_action + ". Μεταβλήθηκαν: " + executed_actions + " καταχωρήσεις. Αμετάβλητες: " + failed_actions + "]");
 
-		return view;
+
+		String[] attr = {"msg_type", "msg_val"};
+		String[] values = {"alert-success", "Η " + str_action + " ολοκληρώθηκε! <br/> [Μεταβλήθηκαν: " + executed_actions + " καταχωρήσεις. Αμετάβλητες: " + failed_actions + "]"};
+		setFlashAttributes(request, response, attr, values);
+
+		String user_search_history = "search";
+		if (request.getSession().getAttribute("user_search_history") != null) {
+			user_search_history = (String) request.getSession().getAttribute("user_search_history");
+		}
+
+
+
+		return "redirect:" + user_search_history;
 	}
 
 	private void prepareLinkReplacements (Model model, String urlString) throws UnsupportedEncodingException {
@@ -308,6 +365,22 @@ public class AdminSearchController {
 		Comparator<Select2GenChild> idSorter  = Comparator.comparing(Select2GenChild::getId, Comparator.reverseOrder());
 		aYearList.sort(idSorter);
 		model.addAttribute("ayList", aYearList);
+	}
+
+	private void setFlashAttributes(HttpServletRequest request, HttpServletResponse response, String[] attr, String[] values) {
+
+		// create a flashmap
+		FlashMap flashMap = new FlashMap();
+		// store the message
+		for (int i=0;i<attr.length; i++) {
+			flashMap.put(attr[i], values[i]);
+		}
+		// create a flashMapManager with `request`
+		FlashMapManager flashMapManager = RequestContextUtils.getFlashMapManager(request);
+		// save the flash map data in session with flashMapManager
+		if (flashMapManager != null) {
+			flashMapManager.saveOutputFlashMap(flashMap, request, response);
+		}
 	}
 
 }

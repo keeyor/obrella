@@ -227,10 +227,10 @@ public class ScheduleService {
         }
         if (schedule.getEvent() != null && !schedule.getEvent().equals("")) {
             ScheduledEvent scheduledEvent = scheduledEventService.findById(schedule.getEvent());
-            scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle()));
+            scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(), scheduledEvent.getIsActive()));
         }
         else {
-            scheduleDTO.setScheduledEvent(new ScheduledEventInfo("",""));
+            scheduleDTO.setScheduledEvent(new ScheduledEventInfo("","", false));
         }
         if (schedule.getSupervisor() != null && !schedule.getSupervisor().equals("")) {
             OpUser opuser = opUserService.findById(schedule.getSupervisor());
@@ -249,14 +249,14 @@ public class ScheduleService {
         if (schedule.getClassroom() != null) {
             Classroom classroom = classroomService.findById(schedule.getClassroom());
             if (classroom != null) {
-                scheduleDTO.setClassroom(new ClassroomInfo(classroom.getId(), classroom.getName(), classroom.getCode()));
+                scheduleDTO.setClassroom(new ClassroomInfo(classroom.getId(), classroom.getName(), classroom.getCode(), classroom.getCalendar().equals("true")));
             }
             else {
                 logger.error("Classroom with id:" + schedule.getClassroom() + " not found");
             }
         }
         else {
-            scheduleDTO.setClassroom(new ClassroomInfo("","",""));
+            scheduleDTO.setClassroom(new ClassroomInfo("","","", false));
         }
         if (schedule.getDate() != null) {
             LocalDate localDate = schedule.getDate();
@@ -620,6 +620,30 @@ public class ScheduleService {
         //> try using other query criteria to minimize  the size of searchSchedule query results...
         long startAt = System.currentTimeMillis();
         List<Schedule> searchResults = this.searchSchedule(scheduleQuery);
+
+        // CODE11 : Remove From searchResults, schedules that are assigned to disabled or unknown classrooms and to de-activated ScheduledEvents
+        List<Schedule> invalidList = new ArrayList<>();
+        for (Schedule schedule: searchResults) {
+            String classroomId = schedule.getClassroom();
+            int classroom_status = classroomService.getClassroomStatus(classroomId);
+            if (classroom_status == 1) {
+                invalidList.add(schedule);
+            }
+            else if (classroom_status == 2) {
+                invalidList.add(schedule);
+            }
+            else {
+                if (schedule.getType().equals("event")) {
+                    ScheduledEvent scheduledEvent = scheduledEventService.findById(schedule.getEvent());
+                    if (scheduledEvent == null || !scheduledEvent.getIsActive()) {
+                        invalidList.add(schedule);
+                    }
+                }
+            }
+        }
+        logger.warn("Removing " + invalidList.size() + " schedules, due to invalid or de-activated rooms and events");
+        searchResults.removeAll(invalidList);
+
         //> add schedules in date range, ignore others
         for (Schedule schedule: searchResults) {
             if (schedule.getRepeat().equals("onetime")) {
@@ -659,22 +683,6 @@ public class ScheduleService {
                 }
             }  // < else regular
         }  //< for schedule in search results
-
-       //Remove From inRangeResults, scheduleDTOs that are assigned to disabled room
-       List<ScheduleDTO> disabledClassroomList = new ArrayList<>();
-       for (ScheduleDTO scheduleDTO: inRangeResults) {
-           String classroomId = scheduleDTO.getClassroom().getId();
-           int classroom_status = classroomService.getClassroomStatus(classroomId);
-           if (classroom_status == 1) {
-               disabledClassroomList.add(scheduleDTO);
-               removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Room NOT FOUND:"  + classroomId);
-           }
-           else if (classroom_status == 2) {
-               disabledClassroomList.add(scheduleDTO);
-               removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Room INACTIVE:"  + classroomId);
-           }
-       }
-       inRangeResults.removeAll(disabledClassroomList);
 
         long endAllAt   = System.currentTimeMillis();
         logger.debug("Time:" + (endAllAt - startAt));

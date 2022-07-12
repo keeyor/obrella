@@ -6,23 +6,24 @@
 
     dashboard.siteurl = "";
     dashboard.dtLanguageGr = "";
-    dashboard.canDelete = true;
+    dashboard.canEdit = true;
 
     let serialize_form;
 
+
     dashboard.init = function () {
 
-        //PRESERVE TAB AFTER RELOAD
-        // use HTML5 localStorage object to save some parameter for the current tab locally in the browser and get it back to make the last active tab selected on page reload.
-        //ON CHANGE TAB EVENT
-        $('a[data-coreui-toggle="tab"]').on('show.coreui.tab', function(e) {
-            localStorage.setItem('activeTab', $(e.target).attr('href'));
-            //console.log($(e.target).attr('href'));
-        });
-        //LOAD ACTIVE TAB
-        var activeTab = localStorage.getItem('activeTab');
-        if(activeTab){
-            $('#myTab a[href="' + activeTab + '"]').tab('show');
+        let schedule_id = $("#id").val();
+        if (schedule_id !== null && schedule_id !== "") {
+            //PRESERVE TAB AFTER RELOAD
+            $('a[data-coreui-toggle="tab"]').on('show.coreui.tab', function (e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            //LOAD ACTIVE TAB
+            let activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
+            }
         }
 
         //display post errors
@@ -56,9 +57,12 @@
         }
         else {
             InitEvents();
+            serialize_form = $("#schedule-form").serialize();
             loader.initialize();
         }
         function InitControls() {
+            //Disable Save Button until change detection
+            $("#save-button").attr("disabled",true);
 
             let schedule_id         = $("#id").val();
             let $schedule_type      = $("#_type");
@@ -74,11 +78,11 @@
 
 
             $("#supervisor_s2").select2({
-                placeholder: "Επιλέξτε Διδάσκων (-ουσα) - προηγείται η επιλογή Μαθήματος"
+                placeholder: "Επιλέξτε Διδάσκων (-ουσα) - πρέπει να προηγηθεί η επιλογή Μαθήματος"
             });
 
             $("#classrooms_s2").select2({
-                placeholder: "Επιλέξτε Χώρο | Αίθουσα - προηγείται η επιλογή Μαθήματος & Διδάσκοντα"
+                placeholder: "Επιλέξτε Χώρο | Αίθουσα - πρέπει να προηγηθεί  η επιλογή Μαθήματος & Διδάσκοντα"
             });
 
             $("#events_s2").select2({
@@ -233,11 +237,21 @@
                 $("._fixed_warn_msg").html("");
                 $repeat_type.attr("disabled", true);
             }
+
         }
 
         function InitEvents() {
 
-
+            $(".form-select").on('select2:select', function(){
+                if (dashboard.canEdit) {
+                    $("#save-button").attr("disabled", false);
+                }
+            });
+            $(".form-control").on('change', function(){
+                if (dashboard.canEdit) {
+                    $("#save-button").attr("disabled", false);
+                }
+            });
 
             $("#resource_hour").on('select2:select', function (e) {
                 let data = e.params.data;
@@ -420,7 +434,6 @@
                 }
             });
 
-            serialize_form = $("#schedule-form").serialize();
             $(".cancelResource_top").on('click',function(e){
                 let end_serialize = $("#schedule-form").serialize();
                 if (serialize_form !== end_serialize) {
@@ -568,9 +581,9 @@
         }
 
         function closeEditDialogWarning(default_href) {
-            if (dashboard.canDelete === true) {
-                let msg = '<div class="font-weight-bold">Οι αλλαγές θα χαθούν! Είστε σίγουρος?</div>';
-                alertify.confirm('Προειδοποίηση', msg,
+            if (dashboard.canEdit === true) {
+                let msg = '<div style="font-weight: 500">Έχετε προβεί σε τροποποιήσεις, που δεν έχουν αποθηκευτεί! Αν συνεχίσετε, όλες οι αλλαγές θα χαθούν! Είστε σίγουρος?</div>';
+                alertify.confirm('<i class="fas fa-exclamation-triangle" style="color:orangered"></i> Προειδοποίηση', msg,
                     function () {
                         window.location = default_href;
                     },

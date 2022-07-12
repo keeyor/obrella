@@ -108,10 +108,10 @@
                                         </h6>
                                     </div>
                                     <div class="col-6 text-end">
-                                        <span data-toggle="tooltip" title="Κατάσταση χρήστη: Ενεργός/Ανενεργός">
+                                        <!--<span data-toggle="tooltip" title="Κατάσταση χρήστη: Ενεργός/Ανενεργός">
                                          <label for="staff_status_toggle" class="col-form-label text-end" style="font-weight: 600">Κατάσταση</label>
                                          <input id="staff_status_toggle" name="staff_status_toggle" type="checkbox"  />
-                                        </span>
+                                        </span>-->
                                     </div>
                                 </div>
 
@@ -246,8 +246,8 @@
                                             </div>
                                             <div class="tab-pane fade show " id="t-rights" role="tabpanel" aria-labelledby="rights-tab">
                                                 <!-- Ανάθεση Δικαιωμάτων -->
-                                                <div class="form-group row rights_assign_warning mt-3" style="display: none">
-                                                    <div class="col-12" style="font-size: 1em;color:orangered">
+                                                <div class="form-group row rights_assign_warning mt-3 p-2" style="display: none;background-color: #fdf59a">
+                                                    <div class="col-12" style="font-size: 1em;color:orangered;font-weight: 500">
                                                         <i class="fas fa-exclamation-triangle"></i>
                                                         Αποθηκεύστε την εγγραφή για να εμφανιστούν οι επιλογές Δικαιωμάτων
                                                     </div>
@@ -259,18 +259,28 @@
                                                                 <input type="hidden" id="r_manager_type" />
                                                                 <input type="hidden" id="r_isStaffMember" />
 
-
+                                                                <div class="form-group row mt-3">
+                                                                    <label for="staff_status_toggle" class="col-2 col-form-label emph-label">Ενεργός Χρήστης</label>
+                                                                    <div class="col-3">
+                                                                        <span data-toggle="tooltip" title="Κατάσταση χρήστη: Ενεργός/Ανενεργός">
+                                                                            <input id="staff_status_toggle" name="staff_status_toggle" type="checkbox"  />
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="form-group row mt-3">
                                                                             <label for="user_role_sel" class="col-2 col-form-label emph-label">Διαχειριστικός Ρόλος</label>
                                                                            <div class="col-3">
                                                                                 <select id="user_role_sel" style="width: 100%"  aria-label="αλλαγή ρόλου χρήστη">
-                                                                                    <option></option>
                                                                                     <option value="SA">Διαχειριστής Συστήματος</option>
                                                                                     <option value="MANAGER">Διαχειριστής Μονάδων</option>
                                                                                     <option value="SUPPORT">Προσωπικό Υποστήριξης</option>
                                                                                 </select>
                                                                            </div>
                                                                 </div>
+
+
+
+
 
 
     <!--                                                                    <div class="mt-2">Υπενθύμιση</div>

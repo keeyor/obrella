@@ -16,11 +16,13 @@ public class ClassroomInfo implements Serializable {
 	private String id;
 	private String name;
 	private String code;
+	private boolean active;
 
-	public ClassroomInfo(String id, String name, String code) {
+	public ClassroomInfo(String id, String name, String code, boolean active) {
 		this.id = id;
 		this.name = name;
 		this.code = code;
+		this.active = active;
 	}
 	public ClassroomInfo() {
 		this.id = "";

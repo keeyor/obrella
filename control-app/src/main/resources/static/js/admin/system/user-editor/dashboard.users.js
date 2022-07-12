@@ -37,6 +37,10 @@
             $(".rights_assign_warning").show();
         }
         else {
+
+            let manager_type = $("#staff_role").val().trim();
+            $("#r_manager_type").val(manager_type);
+
             let staff_name = $("#staff_name").val();
 
             let user_authorities;
@@ -50,13 +54,27 @@
                 $("#submit_button").attr("disabled",false);
             }
 
-            $("#staffModalLabel").html('<div style="font-size: 1.4em">' + staff_name + '</div><br/>');
+            // format page-label
+            let html  = '<div style="font-weight: bold">';
+                html += staff_name;
+                html += '<div style="font-size:1em;font-weight: normal">'
+                if (manager_type === "SUPPORT") {
+                    html += "Προσωπικό Υποστήριξης";
+                }
+                else if (manager_type === "MANAGER" || manager_type === "INSTITUTION_MANAGER") {
+                    html += "Διαχειριστής Μονάδων"
+                }
+                else if (manager_type === "SA") {
+                    html += "Διαχειριστής Συστήματος";
+                }
+                html += '</div>';
+                html += '</div><br/>';
+             $("#staffModalLabel").html(html);
+
+
+
             $(".rights_note").show();
             $(".rights_assign_warning").hide();
-
-            let manager_type = $("#staff_role").val();
-            $("#r_manager_type").val(manager_type);
-
 
             hideShowPanel(manager_type);
 
@@ -174,10 +192,10 @@
                     alertify.confirm('Απενεργοποίηση Χρήστη', msg,
                         function() {
                             updateManagerStatus(staff_id, false);
-                            $("#publication_toggle").bootstrapToggle('enable');
+                            $("#staff_status_toggle").bootstrapToggle('enable');
                         },
                         function() {
-                            $("#publication_toggle").prop('checked', true).change();
+                            $("#staff_status_toggle").prop('checked', true).change();
                         }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
                 }
                 e.preventDefault();
@@ -220,14 +238,14 @@
             }
         });
 
-        $('input[type=radio][name="managerOptions"]').on('change',function() {
-            let selected_value = $("input[name='managerOptions']:checked").val();
-            let previous_value = $("#r_manager_type").val();
+        $("#user_role_sel").on('select2:selecting', function (event) {
             let manager_name = $("#staff_name").val();
-            if (selected_value !== previous_value) {
-                showTypeChangeWarning(manager_name, previous_value, selected_value);
-            }
+            let data = event.params.args.data;
+            let selecting_value = data.id;
+            event.preventDefault();
+            showTypeChangeWarning(manager_name, selecting_value);
         });
+
 
         $("#addAssignedUnits").on('click',function(){
             //Update unitRightsDT with user selections
@@ -443,9 +461,12 @@
         $course_panel.show();
 
 
-        if (manager_type !== "") {
+       /* if (manager_type !== "") {
             $("#user_role_sel").attr("disabled",true);
         }
+        else {
+            $("#user_role_sel").attr("disabled",false);
+        }*/
 
         if (manager_type === "SA") {$("#saRadio").prop("checked",true);
             $unit_panel.hide();
@@ -469,23 +490,22 @@
             $("#user_role_sel").val(manager_type).trigger("change");
         }
     }
-    function showTypeChangeWarning(name ,previous_value, selected_value) {
+    function showTypeChangeWarning(user_name, selecting_value, event) {
 
         let staff_id = $("#staff_id").val();
-        let msg = '<div class="font-weight-bold;font-size: 1.2em">ΠΡΟΣΟΧΗ<br/>Ο Διαχειριστικός Ρόλος του/της: "' + name + '" Θα αλλάξει' +
-            '<br/>Όλα τα ήδη εκχωρημένα δικαιώματα του χρήστη Θα ΔΙΑΓΡΑΦΟΥΝ!<br/><br/>Είστε σίγουρος;</span></div>';
-        msg += '<div class="text-high-emphasis">Πατήστε "Ακύρωση" για ανάκληση της ενέργειας</div>';
+        let msg = '<div class="p-2" style="font-weight: 500;background-color: #fdf59a">ΠΡΟΣΟΧΗ<br/>Ο Διαχειριστικός Ρόλος του χρήστη: "' + user_name + '" Θα μεταβληθεί άμεσα!' +
+            '<br/>ΌΛΑ ΤΑ ΗΔΗ ΕΚΧΩΡΗΜΕΝΑ ΔΙΚΑΙΩΜΑΤΑ ΤΟΥ ΧΡΗΣΗ ΘΑ ΔΙΑΓΡΑΦΟΥΝ!</div>';
+        msg += '<div style="font-weight: bold" class="text-high-emphasis mt-2">Είστε σίγουρος; <br/>Πατήστε "Όχι" για ακύρωση της ενέργειας</div>';
 
         alertify.confirm('<i style="color: red" class="fas fa-user-shield"></i> Τροποποίηση Διαχειριστικού Ρόλου', msg,
             function () {
-                $("#r_manager_type").val(selected_value);
-                postChangeRole(staff_id, selected_value);
+                $("#r_manager_type").val(selecting_value);
+                $("#user_role_sel").val(selecting_value);
+                postChangeRole(staff_id, selecting_value);
             },
             function () {
-                $("input[name='managerOptions'][value=" + previous_value + "]").prop('checked', true);
-                hideShowPanel(previous_value);
 
-            }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
+            }).set('labels', {ok: 'Ναί!', cancel: 'Όχι'});
     }
     function postAssignUnit(staff_Id,unitPermission) {
         $.ajax({

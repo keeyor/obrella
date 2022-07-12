@@ -17,6 +17,9 @@ import org.opendelos.liveapp.services.structure.ClassroomService;
 import org.opendelos.liveapp.services.system.SystemMessageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,9 +52,6 @@ public class HomeController {
 		model.addAttribute("no_lectures", no_lectures);
 		model.addAttribute("no_events", no_events);
 
-		//Messages
-		List<SystemMessage> messageList = systemMessageService.getAllByVisibleIs(true);
-		model.addAttribute("messageList", messageList);
 		//> Get Live List
 		Long live_count = liveService.getLiveResourcesCount();
 		model.addAttribute("live_counter", live_count);
@@ -73,7 +73,17 @@ public class HomeController {
 		model.addAttribute("localeData", locale.getDisplayName());
 		model.addAttribute("localeCode", locale.getLanguage());
 
-		return "home";
+		List<SystemMessage> visitorsMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"visitors");
+		List<SystemMessage> visitorsAllMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"visitors-live");
+		visitorsMessages.addAll(visitorsAllMessages);
+
+		model.addAttribute("VisitorMessages", visitorsMessages);
+
+		if (scheduleService.read_liveDaemonStatus())
+			return "home";
+		else
+			return "offline";
 	}
+
 
 }

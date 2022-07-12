@@ -39,8 +39,8 @@
 <div class="wrapper d-flex flex-column min-vh-100"  style="background-color: white">
     <div th:replace="~{elements/a-topnav-41 :: a-topnav}"></div>
     <div class="body flex-grow-1 px-3">
+
         <div class="container" style="margin-top: 60px">
-                <!-- Upper Logo -->
                 <div class="row">
                     <div class="col-12 text-center">
                         <div><span class="icon-live-lecture" style="color:rgb(179,0,110)!important;font-size: 2.2em"></span>
@@ -71,9 +71,45 @@
                         </div>
                 </div>
 
-            <div>
-                Επιλέξτε "Ζωντανές Μεταδόσεις σε Εξέλιξη" για να εμφανιστούν όλες οι τρέχουσες μεταδόσεις ή συμβουλευτείτε το αναλυτικό "Ημερολόγιο Μεταδόσεων"
+                <div>
+                    Επιλέξτε "Ζωντανές Μεταδόσεις σε Εξέλιξη" για να εμφανιστούν όλες οι τρέχουσες μεταδόσεις ή συμβουλευτείτε το αναλυτικό "Ημερολόγιο Μεταδόσεων"
+                </div>
+
+
+
+            <!-- NEWS & Announcements -->
+            <!-- @thymesVar id="uMsg" type="org.opendelos.model.system.SystemMessage" -->
+            <div class="row" style="margin-top: 50px">
+                <div class="col-lg-3">
+                    <div class="card-header text-white" style="font-weight: 500;background-color: rgb(179,0,110)!important">
+                        <i class="fas fa-scroll me-1 text-white"></i>Νέα & Ανακοινώσεις
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-12" style="font-size: 1em">
+                    <th:block th:each="uMsg, iStat: ${VisitorMessages}" th:style="${iStat.odd}? ''">
+                        <div class="row">
+                            <div class="col-1 text-center" style="min-width: 10px">
+                                <i th:if="${uMsg.status == 'info'}" class="fas fa-info" style="padding: 2px;color:lightskyblue"></i>
+                                <i th:if="${uMsg.status == 'success'}" class="fas fa-check" style="padding: 2px;color:green"></i>
+                                <i th:if="${uMsg.status == 'warning'}" class="fas fa-exclamation" style="padding: 2px;color: orange"></i>
+                                <i th:if="${uMsg.status == 'danger'}" class="fas fa-exclamation-triangle" style="padding: 2px;color:red"></i>
+                            </div>
+                            <div class="vr"></div>
+                            <div class="col-10">
+                                <span style="font-weight: 500" th:text="${uMsg.text}"></span>
+                                <br/>
+                                <span style="font-size: 0.9em" class="text-medium-emphasis">
+                                    <span th:replace="fragments/format-resource-date.html:: formatDate (field=${uMsg.startDate})"></span>
+                                    <span th:replace="fragments/format-resource-date.html:: formatDateTime (field=${uMsg.startDate})"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div th:unless="${iStat.last}" class="my-1" style="border-bottom: 1px #ccc solid;line-height: 2em"></div>
+                    </th:block>
+                </div>
             </div>
+
+
 
             <!-- LOIPA -->
             <div class="pl-0" style="margin-top: 50px">

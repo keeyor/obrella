@@ -11,15 +11,13 @@
     dashboard.selected_year 	= "";
     dashboard.repeat            = "";
     dashboard.dayOfWeek         = "";
-    dashboard.dtLanguageGr = "";
+    dashboard.dtLanguageGr      = "";
     
     dashboard.init = function () {
 
     	dashboard.siteurl           = dashboard.broker.getRootSitePath();
     	dashboard.institution 		= $("#institutionId").val();
     	dashboard.institution_name  = $("#institutionName").val();
-
-    	//dashboard.system.init();
 
         loader.initialize();
 
@@ -30,40 +28,43 @@
         alertify.set('notifier','position', 'top-right');
 
         dashboard.selected_year = $("#currentAcademicYear").val();
-        //dashboard.department.loadDepartmentsOnSearchBar($("#department-columns"));
 
-       // let editor_is_staffMember = $("#editor_is_staffMember").val();
-       // if (editor_is_staffMember === "true") {
-       //     dashboard.editor.loadEditorsOnSearchBar($("#editor-columns"));
-       // }
-        //dashboard.classroom.loadEnabledClassroomsOnSearchBar($("#classroom-columns"));
-
-        if ($("#departmentFilterId").val() === '') {
-            $("#depCanvasLink").show();
-        }
-        if ($("#courseFilterId").val() === '') {
-            $("#courseCanvasLink").show();
-        }
-        if ($("#staffMemberFilterId").val() === '') {
-            $("#staffCanvasLink").show();
-        }
-        if ($("#classRoomFilterId").val() === '') {
-            $("#classCanvasLink").show();
-        }
-
+        //initialize view from request
         let view = $("#view").val();
-        if (view === '' || view === undefined) {
-            dashboard.calendar.view = 'listWeek';
-        }
-        else {
+        if (view !== '' || view !== undefined) {
             dashboard.calendar.view = view;
         }
+        else {
+            dashboard.calendar.view = "listWeek";
+        }
 
+        let departmentFilterId  = $("#departmentFilterId").val();
+        let courseFilterId      = $("#courseFilterId").val();
+        let staffMemberFilterId = $("#staffMemberFilterId").val();
 
-        dashboard.calendar.LoadFullCalendar();
+        if (departmentFilterId !== "") {
+            $("#showFilterWarning").hide();
+            $("#showCalendar").show();
+            if (courseFilterId === '') {
+                $("#courseCanvasLink").show();
+            }
+            if (staffMemberFilterId === '') {
+                $("#staffCanvasLink").show();
+            }
+            dashboard.calendar.LoadFullCalendar();
+        }
+        else {
+            $("#showFilterWarning").show();
+            //Hide Other Filters to Force Department Selection
+            $("#depCanvasLink").show();
+            $("#staffCanvasLink").hide();
+            $("#courseCanvasLink").hide();
+            $("#showCalendar").hide();
+            //force show of Department selection canvas
+            $("#offcanvasDep").offcanvas("show");
+        }
 
         setFilterRemoveLinks();
-
         $("#QueryReportStatus").hide();
     };
 
@@ -71,29 +72,12 @@
 
        dashboard.init();
 
-        $(document).on( 'preInit.dt', function (e, settings) {
+        $(document).on( 'preInit.dt', function () {
             loader.showLoader();
         } );
 
         $("body").tooltip({
             selector: '[data-toggle="tooltip"]'
-        });
-
-      dashboard.broker.on("filter.select", function (event, message) {
-            //console.log(message);
-            dashboard.broker.clearOtherFilters(message.filter);
-            let text = dashboard.broker.getTextForFilter(message.filter);
-            dashboard.broker.toggleFilter(message,text);
-        });
-
-        $(".fc-listMonth-button").on('click',function() {
-            $("#view").val("listMonth");
-        });
-        $(".fc-listWeek-button").on('click',function() {
-            $("#view").val("listWeek");
-        });
-        $(".fc-listDay-button").on('click',function() {
-            $("#view").val("listDay");
         });
 
         $(".short-list").on("keyup",function() {
@@ -143,115 +127,14 @@
         return _location.substring(0, webFolderIndex);
     };
 
-    dashboard.broker.toggleFilter = function(message, text) {
-        let filter_type     = message.filter;
-        let filter_value    = message.id;
-        let $filter_id      = "#" + filter_type + "_filter";
-        let $filter_name    = "#" + filter_type + "_filter_name";
-
-        $($filter_id).val(filter_value);
-        $($filter_name).val(message.value);
-
-        // handle clear filter event
-        if (filter_value === null || filter_value === "") {
-            dashboard.broker.initFilter(filter_type);
-        }
-        dashboard.calendar.reloadTimeTableLectureEDT();
-    };
-
-    dashboard.broker.initFilter = function(filter_type) {
-        let $filter_id    =  "#" + filter_type + "_filter";
-        let $filter_name  =  "#" + filter_type + "_filter_name";
-        let $filter_clear =  "#" + filter_type + "_clear";
-        let $filter_load  =  "#" + filter_type + "_load";
-        let text = dashboard.broker.getTextForFilter(filter_type);
-
-        $($filter_id).val("");
-        $($filter_name).val("");
-        $($filter_clear).hide();
-        let $filter= $($filter_load);
-        $filter.html(text);
-    }
-    dashboard.broker.getTextForFilter = function(filter) {
-
-        let text;
-        switch (filter) {
-            case "school":
-                text = "Σχολή";
-                break;
-            case "department":
-                text = "Τμήμα";
-                break;
-            case "classroom":
-                text = "Άιθουσα/Χώρος";
-                break;
-            case "repeat":
-                text = "Επανάληψη";
-                break;
-            case "dow":
-                text = "Ημέρα";
-                break;
-            case "period":
-                text = "Περίοδος";
-                break;
-            case "editor":
-                text = "Εμφάνιση ";
-                break;
-        }
-        return text;
-    };
-    dashboard.broker.clearFilters = function() {
-
-        let filters = ["department","classroom", "editor"];
-
-        for (let i = 0; i < filters.length; i++) {
-            let $filter_id    = "#" + filters[i] + "_filter";
-            let $filter_name  = "#" + filters[i] + "_filter_name";
-            let $filter_clear = "#" + filters[i] + "_clear";
-            let $filter_load  = "#" + filters[i] + "_load";
-
-            $($filter_id).val("");
-            $($filter_name).val("");
-            $($filter_clear).hide();
-
-            let text = dashboard.broker.getTextForFilter(filters[i]);
-            let $filter= $($filter_load);
-            $filter.html(text);
-        }
-    };
-
-    dashboard.broker.clearOtherFilters = function(exclude_filter) {
-
-        let filters = ["department","classroom", "editor"];
-
-        for (let i = 0; i < filters.length; i++) {
-            if (filters[i] !== exclude_filter) {
-                let $filter_id = "#" + filters[i] + "_filter";
-                let $filter_name = "#" + filters[i] + "_filter_name";
-                let $filter_clear = "#" + filters[i] + "_clear";
-                let $filter_load = "#" + filters[i] + "_load";
-
-                $($filter_id).val("");
-                $($filter_name).val("");
-                $($filter_clear).hide();
-
-                let text = dashboard.broker.getTextForFilter(filters[i]);
-                let $filter = $($filter_load);
-                $filter.html(text);
-             }
-        }
-    };
 
     function setFilterRemoveLinks() {
 
-        let courseFilterId = $("#courseFilterId").val();
-        let staffFilterId = $("#staffMemberFilterId").val();
-        let departmentFilterId = $("#departmentFilterId").val();
-        let eventFilterId = $("#scheduledEventFilterId").val();
-        let classroomFilterId = $("#classRoomFilterId").val();
-        let categoryCode = $("#categoryCode").val();
-        let resourceType = $("#resourceType").val();
-        let accessPolicy = $("#accessPolicy").val();
+        let $clearAllFiltersLnk = $("#clear-all-filters");
+
+        let courseFilterId      = $("#courseFilterId").val();
+        let staffFilterId       = $("#staffMemberFilterId").val();
+        let departmentFilterId  = $("#departmentFilterId").val();
 
         let queryString = $("#queryString").val();
 
@@ -260,37 +143,26 @@
             queryParams.delete("c");
             queryParams.delete("s");
             queryParams.delete("d");
-            queryParams.delete("e");
-            queryParams.delete("ca");
-            queryParams.delete("rp");
-            queryParams.delete("ap");
-            queryParams.delete("cr");
+            queryParams.set("cld",1);
             queryParams.delete("skip");
-            $("#clear-all-filters").attr('href','calendar?' + queryParams);
+            $clearAllFiltersLnk.attr('href','calendar?' + queryParams);
 
             let restParams = new URLSearchParams(window.location.search);
-            //hide clear-filters if only sd,ed,cv params remain
-            restParams.delete("cv");
+            //hide clear-filters if only sd,ed,view params remain
+            restParams.delete("view");
             restParams.delete("sd");
             restParams.delete("ed");
+            restParams.delete("cld");
 
             if (restParams.toString() === "") {
-                $("#clear-all-filters").hide();
+                $clearAllFiltersLnk.hide();
             } else {
-                $("#clear-all-filters").show();
+                $clearAllFiltersLnk.show();
             }
         }
         else {
-
-            $("#clear-all-filters").hide();
+            $clearAllFiltersLnk.hide();
         }
-
-        if (
-            (departmentFilterId !== '' && courseFilterId !== '' && staffFilterId !=='' && accessPolicy !== '') ||
-            (departmentFilterId !== '' && eventFilterId !== '' && staffFilterId !==''  && accessPolicy !== '') ||
-            (categoryCode !== '' && departmentFilterId !== '' && eventFilterId !== '' && staffFilterId !==''   && accessPolicy !== '') ||
-            (categoryCode !== '' && departmentFilterId !== '' && courseFilterId !== '' && staffFilterId !==''  && accessPolicy !== '')
-        ) {}
 
         let courseFilterText = $("#courseFilterText").val();
         if (courseFilterId !== undefined && courseFilterId != null && courseFilterId  !== '') {
@@ -298,11 +170,11 @@
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("c");
             queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
+
             $("#clear-co-filter").attr('href','calendar?' + queryParams);
             $("#course-filter").show();
+            $("#courseCanvasLink").hide();
         }
-
 
         let staffFilterText = $("#staffMemberFilterText").val();
         if (staffFilterId !== undefined && staffFilterId != null && staffFilterId !== '') {
@@ -310,9 +182,10 @@
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("s");
             queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
+
             $("#clear-sm-filter").attr('href','calendar?' + queryParams);
             $("#staff-filter").show();
+            $("#staffCanvasLink").hide();
         }
 
         let departmentFilterText = $("#departmentFilterText").val();
@@ -320,99 +193,16 @@
             $('#department-dd-header').html("<span class='far fa-times-circle'></span> | Τμήμα: " + departmentFilterText);
             let queryParams = new URLSearchParams(window.location.search);
             queryParams.delete("d");
+            queryParams.delete("s");    //for live-app only: require department filter to show results
+            queryParams.delete("c");    //for live-app only: require department filter to show results
+            queryParams.set("cld","1")
             queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
+
             $("#clear-dt-filter").attr('href','calendar?' + queryParams);
             $("#department-filter").show();
+            $("#depCanvasLink").hide();
         }
 
-        let eventFilterText = $("#scheduledEventFilterText").val();
-        if (eventFilterId !== undefined && eventFilterId != null && eventFilterId !== '') {
-            $('#events-dd-header').html("<span class='far fa-times-circle'></span> | Εκδήλωση: " + eventFilterText);
-            let queryParams = new URLSearchParams(window.location.search);
-            queryParams.delete("e");
-            queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
-            $("#clear-ev-filter").attr('href','calendar?' + queryParams);
-            $("#events-filter").show();
-        }
-
-        let classroomFilterText = $("#classRoomFilterText").val();
-        if (classroomFilterId !== undefined && classroomFilterId != null && classroomFilterId !== '') {
-            $('#class-dd-header').html("<span class='far fa-times-circle'></span> | Αίθουσα: " + classroomFilterText);
-            let queryParams = new URLSearchParams(window.location.search);
-            queryParams.delete("cr");
-            queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
-            $("#clear-cr-filter").attr('href','calendar?' + queryParams);
-            $("#class-filter").show();
-        }
-
-        let categoryFilterText = $("#categoryTitle").val();
-        if (categoryCode !== undefined && categoryCode != null && categoryCode !== '') {
-            $('#category-dd-header').html("<b class='mr-2'>Κατηγορία:</b>" + categoryFilterText);
-            let queryParams = new URLSearchParams(window.location.search);
-            queryParams.delete("ca");
-            queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
-            $("#clear-ca-filter").attr('href','calendar?' + queryParams);
-            $("#category-filter").show();
-        }
-
-        //ResourceType
-        let resourceTypeTitle;
-        if (resourceType !== undefined && resourceType != null && resourceType !== '') {
-            if (resourceType === 'c') {resourceTypeTitle = 'Διάλεξη'}
-            else if (resourceType === 'e') { resourceTypeTitle = 'Εκδήλωση'}
-            $('#rt-dd-header').html("<b class='mr-2'>Τύπος:</b>" + resourceTypeTitle);
-            let queryParams = new URLSearchParams(window.location.search);
-            queryParams.delete("rt");
-            queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
-            $("#clear-rt-filter").attr('href','calendar?' + queryParams);
-            $("#resourceType-filter").show();
-        }
-
-        //AccessPolicy
-        let accessPolicyTitle;
-        if (accessPolicy !== undefined && accessPolicy != null && accessPolicy !== '') {
-            if (accessPolicy === 'private') {accessPolicyTitle = 'Ιδιωτικό'}
-            else if (accessPolicy === 'public') { accessPolicyTitle = 'Δημόσιο'}
-            $('#ap-dd-header').html("<b class='mr-2'>Πρόσβαση:</b>" + accessPolicyTitle);
-            let queryParams = new URLSearchParams(window.location.search);
-            queryParams.delete("ap");
-            queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
-            $("#clear-ap-filter").attr('href','calendar?' + queryParams);
-            $("#accessPolicy-filter").show();
-        }
-
-        //Tags
-        let tagTitle;
-        let tag = $("#tag").val();
-        if (tag !== undefined && tag !== null && tag !== '') {
-            if (tag === 'ResApp') {tagTitle = 'Απαιτείται Αποδοχή'}
-            else if (tag === 'MultUp') {tagTitle = 'Απαιτείται Μεταφόρτωση Βίντεο'}
-            else if (tag === 'MetEdt') {tagTitle = 'Ελλειπή Μεταδεδομένα'}
-            else if (tag === 'PreUp') {tagTitle = 'Απαιτείται Μεταφόρτωση Παρουσίασης'}
-            else if (tag === 'MultEdt') {tagTitle = 'Απαιτείται Επεξεργασία Βίντεο'}
-            else if (tag === 'MultRed') {tagTitle = 'Απαιτείται Πραγματική Κοπή'}
-            else if (tag === 'PreSyn')  {tagTitle = 'Απαιτείται Συγχρονιμός'}
-            $('#ap-tag-header').html("<b class='mr-2'>Έλλειψη:</b>" + tagTitle);
-            let queryParams = new URLSearchParams(window.location.search);
-            queryParams.delete("t");
-            queryParams.delete("skip");
-            removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams);
-            $("#clear-tag-filter").attr('href','calendar?' + queryParams);
-            $("#tags-filter").show();
-        }
     }
-    function removeSortAndDirectionFiltersIfOnlyOnesLeft(queryParams) {
-        if (queryParams.get("ca") === null && queryParams.get("d") === null && queryParams.get("s") === null && queryParams.get("ap") === null
-            && queryParams.get("rt") === null && queryParams.get("t") === null && queryParams.get("ft") === null && queryParams.get("c") === null && queryParams.get("e") === null &&
-            queryParams.get("cr") === null) {
-            queryParams.delete("sort");
-            queryParams.delete("direction");
-        }
-    }
+
 })();

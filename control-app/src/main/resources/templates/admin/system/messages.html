@@ -47,6 +47,7 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/users}">Διαχειριστές</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/streamers}">Εξυπηρετητές</a></li>
                 <li class="nav-item"><a class="nav-link active" th:href="@{/admin/system/messages}">Μηνύματα Χρηστών</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/system/texts}">Κείμενα Ιστότοπου</a></li>
                 <li class="nav-item"><a class="nav-link" target="_blank" href="http://localhost:5601">Αρχεία Καταγραφής</a></li>
             </ul>
             <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
@@ -68,7 +69,7 @@
                 <!--<div class="row">
                     <div class="offset-1 col-lg-10" id="content">-->
                         <div class="card" id="messages_card">
-                            <div class="card-header">
+                            <div class="card-header" style="background-color: white;border: none">
                                 <h5>Μηνύματα Χρηστών</h5>
                                 <div class="text-medium-emphasis font-italic">
                                     Διαχείριση μηνυμάτων ιστότοπου
@@ -83,7 +84,7 @@
                                 <div class="row">
                                 <div class="col-12">
                                     <div class="table-responsive" style="margin-top: 10px">
-                                            <table id="messagesDataTable" style="width:100%" class="row-border stripe">
+                                            <table id="messagesDataTable" style="width:100%;padding-top: 20px" class="row-border stripe">
                                                 <thead>
                                                 <tr style="font-weight: 600">
                                                     <td style="height: 12px;width: 20px">#</td>
@@ -127,7 +128,10 @@
                                                 <label for="message_target" class="col-sm-2 col-form-label emph-label">Κοινό*</label>
                                                 <div class="col-sm-4">
                                                     <select id="message_target" name="message_target" style="width: 100%" class="form-control">
-                                                        <option value="visitors"> Επισκέπτες</option>
+                                                        <option value="visitors"> Επισκέπτες (ΟΛΟΙ)</option>
+                                                        <option value="visitors-vod"> Επισκέπτες (ΕΚΠΑ ΔΙΑΛΕΞΕΙΣ)</option>
+                                                        <option value="visitors-live"> Επισκέπτες (ΕΚΠΑ ΜΕΤΑΔΟΣΕΙΣ ΔΙΑΛΕΞΕΩΝ)</option>
+                                                        <option value="visitors-events"> Επισκέπτες (ΕΚΠΑ ΔΡΑΣΕΙΣ)</option>
                                                         <option value="admins-all"> Διαχειριστές & Διδακτικό Προσωπικό</option>
                                                         <option value="admins-users"> Διαχειριστές</option>
                                                         <option value="admins-staff"> Διδακτικό Προσωπικό</option>
@@ -193,7 +197,6 @@
 <script th:src="@{/js/admin/system/messages/dashboard.js}" type="application/javascript"></script>
 <script th:src="@{/js/admin/system/messages/dashboard.messages.js}" type="application/javascript"></script>
 
-<script th:src="@{/js/search/el.js}" type="application/javascript"></script>
 <script th:src="@{/css/moment/moment.min.js}" type="text/javascript" ></script>
 <script th:src="@{/css/moment/en-gb.js}" type="text/javascript" ></script>
 <script th:src="@{/css/moment/el.js}" type="text/javascript" ></script>

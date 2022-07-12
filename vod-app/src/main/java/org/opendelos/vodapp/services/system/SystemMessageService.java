@@ -84,4 +84,8 @@ public class SystemMessageService {
 	public List<SystemMessage> getAllByVisibleIs(boolean visible) {
 		return systemMessagesRepository.findAllByVisibleIs(visible);
 	}
+
+	public List<SystemMessage> findAllByVisibleIsAndTarget(boolean visible, String target) {
+		return systemMessagesRepository.findAllByVisibleIsAndTargetOrderByStartDateDesc(visible,target);
+	}
 }

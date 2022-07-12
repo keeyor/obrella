@@ -95,6 +95,12 @@ public class ScheduledEventsApi {
 						}
 					}
 					child.setSubheader(subHeader.toString());
+					if (scheduledEvent.getIsActive()) {
+						child.setInfo("active");
+					}
+					else {
+						child.setInfo("inactive");
+					}
 					children.add(child);
 		}
 		try {

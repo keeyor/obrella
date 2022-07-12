@@ -17,5 +17,7 @@ public class TimeTableResults {
 	protected String message_pauses;
 	protected String message_cancellations;
 	protected String message_overlaps;
+	protected String message_roomInactive;
+	protected String message_scheduleEventInactive;
 	protected List<ScheduleDTO> results;
 }

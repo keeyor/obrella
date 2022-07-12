@@ -3,17 +3,17 @@
     text-align: center!important;
     float: left!important;
 }
-.dataTables_wrapper .top  {
+/*.dataTables_wrapper .top  {
     padding: 5px 5px 0 5px;
     margin-bottom: 10px;
-}
+}*/
 .dataTables_wrapper .bottom {
     margin-top: 10px;
 }
 .dataTables_wrapper .paging_full_numbers {
     background-color: #f9f9f9;
     padding: 5px 5px 5px 5px;
-
+    margin-top: 10px;
 }
 .dataTables_wrapper .ellipsis {
     color: black;

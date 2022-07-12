@@ -86,13 +86,22 @@ public class Resource {
     protected String publication;                   /* Pre-defined: PUBLIC, PRIVATE */
     protected String broadcastCode;
     protected String classroomName;
+
     protected String scheduleId;
-    protected String streamingServerId;
-    protected String streamingServerInfo;
-    protected String recordingServerId;
     protected String streamId;
     protected String streamName;
+
+
+    protected String streamingServerId;
+    protected String streamingServerInfo;
+    protected String recorderServerId;
+    protected String recorderServerInfo;
+    protected boolean useRecorder;
     protected boolean broadcastToChannel;
+    protected boolean delayedStart;
+    protected boolean Executed;
+
+    protected boolean openCoursesResource;
 
     @TextScore
     private Float score;                        // MongoDB used for text query

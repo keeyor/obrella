@@ -8,18 +8,6 @@
     <div class="row px-1 py-1">
         <div class="col"></div>
         <div class="col-2">
-           <!-- <div class="dropdown">
-                <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-coreui-toggle="dropdown" aria-expanded="false" title="Επιλεγμένα">
-                    <i class="fas fa-check me-2"></i><span id="marked_items_no">(0)</span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item disabled" id="remove_marked_resources" href="#">Διαγραφή</a></li>
-                    <li><a class="dropdown-item disabled" id="publish_marked_resources" href="#">Δημοσιοποίηση</a></li>
-                    <li><a class="dropdown-item disabled" id="unpublish_marked_resources" href="#">Απόσυρση</a></li>
-                    <li><a class="dropdown-item" id="mark_all_resources" href="#">Επιλογή Όλων</a></li>
-                    <li><a class="dropdown-item" id="unmark_all_resources" href="#">Απεπιλογή Όλων</a></li>
-                </ul>
-            </div>-->
         </div>
     </div>
     <div class="mb-2" th:each="lecture, iStat: ${QR.searchResultList}" th:style="${iStat.odd}? ''">
@@ -82,11 +70,11 @@
 
                         <div class="row  row-cols-auto mt-2 pt-2" style="border-top: #efefef 1px solid">
                             <div class="col">
-                                <th:block th:if="${lecture.accessPolicy == 'private'}" title="πρόσβαση">
-                                    <i class="fas fa-lock me-1" style="color: darkorange"></i> Ιδιωτικό
-                                </th:block>
-                                <th:block th:unless="${lecture.accessPolicy == 'private'}" title="πρόσβαση">
+                                <th:block th:if="${lecture.accessPolicy == 'public'}" title="πρόσβαση">
                                     <i class="fas fa-lock-open me-1" style="color:green"></i> Δημόσιο
+                                </th:block>
+                                <th:block th:unless="${lecture.accessPolicy == 'public'}" title="πρόσβαση">
+                                    <i class="fas fa-lock me-1" style="color: darkorange"></i> Ιδιωτικό
                                 </th:block>
                             </div>
                             <div class="col" th:if="${lecture.course != null}" title="περίοδος">
@@ -117,19 +105,19 @@
                         <th:block th:if="${lecture.type == 'COURSE'}">
                             <th:block th:if="${lecture.status.inclMultimedia == 1}">
                                 <th:block th:if="${lecture.rteStatus != null && lecture.rteStatus.status == 'DARE'}">
-                                    <a  class="btn btn-pill btn-sm ms-lg-2 hover_button_warn"
+                                    <a  class="btn btn-sm ms-lg-2 hover_button_warn"
                                         th:href="@{/admin/lecture-editor(id=${lecture.id})}" title="εκκρεμή αποδοχή/απόρριψη πραγματικής κοπής">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                 </th:block>
                                 <th:block th:unless="${lecture.rteStatus != null && lecture.rteStatus.status == 'DARE'}">
-                                    <a  class="btn btn-pill btn-sm ms-lg-2 hover_button"
+                                    <a  class="btn btn-sm ms-lg-2 hover_button"
                                         th:href="@{/admin/lecture-editor(id=${lecture.id})}" title="επεξεργασία">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                 </th:block>
                             </th:block>
-                            <a  th:unless="${lecture.status.inclMultimedia == 1}" class="btn btn-pill btn-sm ms-lg-2  hover_button_warn"
+                            <a  th:unless="${lecture.status.inclMultimedia == 1}" class="btn btn-sm ms-lg-2  hover_button_warn"
                                 th:href="@{/admin/lecture-editor(id=${lecture.id})}"  title="εκκρεμεί ανάρτηση βίντεο">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
@@ -137,33 +125,34 @@
                         <th:block th:if="${lecture.type == 'EVENT'}" >
                             <th:block th:if="${lecture.status.inclMultimedia == 1}">
                                 <th:block th:if="${lecture.rteStatus != null && lecture.rteStatus.status == 'DARE'}">
-                                    <a  class="btn btn-pill btn-sm ms-lg-2 hover_button_warn"
+                                    <a  class="btn btn-sm ms-lg-2 hover_button_warn"
                                         th:href="@{/admin/event-editor(id=${lecture.id})}" title="εκκρεμή αποδοχή/απόρριψη πραγματικής κοπής">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                 </th:block>
                                 <th:block th:unless="${lecture.rteStatus != null && lecture.rteStatus.status == 'DARE'}">
-                                    <a  class="btn btn-pill btn-sm ms-lg-2 hover_button"
+                                    <a  class="btn btn-sm ms-lg-2 hover_button"
                                         th:href="@{/admin/event-editor(id=${lecture.id})}" title="επεξεργασία">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                 </th:block>
                             </th:block>
-                            <a  th:unless="${lecture.status.inclMultimedia == 1}" class="btn btn-pill btn-sm ms-lg-2  hover_button_warn"
+                            <a  th:unless="${lecture.status.inclMultimedia == 1}" class="btn btn-sm ms-lg-2  hover_button_warn"
                                 th:href="@{/admin/event-editor(id=${lecture.id})}"  title="εκκρεμεί ανάρτηση βίντεο">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
                         </th:block>
 
-
+                        <th:block th:if="${lecture.accessPolicy == 'public'}">
+                            <a class="btn btn-sm ms-lg-2 hover_button"  href="#" id="copy-url" title=" Αντιγραφή δημόσιου συνδέσμου"><i class="far fa-clipboard"></i></a>
+                            <a class="btn btn-sm ms-lg-2 hover_button"  href="#" id="copy-embed" title="Αντιγραφή κώδικα ενσωμάτωσης"><i class="fas fa-file-code"></i></a>
+                            <input id="cp_resource_id" type="hidden" th:attr="data-target=${lecture.id}"/>
+                        </th:block>
+                    </div>
+                    <div class="col-1 text-end date_info me-2" style="max-width: 45px;align-items: center;vertical-align: center">
                         <a th:attr="data-target=${lecture.id}" class="btn btn-sm btn-pill ms-lg-2 mark-resource hover_button" href="#" title="Επιλογή">
                             <i class="fas fa-check"></i>
                         </a>
-                        <th:block th:if="${lecture.accessPolicy == 'public'}">
-                            <a class="btn btn-sm btn-pill ms-lg-2 hover_button"  href="#" id="copy-url" title=" Αντιγραφή δημόσιου συνδέσμου"><i class="far fa-clipboard"></i></a>
-                            <a class="btn btn-sm btn-pill ms-lg-2 hover_button"  href="#" id="copy-embed" title="Αντιγραφή κώδικα ενσωμάτωσης"><i class="fas fa-file-code"></i></a>
-                            <input id="cp_resource_id" type="hidden" th:attr="data-target=${lecture.id}"/>
-                        </th:block>
                     </div>
                 </div>
             </div>

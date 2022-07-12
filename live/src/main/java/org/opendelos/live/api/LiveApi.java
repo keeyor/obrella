@@ -41,6 +41,11 @@ public class LiveApi {
 		this.liveService = liveService;
 	}
 
+	@RequestMapping(value = "/api/v1/status", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+	public ResponseEntity<String> pingApp() {
+		return new ResponseEntity<>("ALIVE", HttpStatus.ACCEPTED);
+	}
+
 	@RequestMapping(value = "/api/v1/live/{id}/stop/{keepFile}", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> stopLiveStream(@PathVariable("id") String id,@PathVariable("keepFile") boolean keepFile) {
 		boolean res;

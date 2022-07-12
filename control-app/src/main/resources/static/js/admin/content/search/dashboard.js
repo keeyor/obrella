@@ -29,6 +29,14 @@
 
         dashboard.siteUrl = dashboard.broker.getRootSitePath();
 
+        let   msg_val   = $("#msg_val").val();
+        let   msg_type  = $("#msg_type").val();
+
+        if (msg_val !== '') {
+            let message = {msg: "instant message", type: msg_type, val: msg_val};
+            dashboard.broker.showInstantMessage(message.type ,message.val);
+        }
+
         queryString = $("#queryString").val();
         $("#clear-all-filters").hide();
 
@@ -145,6 +153,28 @@
         let webFolderIndex = _location.indexOf('/', _location.indexOf(applicationName) + applicationName.length);
 
         return _location.substring(0, webFolderIndex);
+    };
+
+    dashboard.broker.showInstantMessage = function(type, val) {
+
+        //Override alertify defaults
+        alertify.set('notifier','position','top-center');
+        alertify.set('notifier','delay', 7);
+
+        switch (type) {
+            case "alert-success":
+                alertify.success(val);
+                break;
+            case "alert-danger":
+                alertify.error(val);
+                break;
+            case "alert-warning":
+                alertify.warning(val);
+                break;
+            case "alert-info":
+                alertify.info(val);
+                break;
+        }
     };
 
     function setupAppliedFilters() {
@@ -312,16 +342,21 @@
             let marked_items_no = marked_resources.length;
             $("#marked_items_no").html(" (" + marked_items_no + ")");
             if (marked_items_no >0) {
-                $("#remove_marked_resources").removeClass("disabled");
+                //enable actions here
+                $(".ms-action-delete").removeClass("disabled");
+                $(".ms-action-publish").removeClass("disabled");
+                $(".ms-action-unpublish").removeClass("disabled");
             }
             else {
-                $("#remove_marked_resources").addClass("disabled");
+                $(".ms-action-delete").addClass("disabled");
+                $(".ms-action-publish").addClass("disabled");
+                $(".ms-action-unpublish").addClass("disabled");
             }
             console.log("marked_resources:" + marked_resources);
             e1.preventDefault();
         });
 
-        $("#mark_all_resources").on('click',function(e1){
+        $("#mark_all_resources").on('click',function(e1) {
             marked_resources = [];
             $(".mark-resource").each(function () {
                     let target = $(this).data("target");
@@ -333,13 +368,15 @@
             $("#marked_items_no").html(" (" + marked_items_no + ")");
 
             //enable actions here
-            $("#remove_marked_resources").removeClass("disabled");
+            $(".ms-action-delete").removeClass("disabled");
+            $(".ms-action-publish").removeClass("disabled");
+            $(".ms-action-unpublish").removeClass("disabled");
 
             console.log("marked_resources:" + marked_resources);
             e1.preventDefault();
         });
 
-        $("#unmark_all_resources").on('click',function(e1){
+        $("#unmark_all_resources").on('click',function(e1) {
             marked_resources.length = 0;
             $(".mark-resource").each(function () {
                 let target = $(this).data("target");
@@ -348,12 +385,50 @@
             $("#marked-resources").val("");
             let marked_items_no = marked_resources.length;
             $("#marked_items_no").html(" (" + marked_items_no + ")");
+
             //disable actions here
-            $("#remove_marked_resources").addClass("disabled");
+            $(".ms-action-delete").addClass("disabled");
+            $(".ms-action-publish").addClass("disabled");
+            $(".ms-action-unpublish").addClass("disabled");
 
             console.log("marked_resources:" + marked_resources);
             e1.preventDefault();
         });
+
+        $(".ms-action").on('click',function(e1) {
+            let action = $(this).data("action");
+            let marked_items_no = marked_resources.length;
+            let msg = "";
+            if (action === "delete") {
+                msg = '<div style="color:darkslategrey">Έχετε επιλέξει <span style="font-size: 1.2em;font-weight: 500">' + marked_items_no + '</span> καταχωρήσεις περιεχομένου</div>';
+                msg +='<div class="mt-2 text-center" style="font-weight: 500;font-size: 1.2em">Όλες οι επιλεγμένες καταχωρήσεις (στοιχεία, αρχεία βίντεο & παρουσίασης) θα διαγραφούν ΟΡΙΣΤΙΚΑ!</div>';
+                msg +='<div class="mt-2 text-center" style="font-weight: 500;font-size: 1.2em">ΔΕΝ ΥΠΑΡΧΕΙ ΤΡΟΠΟΣ ΕΠΑΝΑΦΟΡΑΣ</div>';
+                msg +='<div class="mt-2" style="color:darkslategrey">Συνιστάται η δημιουργία αντιγράφου των αρχείων βίντεο και παρουσίασης στον τοπικό δίσκο πριν τη διαγραφή</div>';
+                msg +='<div style="color:darkslategrey">Δεν θα διαγραφούν δημόσιες καταχωρήσεις (πρέπει να προηγηθεί απόσυρση)</div>';
+
+                msg +='<div class="mt-2" style="font-size:1.2em;color:red">ΕΙΣΤΕ ΣΙΓΟΥΡΟΣ?</div>';
+            }
+            if (action === "publish") {
+                msg = '<div style="color:darkslategrey">Έχετε επιλέξει <span style="font-size: 1.2em;font-weight: 500">' + marked_items_no + '</span> καταχωρήσεις περιεχομένου</div>';
+                msg += '<div class="mt-2" style="font-weight: 500;font-size: 1.2em">Όλες οι επιλεγμένες καταχωρήσεις θα δημοσιοποιηθούν! Είστε σίγουρος?</div>';
+                msg +='<div class="mt-2" style="color:darkslategrey">Δεν θα δημοσιευτούν καταχωρήσεις που δεν εκπληρούν όλες τις προϋποθέσεις δημοσιοποίησης</div>';
+            }
+            if (action === "unpublish") {
+                msg = '<div style="color:darkslategrey">Έχετε επιλέξει <span style="font-size: 1.2em;font-weight: 500">' + marked_items_no + '</span> καταχωρήσεις περιεχομένου</div>';
+                msg += '<div class="mt-2" style="font-weight: 500;font-size: 1.2em">Όλες οι επιλεγμένες καταχωρήσεις θα αποσυρθούν (απο-δημοσίευση)! Είστε σίγουρος?</div>';
+                msg +='<div class="mt-2" style="color:darkslategrey">Δεν θα απο-δημοσιευτούν καταχωρήσεις που δεν εκπληρούν όλες τις προϋποθέσεις απόσυρσης</div>';
+            }
+            alertify.confirm('<i class="fas fa-exclamation-triangle" style="color:orangered"></i> Προειδοποίηση', msg,
+                function () {
+                    let $form_ms = $("#form-ms");
+                    $form_ms.attr("action", "search?action=" + action);
+                    $form_ms.submit();
+                },
+                function () {
+                }).set('labels', {ok: 'Ναί!', cancel: 'Ακύρωση'});
+
+        });
+
 
         $("#copy-url").on('click', function(e){
             copyUrl();

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ζωντανές Μεταδόσεις</title>
+    <title>Τρέχουες Μεταδόσεις</title>
     <link rel="stylesheet" th:href="@{/css/global41.css}"/>
     <!-- CoreUI CSS -->
     <link rel="stylesheet" th:href="@{/lib/coreui41/coreui.min.css}"/>
@@ -41,7 +41,7 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/timetable}">Πρόγραμμα Μεταδόσεων</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/schedule}"> Νέα Μετάδοση</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/scheduler/calendar}">Ημερολόγιο Μεταδόσεων</a></li>
-                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/scheduler/live}">Ζωντανές Μεταδόσεις</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/scheduler/live}">Τρέχουσες Μεταδόσεις</a></li>
             </ul>
             <div th:replace="~{admin/fragments/a-header-rmenu :: a-header-rmenu}"></div>
         </div>
@@ -50,7 +50,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb my-0 ms-2">
                     <li class="breadcrumb-item"><i class="fas fa-home me-1"></i><a th:href="@{/admin}">Αρχική</a></li>
-                    <li class="breadcrumb-item active"><span>Ζωντανές Μεταδόσεις</span></li>
+                    <li class="breadcrumb-item active"><span>Τρέχουσες Μεταδόσεις</span></li>
                 </ol>
             </nav>
         </div>
@@ -65,9 +65,9 @@
 
                         <div class="card">
                             <div class="card-header">
-                                <h4><span class="icon-live-lecture" style="color: red;font-size: 1.3em"></span> Ζωντανές Μεταδόσεις!</h4>
+                                <h4><span class="icon-live-lecture" style="color: red;font-size: 1.3em"></span> Τρέχουσες Μεταδόσεις!</h4>
                                 <div class="text-muted font-italic">
-                                    Διαχείριση ζωντανών μεταδόσεων και καταγραφών
+                                    Επισκόπηση & Διαχείριση ζωντανών μεταδόσεων και καταγραφών
                                 </div>
                                 <div class="row">
                                     <div class="col-12">

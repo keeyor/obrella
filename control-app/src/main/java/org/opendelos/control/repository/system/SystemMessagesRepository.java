@@ -14,5 +14,5 @@ public interface SystemMessagesRepository extends MongoRepository<SystemMessage,
 	List<SystemMessage> findAllByStatus(String status);
 	List<SystemMessage> findAllByTarget(String target);
 
-	List<SystemMessage> findAllByVisibleIsAndTarget(boolean visible, String target);
+	List<SystemMessage> findAllByVisibleIsAndTargetOrderByStartDateDesc(boolean visible, String target);
 }

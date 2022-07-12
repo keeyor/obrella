@@ -48,19 +48,15 @@ public class ResourceService {
     private final StreamingProperties streamingProperties;
     private final MultimediaProperties multimediaProperties;
     private final OpUserService opUserService;
-    private final CourseService courseService;
-    private final ScheduledEventService scheduledEventService;
 
     private final ResourceUtils resourceUtils;
 
     @Autowired
-    public ResourceService(ResourceRepository resourceRepository, StreamingProperties streamingProperties, MultimediaProperties multimediaProperties, OpUserService opUserService, CourseService courseService, ScheduledEventService scheduledEventService, ResourceUtils resourceUtils) {
+    public ResourceService(ResourceRepository resourceRepository, StreamingProperties streamingProperties, MultimediaProperties multimediaProperties, OpUserService opUserService, ResourceUtils resourceUtils) {
         this.resourceRepository = resourceRepository;
         this.streamingProperties = streamingProperties;
         this.multimediaProperties = multimediaProperties;
         this.opUserService = opUserService;
-        this.courseService = courseService;
-        this.scheduledEventService = scheduledEventService;
         this.resourceUtils = resourceUtils;
     }
 
@@ -432,6 +428,44 @@ public class ResourceService {
         }
     }
 
+    public void deleteThrowingException(String id) throws Exception {
+
+        logger.trace(String.format("Resource.deleteWithThrow: %s", id));
+
+            Resource resource = findById(id);
+            if (resource == null) {
+                throw new Exception("RESOURCE_NOTFOUND_ERROR");
+            }
+            if (resource.getAccessPolicy().equals("public")) {
+                throw new Exception("RESOURCE_ACCESS_DENIED_ERROR");
+            }
+            if (resource.isOpenCoursesResource()) {
+                throw new Exception("RESOURCE_ACCESS_DENIED_ERROR");
+            }
+            if (resource.getStatus().getInclMultimedia() == 1) {
+                try {
+                    this.removeResourceMultimedia(resource);
+                }
+                catch (Exception e) {
+                    throw new Exception("MULTIMEDIA_REMOVE_ERROR");
+                }
+            }
+            if (resource.getStatus().getInclPresentation() == 1) {
+                try {
+                    this.removeResourcePresentation(resource);
+                }
+                catch (Exception e1) {
+                    throw new Exception("PRESENTATION_REMOVE_ERROR");
+                }
+            }
+            try {
+                resourceRepository.deleteById(id);
+            }
+            catch (Exception e2) {
+                throw new Exception("RESOURCE_REMOVE_ERROR");
+            }
+    }
+
     public QueryResourceResults searchPageableLectures(ResourceQuery resourceQuery) {
         logger.trace("Lectures.search");
         if (resourceQuery != null) {
@@ -440,11 +474,7 @@ public class ResourceService {
         else return null;
     }
 
-
-
     public ResourceQuery setAccessRestrictions(ResourceQuery resourceQuery, OoUserDetails editor) {
-
-        List<ObjectId> authorizedUnitIds;
 
         resourceQuery.setManagerId(editor.getId());
         if (editor.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFFMEMBER"))) {
@@ -499,6 +529,28 @@ public class ResourceService {
     public void updateAccessPolicy(String id, String status) {
 
         Resource resource = this.findById(id);
+        resource.setAccessPolicy(status);
+        this.update(resource);
+    }
+
+    public void updateAccessPolicyThrowingError(String id, String status) throws Exception {
+
+        Resource resource = this.findById(id);
+        if (resource == null) {
+            throw new Exception("RESOURCE_NOTFOUND_ERROR");
+        }
+        if (status.equals("public") && resource.getAccessPolicy().equals("public")) {
+            throw new Exception("RESOURCE_PUBLISH_IGNORE");
+        }
+        if (status.equals("private") && resource.getAccessPolicy().equals("private")) {
+            throw new Exception("RESOURCE_PUBLISH_IGNORE");
+        }
+        if (status.equals("private") && resource.isOpenCoursesResource()) {
+            throw new Exception("RESOURCE_ACCESS_DENIED_ERROR");
+        }
+        if (status.equals("public") && resource.getStatus().getInclMultimedia() != 1) {
+            throw new Exception("RESOURCE_PUBLISH_ERROR");
+        }
         resource.setAccessPolicy(status);
         this.update(resource);
     }

@@ -17,17 +17,24 @@
     <!-- alertify -->
     <link rel="stylesheet" th:href="@{/lib/alertify/css/alertify.min.css}"/>
     <link rel="stylesheet" th:href="@{/lib/alertify/css/themes/semantic.min.css}"/>
+    <style>
+        .alertify-notifier .ajs-message {
+            width: 500px !important;
+            font-size: 1em;
+        }
+    </style>
 </head>
 <body>
 
-<!-- field to keep MARKED RESOURCED -->
-<input type="hidden" id="marked-resources" value=""/>
+<!--@thymesVar id="msg_val" type="java.lang.String"-->
+<input type="hidden" id="msg_val" th:value="${msg_val}"/>
+<!--@thymesVar id="msg_type" type="java.lang.String"-->
+<input type="hidden" id="msg_type" th:value="${msg_type}"/>
 
 <!--@thymesVar id="QR" type="org.opendelos.model.repo.QueryResourceResults"-->
 <!--@thymesVar id="queryString" type="java.lang.String"-->
 <input type="hidden" id="queryString"  th:value="${queryString}" />
                     <input id="userIsStaffMemberOnly"       type="hidden" th:value="${userIsStaffMemberOnly}"/>
-
                      <input id="departmentFilterId"         type="hidden" th:value="${departmentFilter.id}"/>
                      <input id="departmentFilterText"       type="hidden" th:value="${departmentFilter.text}"/>
                      <input id="courseFilterId"             type="hidden" th:value="${courseFilter.id}"/>
@@ -40,6 +47,8 @@
                      <input id="tag"                        type="hidden" th:value="${tag}"/>
                      <input id="resource_type"              type="hidden" th:value="${resource_type}"/>
                      <input id="academicYear"               type="hidden" th:value="${academicYear}"/>
+
+
 
 <span th:if="${resourceQuery.categoryCode != null && resourceQuery.categoryCode != ''}">
          <input type="hidden" id="categoryTitle" th:value="#{${resourceQuery.categoryCode}}" />
@@ -101,6 +110,38 @@
                                                        <div th:insert="~{admin/content/search/u-pager :: u-pager('false')}">Pager</div>
                                                    </div>
                                                </div>
+                                                <!-- Multiple Select actions -->
+                                               <div class="row my-1">
+                                                  <div class="col-12 text-end">
+                                                      <div class="btn-group">
+                                                          <a role="button" class="btn btn-light btn-sm ms-action ms-action-publish disabled me-1" data-action="publish" href="#">
+                                                              <i class="far fa-eye me-1" style="color: #2eb85c"></i>Δημοσιοποίηση
+                                                          </a>
+                                                          <a role="button" class="btn btn-light btn-sm ms-action ms-action-unpublish disabled me-1" data-action="unpublish" href="#">
+                                                              <i class="far fa-eye-slash me-1"></i> Απόσυρση
+                                                          </a>
+                                                          <a role="button" class="btn btn-light btn-sm ms-action ms-action-delete disabled me-2" data-action="delete" href="#">
+                                                              <i class="fas fa-trash me-1" style="color:red"></i>Διαγραφή
+                                                          </a>
+
+                                                          <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuMS" data-coreui-toggle="dropdown" aria-expanded="false" title="Επιλεγμένα">
+                                                              <i class="fas fa-check me-2"></i><span id="marked_items_no">(0)</span>
+                                                          </button>
+                                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMS">
+                                                              <li><a class="dropdown-item" id="mark_all_resources" href="#">
+                                                                  <i class="fas fa-check me-1 blue-link-wcag-color"></i>Επιλογή Όλων</a>
+                                                              </li>
+                                                              <li><a class="dropdown-item" id="unmark_all_resources" href="#">
+                                                                  <i class="fas fa-times  me-1"></i>Απεπιλογή Όλων</a>
+                                                              </li>
+                                                          </ul>
+                                                      </div>
+                                                      <form id="form-ms" method="post" th:action="@{/admin/search}">
+                                                          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                                          <input type="hidden"  id="marked-resources" name="marked_resources" value=""/>
+                                                      </form>
+                                                  </div>
+                                              </div>
 
                                                <div class="row">
                                                    <div class="col-12">

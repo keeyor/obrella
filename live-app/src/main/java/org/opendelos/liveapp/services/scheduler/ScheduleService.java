@@ -49,11 +49,20 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ScheduleService {
+
+    @Value("${app.liverunner.url}")
+    String live_runner_url;
 
     @Autowired
     Institution defaultInstitution;
@@ -249,18 +258,19 @@ public class ScheduleService {
             ScheduledEvent scheduledEvent = scheduledEventService.findById(schedule.getEvent());
             if (scheduledEvent != null) {
                 if (scheduledEvent.getResponsiblePerson() != null && scheduledEvent.getResponsiblePerson().getName() != null) {
-                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(), scheduledEvent.getResponsiblePerson().getName()));
+                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(),
+                            scheduledEvent.getResponsiblePerson().getName(), scheduledEvent.getIsActive()));
                 }
                 else {
-                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle()));
+                    scheduleDTO.setScheduledEvent(new ScheduledEventInfo(scheduledEvent.getId(), scheduledEvent.getTitle(),scheduledEvent.getIsActive()));
                 }
             }
             else {
-                scheduleDTO.setScheduledEvent(new ScheduledEventInfo("-1","Άγνωστη Εκδήλωση"));
+                scheduleDTO.setScheduledEvent(new ScheduledEventInfo("-1","Άγνωστη Εκδήλωση",false));
             }
         }
         else {
-            scheduleDTO.setScheduledEvent(new ScheduledEventInfo("",""));
+            scheduleDTO.setScheduledEvent(new ScheduledEventInfo("","",false));
         }
         if (schedule.getSupervisor() != null && !schedule.getSupervisor().equals("")) {
             OpUser opuser = opUserService.findById(schedule.getSupervisor());
@@ -282,14 +292,14 @@ public class ScheduleService {
         if (schedule.getClassroom() != null) {
             Classroom classroom = classroomService.findById(schedule.getClassroom());
             if (classroom != null) {
-                scheduleDTO.setClassroom(new ClassroomInfo(classroom.getId(), classroom.getName(), classroom.getCode()));
+                scheduleDTO.setClassroom(new ClassroomInfo(classroom.getId(), classroom.getName(), classroom.getCode(), classroom.getCalendar().equals("true")));
             }
             else {
                 logger.error("Classroom with id:" + schedule.getClassroom() + " not found");
             }
         }
         else {
-            scheduleDTO.setClassroom(new ClassroomInfo("","",""));
+            scheduleDTO.setClassroom(new ClassroomInfo("","","",false));
         }
         if (schedule.getDate() != null) {
             LocalDate localDate = schedule.getDate();
@@ -815,6 +825,21 @@ public class ScheduleService {
         //> try using other query criteria to minimize  the size of searchSchedule query results...
         long startAt = System.currentTimeMillis();
         List<Schedule> searchResults = this.searchSchedule(scheduleQuery);
+
+        //Remove From searchResults, schedules that are assigned to disabled or unknown classrooms
+        List<Schedule> invalidClassroomList = new ArrayList<>();
+        for (Schedule schedule: searchResults) {
+            String classroomId = schedule.getClassroom();
+            int classroom_status = classroomService.getClassroomStatus(classroomId);
+            if (classroom_status == 1) {
+                invalidClassroomList.add(schedule);
+            }
+            else if (classroom_status == 2) {
+                invalidClassroomList.add(schedule);
+            }
+        }
+        searchResults.removeAll(invalidClassroomList);
+
         //> add schedules in date range, ignore others
         boolean cancelLive = false;
         for (Schedule schedule: searchResults) {
@@ -857,7 +882,7 @@ public class ScheduleService {
         }  //< for schedule in search results
 
        //Remove From inRangeResults, scheduleDTOs that are assigned to disabled room
-       List<ScheduleDTO> disabledClassroomList = new ArrayList<>();
+/*       List<ScheduleDTO> disabledClassroomList = new ArrayList<>();
        for (ScheduleDTO scheduleDTO: inRangeResults) {
            String classroomId = scheduleDTO.getClassroom().getId();
            int classroom_status = classroomService.getClassroomStatus(classroomId);
@@ -870,10 +895,9 @@ public class ScheduleService {
                removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Απενεργοποιημένη αίθουσα:"  + classroomId);
            }
        }
-       inRangeResults.removeAll(disabledClassroomList);
+       inRangeResults.removeAll(disabledClassroomList);*/
 
         long endAllAt   = System.currentTimeMillis();
-        logger.debug("Time:" + (endAllAt - startAt));
         return inRangeResults;
     }
 
@@ -889,6 +913,21 @@ public class ScheduleService {
         //> try using other query criteria to minimize  the size of searchSchedule query results...
         long startAt = System.currentTimeMillis();
         List<Schedule> searchResults = this.searchScheduleByEditor(scheduleQuery, editor,access);
+
+        //Remove From searchResults, schedules that are assigned to disabled or unknown classrooms
+        List<Schedule> invalidClassroomList = new ArrayList<>();
+        for (Schedule schedule: searchResults) {
+            String classroomId = schedule.getClassroom();
+            int classroom_status = classroomService.getClassroomStatus(classroomId);
+            if (classroom_status == 1) {
+                invalidClassroomList.add(schedule);
+            }
+            else if (classroom_status == 2) {
+                invalidClassroomList.add(schedule);
+            }
+        }
+        searchResults.removeAll(invalidClassroomList);
+
         //> add schedules in date range, ignore others
         boolean cancelLive = false;
         for (Schedule schedule: searchResults) {
@@ -931,7 +970,7 @@ public class ScheduleService {
         }  //< for schedule in search results
 
         //Remove From inRangeResults, scheduleDTOs that are assigned to disabled room
-        List<ScheduleDTO> disabledClassroomList = new ArrayList<>();
+      /*  List<ScheduleDTO> disabledClassroomList = new ArrayList<>();
         for (ScheduleDTO scheduleDTO: inRangeResults) {
             String classroomId = scheduleDTO.getClassroom().getId();
             int classroom_status = classroomService.getClassroomStatus(classroomId);
@@ -944,10 +983,9 @@ public class ScheduleService {
                 removeScheduleFromTodaysProgrammeMessage(scheduleDTO,"Απενεργοποιημένη αίθουσα:"  + classroomId);
             }
         }
-        inRangeResults.removeAll(disabledClassroomList);
+        inRangeResults.removeAll(disabledClassroomList);*/
 
         long endAllAt   = System.currentTimeMillis();
-        logger.debug("Time:" + (endAllAt - startAt));
         return inRangeResults;
     }
 
@@ -1284,6 +1322,26 @@ public class ScheduleService {
         }
 
         return scheduleDTOList;
+    }
+
+    public boolean read_liveDaemonStatus() {
+
+        ResponseEntity<String> live_daemon_status = this.getLiveDeamonStatus();
+        return live_daemon_status.getStatusCode().equals(HttpStatus.ACCEPTED);
+    }
+
+    private ResponseEntity<String> getLiveDeamonStatus() {
+
+        String live_server = live_runner_url;
+        RestTemplate restTemplate = new RestTemplate();
+        String postUrl = live_server + "/api/v1/status";
+        try {
+            restTemplate.exchange(postUrl, HttpMethod.GET, null, String.class);
+            return new ResponseEntity<>("", HttpStatus.ACCEPTED);
+        }
+        catch (RestClientException rce) {
+            return new ResponseEntity<>("Η ακύρωση απέτυχε", HttpStatus.BAD_REQUEST);
+        }
     }
 }
 

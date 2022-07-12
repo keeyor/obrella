@@ -47,7 +47,7 @@ public class OdSimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         String requested_url = savedRequest.getRedirectUrl();
         if (requested_url.contains("/cas/live_player")) {
             targetUrl = "/cas/live_player?" + StringUtils.substringAfter(requested_url,"?");
-            log.info("redirect to:" + targetUrl);
+            log.trace("redirect to:" + targetUrl);
         }
         OoUserDetails loggedIn_user = (OoUserDetails) authentication.getPrincipal();
         if (loggedIn_user.getDepartmentId().equalsIgnoreCase("ASK")) {
