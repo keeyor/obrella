@@ -156,6 +156,8 @@
     <div th:replace="~{fragments/footer :: footer}">Footer</div>
 </div>
 <div th:replace="~{modals/about-modal :: #about_modal}"></div>
+<div th:replace="~{modals/terms-modal :: #terms_modal}"></div>
+<div th:replace="~{modals/faq-modal :: #faq_modal}"></div>
 <div th:replace="~{modals/contact-modal :: #contact_modal}"></div>
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
 <!-- Optional JavaScript -->
@@ -180,7 +182,7 @@
 
 <script th:if="${localeCode == 'el'}" th:src="@{/js/scripts/i18n/el.js}"></script>
 <script th:if="${localeCode == 'en'}" th:src="@{/js/scripts/i18n/en.js}"></script>
-
+<script th:src="@{/js/texts/text-utils.js}"></script>
 <!--<script th:src="@{https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js}" type="text/javascript" ></script>-->
 </body>
 </html>

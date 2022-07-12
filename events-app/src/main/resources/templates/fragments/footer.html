@@ -19,10 +19,17 @@
               <div class="col-lg-4 col-md-6 col-xs-12 text-muted">
                   <ul style="line-height: 20px;list-style-type: none;">
                       <li>
-                          <a href="https://www.uoa.gr/anakoinoseis_kai_ekdiloseis/" target="_blank" style="text-decoration: none" class="text-muted" th:text="#{footer.link.news}">Ανακοινώσεις και Εκδηλώσεις</a></li>
-                      <li>
-                          <a class="text-muted" href="#" th:title="#{footer.link.about}" data-toggle="modal" data-target="#about_modal">
+                          <button type="button" class="btn btn-default" style="color: whitesmoke" data-toggle="modal" data-target="#about_modal">
                               <span th:text="#{footer.link.about}">Σχετικά</span>
+                          </button>
+                          <button type="button" class="btn btn-default" style="color: whitesmoke"  data-toggle="modal" data-target="#terms_modal">
+                              <span th:text="#{footer.link.terms}">Όροι Χρήσης</span>
+                          </button>
+                          <button type="button" class="btn btn-default" style="color: whitesmoke"  data-toggle="modal" data-target="#faq_modal">
+                              <span th:text="#{footer.link.faq}">Συχνές Ερωτήσεις</span>
+                          </button>
+                          <a role="button" class="btn btn-default" href="https://www.uoa.gr/anakoinoseis_kai_ekdiloseis/" target="_blank" style="color: whitesmoke">
+                              <i class="fas fa-external-link-alt" style="color: whitesmoke"></i> <span th:text="#{footer.link.news}">Ανακοινώσεις & Εκδηλώσεις</span>
                           </a>
                       </li>
                   </ul>

@@ -190,6 +190,8 @@
     <div th:replace="~{fragments/footer :: footer}">Footer</div>
 </div>
 <div th:replace="~{modals/about-modal :: #about_modal}"></div>
+<div th:replace="~{modals/terms-modal :: #terms_modal}"></div>
+<div th:replace="~{modals/faq-modal :: #faq_modal}"></div>
 <div th:replace="~{modals/contact-modal :: #contact_modal}"></div>
 <div th:replace="~{modals/logout_modal :: #logout_modal}"></div>
 
@@ -216,5 +218,6 @@
 <script th:if="${localeCode == 'en'}" th:src="@{/js/scripts/i18n/en.js}"></script>
 <!-- Custom -->
 <script th:src="@{/js/scripts/search-evs/dashboard.js}"></script>
+<script th:src="@{/js/texts/text-utils.js}"></script>
 </body>
 </html>
