@@ -12,9 +12,11 @@ import org.opendelos.eventsapp.services.i18n.OptionServices;
 import org.opendelos.eventsapp.services.resource.ResourceService;
 import org.opendelos.eventsapp.services.resource.ResourceUtils;
 import org.opendelos.eventsapp.services.scheduler.ScheduleService;
+import org.opendelos.eventsapp.services.system.SystemMessageService;
 import org.opendelos.model.repo.QueryResourceResults;
 import org.opendelos.model.repo.ResourceQuery;
 import org.opendelos.model.scheduler.ScheduleDTO;
+import org.opendelos.model.system.SystemMessage;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +31,15 @@ public class HomeController {
 	private final ResourceService resourceService;
  	private final ResourceUtils resourceUtils;
  	private final ScheduleService scheduleService;
+ 	private final SystemMessageService systemMessageService;
 
 	@Autowired
-	public HomeController(OptionServices optionServices, ResourceService resourceService, ResourceUtils resourceUtils, ScheduleService scheduleService) {
+	public HomeController(OptionServices optionServices, ResourceService resourceService, ResourceUtils resourceUtils, ScheduleService scheduleService, SystemMessageService systemMessageService) {
 		this.optionServices = optionServices;
 		this.resourceService = resourceService;
 		this.resourceUtils = resourceUtils;
 		this.scheduleService = scheduleService;
+		this.systemMessageService = systemMessageService;
 	}
 
 	@GetMapping(value = "/")
@@ -88,6 +92,11 @@ public class HomeController {
 		//Locale
 		model.addAttribute("localeData", locale.getDisplayName());
 		model.addAttribute("localeCode", locale.getLanguage());
+
+		//Messages
+
+		List<SystemMessage> visitorsMessages = systemMessageService.findAllByVisibleIsAndTargetAndSites(true,"visitors","events");
+		model.addAttribute("VisitorMessages", visitorsMessages);
 
 		model.addAttribute("page","home");
 
