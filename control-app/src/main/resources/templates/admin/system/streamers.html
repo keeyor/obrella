@@ -68,9 +68,9 @@
             <div class="container-fluid">
              <!--   <div class="row">
                     <div class="offset-1 col-lg-10" id="content">-->
-                        <div class="card">
-                            <div class="card-header" style="background-color:white;border: none">
-                                <h5>Εξυπηρετητές [<span id="count_streamers_results"></span>]</h5>
+                        <div class="card" id="streamers_card">
+                            <div class="card-header" style="border: none;background-color: white">
+                                <h5>Εξυπηρετητές [<span id="count_streamers_results"></span> ]</h5>
                                 <div class="text-medium-emphasis font-italic">
                                     Διαχείριση εξυπηρετητών μεταδόσεων και καταγραφών
                                 </div>
@@ -83,9 +83,12 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="card-body">
-                               <div class="table-responsive" style="margin-top: 20px">
-                                                 <table id="streamersDataTable" style="width:100%;padding-top: 20px" class="row-border stripe">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive" style="margin-top: 40px">
+                                                 <table id="streamersDataTable" style="width:100%" class="row-border stripe">
                                                                 <thead>
                                                                 <tr style="font-weight: 600">
                                                                     <td style="height: 12px;width: 20px">#</td>
@@ -107,6 +110,8 @@
                                                                 </thead>
                                                  </table>
                                             </div>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                         <div class="card mt-3" id="streamers_edit_card" style="display: none">
