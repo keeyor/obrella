@@ -76,10 +76,7 @@ public class HomeController {
 		model.addAttribute("app_live_url", app_live_url);
 		model.addAttribute("app_events_url",app_events_url);
 
-		List<SystemMessage> visitorsMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"visitors");
-		List<SystemMessage> visitorsAllMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"visitors-vod");
-		visitorsMessages.addAll(visitorsAllMessages);
-
+		List<SystemMessage> visitorsMessages = systemMessageService.findAllByVisibleIsAndTargetAndSites(true,"visitors","vod");
 		model.addAttribute("VisitorMessages", visitorsMessages);
 
 		return "home";

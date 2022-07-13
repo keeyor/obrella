@@ -19,6 +19,66 @@
         a {
             text-decoration: none;
         }
+        /*share button*/
+        .share-button {
+            width: 140px;
+            height: 40px;
+            background: #eceff0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s linear;
+        }
+        .share-button:hover {
+            transform: scale(1.1);
+        }
+        .share-button span {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #006A9B;
+            color: #f1f1f1;
+            text-align: center;
+            line-height: 40px;
+            z-index: 999;
+            transition: 0.4s linear;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .share-button:hover span {
+            transform: translateX(-100%);
+            transition-delay: 0.3s;
+        }
+        .share-button a {
+            flex: 1;
+            font-size: 26px;
+            color: #2d3436;
+            text-align: center;
+            transform: translateX(-100%);
+            opacity: 0;
+            transition: 0.3s linear;
+        }
+        .share-button:hover a {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .share-button a:nth-of-type(1) {
+            transition-delay: 1s;
+        }
+        .share-button a:nth-of-type(2) {
+            transition-delay: 0.8s;
+        }
+        .share-button a:nth-of-type(3) {
+            transition-delay: 0.6s;
+        }
+        .share-button a:nth-of-type(4) {
+            transition-delay: 0.4s;
+        }
     </style>
 </head>
 
@@ -70,7 +130,7 @@
                                      </div>
                                     <div class="col-lg-3 col-md-6 col-sm-12 text-center my-2">
                                         <a role="button" title="Αναζήτηση με Θεματική Περιοχή"  style="width: 80%" class="blue-link-wcag-color me-1  py-2 btn btn-secondary" th:href="@{themareas}">
-                                            <i class="fas fa-share-alt me-1"></i><span th:text="#{area}">Θεματική Περιοχή</span>
+                                            <i class="fas fa-map-signs me-1"></i><span th:text="#{area}">Θεματική Περιοχή</span>
                                         </a>
                                     </div>
                                 </div>
@@ -95,6 +155,16 @@
             <div class="pl-0" style="margin-top: 10px;font-style: italic;font-size: small">
                 <span th:text="#{lectures_sum_note}"></span>
             </div>
+
+            <!-- SHARE -->
+<!--            <div class="row" style="align-items: center;justify-content: center">
+                    <div class="share-button">
+                        <span> SHARE! </span>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+            </div>-->
 
 
             <!-- NEWS & Announcements -->
@@ -129,8 +199,9 @@
                 </div>
             </div>
 
-
+            <!-- ALSO VISIT -->
             <div class="pl-0" style="margin-top: 50px">
+                <i class="fas fa-link me-2"></i> Σύνδεσμοι<br/>
                 <span style="font-weight: 500" th:text="#{also_visit}"></span>
             </div>
             <div class="row mt-3">
@@ -167,9 +238,6 @@
                     </div>
                 </div>
             </div>
-
-
-
        </div>
 
     </div>

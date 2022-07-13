@@ -73,7 +73,7 @@ public class SearchController {
 		Date startTime = time_start.getTime();
 
 		//Messages
-		List<SystemMessage> messageList = systemMessageService.getAllByVisibleIs(true);
+		List<SystemMessage> messageList = systemMessageService.findAllByVisibleIs(true);
 		model.addAttribute("messageList", messageList);
 
 		String urlString = request.getRequestURL().toString();
