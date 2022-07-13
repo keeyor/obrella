@@ -33,6 +33,13 @@ public class HomeController {
 	private final ScheduleService scheduleService;
 	private final OptionServices optionServices;
 
+	@Value("${app.live.url}")
+	String app_live_url;
+	@Value("${app.events.url}")
+	String app_events_url;
+	@Value("${app.vod.url}")
+	String app_vod_url;
+
 	@Autowired
 	public HomeController(ResourceService resourceService, LiveService liveService, SystemMessageService systemMessageService, ScheduleService scheduleService, OptionServices optionServices) {
 		this.resourceService = resourceService;
@@ -69,14 +76,16 @@ public class HomeController {
 		//Languages
 		String[] langList = optionServices.getLanguages(locale);
 		model.addAttribute("langList",langList);
+
 		//Locale
 		model.addAttribute("localeData", locale.getDisplayName());
 		model.addAttribute("localeCode", locale.getLanguage());
 
-		List<SystemMessage> visitorsMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"visitors");
-		List<SystemMessage> visitorsAllMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"visitors-live");
-		visitorsMessages.addAll(visitorsAllMessages);
+		model.addAttribute("app_live_url", app_live_url);
+		model.addAttribute("app_events_url",app_events_url);
+		model.addAttribute("app_vod_url", app_vod_url);
 
+		List<SystemMessage> visitorsMessages = systemMessageService.findAllByVisibleIsAndTargetAndSites(true,"visitors","live");
 		model.addAttribute("VisitorMessages", visitorsMessages);
 
 		if (scheduleService.read_liveDaemonStatus())

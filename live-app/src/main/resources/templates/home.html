@@ -109,47 +109,45 @@
                 </div>
             </div>
 
-
-
-            <!-- LOIPA -->
+            <!-- ALSO VISIT -->
             <div class="pl-0" style="margin-top: 50px">
-                <strong>Επισκεφτείτε επίσης...</strong>
+                <i class="fas fa-link me-2"></i> Σύνδεσμοι<br/>
+                <span style="font-weight: 500" th:text="#{also_visit}"></span>
             </div>
             <div class="row mt-3">
                 <div class="col-lg-6 col-md-12">
                     <div class="card mb-3">
-                        <div class="card-body p-0">
+                        <div class="card-body">
                             <div style="font-size: 1.2em">
-                                <a href="https://dimos.med.uoa.gr/vod" style="color: #006A9B" target="_blank">
-                                    <span class="icon-on-demand" style="color: #006A9B"></span> ΕΚΠΑ
-                                    <b>ΔΙΑΛΕΞΕΙΣ</b>
+                                <a th:href="${app_vod_url}" style="color: #006A9B" target="_blank">
+                                    <span class="icon-on-demand me-2" style="color: #006A9B"></span>
+                                    <span  th:text="#{ekpa_initials}">ΕΚΠΑ</span>
+                                    <span style="font-weight: 600" th:text="#{vod_cap}">ΔΙΑΛΕΞΕΙΣ</span><i class="fas fa-external-link-alt fa-xs ms-2"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="card-footer" style="background-color: white">
-                            Αναζητήστε & προβάλετε μαγνητοσκοπημένες διαλέξεις, καταγεγραμμένες από την εκπαιδευτική διαδικασία του Ιδρύματος<br/>
-                            Το περιεχόμενο είναι δημόσιο και η πρόσβαση είναι ελεύθερη σε όλους
+                            <span th:text="#{site_vod_text}"></span>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="card mb-3">
-                        <div class="card-body p-0">
+                        <div class="card-body">
                             <div style="font-size: 1.2em">
-                                <a href="https://dimos.med.uoa.gr/events" style="color: #006A9B" target="_blank">
-                                    <span class="fas fa-circle" style="color: darkorange"></span> ΕΚΠΑ
-                                    <b>ΕΚΔΗΛΩΣΕΙΣ</b>
+                                <a th:href="${app_events_url}" style="color: #006A9B" target="_blank">
+                                    <span class="fas fa-circle me-2" style="color: darkorange"></span>
+                                    <span  th:text="#{ekpa_initials}">ΕΚΠΑ</span>
+                                    <span style="font-weight: 600" th:text="#{events_cap}">ΔΡΑΣΕΙΣ</span><i class="fas fa-external-link-alt fa-xs ms-2"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="card-footer" style="background-color: white">
-                            Παρακολουθείστε ζωντανά & προβάλετε μαγνητοσκοπημένο περιεχόμενο από τις δράσεις και τις εκδηλώσεις του Ιδρύματος<br/>
-                            Το περιεχόμενο είναι δημόσιο και η πρόσβαση είναι ελεύθερη σε όλους
+                            <span th:text="#{site_events_text}"></span>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <div th:replace="~{fragments/footer-411 :: footer}">Footer</div>
