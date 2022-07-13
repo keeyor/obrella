@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="managers_modal">
+    <div class="modal fade " id="managers_modal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true" style="max-height: 800px">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header pb-1">
+                    <div style="font-size: 1.2em; font-weight: 500" class="modal-title" id="modalTitle"> <i class="fas fa-info-circle"></i> Σχετικά: Ενημέρωση Διαχειριστών</div>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-1">
+                    <div class="container-fluid mt-2"  id="managers-modal-html">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-coreui-dismiss="modal">Κλείσιμο</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -73,6 +73,11 @@
                         <div class="text-medium-emphasis font-italic">
                             Διαχείριση κειμένων Ιστότοπων
                         </div>
+                        <div class="row">
+                            <div class="col-10 text-end">
+                                <a role="button" class="btn btn-secondary" th:href="@{/admin}"><i class="fas fa-undo"></i> Επιστροφή</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row mt-2">
@@ -84,7 +89,8 @@
                                         <option value="admin-about">H Υπηρεσία</option>
                                         <option value="admin-terms">Όροι Χρήσης</option>
                                         <option value="admin-faq">Συχνές Ερωτήσεις</option>
-                                        <option value="admin-managers">Ενημέρωση Διαχειριστών</option>
+                                        <option value="admin-managers">Περί Διαχειριστών</option>
+                                        <option value="admin-updates">Ενημερώσεις-Αναβαθμίσεις</option>
                                     </optgroup>
                                     <optgroup label="ΕΚΠΑ Διαλέξεις" id="site-vod">
                                         <option value="vod-about">H Υπηρεσία</option>
@@ -106,14 +112,140 @@
                         </div>
                         <div class="offset-2 col-8 mt-2 ps-2">
                             <div style="font-size: 1.2em;margin-bottom: 20px;margin-top: 20px">
-                                <i class="fas fa-edit me-1"></i><span style="font-weight: 500" id="edit_site_title"></span><span id="edit_doc_title"></span></span>
+                                <i class="fas fa-edit me-1"></i><span style="font-weight: 500" id="edit_site_title"></span><span id="edit_doc_title"></span>
                             </div>
-                            <div id="quill-container"></div>
-                            <div class=" mt-2">
-                                            <span class="float-end">
-                                             <button type="button" class="btn btn-secondary" id="closeUpdateMessage"><i class="fas fa-undo"></i> Ακύρωση</button>
-                                             <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateText" disabled><i class="far fa-save"></i> Αποθήκευση</button>
-                                            </span>
+                            <div id="toolbar-container">
+                                <span class="ql-formats">
+                                    <button class="ql-bold" data-toggle="tooltip" data-placement="bottom" title="Bold"></button>
+                                    <button class="ql-italic" data-toggle="tooltip" data-placement="bottom" title="Italics"></button>
+                                    <button class="ql-underline" data-toggle="tooltip" data-placement="bottom" title="Underline"></button>
+                                    <button class="ql-strike" data-toggle="tooltip" data-placement="bottom" title="Strike"></button>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-link mx-3"  data-toggle="tooltip" data-placement="bottom" title="link"></button>
+                                </span>
+                                <span class="ql-formats mx-2" data-toggle="tooltip" data-placement="bottom"  title="Heading">
+                                  <select class="ql-header">
+                                    <option value="1">Heading 1</option>
+                                    <option value="2">Heading 2</option>
+                                    <option value="3">Heading 3</option>
+                                    <option value="4">Heading 4</option>
+                                    <option value="false" selected>Normal</option>
+                                  </select>
+                                </span>
+                                <span class="ql-formats" data-toggle="tooltip" data-placement="bottom" title="Font">
+                                  <select class="ql-font">
+                                    <option selected></option>
+                                    <option value="serif"></option>
+                                    <option value="monospace"></option>
+                                  </select>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-blockquote" data-toggle="tooltip" data-placement="bottom" title="BlockQuote"></button>
+                                    <button class="ql-list" value="ordered" data-toggle="tooltip" data-placement="bottom" title="BlockQuote"></button>
+                                    <button class="ql-list" value="bullet" data-toggle="tooltip" data-placement="bottom" title="BlockQuote"></button>
+                                    <button class="ql-script" value="sub" data-toggle="tooltip" data-placement="bottom" title="BlockQuote"></button>
+                                    <button class="ql-script" value="super" data-toggle="tooltip" data-placement="bottom" title="BlockQuote"></button>
+                                    <button class="ql-indent" value="+1" data-toggle="tooltip" data-placement="bottom" title="+indent"></button>
+                                    <button class="ql-indent" value="-1" data-toggle="tooltip" data-placement="bottom" title="-indent"></button>
+                                </span>
+                                <span class="ql-formats" data-toggle="tooltip" data-placement="bottom" title="Align">
+                                  <select class="ql-align">
+                                    <option selected></option>
+                                    <option value="center"></option>
+                                    <option value="justify"></option>
+                                    <option value="right"></option>
+                                  </select>
+                                </span>
+                                <span class="ql-formats"  data-toggle="tooltip" data-placement="bottom" title="Text Color">
+                                   <select class="ql-color">
+                                <option selected></option>
+                                <option value="#e60000"></option>
+                                <option value="#ff9900"></option>
+                                <option value="#ffff00"></option>
+                                <option value="#008a00"></option>
+                                <option value="#0066cc"></option>
+                                <option value="#9933ff"></option>
+                                <option value="#ffffff"></option>
+                                <option value="#facccc"></option>
+                                <option value="#ffebcc"></option>
+                                <option value="#ffffcc"></option>
+                                <option value="#cce8cc"></option>
+                                <option value="#cce0f5"></option>
+                                <option value="#ebd6ff"></option>
+                                <option value="#bbbbbb"></option>
+                                <option value="#f06666"></option>
+                                <option value="#ffc266"></option>
+                                <option value="#ffff66"></option>
+                                <option value="#66b966"></option>
+                                <option value="#66a3e0"></option>
+                                <option value="#c285ff"></option>
+                                <option value="#888888"></option>
+                                <option value="#a10000"></option>
+                                <option value="#b26b00"></option>
+                                <option value="#b2b200"></option>
+                                <option value="#006100"></option>
+                                <option value="#0047b2"></option>
+                                <option value="#6b24b2"></option>
+                                <option value="#444444"></option>
+                                <option value="#5c0000"></option>
+                                <option value="#663d00"></option>
+                                <option value="#666600"></option>
+                                <option value="#003700"></option>
+                                <option value="#002966"></option>
+                                <option value="#3d1466"></option>
+                              </select>
+                                 </span>
+                                <span class="ql-formats"  data-toggle="tooltip" data-placement="bottom" title="Background Color">
+                                  <select class="ql-background">
+                                    <option value="#000000"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option selected></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                  </select>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-clean"  data-toggle="tooltip" data-placement="bottom" title="Clean Formatting"></button>
+                                </span>
+                            </div>
+                            <div id="quill-container">
+
+                            </div>
+                            <div class="mt-2">
+                                <span class="float-end">
+                                    <button type="button" class="btn btn-primary blue-btn-wcag-bgnd-color"  id="addOrUpdateText" disabled><i class="far fa-save"></i> Αποθήκευση</button>
+                                </span>
                             </div>
                         </div>
                     </div>

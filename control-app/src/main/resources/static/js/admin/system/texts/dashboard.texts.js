@@ -23,9 +23,15 @@
         });
 
         quill = new Quill('#quill-container', {
+            modules: {
+                toolbar: '#toolbar-container'
+            },
             placeholder: 'Επιλέξτε ένα από τα Διαθέσιμα Κείμενα για επεξεργασία...',
             theme: 'snow'
         });
+
+        // Enable all tooltips
+        $('[data-toggle="tooltip"]').tooltip();
 
         RegisterEvents();
     };

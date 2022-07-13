@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
@@ -66,6 +67,13 @@ public class AdminController {
 	private final ScheduledEventService scheduledEventService;
 	private final SystemMessageService systemMessageService;
 
+	@Value("${app.live.url}")
+	String app_live_url;
+	@Value("${app.events.url}")
+	String app_events_url;
+	@Value("${app.vod.url}")
+	String app_vod_url;
+
 	@Autowired
 	Institution defaultInstitution;
 
@@ -89,7 +97,7 @@ public class AdminController {
 	}
 
 	@GetMapping(value = {"admin/", "admin"})
-	public String getAdminControlPanel(final Model model) {
+	public String getAdminControlPanel(final Model model,Locale locale) {
 
 		boolean userIsStaffMember = false;
 		boolean userIsStaffMemberOnly = false;
@@ -97,30 +105,33 @@ public class AdminController {
 		OoUserDetails editor = (OoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user",editor);
 
-
-		List<SystemMessage> adminAllMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"admins-all");
-		List<SystemMessage> adminStaffMessages;
-		List<SystemMessage> adminUsersMessages;
-
 		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER) && editor.getUserAuthorities().size() == 1) {
 			userIsStaffMemberOnly= true;
 		}
 		model.addAttribute("userIsStaffMemberOnly",userIsStaffMemberOnly);
 
+		String build_sites = "admin";
+		String build_targets= "";
+
 		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.STAFFMEMBER)) {
 			userIsStaffMember = true;
-			adminStaffMessages = systemMessageService.findAllByVisibleIsAndTarget(true,"admins-staff");
-			adminAllMessages.addAll(adminStaffMessages);
+			build_targets += "users";
 		}
 		model.addAttribute("userIsStaffMember",userIsStaffMember);
-
 		if (editor.getUserAuthorities().contains(UserAccess.UserAuthority.MANAGER)) {
-			adminUsersMessages = systemMessageService.findAllByVisibleIsAndTarget(true, "admins-users");
-			adminAllMessages.addAll(adminUsersMessages);
+			build_targets += ",admins";
 		}
-		adminAllMessages.sort((u1, u2) -> u2.getStartDate().compareTo(u1.getStartDate()));
+
+		List<SystemMessage> adminAllMessages = systemMessageService.findAllByVisibleIsAndTargetAndSites(true,build_targets, build_sites);
 		model.addAttribute("adminAllMessages", adminAllMessages);
 
+		//Locale
+		model.addAttribute("localeData", locale.getDisplayName());
+		model.addAttribute("localeCode", locale.getLanguage());
+
+		model.addAttribute("app_live_url", app_live_url);
+		model.addAttribute("app_events_url",app_events_url);
+		model.addAttribute("app_vod_url", app_vod_url);
 		//Logged on Users
 		model.addAttribute("logged_users_counter", activeUserStore.getUsers().size());
 

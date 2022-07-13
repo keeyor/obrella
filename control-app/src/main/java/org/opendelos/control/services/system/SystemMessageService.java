@@ -4,6 +4,7 @@
 */
 package org.opendelos.control.services.system;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.opendelos.control.repository.system.SystemMessagesRepository;
@@ -77,18 +78,8 @@ public class SystemMessageService {
 		}
 	}
 
-	public List<SystemMessage> getAllByStatus(String status) {
-		return systemMessagesRepository.findAllByStatus(status);
+	public List<SystemMessage> findAllByVisibleIsAndTargetAndSites(boolean visible, String target, String sites) {
+		return systemMessagesRepository.findAllByVisibleAndTargetAndSitesOrderByStartDateDesc(visible,target,sites);
 	}
 
-	public List<SystemMessage> getAllByTarget(String target) {
-		return systemMessagesRepository.findAllByTarget(target);
-	}
-
-	public List<SystemMessage> getAllByVisibleIs(boolean visible) {
-		return systemMessagesRepository.findAllByVisibleIs(visible);
-	}
-	public List<SystemMessage> findAllByVisibleIsAndTarget(boolean visible, String target) {
-		return systemMessagesRepository.findAllByVisibleIsAndTargetOrderByStartDateDesc(visible,target);
-	}
 }

@@ -28,6 +28,11 @@
 
     <!-- loader -->
     <link rel="stylesheet" th:href="@{/lib/loader/loader.css}"/>
+    <style>
+        .left_border {
+            border-left: grey 1px solid;
+        }
+    </style>
 </head>
 <body>
 <input type="hidden" id="institutionIdentity" th:value="${Institution.identity}"/>
@@ -75,7 +80,8 @@
                                     Διαχείριση μηνυμάτων ιστότοπου
                                 </div>
                                 <span class="float-end">
-                                        <a  class="btn btn-sm blue-btn-wcag-bgnd-color text-white" id="newMessageBt" role="button">
+                                        <a role="button" class="btn btn-secondary" th:href="@{/admin}"><i class="fas fa-undo"></i> Επιστροφή</a>
+                                        <a  class="btn blue-btn-wcag-bgnd-color text-white" id="newMessageBt" role="button">
                                             <i class="fas fa-plus mr-1 font-weight-bolder"></i> Νέο Μήνυμα
                                         </a>
                                 </span>
@@ -87,13 +93,24 @@
                                             <table id="messagesDataTable" style="width:100%;padding-top: 20px" class="row-border stripe">
                                                 <thead>
                                                 <tr style="font-weight: 600">
-                                                    <td style="height: 12px;width: 20px">#</td>
-                                                    <td style="height: 12px;width: 60px"></td>
-                                                    <td>Κοινό</td>
-                                                    <td >Κατάσταση</td>
-                                                    <td style="width: 60%">Κείμενο</td>
-                                                    <td >Ενεργό/Ανενεργό</td>
-                                                    <td style="height: 12px;width: 20px"></td>
+                                                    <td rowspan="2">#</td>
+                                                    <td rowspan="2"></td>
+                                                    <td rowspan="2"><i class="fas fa-calendar-alt"></i></td>
+                                                    <td  rowspan="2"  style="border-left: grey 1px solid">Κατάσταση</td>
+                                                    <td  rowspan="2">Κείμενο</td>
+                                                    <td colspan="3" style="border-left: grey 1px solid">Κοινό</td>
+                                                    <td colspan="4" style="border-left: grey 1px solid">Ιστότοποι</td>
+                                                    <td  rowspan="2">Ενεργό/Ανενεργό</td>
+                                                    <td  rowspan="2" style="height: 12px;width: 20px"></td>
+                                                </tr>
+                                                <tr style="font-weight: 600">
+                                                    <td style="border-left: grey 1px solid">Επισκέπτες</td>
+                                                    <td >Διαχειριστές</td>
+                                                    <td>Προσωπικό</td>
+                                                    <td style="border-left: grey 1px solid">Διαχείριση</td>
+                                                    <td>Διαλέξεις</td>
+                                                    <td>Μεταδόσεις</td>
+                                                    <td>Δράσεις</td>
                                                 </tr>
                                                 </thead>
                                             </table>
@@ -125,17 +142,41 @@
                                             <input type="hidden" id="message_id" value=""/>
 
                                             <div class="form-group row pt-3">
-                                                <label for="message_target" class="col-sm-2 col-form-label emph-label">Κοινό*</label>
+                                                <label class="col-sm-2 col-form-label emph-label">Κοινό*</label>
                                                 <div class="col-sm-4">
-                                                    <select id="message_target" name="message_target" style="width: 100%" class="form-control">
-                                                        <option value="visitors"> Επισκέπτες (ΟΛΟΙ)</option>
-                                                        <option value="visitors-vod"> Επισκέπτες (ΕΚΠΑ ΔΙΑΛΕΞΕΙΣ)</option>
-                                                        <option value="visitors-live"> Επισκέπτες (ΕΚΠΑ ΜΕΤΑΔΟΣΕΙΣ ΔΙΑΛΕΞΕΩΝ)</option>
-                                                        <option value="visitors-events"> Επισκέπτες (ΕΚΠΑ ΔΡΑΣΕΙΣ)</option>
-                                                        <option value="admins-all"> Διαχειριστές & Διδακτικό Προσωπικό</option>
-                                                        <option value="admins-users"> Διαχειριστές</option>
-                                                        <option value="admins-staff"> Διδακτικό Προσωπικό</option>
-                                                    </select>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="target_visitors">
+                                                        <label class="form-check-label emph-label" for="target_visitors">Επισκέπτες</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="target_admins">
+                                                        <label class="form-check-label emph-label" for="target_admins">Διαχειριστές</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="target_users">
+                                                        <label class="form-check-label emph-label" for="target_users">Διδακτικό Προσωπικό</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row pt-3">
+                                                <label class="col-sm-2 col-form-label emph-label">Ιστότοποι Εμφάνισης*</label>
+                                                <div class="col-sm-4">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="site_admin">
+                                                        <label class="form-check-label emph-label" for="site_admin">ΔΙΑΧΕΙΡΙΣΗ ΠΕΡΙΕΧΟΜΕΝΟΥ & ΜΕΤΑΔΟΣΕΩΝ</label>
+                                                    </div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="site_vod">
+                                                        <label class="form-check-label emph-label" for="site_vod">ΔΙΑΛΕΞΕΙΣ</label>
+                                                    </div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="site_live">
+                                                        <label class="form-check-label emph-label" for="site_live">ΜΕΤΑΔΟΣΕΙΣ ΔΙΑΛΕΞΕΩΝ</label>
+                                                    </div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="site_events">
+                                                        <label class="form-check-label emph-label" for="site_events">ΔΡΑΣΕΙΣ</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group row pt-3">

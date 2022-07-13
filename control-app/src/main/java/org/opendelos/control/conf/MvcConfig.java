@@ -83,7 +83,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	@Bean
 	public MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasenames("i18n/messages","i18n/options", "i18n/errors", "i18n/richlecture-messages", "i18n/draseis");
+		messageSource.setBasenames("i18n/messages","i18n/options", "i18n/labels", "i18n/errors", "i18n/richlecture-messages", "i18n/draseis");
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
 	}
